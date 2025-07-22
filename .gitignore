@@ -1,0 +1,17 @@
+# Folders
+literature/
+data/
+code/da_scenes/videos/
+code/da_scenes/media/
+syllabus/design material/
+__pycache__/
+
+# File types
+*.pdf
+*.docx
+*.pptx
+
+# pixi environments
+.pixi
+*.egg-info
+.envrc

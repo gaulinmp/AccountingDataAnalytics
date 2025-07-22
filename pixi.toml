@@ -1,0 +1,54 @@
+[workspace]
+channels = ["conda-forge"]
+name = "5150_Analytics"
+platforms = ["win-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+
+[environments]
+nb = ["py", "nb", "datasci", "ffmpeg"]
+manim = ["py10", "nb", "datasci", "ffmpeg", "manim"]
+marimo = ["py", "nb", "datasci", "ffmpeg", "marimo"]
+
+[feature.py10.dependencies]
+python = "3.10.*"
+
+[feature.py.dependencies]
+python = "*"
+
+[feature.manim.dependencies]
+manim = "*"
+
+[feature.nb.dependencies]
+notebook = "*"
+
+[feature.marimo.dependencies]
+marimo = "*"
+nodejs = ">=24.4.1,<24.5"
+duckdb = ">=1.3.2,<2"
+sqlglot = ">=27.1.0,<28"
+altair = ">=5.5.0,<6"
+vegafusion = ">=2.0.2,<3"
+openai = ">=1.97.0,<2"
+python-lsp-server = ">=1.13.0,<2"
+websockets = ">=15.0.1,<16"
+vl-convert-python = ">=1.7.0,<2"
+
+[feature.datasci.dependencies]
+pandas = "*"
+scikit-learn = "*"
+scikit-image = "*"
+seaborn = "*"
+sqlalchemy = "*"
+psycopg = "*"
+openpyxl = "*"
+
+[feature.datasci.pypi-dependencies]
+pyedgar = { path = "C:/Users/gaulinmp/Dropbox/Documents/Programming/Python/pyedgar", editable = true }
+reslib = { path = "C:/Users/gaulinmp/Dropbox/Documents/Programming/Python/reslib", editable = true }
+
+[feature.ffmpeg.dependencies]
+ffmpeg = ">=7.1.1,<8"

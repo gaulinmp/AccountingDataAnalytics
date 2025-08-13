@@ -26,6 +26,8 @@ manim = "*"
 notebook = "*"
 nbconvert = "*"
 markdown = "*"
+pygments = "*"
+pymdown-extensions = "*"
 
 [feature.marimo.dependencies]
 marimo = "*"

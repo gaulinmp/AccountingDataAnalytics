@@ -1,6 +1,7 @@
 # Files
 labs_hw/*.html
 labs_hw/*/*.html
+labs_hw/cases/
 
 # Folders
 literature/

@@ -11,13 +11,13 @@ import xml.etree.ElementTree as etree
 
 CSS = """
 <style>
-details {
+details.inline-image {
    color: #BE0000;
 }
-details[open] {
+details[open].inline-image {
     font-weight: bold;
 }
-details[open] > p {
+details[open].inline-image > p {
     border-left: 5px solid #BE0000;
     margin-left: 1em;
     padding-left: 1em;
@@ -33,6 +33,24 @@ details[open] > p {
 code {
   font-family: monospace;
   background-color: #f1f1f1;
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table {
+    border-collapse: collapse;
+}
+/* General styling of all cells */
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
 }
 </style>
 """
@@ -87,7 +105,7 @@ class ImageWrapperProcessor(Treeprocessor):
                     data_uri = f"data:{mime_type};base64,{img_data}"
 
                     html = (
-                        f"<details> <summary>{title}</summary>"
+                        f"<details class=\"inline-image\"> <summary>{title}</summary>"
                         f'<p><img alt="{alt}" class="detail-image" src="{data_uri}" /></p>'
                         f"</details>"
                     )
@@ -122,6 +140,8 @@ def md_to_html_with_inline_images(md_file):
             "toc",
             "tables",
             "sane_lists",
+            # "md_in_html",
+            'pymdownx.details',
             'pymdownx.superfences',
             ExternalLinksExtension(),
             HeadingClassExtension(class_text="ada"),

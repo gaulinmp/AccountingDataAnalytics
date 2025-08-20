@@ -131,7 +131,7 @@ Tableau's Data Source tab offers tools to clean data upon import.
     * Tableau will open the Data Source tab. It will misinterpret the file structure initially.
     * In the left pane, under "Sheets", turn on the `Data Interpreter` checkbox.
     * Data Interpreter will analyze the file and identify the actual data table, often correctly removing headers and footers.
-        * I had to rename a few columns, e.g. `F3` &rarr; `Post Date`. See table snipped above for column names.
+        * I had to rename a few columns, e.g. `F3` &rarr; `Post Date`. See table snippet above for column names.
     * Review the results to ensure the data looks correct.
     * You may need to add filters to remove any remaining unwanted rows.
 3. **Go to Worksheet and Explore:**
@@ -167,13 +167,10 @@ To complete this lab, provide evidence that you have successfully cleaned the da
 1. **Take Screenshots:**
     * Capture a screenshot of the cleaned data table. Don't worry about the aesthetics of the table, the default format for whichever tool you used is fine (for now).
     * Capture a screenshot of the unique "User ID" names. Here's where the aesthetics might matter a bit more, as you'll want to clearly show the distinct values.
-
 2. **Create a Document:**
     * Open a new document in a word processor like Microsoft Word or Google Docs.
     * Paste all screenshots into this single document.
-
 3. **Save as PDF:**
     * Save or export the document as a PDF file. Name it `[your uid]_Lab2.pdf`.
-
 4. **Submit to Canvas:**
     * Navigate to the "Lab 2" assignment on our course Canvas page and upload your PDF file.

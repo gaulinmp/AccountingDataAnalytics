@@ -144,6 +144,10 @@ Tableau's Data Source tab offers tools to clean data upon import.
 
 Note to Python users: as with all programming, our lives are simultaneously easier and harder. Easier, because we are in control of every byte of data and can set up automation to be far more robust. Harder, because we must control of every byte of data and set up automation to be far more robust. In this Lab, that means we need to be explicit about handling each data issue in the file that tools like Excel and Tableau might manage for us. To get you started, I have prepared a notebook that you can open on Colab. Merely click the link below to open Colab, then drag the `JEA Detail.txt` file into the Colab file explorer so the code can access it.
 
+<a href="https://colab.research.google.com/github/gaulinmp/AccountingDataAnalytics/blob/main/labs_hw/week2_connecting-to-data/Lab 2 - Opening and Cleaning Data.ipynb" target="_parent">
+<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
+
 We will use the `pandas` library in a Jupyter Notebook to programmatically clean the data.
 
 1. **Setup Notebook:**

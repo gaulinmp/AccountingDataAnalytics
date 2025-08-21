@@ -59,11 +59,12 @@ The first software will be Excel. Excel, an Accountant's workhorse, is a ubiquit
 
 The second software will be Tableau. Tableau is a leading data visualization tool that allows for the creation of interactive dashboards and worksheets.
 
-1. **Open Tableau:** Launch Tableau Desktop, Tableau Cloud, or Tableau Public depending on which you are using.
+1. **Open Tableau:** Launch Tableau Desktop or [Tableau Cloud](https://10ay.online.tableau.com/#/site/accounting-data-analytics/personalSpace), depending on which you are using.
+      1. If you don't have an account, you should get an email to `[uid]@utah.edu` to create one. If you want a different email, come see me.
 
 2. **Connect to Data:** Open the Connection pane, and connect to a File (type Microsoft Excel).
 
-       1. *Tableau Cloud*: On the New Workbook page, under the "Data" menu, select "New Data Source." In the popup titled "Connect to Data", select the "Files" tab, then drag and drop the downloaded Excel file from Step 1.
+       1. *[Tableau Cloud](https://10ay.online.tableau.com/#/site/accounting-data-analytics/personalSpace)*: Create a new Workbook by going to "Personal Space" on the left, and clicking "Create Workbook". On the New Workbook page, under the "Data" menu, select "New Data Source." In the popup titled "Connect to Data", select the "Files" tab, then drag and drop the downloaded Excel file from Step 1.
           ![Screenshot of tableau cloud connection pane](tableau_cloud_connection_pane.png "Screenshot: Tableau Cloud")
        2. *Tableau Desktop*: On the start page, under the "Connect" pane on the left, select "Microsoft Excel". A file dialog will open. Navigate to where you saved the data file from Step 1, select it, and click "Open".
           ![Screenshot of tableau Desktop Connection Pane](tableau_desktop_connection_pane.png "Screenshot: Tableau Desktop")
@@ -79,7 +80,7 @@ The second software will be Tableau. Tableau is a leading data visualization too
 
 The third software will be Python. We will use **Google Colaboratory (Colab)**, a free, cloud-based Jupyter Notebook environment that requires no local installation. Python is a versatile programming language with powerful libraries for data analysis, such as pandas.
 
-1. **Go to Google Colab:** Open your web browser and navigate to [colab.research.google.com](https://colab.research.google.com/). You may need to be logged into a Google account.
+1. **Go to Google Colab:** Open your web browser and navigate to [colab.research.google.com](https://colab.research.google.com/). You may need to be logged into a Google account, which the University of Utah provides ([link](https://gcloud.utah.edu/)).
       ![Screenshot of new colab window](colab_new_notebook_pane.png "Screenshot: Google Colab New Page")
        1. **Alternative:** If you prefer to work locally, you can install python on your own machine (I suggest this\!). You will just need to ensure you have the notebook and pandas libraries installed to follow along. If this is a route you are interested in, I further suggest looking into `mamba` (or `uv`/`pixi` if you're feeling fancy) and using environments.
 
@@ -91,7 +92,7 @@ The third software will be Python. We will use **Google Colaboratory (Colab)**, 
      2. Click the **Upload to session storage** icon (a page with an upward-pointing arrow).
      3. In the file browser that opens, find and select the `university_grad_salary_data.xlsx` file you downloaded in Step 1\.
         ![Screenshot of upload Data to Colab](colab_upload_file.png "Screenshot: Google Colab Upload File")
-        **Important Note:** Files uploaded this way are temporary and will be deleted when the Colab session ends. You will need to re-upload your data file each time you open this notebook. To not lose data, you can store files in your Google Drive (the university has given you a Google account at `uid@gcloud.utah.edu` if you don't have a personal one).
+        **Important Note:** Files uploaded this way are temporary and will be deleted when the Colab session ends. You will need to re-upload your data file each time you open this notebook. To not lose data, you can store files in your Google Drive (the [university has given you a Google account](https://gcloud.utah.edu/) at `[uid]@gcloud.utah.edu` if you don't have a personal one).
 
 4. **Import the pandas Library:** In the first code cell, we need to import the pandas library. Type the following code and press Shift \+ Enter (or click the play button) to run the cell: `import pandas as pd`. We can now access pandas library by using `pd`.
 

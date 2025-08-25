@@ -1,4 +1,5 @@
 import re
+from datetime import datetime as dt
 import time
 import base64
 from pathlib import Path
@@ -8,6 +9,8 @@ from markdown import Extension
 from markdown.postprocessors import Postprocessor
 from markdown.treeprocessors import Treeprocessor
 import xml.etree.ElementTree as etree
+
+_dir = Path(__file__).parent
 
 CSS = """
 <style>
@@ -30,9 +33,13 @@ details[open].inline-image > p {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 10px 0;
 }
-code {
-  font-family: monospace;
-  background-color: #f1f1f1;
+
+.fixed-width {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* padding: 2px 4px; */
 }
 
 /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
@@ -52,8 +59,11 @@ table > thead > tr > :is(th, td) {
 table > tbody > tr:last-child > :is(th, td) {
     border-bottom: 2px solid; /* Bottom thick line */
 }
+
+/* Generated with pygmentize -S STYLE -f html -a .highlight > STYLE.css */
+%s
 </style>
-"""
+""" % (_dir / "github-dark.css").read_text()
 
 
 # Add a custom class to each heading
@@ -130,6 +140,30 @@ class ImageWrapperExtension(Extension):
         md.treeprocessors.register(processor, "image_wrapper", 15)
 
 
+# Add custom CSS class to inline code blocks
+class InlineCodeClassProcessor(Treeprocessor):
+    def run(self, root):
+        # Build a parent map since etree doesn't have getparent()
+        parent_map = {c: p for p in root.iter() for c in p}
+
+        for elem in root.iter():
+            if elem.tag == "code":
+                # Check if this is inline code (not part of a pre block)
+                parent = parent_map.get(elem)
+                if parent is not None and parent.tag != "pre":
+                    elem.set("class", self.code_class)
+
+class InlineCodeClassExtension(Extension):
+    def __init__(self, code_class="inline-code", **kwargs):
+        self.code_class = code_class
+        super().__init__(**kwargs)
+
+    def extendMarkdown(self, md):
+        processor = InlineCodeClassProcessor(md)
+        processor.code_class = self.code_class
+        md.treeprocessors.register(processor, "inline_code_class", 15)
+
+
 def md_to_html_with_inline_images(md_file):
     md_path = Path(md_file)
     md_root = md_path.parent
@@ -139,18 +173,19 @@ def md_to_html_with_inline_images(md_file):
         extensions=[
             "toc",
             "tables",
+            'codehilite',
             "sane_lists",
-            # "md_in_html",
             'pymdownx.details',
             'pymdownx.superfences',
             ExternalLinksExtension(),
             HeadingClassExtension(class_text="ada"),
             ImageWrapperExtension(md_root=md_root),
+            InlineCodeClassExtension(code_class="fixed-width"),
         ]
     )
-    html = md.convert(md_path.read_text(encoding="utf-8")) + "\n" + CSS
+    html = md.convert(md_path.read_text()) + "\n" + CSS
 
-    output_path.write_text(html, encoding="utf-8")
+    output_path.write_text(html)
 
     return output_path
 
@@ -164,7 +199,7 @@ if __name__ == "__main__":
         for md_file in Path(".").rglob("*.md"):
             html_file = md_file.with_suffix(".html")
             if first or not html_file.exists() or html_file.stat().st_mtime <= md_file.stat().st_mtime:
-                print(f"Detected change in {md_file}. Converting to HTML with inline images.")
+                print(f"{dt.now():%H:%M:%S} - Detected change in {md_file}.")
                 md_to_html_with_inline_images(md_file)
         first = False
         try:

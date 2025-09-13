@@ -7,10 +7,10 @@ Lab 2 builds on our first lab by moving from simply opening a clean, well-struct
 ## 1. Assignment
 
 
-**Submission:** a PDF document with two screenshots:
+**Submission:** a PDF document with two screenshots of:
 
-  * One of the cleaned dataset (at least including all columns and the first few rows)
-  * One of the Wide format dataset (after pivoting)
+  * A table showing the cleaned dataset (at least including all columns and the first few rows)
+  * A table showing count of transactions for each user by period (Wide format dataset after pivoting)
 
 
 ### 1.1. Learning Objectives

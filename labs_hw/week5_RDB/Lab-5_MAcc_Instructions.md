@@ -151,6 +151,6 @@ My notes on the difficulty of each modality:
 I have provided a starter Jupyter notebook, `Lab 5 - Merging & Relational Databases.ipynb`, that includes code to connect to the PostgreSQL database and run SQL queries.
 You will need to fill in the variables for the graphs, hopefully by now that's familiar territory.
 
-<a href="https://colab.research.google.com/github/gaulinmp/AccountingDataAnalytics/blob/main/labs_hw/week5_RDB/Lab 5 - Merging & Relational Databases.ipynb" target="_parent">
+<a href="https://colab.research.google.com/github/gaulinmp/AccountingDataAnalytics/blob/main/labs_hw/week5_RDB/Lab%205%20-%20Merging%20%26%20Relational%20Databases.ipynb" target="_parent">
 <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>

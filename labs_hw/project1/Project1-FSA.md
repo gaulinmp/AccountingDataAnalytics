@@ -203,7 +203,7 @@ The following variables are provided in `CompustatAnnual.csv`. Unless otherwise 
 2. Add values from previous years (called lags) for calculating year-over-year changes, and averages if necessary.
 3. Perform initial exploratory analysis (e.g. summary statistics, correlations) to understand the data landscape.
 4. Compute candidate ratios, handling zero denominators and addressing outliers.
-5. Select 2&ndash;3 FSA ratios to calculate, considering the composite story they might tell (i.e. how they interact or jointly provide insights into firm performance).
+5. Select 1&ndash;2 FSA ratios to calculate, considering the composite story they might tell (i.e. how they interact or jointly provide insights into firm performance).
 6.  Pick a grouping dimension from: industry (via [GICS](https://en.wikipedia.org/wiki/Global_Industry_Classification_Standard)), or firm age or size buckets (you determine the buckets, e.g. < 5 years, 5-10 years, > 10 years for age).
 7.  Investigate distributions across firms (e.g. using boxplots) and over time.
 8.  Draft a hypothesis with a simple economic and accounting story about differences in these ratios across your group (i.e. by industry or over time/firm age).
@@ -288,6 +288,7 @@ Suggestions for handling data quality issues, which you should document in the A
 
     * **Slide 2 (Business Context & Question)**
         * Clear research question with measurable outcomes: "Does [ratio] vary materially by [industry]?"
+        * Economic rationale: "We expect this difference because [brief explanation]"
         * Frame as investment decision: "Should we control for [industry] when building our portfolio on [ratio]?"
         * Optionally include specific decision framework: "What action would different findings trigger?"
 

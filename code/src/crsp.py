@@ -28,7 +28,7 @@ class CRSP(_DataFrameCache):
     """
     # Arguments passed to _pd.read_csv
     file_format = "csv"
-    read_args = {"compression": None, "parse_dates": ["date"]}
+    read_args = {"compression": 'gzip', "parse_dates": ["date"]}
     override_directory = DATA_DIR
 
     def make_dataset(self):
@@ -38,12 +38,12 @@ class CRSP(_DataFrameCache):
         good_permnos = f"SELECT DISTINCT lpermno FROM crsp.ccmxpf_linktable WHERE lpermno IS NOT NULL AND gvkey IN ({good_gvkeys})"
 
         sql_dsf = f"""
-            SELECT a.permno, a.permco, ticker, shrcls, date, prc, vol, ret, bid, ask, shrout
+            SELECT a.permno, ticker, shrcls, date, prc, vol, ret, bid, ask, shrout
             FROM crsp.dsf AS a
             LEFT JOIN crsp.stocknames AS b
                 ON a.permno = b.permno
                 AND a.date BETWEEN COALESCE(b.namedt, '1900-01-01') AND COALESCE(b.nameenddt, current_date)
-            WHERE EXTRACT(year from date) >= 2015
+            WHERE EXTRACT(year from date) >= 1995
                 AND a.permno IN ({good_permnos})
         """
 

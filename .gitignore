@@ -18,8 +18,16 @@ syllabus/design material/
 .pixi
 *.egg-info
 .envrc
+pixi.lock
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
+.ipynb_checkpoints/
+
+# OS nonsense
+.DS_Store
+Thumbs.db
+desktop.ini
+

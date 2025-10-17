@@ -1,7 +1,7 @@
 [workspace]
 channels = ["conda-forge"]
 name = "5150_Analytics"
-platforms = ["win-64", "osx-64"]
+platforms = ["win-64", "osx-64", "linux-64"]
 version = "0.1.0"
 
 [tasks]
@@ -10,7 +10,7 @@ version = "0.1.0"
 
 [environments]
 nb = ["py", "nb", "datasci", "ffmpeg"]
-manim = ["py10", "nb", "datasci", "ffmpeg", "manim"]
+# manim = ["py10", "nb", "datasci", "ffmpeg", "manim"]
 
 [feature.py10.dependencies]
 python = "3.10.*"
@@ -25,22 +25,30 @@ manim = "*"
 notebook = "*"
 nbconvert = "*"
 markdown = "*"
+PyPDF2 = "*"
 lxml = "*"
+google-genai = "*"
 pygments = "*"
 pymdown-extensions = "*"
 
 [feature.datasci.dependencies]
 pandas = "*"
+duckdb = "*"
 scikit-learn = "*"
 scikit-image = "*"
 seaborn = "*"
 sqlalchemy = "*"
+statsmodels = "*"
 psycopg = "*"
+pyodbc = "*"
 openpyxl = "*"
+umap-learn = "*"
+tabulate = "*"
 
 [feature.datasci.pypi-dependencies]
 pyedgar = { path = "../../../Programming/Python/pyedgar", editable = true }
 reslib = { path = "../../../Programming/Python/reslib", editable = true }
+stargazer = "*"
 
 [feature.ffmpeg.dependencies]
 ffmpeg = ">=7.1.1,<8"

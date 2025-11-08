@@ -12,6 +12,19 @@ import xml.etree.ElementTree as etree
 
 _dir = Path(__file__).parent
 
+HTML_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    {css}
+</head>
+<body>
+    {content}
+</body>
+</html>
+"""
 
 def load_css(file_name="default", wrap_in_style_tag=False):
     css_file = _dir / f"{file_name}.css"
@@ -65,6 +78,9 @@ class ImageWrapperProcessor(Treeprocessor):
                     img_path = self.md_root / src
 
                     if not img_path.exists():
+                        if 'http' in src:
+                            # Skip external images
+                            continue
                         raise FileNotFoundError(f"Image file {img_path.absolute()} not found.")
 
                     mime_type = mimetypes.guess_type(img_path)[0] or "application/octet-stream"
@@ -125,7 +141,7 @@ class InlineCodeClassExtension(Extension):
 # Add CSS class attributes using {: .classname} syntax
 class AttributeClassProcessor(Treeprocessor):
     def run(self, root):
-        pattern = re.compile(r"\{\:\s+\.([a-zA-Z0-9_-]+)\}")
+        pattern = re.compile(r"\{\:\s+\.([^}]+)\}")
         # Build a parent map since etree doesn't have getparent()
         parent_map = {c: p for p in root.iter() for c in p}
 
@@ -179,7 +195,7 @@ def md_to_html_with_inline_images(md_file):
             AttributeClassExtension(),
         ]
     )
-    html = md.convert(md_path.read_text(encoding="utf-8")) + "\n" + css
+    html = HTML_TEMPLATE.format(content=md.convert(md_path.read_text(encoding="utf-8")), css=css)
 
     output_path.write_text(html, encoding="utf-8")
 

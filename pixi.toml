@@ -10,6 +10,7 @@ version = "0.1.0"
 
 [environments]
 nb = ["py", "nb", "datasci", "ffmpeg"]
+geo = ["py", "datasci", "geo"]
 # manim = ["py10", "nb", "datasci", "ffmpeg", "manim"]
 
 [feature.py10.dependencies]
@@ -44,6 +45,14 @@ pyodbc = "*"
 openpyxl = "*"
 umap-learn = "*"
 tabulate = "*"
+plotly = "*"
+
+[feature.geo.dependencies]
+notebook = "*"
+geopandas = "*"
+geoplot = "*"
+shapely = "*"
+folium = "*"
 
 [feature.datasci.pypi-dependencies]
 pyedgar = { path = "../../../Programming/Python/pyedgar", editable = true }

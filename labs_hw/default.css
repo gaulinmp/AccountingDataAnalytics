@@ -31,24 +31,6 @@ details.inline-image {
      /* padding: 2px 4px; */
  }
 
- /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
- /* Make horizontal lines connect through column boundaries */
- /* table {
-     border-collapse: collapse;
- } */
- /* General styling of all cells */
- table > :is(thead, tbody) > tr > :is(th, td) {
-     padding: 3px;
-     text-align: left;
- }
- table > thead > tr > :is(th, td) {
-     border-top: 2px solid; /* Top thick line */
-     border-bottom: 1px solid; /* Below head thin line */
- }
- table > tbody > tr:last-child > :is(th, td) {
-     border-bottom: 2px solid; /* Bottom thick line */
- }
-
 /* Claud's generated CSS */
 /* Base Styles */
 body {
@@ -58,7 +40,7 @@ body {
     margin: 0 auto;
     padding: 2rem;
     color: #333;
-    background-color: #dbdbdb;
+    background-color: #ebebeb;
 }
 
 /* Main Content Container */
@@ -205,19 +187,31 @@ pre[class*="language-"]::before {
 
 /* Tables */
 table {
-    width: 100%;
     border-collapse: collapse;
     margin: 1.5rem 0;
-    background-color: white;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-tr:nth-child(even) {
-    background-color: #f8f9fa;
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
 }
 
-tr:hover {
-    background-color: #f0f4f8;
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
 }
 
 /* Blockquotes and Notes */
@@ -241,9 +235,10 @@ blockquote p:last-child {
 /* Special callout boxes */
 .note, .warning, .tip {
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem;
     border-radius: 6px;
     border-left: 5px solid;
+    border-right: 5px solid;
 }
 
 .note {
@@ -270,6 +265,11 @@ em {
 strong {
     font-weight: 600;
     color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
 }
 
 /* Links */

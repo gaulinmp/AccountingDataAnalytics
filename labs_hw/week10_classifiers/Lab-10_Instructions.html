@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid;
+    border-right: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="lab-10-classifiers-and-cost-evaluation">Lab 10: Classifiers and Cost Evaluation</h1>
+<p>Lab 10 introduces you to building, interpreting, and evaluating logistic regression classifiers, and estimating the expected-cost effects of different errors. The data are of customer accounts receivable (AR) payment behavior, and the goal is to predict which customers are likely to default on their payments. You will build two classifiers: one using only payment and credit features, and another adding customer demographic characteristics. You will evaluate model performance using classification metrics (precision, recall, F1 score) and ROC/AUC analysis, and perform cost-benefit analysis to determine optimal classification thresholds.</p>
+<div class="toc">
+<ul>
+<li><a href="#lab-10-classifiers-and-cost-evaluation">Lab 10: Classifiers and Cost Evaluation</a><ul>
+<li><a href="#1-assignment">1. Assignment</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-tools">1.2. Tools</a></li>
+</ul>
+</li>
+<li><a href="#2-data">2. Data</a><ul>
+<li><a href="#22-key-variables-for-this-lab">2.2. Key Variables for This Lab</a></li>
+<li><a href="#23-understanding-classifier-metrics">2.3. Understanding Classifier Metrics</a></li>
+</ul>
+</li>
+<li><a href="#3-step-by-step-instructions">3. Step-by-Step Instructions</a><ul>
+<li><a href="#31-exercise-1-base-logitols-classifier">3.1. Exercise 1: Base Logit/OLS Classifier</a><ul>
+<li><a href="#311-tasks">3.1.1. Tasks</a></li>
+<li><a href="#312-questions-to-answer">3.1.2. Questions to Answer</a></li>
+</ul>
+</li>
+<li><a href="#32-exercise-2-classifier-with-demographics">3.2. Exercise 2: Classifier with Demographics</a><ul>
+<li><a href="#321-tasks">3.2.1. Tasks</a></li>
+<li><a href="#322-questions-to-answer">3.2.2. Questions to Answer</a></li>
+</ul>
+</li>
+<li><a href="#33-exercise-3-roc-curves-and-threshold-selection">3.3. Exercise 3: ROC Curves and Threshold Selection</a><ul>
+<li><a href="#331-tasks">3.3.1. Tasks</a></li>
+<li><a href="#332-questions-to-answer">3.3.2. Questions to Answer</a></li>
+</ul>
+</li>
+<li><a href="#34-exercise-4-cost-benefit-analysis">3.4. Exercise 4: Cost-Benefit Analysis</a><ul>
+<li><a href="#341-tasks">3.4.1. Tasks</a></li>
+<li><a href="#342-questions-to-answer">3.4.2. Questions to Answer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4-technical-guidance">4. Technical Guidance</a><ul>
+<li><a href="#41-excel-implementation">4.1. Excel Implementation</a></li>
+<li><a href="#42-python-implementation">4.2. Python Implementation</a></li>
+<li><a href="#43-common-issues-and-troubleshooting">4.3. Common Issues and Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
+<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading screenshots and reporting results:</p>
+<ol>
+<li><strong>Base Logit Classifier</strong>: Logistic regression predicting customer non-payment of Accounts Receivable using payment and credit features</li>
+<li><strong>Classifier with Demographics</strong>: Logistic regression building on the base model by adding customer demographic features (gender, education, marital status, age)</li>
+<li><strong>Classifier Error Estimation</strong>: Evaluation of the two classifiers using cost metrics (confusion matrix, precision, recall, F1 score) and ROC/AUC analysis</li>
+<li><strong>Cost-Benefit Analysis</strong>: Estimation of expected costs associated with different classification thresholds</li>
+</ol>
+<p>Data are adapted from a dataset of an anonymous company's dataset of 30,000 customers, and contain that customer's payment behavior, extended credit limit, and demographic information.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Build and estimate logistic regression classifiers for binary outcomes</li>
+<li>Interpret logistic regression coefficients (log-odds, odds ratios, and their meaning)</li>
+<li>Evaluate classifier performance using confusion matrices and classification metrics (accuracy, precision, recall, F1 score)</li>
+<li>Understand ROC curves and AUC (Area Under Curve) as threshold-independent performance measures</li>
+<li>Apply cost-sensitive evaluation by incorporating business costs of false positive and false negative errors</li>
+<li>Understand the business implications of classification thresholds and optimize threshold selection based on cost-benefit analysis</li>
+</ul>
+<h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
+<p>As always, you can use whatever modality you are comfortable with, but it should again be noted that Tableau doesn't have logistic regression capabilities, so Python or Excel are recommended. Further, not even Excel has native logistic regression support (it's possible using the Solver add-in with manual log-likelihood setup, but not practical for this lab). So if you are planning on using Excel, we will use OLS as our regression, and pretend the output is a probability like a logistic regression (which is fine when we're wanting to use the prediction as a classifier, meaning we're just taking a cutoff at a threshold). This also hopefully serves as a nice reminder that a) OLS is awesome, and b) OLS and logistic regression often give similar results (and in this dataset, almost exactly the same results!).</p>
+<ul>
+<li><strong>Excel</strong>: Use OLS regression via Data Analysis Toolpak. Predicted values will be interpreted as probabilities, as with a logistic regression, and from there everything will be calculated as if it were a logistic regression, including classification metrics.</li>
+<li><strong>Python</strong>: <code class="fixed-width">statsmodels</code> library provides <code class="fixed-width">logit()</code> function for logistic regression with well-formatted output. <code class="fixed-width">sklearn.metrics</code> provides all classification metrics. Gotta love Python!</li>
+</ul>
+<hr />
+<h2 class="ada-h2" id="2-data">2. Data</h2>
+<p>The dataset for this lab contains customer accounts receivable (AR) payment data from an anonymous company. The data includes 29,881 customer records with information about their payment behavior, credit limits, and demographic characteristics. This allows you to build predictive models for identifying customers at risk of non-payment, and to evaluate the trade-offs between different types of classification errors.</p>
+<p>The dataset <code class="fixed-width">ar_default_data.csv</code> contains the following variables:</p>
+<ul>
+<li><strong>Outcome Variable:</strong><ul>
+<li><code class="fixed-width">bad_ar</code>: Binary indicator (1 = customer defaulted on payment in the next month, 0 = customer did not default)</li>
+</ul>
+</li>
+<li><strong>Payment and Credit Features:</strong><ul>
+<li><code class="fixed-width">credit_limit</code>: Maximum credit extended to customer (thousands of dollars)</li>
+<li><code class="fixed-width">outstanding_balance</code>: Current outstanding balance (thousands of dollars)</li>
+<li><code class="fixed-width">pay_this_month</code>: Payment status this month (0 = paid on time or did not have any transactions with the company (see next variable), 1 = AR age 30 - 60 days, 2 = AR age 60 - 90 days, 3 = AR age 90+ days)</li>
+<li><code class="fixed-width">no_activity_this_month</code>: Binary indicator (1 = no transactions or payments this month, 0 = activity occurred)</li>
+<li><code class="fixed-width">last_payment_portion</code>: Portion of balance paid in last payment (0 to 2, where 1 = paid 100% balance, &lt;1 = partial payment, &gt;1 = overpaid, or paid current period and settled previous balance)</li>
+<li><code class="fixed-width">num_recent_payments</code>: Number of payments made in last 6 months months (0-6, where 6 indicates consistent payment history)</li>
+</ul>
+</li>
+<li><strong>Demographic Features:</strong><ul>
+<li><code class="fixed-width">gender</code>: Customer gender (male, female)</li>
+<li><code class="fixed-width">education</code>: Education level (1-high school, 2-university, 3-graduate school, 4-trade school, 5-phd)</li>
+<li><code class="fixed-width">marital_status</code>: Marital status (married, single, divorced)</li>
+<li><code class="fixed-width">age_decile</code>: Customer age group (20-70, representing age deciles, e.g., 20 = 20-29, 30 = 30-39, etc.)</li>
+</ul>
+</li>
+</ul>
+<p class="note"><em>Note</em>: This dataset exhibits slight class imbalance, with approximately 22% of customers in the "bad AR" category. This is typical in credit risk modeling (often even more imbalanced) and affects how we interpret classification metrics.</p>
+<h3 class="ada-h3" id="22-key-variables-for-this-lab">2.2. Key Variables for This Lab</h3>
+<p><strong>Outcome Variable (Y)</strong></p>
+<ul>
+<li><strong><code class="fixed-width">bad_ar</code></strong>: Binary indicator of customer default<ul>
+<li>1 = customer failed to pay (bad debt)</li>
+<li>0 = customer paid as expected</li>
+<li>Base rate: ~22% of customers (class imbalance)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Base Model Predictors (X)</strong></p>
+<ul>
+<li><strong>Payment behavior features</strong>: These capture how customers have been managing their payments<ul>
+<li><code class="fixed-width">credit_limit</code>: Credit extended (higher limits may indicate lower perceived risk)</li>
+<li><code class="fixed-width">outstanding_balance</code>: Current balance owed (higher balances may indicate higher risk)</li>
+<li><code class="fixed-width">pay_this_month</code>: Current payment delay (worth considering how to treat this variable, as it is ordinal)</li>
+<li><code class="fixed-width">no_activity_this_month</code>: No activity indicator (dormant accounts)</li>
+<li><code class="fixed-width">last_payment_portion</code>: Recent payment amount relative to balance</li>
+<li><code class="fixed-width">num_recent_payments</code>: Payment consistency over time (higher is more consistent, thus less risky)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Extended Model Predictors (additional Xs)</strong></p>
+<ul>
+<li><strong>Demographic features</strong>: These add customer characteristics to assess incremental predictive value<ul>
+<li><code class="fixed-width">gender</code>: Male vs female</li>
+<li><code class="fixed-width">education</code>: Educational attainment (5 categories)</li>
+<li><code class="fixed-width">marital_status</code>: Married, single, or other</li>
+<li><code class="fixed-width">age_decile</code>: Age group (younger vs older customers)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Expected performance</strong>: The base model using payment features should achieve decent predictive performance. Adding demographics may provide modest improvements, but raises questions about whether collecting this additional data is worthwhile given the incremental value and potential fairness concerns.</p>
+<h3 class="ada-h3" id="23-understanding-classifier-metrics">2.3. Understanding Classifier Metrics</h3>
+<p>Classification models require different evaluation metrics than regression models. The nomenclature (positive/negative, true/false) can be confusing at first, especially if you're thinking of "positive" as "good." In classification, "positive" simply refers to the class of interest, which in this setting of AR defaults, would mean positive is defaulting on AR (which is bad). I will admit that when I made my python and excel solutions, I skipped the whole positive/negative thing, and just refered to it as "default" and "pay", so that when thinking about true positives, I was writing "true default", which meant correctly predicting a customer would default. Hopefully that makes it a bit easier to think about!</p>
+<p>Here are the key concepts:</p>
+<p><strong>Confusion Matrix</strong>: A 2 by 2 table showing predicted vs actual classifications</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Predicted: No Default</strong></th>
+<th><strong>Predicted: Default</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actual: No Default</strong></td>
+<td>True Negative (TN)</td>
+<td>False Positive (FP)</td>
+</tr>
+<tr>
+<td><strong>Actual: Default</strong></td>
+<td>False Negative (FN)</td>
+<td>True Positive (TP)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Metrics</strong>:</p>
+<ul>
+<li><strong>Accuracy</strong> = (TP + TN) / Total: Overall correctness, but can be misleading with imbalanced classes</li>
+<li><strong>Precision</strong> = TP / (TP + FP): Of customers flagged as risky, what % actually defaulted? (Quality of positive predictions)</li>
+<li><strong>Recall</strong> (Sensitivity) = TP / (TP + FN): Of customers who defaulted, what % did we catch? (Completeness of positive predictions)</li>
+<li><strong>F1 Score</strong> = 2 * (Precision * Recall) / (Precision + Recall): Harmonic mean balancing precision and recall</li>
+<li><strong>Specificity</strong> = TN / (TN + FP): Of customers who paid, what % did we correctly identify as non-risky?</li>
+<li>For the ROC curve:</li>
+</ul>
+<p><strong>ROC Curve and AUC</strong>:</p>
+<ul>
+<li><strong>ROC (Receiver Operating Characteristic) Curve</strong>: Plots True Positive Rate vs False Positive Rate across all thresholds<ul>
+<li><strong>True Positive Rate (TPR)</strong> = Recall = TP / (TP + FN)</li>
+<li><strong>False Positive Rate (FPR)</strong> = 1 - specificity = FP / (FP + TN): Of customers who didn't default, what % did we incorrectly flag as risky?</li>
+</ul>
+</li>
+<li><strong>AUC (Area Under Curve)</strong>: Single number summarizing ROC curve. Ranges from 0.5 (random guessing) to 1.0 (perfect classifier)<ul>
+<li>AUC = 0.70-0.75: Acceptable <em>(our model comes in around here)</em></li>
+<li>AUC = 0.75-0.80: Good</li>
+<li>AUC = 0.80-0.90: Excellent <em>(a random forest model on this data comes in around here)</em></li>
+<li>AUC &gt; 0.90: Outstanding (or potentially overfit)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Classification Thresholds</strong>: By default, classifiers use 0.5 probability as the cutoff. However, business context often requires different thresholds to optimize for specific costs and benefits. Also, if we are using OLS, we likely have to adjust our threshold anyway.</p>
+<p class="note"><em>Note</em>: With imbalanced classes (78% non-default, 22% default), simply predicting "everyone pays" achieves 78% accuracy but is useless for risk management. This is why precision, recall, and AUC are more informative metrics than accuracy alone.</p>
+<hr />
+<h2 class="ada-h2" id="3-step-by-step-instructions">3. Step-by-Step Instructions</h2>
+<p>This lab walks you through building and evaluating classification models for credit risk prediction.</p>
+<p>Generally, when reporting the output of a logistic regression model, you should include:</p>
+<ul>
+<li>Intercept and coefficients (in log-odds form, the default output of Excel and <code class="fixed-width">statsmodels</code>)</li>
+<li>Standard errors or z-statistics or P-values for significance testing</li>
+<li>Some R<sup>2</sup> (pseudo, adjusted, etc.)</li>
+<li>Number of observations</li>
+<li>We will separately calculate classification performance metrics (confusion matrix, precision, recall, F1, AUC), so no need to try and fit them in your regression output</li>
+</ul>
+<h3 class="ada-h3" id="31-exercise-1-base-logitols-classifier">3.1. Exercise 1: Base Logit/OLS Classifier</h3>
+<p><strong>Objective</strong>: Build a logistic regression classifier to predict customer default using payment behavior and credit features.</p>
+<p>Logistic regression is the standard approach for binary classification problems in accounting and finance. Unlike OLS regression (which predicts any old value), logistic regression predicts a probability that an observation belongs to a particular class (in our case, the probability of default). The model outputs values between 0 and 1, which can be interpreted as risk scores.</p>
+<p class="note"><em>Excel Note</em>: Since Excel does not have built-in logistic regression, so you will use OLS regression instead <span class='smol'>(let's just pretend that Excel has kept up with the times, and added even one analytical feature by default. Looking at you, Analysis ToolPak still being a plugin 👀)</span>. We will treat the predicted values from OLS as probabilities, and proceed with classification metrics as if they were from a logistic regression. If it makes you feel any better, OLS and Logit both achieve a 75% AUC score, so effectively identical.</p>
+<h4 class="ada-h4" id="311-tasks">3.1.1. Tasks</h4>
+<ol>
+<li><strong>Load the dataset</strong>: <code class="fixed-width">ar_default_data.csv</code> (all 29,881 customer records)</li>
+<li><strong>Run logistic regression</strong>:<ul>
+<li>Outcome variable (Y): <code class="fixed-width">bad_ar</code></li>
+<li>Predictor variables (X): <code class="fixed-width">credit_limit</code>, <code class="fixed-width">outstanding_balance</code>, <code class="fixed-width">pay_this_month</code>, <code class="fixed-width">no_activity_this_month</code>, <code class="fixed-width">last_payment_portion</code>, <code class="fixed-width">num_recent_payments</code></li>
+</ul>
+</li>
+<li><strong>Report the results</strong>: Take a screenshot of your regression output showing coefficients, fit statistics, and R<sup>2</sup></li>
+<li><strong>Generate predictions</strong>:<ul>
+<li>Calculate predicted probabilities for each customer: <code class="fixed-width">bad_ar_prob</code></li>
+<li>Create binary predictions using 0.5 threshold: <code class="fixed-width">bad_ar_predicted = bad_ar_prob &gt; 0.5</code></li>
+</ul>
+</li>
+<li><strong>Create confusion matrix</strong>: Compare <code class="fixed-width">bad_ar_predicted</code> to actual <code class="fixed-width">bad_ar</code> values</li>
+<li><strong>Calculate classification metrics</strong> (remember, TP is correctly predicted defaults, FP is incorrectly predicted defaults, etc.):<ul>
+<li>Accuracy: (TP + TN) / Total</li>
+<li>Precision: TP / (TP + FP)</li>
+<li>Recall: TP / (TP + FN)</li>
+<li>F1 Score: 2 * (Precision * Recall) / (Precision + Recall)</li>
+</ul>
+</li>
+</ol>
+<h4 class="ada-h4" id="312-questions-to-answer">3.1.2. Questions to Answer</h4>
+<ol>
+<li>Which payment features are statistically significant (p-values &lt; 0.05)? What does this tell you about what predicts defaults in this dataset?</li>
+<li>What is the coefficient on <code class="fixed-width">pay_this_month</code>? Since logistic regression uses log-odds, what does a positive coefficient mean for the probability of default?</li>
+<li>What is the precision of your classifier? In general terms, this means: "Of the customers we flagged as high-risk, what percentage actually defaulted?"</li>
+<li>What is the recall of your classifier? In general terms, this means: "Of the customers who actually defaulted, what percentage did we successfully flag?"</li>
+<li>Would you prefer to optimize for higher precision or higher recall in a credit risk context? Why? (Consider the business costs of false positives vs false negatives)</li>
+</ol>
+<h3 class="ada-h3" id="32-exercise-2-classifier-with-demographics">3.2. Exercise 2: Classifier with Demographics</h3>
+<p><strong>Objective</strong>: Enhance the base model by adding demographic features to assess whether customer characteristics provide incremental predictive value.</p>
+<p>Demographics are often included in credit risk models, but they raise important questions: Do they materially improve predictions? Is the incremental value worth the additional data collection? Are there fairness and compliance concerns with using demographic variables in credit decisions?</p>
+<p class="note"><em>Excel note</em>: Yet more Excel issues! Excel doesn't let you run a regression with more than 16 variables. No really. So if you're running out of variables, I suggest grouping up some of the age deciles like <code class="fixed-width">age_60_and_70</code>, or use it as a single continuous variable.</p>
+<h4 class="ada-h4" id="321-tasks">3.2.1. Tasks</h4>
+<ol>
+<li><strong>Using the same dataset and base model from Exercise 1</strong>, add demographic features:<ul>
+<li><code class="fixed-width">gender</code>: only has 2 categories, so one dummy variable is needed (e.g. male OR female, not two)</li>
+<li><code class="fixed-width">education</code>: create a dummy variable for each category, omitting one (see Lab 9 for why)</li>
+<li><code class="fixed-width">marital_status</code>: create a dummy variable for each category, again omitting one</li>
+<li><code class="fixed-width">age_decile</code>: consider whether you want to treat this as continuous or categorical (if categorical, create dummies)</li>
+<li><em>Python note</em>: <code class="fixed-width">statsmodels</code> can handle categorical variables directly using the <code class="fixed-width">C()</code> function as we saw in Lab 9, so no need to manually create dummies.</li>
+</ul>
+</li>
+<li><strong>Run logistic regression</strong> with all features:<ul>
+<li>Outcome variable (Y): <code class="fixed-width">bad_ar</code></li>
+<li>Predictor variables (X): All payment/credit features from Exercise 1 <strong>plus</strong> the demographic variables <code class="fixed-width">gender</code>, <code class="fixed-width">education</code>, <code class="fixed-width">marital_status</code>, <code class="fixed-width">age_decile</code>, however you choose to code them</li>
+</ul>
+</li>
+<li><strong>Report the results</strong>: Take a screenshot of your regression output</li>
+<li><strong>Generate predictions and metrics</strong> using 0.5 threshold</li>
+<li><strong>Create comparison table</strong> for your own edification:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Base Model (Ex 1)</th>
+<th>With Demographics (Ex 2)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pseudo R<sup>2</sup></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Precision</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Recall</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>F1 Score</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 class="ada-h4" id="322-questions-to-answer">3.2.2. Questions to Answer</h4>
+<ol>
+<li>Which demographic features are statistically significant at the 5% level (p &lt; 0.05)? What does this tell you?</li>
+<li>How much did the accuracy improve from the base model to the model with demographics? Is this a meaningful improvement?</li>
+<li>Did precision improve, worsen, or stay roughly the same? What about recall? What does this pattern tell you?</li>
+<li>Looking at the precision/recall trade-off, is the model improvement worth collecting demographic data? Consider: data collection costs, privacy concerns, and potential regulatory issues with using demographics in credit decisions.</li>
+</ol>
+<h3 class="ada-h3" id="33-exercise-3-roc-curves-and-threshold-selection">3.3. Exercise 3: ROC Curves and Threshold Selection</h3>
+<p><strong>Objective</strong>: Understand the trade-offs between precision and recall at different classification thresholds, and use ROC curves to compare model performance.</p>
+<p>So far we've used the default 0.5 threshold to convert predicted probabilities into binary classifications. But this threshold is arbitrary! Different thresholds create different precision/recall trade-offs. ROC curves visualize model performance across all possible thresholds, making them invaluable for model comparison and threshold selection.</p>
+<h4 class="ada-h4" id="331-tasks">3.3.1. Tasks</h4>
+<ol>
+<li><strong>Using your models from Exercises 1</strong>, generate predicted probabilities (don't convert to binary classes yet)</li>
+<li><strong>Create threshold analysis table</strong> by making a table of thresholds from 0.0 to 1.0 (e.g., increments of 0.01) and then using those thresholds to calculate confusion matrix components and metrics at each threshold (see the table below which contains a few rows based on my model, as an example. As you can see, I called True Positives "TrueDefault" to keep things straight. I also added a "check sum" column to make sure my counts added up to the total number of observations, verifying that I didn't mess up the formulas):<ul>
+<li>Calculate TP, TN, FP, FN at each threshold</li>
+<li>Calculate recall and precision at each threshold</li>
+<li>Calculate True Positive Rate (TPR = recall) and False Positive Rate (FPR = 1 - specificity) at each thresholds</li>
+<li>Plot TPR vs FPR to create the ROC curve</li>
+<li>Calculate the area under the curve (AUC)</li>
+</ul>
+</li>
+<li><strong>Calculate AUC</strong> (Area Under the ROC Curve) for your model</li>
+<li><strong>Plot Recall and Precision vs Threshold</strong> on the same chart to visualize the trade-off</li>
+<li><strong>Plot the ROC curves</strong> based on true positive rate and false positive rate calculations from your table</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Threshold</th>
+<th>TruePay</th>
+<th>FalsePay</th>
+<th>FalseDefault</th>
+<th>TrueDefault</th>
+<th>check sum</th>
+<th>Recall</th>
+<th>Precision</th>
+<th>tpr</th>
+<th>fpr</th>
+<th>auc_part</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.5</td>
+<td>22292</td>
+<td>4425</td>
+<td>966</td>
+<td>2198</td>
+<td>29881</td>
+<td>0.331</td>
+<td>0.694</td>
+<td>0.331</td>
+<td>0.0415</td>
+<td>0.000285</td>
+</tr>
+<tr>
+<td>0.51</td>
+<td>22312</td>
+<td>4436</td>
+<td>946</td>
+<td>2187</td>
+<td>29881</td>
+<td>0.330</td>
+<td>0.698</td>
+<td>0.330</td>
+<td>0.0406</td>
+<td>0.000226</td>
+</tr>
+<tr>
+<td>0.52</td>
+<td>22328</td>
+<td>4459</td>
+<td>930</td>
+<td>2164</td>
+<td>29881</td>
+<td>0.326</td>
+<td>0.699</td>
+<td>0.326</td>
+<td>0.0399</td>
+<td>0.000182</td>
+</tr>
+</tbody>
+</table>
+<h4 class="ada-h4" id="332-questions-to-answer">3.3.2. Questions to Answer</h4>
+<ol>
+<li>Looking at your threshold analysis graph and table, describe the precision/recall trade-off as you move from low thresholds to high thresholds.</li>
+<li>If your goal was to catch at least 80% of customers who will default (recall ≥ 0.80), what threshold would you choose? What precision does this achieve? How many customers would you flag for collections intervention?</li>
+<li>What does the ROC curve tell you about model performance? Why is a curve closer to the top-left corner better?</li>
+<li>Why might you choose a threshold different from 0.5? Give a specific business scenario where a lower threshold (e.g., 0.30) or higher threshold (e.g., 0.70) would be more appropriate.</li>
+</ol>
+<h3 class="ada-h3" id="34-exercise-4-cost-benefit-analysis">3.4. Exercise 4: Cost-Benefit Analysis</h3>
+<p><strong>Objective</strong>: Incorporate business costs into threshold selection by calculating the expected financial impact of different classification errors.</p>
+<p>Classification metrics like precision and recall are useful, but they treat all errors equally. In reality, not flagging an account that defaults (false negatives) and incorrectly flagging good customers (false positives) have different business costs. Cost-benefit analysis helps you choose the optimal threshold that minimizes expected losses or maximizes expected profits.</p>
+<p>We're going to take an extreme example, and say that the company does not extend any AR credit to those customers who are flagged as likely to default (i.e. above a threshold). This means that we forgoe the expected cost of a default when correct, but forgo the expected value of a customer when wrong. In general, we might choose to calculate those expected costs/benefits from our historical data, which I've provided below (I recommend putting these values in cells in Excel, or variables in Python, so you can reference them in your formulas and easily see how changing them affects your results):</p>
+<ul>
+<li><strong>True Paying Customer (TN)</strong>: Correctly identify paying customer → cost: $0</li>
+<li><strong>True Defaulting Customer (TP)</strong>: Correctly identify defaulting customer, avoiding their default → benefit: $0.4 thousand USD (all numbers in thousands of dollars, so this is just 0.4)</li>
+<li><strong>Falsely Predict Default (FP)</strong>: Flag good customer as risky, forgo revenue on account → cost: $0.5 thousand USD</li>
+<li><strong>Falsely Predict Paying (FN)</strong>: Miss a defaulting account, write off bad debt → cost: $0.4 thousand USD</li>
+</ul>
+<h4 class="ada-h4" id="341-tasks">3.4.1. Tasks</h4>
+<ol>
+<li><strong>Using your threshold analysis table from Exercise 3</strong>, add calculations for expected costs/benefits at each threshold:<ul>
+<li>Expected cost = # of TP * benefit per TP + # of TN * benefit per TN - # of FP * cost per FP - # of FN * cost per FN</li>
+</ul>
+</li>
+<li><strong>Plot net result vs threshold</strong> to visualize the optimal operating point</li>
+<li><strong>Identify the optimal threshold</strong> that minimizes expected costs (it will be net negative, so we're looking for the least negative value)</li>
+</ol>
+<h4 class="ada-h4" id="342-questions-to-answer">3.4.2. Questions to Answer</h4>
+<ol>
+<li>What threshold maximizes the net financial result? How does this compare to the default 0.5 threshold?</li>
+<li>How would your optimal threshold change if FN cost doubled? Test this scenario and explain the intuition (also your precision / recall vs threshold graph will help with this explanation).</li>
+<li>Why is this cost-benefit approach more useful for business decision-making than simply maximizing an accuracy score?</li>
+</ol>
+<hr />
+<h2 class="ada-h2" id="4-technical-guidance">4. Technical Guidance</h2>
+<p>This section provides step-by-step instructions for implementing the lab exercises.</p>
+<h3 class="ada-h3" id="41-excel-implementation">4.1. Excel Implementation</h3>
+<p>Excel does not have native support for logistic regression. While it's theoretically possible to estimate logistic regression using the Solver add-in by manually setting up the log-likelihood function, this is impractical for a lab setting and error-prone. As a workaround, we will use OLS regression to generate predicted values, and treat these as probabilities for classification purposes. This is a simplification, but for the purposes of this lab, it will suffice.</p>
+<p class="note"><em>Note</em>: Statisticians, being very grandiose, like to call using OLS in this way a "linear probability model." In practice, OLS and logistic regression for binary outcomes often yield similar classification results, especially when the outcome is not extremely imbalanced, so it's fine to use. But now you know how fancy you can sound doing so.</p>
+<p>Broadly, the steps are:</p>
+<ol>
+<li>Prepare your data in a tabular format with features and target variable.</li>
+<li>Use OLS regression to estimate the models<ol>
+<li>I put the Y variable in column A, and the X variables for Exercise 1 in columns F-K.</li>
+<li>For Exercise 2, add demographic dummy variables, depending on which coding you choose (e.g. how many levels of education, age, etc.) (mine were columns L - U). Just make sure that the variables from Exercise 1 are contiguous with your new demographic dummy variables so you can put them all in the second regression together, and that the total number of variables does not exceed 16.</li>
+</ol>
+</li>
+<li>Generate predicted probabilities from the model (I called mine <code class="fixed-width">bad_ar_prob</code>)<ul>
+<li>This will be just like in Lab 9, where you use the regression coefficients to calculate predicted Y values. </li>
+<li>Given where I put my table, my formula for Exercise 1 was:<ul>
+<li><code class="fixed-width">=$Z$13 + $Z$14 * [@[outstanding_balance]] + $Z$15 * [@[pay_this_month]] + $Z$16 * [@[no_activity_this_month]] + $Z$17 * [@[last_payment_portion]] + $Z$18 * [@[num_recent_payments]] + $Z$19 * [@[credit_limit]]</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Generate binary predictions using a threshold. I <strong>strongly</strong> recommend referencing the threshold in a cell, so you can easily change it later. I put the value <code class="fixed-width">0.5</code> in cell <code class="fixed-width">Z1</code> (and labeled it for clarity), and then my formula for predicted class (which I called <code class="fixed-width">bad_ar_hat</code>) was:<ul>
+<li><code class="fixed-width">=--([@[bad_ar_prob]]&gt;$Z$1)</code> (using that <code class="fixed-width">--</code> trick to convert <code class="fixed-width">TRUE</code>/<code class="fixed-width">FALSE</code> to <code class="fixed-width">1</code>/<code class="fixed-width">0</code>)</li>
+</ul>
+</li>
+<li>Create confusion matrices and calculate metrics at different thresholds<ol>
+<li>Create a table of thresholds from 0 to 1 (e.g., increments of 0.01). For the formulas below, I made this new table an Excel table called <code class="fixed-width">ThresholdTable</code>, with the first column named <code class="fixed-width">Threshold</code>.</li>
+<li>For each threshold, calculate the confusion matrix counts (TP, TN, FP, FN) by counting how many predictions fall into each category based on the threshold<ul>
+<li class="note"><em>Note</em>: Calculating the confusion matrix requires counting the number of true positives, true negatives, false positives, and false negatives based on the predicted and actual values. This is where being comfortable with binary comes in handy for making Excel formulas, because counting how many rows have <code class="fixed-width">bad_ar == 1</code> <em>and</em> <code class="fixed-width">bad_ar_pred == 1</code> is mathematically the same as <code class="fixed-width">SUM(bad_ar * bad_ar_pred)</code>.</li>
+<li>Example formulas (assuming your actual <code class="fixed-width">bad_ar</code> values are in column A, predicted probabilities in column B):<ul>
+<li>True Positives (TP): <code class="fixed-width">=SUM((--(DataTable[bad_ar_prob] &gt;= [@Threshold])) * (DataTable[bad_ar]))</code></li>
+<li>False Positives (FP): <code class="fixed-width">=SUM((--(DataTable[bad_ar_prob] &gt;= [@Threshold])) * (1-DataTable[bad_ar]))</code></li>
+<li>True Negatives (TN): <code class="fixed-width">=SUM((--(DataTable[bad_ar_prob] &lt; [@Threshold])) * (1-DataTable[bad_ar]))</code></li>
+<li>False Negatives (FN): <code class="fixed-width">=SUM((--(DataTable[bad_ar_prob] &lt; [@Threshold])) * (DataTable[bad_ar]))</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Calculate precision, recall, and other metrics using these confusion matrix counts</li>
+<li>Calculate TPR and FPR for ROC curve<ul>
+<li>TPR = Recall = TP / (TP + FN)</li>
+<li>FPR = FP / (FP + TN)</li>
+</ul>
+</li>
+<li>Calculate the AUC using the trapezoidal rule (you can do this by summing up the areas of trapezoids formed between each pair of points on the ROC curve)<ul>
+<li>The trapezoidal rule formula for each segment is the width (difference in FPR from row to row) times the average height (average of TPR from row to row)</li>
+<li>My TPR was in column <code class="fixed-width">AW13:112</code>, and FPR was in column <code class="fixed-width">AX13:112</code>, so the formula was <code class="fixed-width">=(AX13-AX14) * AVERAGE(AW13:AW14)</code></li>
+</ul>
+</li>
+<li>Calculate expected costs/benefits at each threshold (again, I recommend calculating the average outstanding balances in cells, and then referencing them in your formulas)<ul>
+<li>Multiply the TP/TN/FP/FN counts by their respective costs/benefits and sum them up (remembering to add the benefits and subtract the costs)</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>Plot the ROC curve and cost-benefit analysis results using Excel charts<ul>
+<li>Plot Recall vs Threshold and Precision vs Threshold on the same chart</li>
+<li>Plot TPR vs FPR to create the ROC curve</li>
+<li>Plot summed cost-benefit vs Threshold to visualize optimal operating point</li>
+</ul>
+</li>
+</ol>
+<p>Note on the confusion matrix calculations: you could also achieve these counts with <code class="fixed-width">SUMPRODUCT</code> or array formulas that evaluate conditions across your dataset. I'll explain my formula, if you're curious:</p>
+<ul>
+<li>For True Positives (TP), the formula <code class="fixed-width">=SUM((--(DataTable[bad_ar_prob] &gt;= [@Threshold])) * (DataTable[bad_ar]))</code> works as follows:<ul>
+<li><code class="fixed-width">--(DataTable[bad_ar_prob] &gt;= [@Threshold])</code> creates an array of 1s and 0s indicating whether each predicted probability exceeds the threshold (1 for predicted default, 0 for non-default).</li>
+<li><code class="fixed-width">DataTable[bad_ar]</code> is the actual outcome (1 for default, 0 for non-default).</li>
+<li>Multiplying these two arrays element-wise gives 1 only when both conditions are met because only 1 * 1 = 1 (predicted default and actual default), and 0 otherwise.</li>
+<li>Finally, <code class="fixed-width">SUM(...)</code> adds up all the 1s to give the total count of true positives.</li>
+</ul>
+</li>
+<li>The TN/FN calculations just change the greater-than to a less-than condition (e.g. &lt; threshold means 1 is non-default)</li>
+<li>The FP/TN calculations multiply by <code class="fixed-width">(1 - DataTable[bad_ar])</code> to flip the actual outcome so non-defaults is a 1, and defaults is a 0 (because 1 - 1 = 0, and 1 - 0 = 1)<ul>
+<li>This flipping of 1s and 0s is a common trick in binary math to isolate the opposite class, but only works with binary variables</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="42-python-implementation">4.2. Python Implementation</h3>
+<p>The following is example code for implementing the lab exercises in Python. You could think of each section as a cell in your notebook, but note that the code below doesn't just copy/paste complete the Lab. It does, however, cover all the code you need to complete the exercises.</p>
+<p><strong>Setup and Data Loading</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Load Imports</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span>
+                             <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span>
+                             <span class="n">roc_curve</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">auc</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="c1"># Load data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;ar_default_data.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># View first few rows</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+<span class="c1"># Check class balance</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Default rate: </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</code></pre></div>
+<p><strong>Running Logistic Regression (Exercise 1)</strong></p>
+<p><em>Note</em>: if you want, you could use ols instead of logit here to mimic Excel's approach, but logit is preferred for classification tasks. Just change the <code class="fixed-width">smf.logit</code> to <code class="fixed-width">smf.ols</code> and proceed similarly.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Exercise 1: Base model with payment/credit features</span>
+<span class="n">model_e1_base</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span>
+    <span class="s1">&#39;bad_ar ~ credit_limit + pay_this_month + no_activity_this_month + last_payment_portion + num_recent_payments&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="c1"># Exercise 2: Base model + demographics</span>
+<span class="n">model_e2_demo</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span>
+    <span class="s1">&#39;bad_ar ~ credit_limit + pay_this_month + no_activity_this_month + last_payment_portion + num_recent_payments &#39;</span>
+    <span class="s1">&#39;+ C(gender) + C(education) + C(marital_status) + C(age_decile)&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Display regression output for screenshot</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_e1_base</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="c1"># Get predicted probabilities</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_e1_base</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_demo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_e2_demo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># Create binary predictions using 0.5 threshold</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_class_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_class_demo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_demo&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Confusion Matrix and Classification Metrics</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Set threshold variable for changing later</span>
+<span class="n">THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="c1"># Create confusion matrix</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Confusion Matrix:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
+
+<span class="c1"># Pretty confusion matrix with labels</span>
+<span class="n">cm_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span>
+                     <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Actual: Paid&#39;</span><span class="p">,</span> <span class="s1">&#39;Actual: Default&#39;</span><span class="p">],</span>
+                     <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Predicted: Paid&#39;</span><span class="p">,</span> <span class="s1">&#39;Predicted: Default&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm_df</span><span class="p">)</span>
+
+<span class="c1"># Calculate metrics</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
+<span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
+<span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Classification Metrics (threshold=0.5):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accuracy:  </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precision: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recall:    </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F1 Score:  </span><span class="si">{</span><span class="n">f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Alternative: Use classification_report for comprehensive output</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">,</span>
+                                   <span class="n">target_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Paid&#39;</span><span class="p">,</span> <span class="s1">&#39;Default&#39;</span><span class="p">]))</span>
+</code></pre></div>
+<p><strong>ROC Curves</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Calculate ROC curve for both models</span>
+<span class="n">fpr_base</span><span class="p">,</span> <span class="n">tpr_base</span><span class="p">,</span> <span class="n">thresholds_base</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">])</span>
+<span class="n">fpr_demo</span><span class="p">,</span> <span class="n">tpr_demo</span><span class="p">,</span> <span class="n">thresholds_demo</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_demo&#39;</span><span class="p">])</span>
+
+<span class="n">auc_base</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr_base</span><span class="p">,</span> <span class="n">tpr_base</span><span class="p">)</span>
+<span class="n">auc_demo</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr_demo</span><span class="p">,</span> <span class="n">tpr_demo</span><span class="p">)</span>
+
+<span class="c1"># Plot ROC curves</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_base</span><span class="p">,</span> <span class="n">tpr_base</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Base Model (AUC = </span><span class="si">{</span><span class="n">auc_base</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_demo</span><span class="p">,</span> <span class="n">tpr_demo</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;With Demographics (AUC = </span><span class="si">{</span><span class="n">auc_demo</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Classifier&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate (Recall)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC Curves&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Plot Threshold Analysis</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Threshold analysis for base model</span>
+<span class="n">thresholds_to_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">))</span>
+<span class="n">threshold_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">thresholds_to_test</span><span class="p">:</span>
+    <span class="n">pred_class</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="n">threshold_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;Threshold&#39;</span><span class="p">:</span> <span class="n">threshold</span><span class="p">,</span>
+        <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">),</span>
+        <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">),</span>
+        <span class="s1">&#39;F1 Score&#39;</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">),</span>
+        <span class="s1">&#39;</span><span class="si">% F</span><span class="s1">lagged&#39;</span><span class="p">:</span> <span class="n">pred_class</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="p">})</span>
+
+<span class="n">threshold_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">threshold_results</span><span class="p">)</span>
+<span class="n">threshold_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Threshold&#39;</span><span class="p">)[[</span><span class="s1">&#39;Precision&#39;</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">,</span> <span class="s1">&#39;F1 Score&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</code></pre></div>
+<p><strong>Cost-Benefit Analysis</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Define costs/benefits</span>
+<span class="n">COST_FP</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;bad_ar==0&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">outstanding_balance</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">COST_FN</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;bad_ar==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">outstanding_balance</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">BENEFIT_TP</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;bad_ar==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">outstanding_balance</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">COST_TN</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Test multiple thresholds</span>
+<span class="n">thresholds_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">cost_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">thresholds_cost</span><span class="p">:</span>
+    <span class="n">pred_class</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># Get confusion matrix components</span>
+    <span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="c1"># Calculate costs and benefits</span>
+    <span class="n">total_fp_cost</span> <span class="o">=</span> <span class="n">fp</span> <span class="o">*</span> <span class="n">COST_FP</span>
+    <span class="n">total_fn_cost</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">*</span> <span class="n">COST_FN</span>
+    <span class="n">total_tp_benefit</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">*</span> <span class="n">BENEFIT_TP</span>
+    <span class="n">net_result</span> <span class="o">=</span> <span class="n">total_tp_benefit</span> <span class="o">-</span> <span class="n">total_fp_cost</span> <span class="o">-</span> <span class="n">total_fn_cost</span>
+
+    <span class="n">cost_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;Threshold&#39;</span><span class="p">:</span> <span class="n">threshold</span><span class="p">,</span>
+        <span class="s1">&#39;TP&#39;</span><span class="p">:</span> <span class="n">tp</span><span class="p">,</span> <span class="s1">&#39;FP&#39;</span><span class="p">:</span> <span class="n">fp</span><span class="p">,</span> <span class="s1">&#39;FN&#39;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;TN&#39;</span><span class="p">:</span> <span class="n">tn</span><span class="p">,</span>
+        <span class="s1">&#39;TP Benefit&#39;</span><span class="p">:</span> <span class="n">total_tp_benefit</span><span class="p">,</span>
+        <span class="s1">&#39;FP Cost&#39;</span><span class="p">:</span> <span class="n">total_fp_cost</span><span class="p">,</span>
+        <span class="s1">&#39;FN Cost&#39;</span><span class="p">:</span> <span class="n">total_fn_cost</span><span class="p">,</span>
+        <span class="s1">&#39;Net Result&#39;</span><span class="p">:</span> <span class="n">net_result</span>
+    <span class="p">})</span>
+
+<span class="n">cost_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cost_results</span><span class="p">)</span>
+
+<span class="c1"># Find optimal threshold</span>
+<span class="n">optimal_idx</span> <span class="o">=</span> <span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Net Result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
+<span class="n">optimal_threshold</span> <span class="o">=</span> <span class="n">cost_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">optimal_idx</span><span class="p">,</span> <span class="s1">&#39;Threshold&#39;</span><span class="p">]</span>
+<span class="n">optimal_net</span> <span class="o">=</span> <span class="n">cost_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">optimal_idx</span><span class="p">,</span> <span class="s1">&#39;Net Result&#39;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Optimal threshold: </span><span class="si">{</span><span class="n">optimal_threshold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Net result at optimal threshold: $</span><span class="si">{</span><span class="n">optimal_net</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Compare to default 0.5 threshold</span>
+<span class="n">threshold_50_net</span> <span class="o">=</span> <span class="n">cost_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Threshold&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;Net Result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">improvement</span> <span class="o">=</span> <span class="n">optimal_net</span> <span class="o">-</span> <span class="n">threshold_50_net</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Net result at 0.5 threshold: $</span><span class="si">{</span><span class="n">threshold_50_net</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Improvement: $</span><span class="si">{</span><span class="n">improvement</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot net result vs threshold</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Threshold&#39;</span><span class="p">],</span> <span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Net Result&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">optimal_threshold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Optimal: </span><span class="si">{</span><span class="n">optimal_threshold</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Default: 0.50&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Classification Threshold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Net Result ($)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Cost-Benefit Analysis: Net Result by Threshold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<h3 class="ada-h3" id="43-common-issues-and-troubleshooting">4.3. Common Issues and Troubleshooting</h3>
+<ul>
+<li>
+<p><strong>Problem</strong>: Very low precision but high recall (or vice versa)</p>
+<ul>
+<li><strong>Cause</strong>: Threshold too low (high recall, low precision) or too high (low recall, high precision)</li>
+<li><strong>Solution</strong>: This is not a "problem"—it's the precision/recall trade-off. Adjust threshold based on business costs (Exercise 4)</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: AUC is around 0.5 (no better than random guessing)</p>
+<ul>
+<li><strong>Cause</strong>: Model has no predictive power, or using wrong variables</li>
+<li><strong>Solution</strong>: Verify you're using correct outcome variable (<code class="fixed-width">bad_ar</code>) and predictors. Check that data loaded correctly. AUC should be about 0.75</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Getting different confusion matrix values at threshold 0.5 than classmates</p>
+<ul>
+<li><strong>Cause</strong>: Possible differences in how ties are handled or rounding</li>
+<li><strong>Solution</strong>: Small differences (1-2 observations) are okay. Large differences suggest using different data or models</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Cost-benefit analysis shows that 0 or 1 threshold is optimal</p>
+<ul>
+<li><strong>Cause</strong>: Cost calculations may be wrong, or have the wrong sign</li>
+<li><strong>Solution</strong>: Check that you're using BENEFIT for TP (positive number) and subtracting costs, not adding them: <code class="fixed-width">net = TP_benefit - FP_cost - FN_cost</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: ROC curve looks jagged or strange</p>
+<ul>
+<li><strong>Cause</strong>: Plotting issue or not enough unique predicted probabilities</li>
+<li><strong>Solution</strong>: Make sure you're passing predicted probabilities (0-1 range), not binary classes. Use <code class="fixed-width">df['pred_prob_base']</code>, not <code class="fixed-width">df['pred_class_base']</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Python says "module not found" for sklearn or statsmodels</p>
+<ul>
+<li><strong>Cause</strong>: Package not installed</li>
+<li><strong>Solution</strong>: In Colab, these should be pre-installed. Try running: <code class="fixed-width">!pip install scikit-learn statsmodels</code> in a cell</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Convergence warnings when fitting logistic regression</p>
+<ul>
+<li><strong>Cause</strong>: Model optimization didn't fully converge to best coefficients</li>
+<li><strong>Solution</strong>: Usually not a problem if warning says "nearly converged". If persistent, try increasing max iterations: <code class="fixed-width">model.fit(maxiter=100)</code> or check for perfect separation</li>
+</ul>
+</li>
+</ul>
+<p class="tip"><em>Excel tip</em>: Don't use Excel for analytics :)</p>
+</body>
+</html>

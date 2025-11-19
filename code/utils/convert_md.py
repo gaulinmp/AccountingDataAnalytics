@@ -1,8 +1,13 @@
+# stdlib imports
 import re
+import sys
 from datetime import datetime as dt
 import time
 import base64
 from pathlib import Path
+
+# third-party imports
+import click
 import mimetypes
 import markdown
 from markdown import Extension
@@ -10,7 +15,10 @@ from markdown.postprocessors import Postprocessor
 from markdown.treeprocessors import Treeprocessor
 import xml.etree.ElementTree as etree
 
-_dir = Path(__file__).parent
+# project imports
+_dir = Path(__file__).parent.parent # Assumes this is in code/utils/
+sys.path.append(str(_dir))
+from src import LAB_DIR
 
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
@@ -202,24 +210,50 @@ def md_to_html_with_inline_images(md_file):
     return output_path
 
 
-if __name__ == "__main__":
-    print(f"Starting at: {Path('.').absolute()}")
-    first = False
+def convert_md(md_file, update_if_html_older=True):
+    """
+    Convert a single markdown file to HTML if needed.
+    """
+    md_file = Path(md_file)
+    html_file = md_file.with_suffix(".html")
+
+    if not update_if_html_older:
+        # Force update
+        pass
+    elif html_file.exists() and html_file.stat().st_mtime > md_file.stat().st_mtime:
+        # HTML is newer, skip
+        return
+
+    print(f"{dt.now():%H:%M:%S} - Detected change in {md_file}.")
+    try:
+        md_to_html_with_inline_images(md_file)
+    except Exception as e:
+        print(f"Error processing {md_file}: {e}")
+        # raise # Don't crash on error
+
+
+def convert_all_md_in_dir(root_dir, update_if_html_older=True):
+    """
+    Scan directory and convert all markdown files.
+    """
+    for md_file in Path(root_dir).rglob("*.md"):
+        convert_md(md_file, update_if_html_older=update_if_html_older)
+
+
+@click.command()
+@click.option("--root-dir", default=LAB_DIR, help="Root directory to watch for markdown files.")
+def main(root_dir):
+    print(f"Starting at: {Path(root_dir).absolute()}")
 
     # Convert the Markdown file to HTML with inline images
     while True:
-        for md_file in Path(".").rglob("*.md"):
-            html_file = md_file.with_suffix(".html")
-            if first or not html_file.exists() or html_file.stat().st_mtime <= md_file.stat().st_mtime:
-                print(f"{dt.now():%H:%M:%S} - Detected change in {md_file}.")
-                try:
-                    md_to_html_with_inline_images(md_file)
-                except Exception as e:
-                    print(f"Error processing {md_file}: {e}")
-                    raise
-        first = False
+        convert_all_md_in_dir(root_dir, update_if_html_older=True)
+
         try:
             time.sleep(5)
         except KeyboardInterrupt:
             print("\nStopping file watcher...")
             break
+
+if __name__ == "__main__":
+    main(LAB_DIR)

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid;
+    border-right: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.small {
+    font-size: 0.75rem;
+    color: #555;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="lab-9-regression-modeling">Lab 9: Regression Modeling</h1>
+<p>Lab 9 introduces you to building, interpreting, and evaluating regression models for cost estimation. This lab builds on Lab 8's exploration of relationships (R<sup>2</sup>) by having you actually construct descriptive models, interpret coefficients, and evaluate model performance using production cost data.</p>
+<div class="toc">
+<ul>
+<li><a href="#lab-9-regression-modeling">Lab 9: Regression Modeling</a><ul>
+<li><a href="#1-assignment">1. Assignment</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-tools">1.2. Tools</a></li>
+</ul>
+</li>
+<li><a href="#2-data">2. Data</a><ul>
+<li><a href="#22-key-variables-for-this-lab">2.2. Key Variables for This Lab</a></li>
+<li><a href="#23-significance-levels">2.3. Significance Levels</a></li>
+</ul>
+</li>
+<li><a href="#3-step-by-step-instructions">3. Step-by-Step Instructions</a><ul>
+<li><a href="#31-exercise-1-simple-volume-based-model">3.1. Exercise 1: Simple Volume-Based Model</a><ul>
+<li><a href="#311-tasks">3.1.1. Tasks</a></li>
+<li><a href="#312-questions-to-answer">3.1.2. Questions to Answer</a></li>
+</ul>
+</li>
+<li><a href="#32-exercise-2-abc-activity-based-costing-model">3.2. Exercise 2: ABC (Activity-Based Costing) Model</a><ul>
+<li><a href="#321-tasks">3.2.1. Tasks</a></li>
+<li><a href="#322-questions-to-answer">3.2.2. Questions to Answer</a></li>
+</ul>
+</li>
+<li><a href="#33-exercise-3-volume-with-quarter-fixed-effects">3.3. Exercise 3: Volume with Quarter Fixed Effects</a><ul>
+<li><a href="#331-tasks">3.3.1. Tasks</a></li>
+<li><a href="#332-questions-to-answer">3.3.2. Questions to Answer</a></li>
+</ul>
+</li>
+<li><a href="#34-exercise-4-out-of-sample-validation">3.4. Exercise 4: Out-of-Sample Validation</a><ul>
+<li><a href="#341-tasks">3.4.1. Tasks</a></li>
+<li><a href="#342-questions-to-answer">3.4.2. Questions to Answer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#4-cost-accounting-insights">4. Cost Accounting Insights</a></li>
+<li><a href="#5-technical-guidance">5. Technical Guidance</a><ul>
+<li><a href="#51-excel-implementation">5.1. Excel Implementation</a><ul>
+<li><a href="#511-running-regressions-in-excel-with-data-analysis-toolpak">5.1.1. Running Regressions in Excel with Data Analysis ToolPak</a></li>
+<li><a href="#512-running-regressions-in-excel-with-linest-function">5.1.2. Running Regressions in Excel with LINEST Function</a></li>
+<li><a href="#513-creating-quarter-indicator-variables">5.1.3. Creating Quarter Indicator Variables</a></li>
+<li><a href="#514-calculating-error-metrics">5.1.4. Calculating Error Metrics</a></li>
+</ul>
+</li>
+<li><a href="#52-python-implementation">5.2. Python Implementation</a><ul>
+<li><a href="#521-setup-and-data-loading">5.2.1. Setup and Data Loading</a></li>
+<li><a href="#522-running-a-regression">5.2.2. Running a regression</a></li>
+<li><a href="#523-error-calculations">5.2.3. Error Calculations</a></li>
+<li><a href="#524-traintest-split">5.2.4. Train/Test Split</a></li>
+</ul>
+</li>
+<li><a href="#53-common-issues-and-troubleshooting">5.3. Common Issues and Troubleshooting</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
+<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading screenshots and reporting results:</p>
+<ol>
+<li><strong>Simple Volume Model</strong>: Regression of total cost on production volume with coefficients, significance, and R<sup>2</sup></li>
+<li><strong>ABC Model</strong>: Regression of total cost on activity based cost (ABC) drivers (material, labor, machine hours, etc.) with comparison to volume-only model</li>
+<li><strong>Volume with Quarter Fixed Effects</strong>: Regression of total cost on production volume, adding indicator variables for each quarter, with coefficient comparison to Exercise 1</li>
+<li><strong>Out-of-Sample Validation</strong>: Train volume model on 2015-2022 data, apply to 2023-2024 data, and compare RMSE/MAE/MAPE between training and test sets</li>
+</ol>
+<p>The breakdown of submissions will generally be the regression and error metrics screenshots will be submitted in the Lab, and the written questions asked in each exercise will be submitted in the Homework.</p>
+<p class="note"><em>Note</em>: This lab demonstrates a fundamental cost accounting principle: detailed cost driver analysis provides better predictions than simple volume-based costing. The skills you practice here, running regressions, interpreting output, and evaluating predictions, are essential for cost management and budgeting.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Build and estimate OLS regression models using production cost data</li>
+<li>Compare simple volume-based models with detailed cost driver models</li>
+<li>Interpret regression coefficients in cost accounting terms (economic magnitude and statistical significance), including fixed effects</li>
+<li>Calculate and interpret model evaluation metrics (<em>RMSE</em>-Root Mean Square Error, <em>MAE</em>-Mean Absolute Error, <em>MAPE</em>-Mean Absolute Percentage Error)</li>
+<li>Apply proper train/test splits to assess out-of-sample prediction accuracy</li>
+<li>Understand when detailed cost analysis provides value over simple volume approximations</li>
+<li>Apply regression analysis to cost management and budgeting decisions</li>
+</ul>
+<h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
+<p>As always, you can use whatever modality you are comfortable with, but it should be noted that these regression calculations are far more difficult in Tableau, so I recommend using Excel or Python for this lab (and I won't be providing Tableau guidance).</p>
+<ul>
+<li><strong>Excel</strong>: Data Analysis ToolPak provides regression analysis with full output tables, or you can use the <code class="fixed-width">LINEST</code> function for more compact output</li>
+<li><strong>Python</strong>: <code class="fixed-width">statsmodels</code> library provides formula-based regression interface, with well-formatted regression output</li>
+</ul>
+<h2 class="ada-h2" id="2-data">2. Data</h2>
+<p>The dataset for this lab contains simulated monthly production costs for a manufacturing operation from 2015-2024. The data tracks both total costs and the underlying cost drivers that generate those costs, allowing you to compare simple volume-based cost estimation with detailed activity-based costing approaches.</p>
+<p>The dataset <code class="fixed-width">production_costs_daily.csv</code> contains, at the daily level, the following variables:</p>
+<ul>
+<li><code class="fixed-width">date</code>: Full date (YYYY-MM-DD format)</li>
+<li><code class="fixed-width">year</code>: Year (2015-2024)</li>
+<li><code class="fixed-width">month</code>: Month number (1-12)</li>
+<li><code class="fixed-width">quarter</code>: Quarter number (1-4)</li>
+<li><code class="fixed-width">cpi</code>: Consumer price index (base year 2015 = 1). Used to adjust for inflation.</li>
+<li><code class="fixed-width">volume</code>: Number of units produced in the month</li>
+<li><code class="fixed-width">dm_cost</code>: Direct material cost (dollars)</li>
+<li><code class="fixed-width">dl_cost</code>: Direct labor cost (dollars)</li>
+<li><code class="fixed-width">voh_cost</code>: Variable overhead cost (dollars)</li>
+<li><code class="fixed-width">material_lbs</code>: Pounds of raw material consumed</li>
+<li><code class="fixed-width">labor_hours</code>: Direct labor hours worked</li>
+<li><code class="fixed-width">machine_hours</code>: Machine hours used in production</li>
+<li><code class="fixed-width">num_batches</code>: Number of production batches (drives setup labor)</li>
+<li><code class="fixed-width">num_inspections</code>: Number of quality inspections performed</li>
+<li><code class="fixed-width">foh_setup</code>: Fixed overhead for production setup</li>
+<li><code class="fixed-width">foh_inspection</code>: Fixed overhead for quality inspection</li>
+<li><code class="fixed-width">foh_material_handling</code>: Fixed overhead for material handling</li>
+<li><code class="fixed-width">foh_facility</code>: Fixed overhead for facility costs (rent, utilities, etc.)</li>
+<li><code class="fixed-width">foh_total</code>: Total daily fixed overhead</li>
+<li><code class="fixed-width">total_variable_cost</code>: Total daily variable cost</li>
+<li><code class="fixed-width">total_cost</code>: Total daily cost</li>
+</ul>
+<p class="note"><em>Note</em>: CPI is included to allow you to adjust costs for inflation over the 10-year period. Normally, CPI is a number that starts around 100 and increases over time, but for simplicity in this dataset, CPI starts at 1 in 2015 and increases by approximately 3% per year. To adjust costs to real 2015 dollars, divide costs by the CPI value. To do this with real CPI (e.g. from the Bureau of Labor Statistics), you would pick a base year, divide each month's CPI by that base year (which normalizes CPI to that year), then divide your costs by the normalized CPI. I've just done that base-year normalization for you here.</p>
+<h3 class="ada-h3" id="22-key-variables-for-this-lab">2.2. Key Variables for This Lab</h3>
+<p><strong>Outcome Variable (Y)</strong></p>
+<ul>
+<li><strong><code class="fixed-width">total_cost</code></strong>: Total monthly production cost (dollars)<ul>
+<li>Includes all direct materials, direct labor, variable overhead, and fixed overhead</li>
+<li>This is what we want to predict</li>
+</ul>
+</li>
+</ul>
+<p><strong>Simple Model Predictor (X)</strong></p>
+<ul>
+<li><strong><code class="fixed-width">volume</code></strong>: Number of units produced in the month<ul>
+<li>Traditional volume-based costing uses this as the single driver</li>
+<li>Expected R<sup>2</sup> ≈ 80% when predicting total_cost</li>
+</ul>
+</li>
+</ul>
+<p><strong>Detailed Cost Driver Predictors (multiple Xs)</strong></p>
+<ul>
+<li><strong>Material drivers</strong>:<ul>
+<li><code class="fixed-width">material_lbs</code>: Pounds of raw material consumed</li>
+</ul>
+</li>
+<li><strong>Labor drivers</strong>:<ul>
+<li><code class="fixed-width">labor_hours</code>: Direct labor hours worked</li>
+<li><code class="fixed-width">num_batches</code>: Number of production batches (drives setup labor)</li>
+</ul>
+</li>
+<li><strong>Machine drivers</strong>:<ul>
+<li><code class="fixed-width">machine_hours</code>: Machine hours used in production</li>
+<li><code class="fixed-width">num_inspections</code>: Number of quality inspections performed</li>
+</ul>
+</li>
+</ul>
+<p><strong>Expected improvement</strong>: Using detailed cost drivers should increase R<sup>2</sup> from ~80% to ~90%, demonstrating the value of detailed cost analysis.</p>
+<h3 class="ada-h3" id="23-significance-levels">2.3. Significance Levels</h3>
+<p>When interpreting regression output, you may see multiple ways to assess statistical significance of coefficients:</p>
+<ul>
+<li><strong>P-value</strong>: Probability of observing the data if the null hypothesis (coefficient = 0) is true<ul>
+<li>Common thresholds: &lt;0.05 (5%), &lt;0.01 (1%)</li>
+<li>If p-value &lt; threshold, reject null hypothesis and conclude coefficient is statistically significant</li>
+</ul>
+</li>
+<li><strong>T-statistic</strong>: Ratio of coefficient estimate to its standard error<ul>
+<li>Higher absolute t-statistic indicates more evidence against null hypothesis</li>
+<li>Rough rule of thumb: |t| &gt; 2 corresponds to p-value &lt; 0.05</li>
+</ul>
+</li>
+<li><strong>Standard Error</strong>: Measure of uncertainty in coefficient estimate<ul>
+<li>Smaller standard error relative to coefficient indicates more precise estimate</li>
+<li>Used to calculate t-statistic (t-statistic = coefficient / standard error)</li>
+</ul>
+</li>
+</ul>
+<p class="note"><em>Note</em>: Be wary of over-reliance on statistical significance alone, for two reasons. Firstly, p-hacking is the practice of manipulating data or models until you achieve statistically significant results. So unless you did the analysis yourself, you should be cautious in interpreting the results of "significant" findings, especially with p-values close to 0.05 (i.e. t-statistics close to 2). Secondly, a coefficient can be statistically significant but economically meaningless if its magnitude is very small. Always interpret coefficients in business terms, considering both significance and practical impact.</p>
+<h2 class="ada-h2" id="3-step-by-step-instructions">3. Step-by-Step Instructions</h2>
+<p>This lab walks you through some important regression modeling concepts using production cost data. The homework will continue with year fixed effects, and then CPI adjustment.</p>
+<p>Generally, when reporting the output of a regression model, you should include:</p>
+<ul>
+<li>Intercept and coefficients</li>
+<li>Standard errors or t-statistics or P-values for significance testing</li>
+<li>R<sup>2</sup> and, optionally, adjusted R<sup>2</sup></li>
+<li>Number of observations</li>
+</ul>
+<h3 class="ada-h3" id="31-exercise-1-simple-volume-based-model">3.1. Exercise 1: Simple Volume-Based Model</h3>
+<p><strong>Objective</strong>: Build a traditional volume-based cost model that predicts total cost using only production volume.</p>
+<p>Most basic cost accounting systems use a traditional cost system that assumes one cost driver. This is easy to implement but ignores the complexity of how different activities drive different costs. In this example, our traditional cost system assumes that total costs are a linear function of production volume (units produced).</p>
+<h4 class="ada-h4" id="311-tasks">3.1.1. Tasks</h4>
+<ol>
+<li><strong>Load the dataset</strong>: all years 2015-2024</li>
+<li><strong>Run the regression</strong>: Use OLS (Ordinary Least Squares) regression<ul>
+<li>Outcome variable (Y): <code class="fixed-width">total_cost</code></li>
+<li>Predictor variable (X): <code class="fixed-width">volume</code></li>
+</ul>
+</li>
+<li><strong>Report the results</strong>: Take a screenshot of your regression output</li>
+<li><strong>Calculate error metrics</strong>:<ul>
+<li>Use the regression coefficients to calculate predicted values: <code class="fixed-width">total_cost_hat</code></li>
+<li>Calculate residuals: <code class="fixed-width">residual = total_cost - total_cost_hat</code></li>
+<li>Calculate RMSE: <code class="fixed-width">sqrt(mean(residual^2))</code></li>
+<li>Calculate MAE: <code class="fixed-width">mean(abs(residual))</code></li>
+<li>Calculate MAPE: <code class="fixed-width">mean(abs(residual / total_cost)) * 100</code></li>
+</ul>
+</li>
+</ol>
+<h4 class="ada-h4" id="312-questions-to-answer">3.1.2. Questions to Answer</h4>
+<ol>
+<li>What is the coefficient on <code class="fixed-width">volume</code>? In cost accounting terms, what does this represent?</li>
+<li>What is the intercept? What does this represent in cost accounting terms?</li>
+<li>What are the RMSE and MAE? How should you interpret these dollar values? Do you think the difference between them is material? Which would you use in communication and why?</li>
+<li>What is the MAPE? How should you interpret this value? Is it more or less useful than RMSE/MAE when communicating results?</li>
+</ol>
+<h3 class="ada-h3" id="32-exercise-2-abc-activity-based-costing-model">3.2. Exercise 2: ABC (Activity-Based Costing) Model</h3>
+<p><strong>Objective</strong>: Build a comprehensive cost model using detailed cost drivers to predict total cost more accurately than the simple volume model.</p>
+<p>Activity-Based Costing (ABC) recognizes that different activities consume different resources. Instead of assuming all costs are driven by one cost driver (e.g., volume), ABC identifies specific cost drivers for each activity.</p>
+<h4 class="ada-h4" id="321-tasks">3.2.1. Tasks</h4>
+<ol>
+<li><strong>Load the dataset</strong>: all years 2015-2024</li>
+<li><strong>Run the regression</strong>: Use OLS (Ordinary Least Squares) regression<ul>
+<li>Outcome variable (Y): <code class="fixed-width">total_cost</code></li>
+<li>Predictor variables (X): <code class="fixed-width">material_lbs</code>, <code class="fixed-width">labor_hours</code>, <code class="fixed-width">machine_hours</code>, <code class="fixed-width">num_batches</code>, <code class="fixed-width">num_inspections</code></li>
+</ul>
+</li>
+<li><strong>Report the results</strong>: Take a screenshot of your regression output</li>
+<li><strong>Create comparison table</strong>:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Volume Only (Ex 1)</th>
+<th>ABC Model (Ex 2)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R<sup>2</sup></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MAE</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MAPE (%)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 class="ada-h4" id="322-questions-to-answer">3.2.2. Questions to Answer</h4>
+<ol>
+<li>How much did R<sup>2</sup> improve from the volume-only model to the ABC model? What does this tell you about the value of detailed cost analysis?</li>
+<li>What is the coefficient on <code class="fixed-width">labor_hours</code>? In cost accounting terms, what does this represent?</li>
+<li>What is the coefficient on <code class="fixed-width">material_lbs</code>? In cost accounting terms, what does this represent?</li>
+<li>Which cost drivers are statistically significant at the 5% level? What does this tell you about which activities are important in driving total costs?</li>
+<li>If you were a cost accountant, would the R<sup>2</sup> improvement justify the additional data collection required for the detailed drivers?</li>
+</ol>
+<h3 class="ada-h3" id="33-exercise-3-volume-with-quarter-fixed-effects">3.3. Exercise 3: Volume with Quarter Fixed Effects</h3>
+<p><strong>Objective</strong>: Improve the simple volume model by controlling for seasonal patterns using quarter indicator variables (i.e., quarter fixed effects).</p>
+<p>Production costs could vary by season due to factors like heating/cooling costs, holiday staffing/overtime, or seasonal demand patterns. Fixed effects allow each quarter to have its own baseline cost level while maintaining the same volume-cost relationship. <em>Note</em>: it's worth mulling over how these quarter fixed effects, which allow the intercept to vary by quarter, differ from allowing the slopes to vary by quarter (which technically would be an interaction between the quarter indicators and the volume variable).</p>
+<h4 class="ada-h4" id="331-tasks">3.3.1. Tasks</h4>
+<ol>
+<li><strong>Load the dataset</strong>: all years 2015-2024</li>
+<li><strong>Create quarter indicator variables</strong>:<ul>
+<li>Quarter 2 indicator: 1 if <code class="fixed-width">quarter == 2</code>, 0 otherwise</li>
+<li>Quarter 3 indicator: 1 if <code class="fixed-width">quarter == 3</code>, 0 otherwise</li>
+<li>Quarter 4 indicator: 1 if <code class="fixed-width">quarter == 4</code>, 0 otherwise</li>
+<li><strong>Important</strong>: Do NOT create a quarter 1 indicator (this avoids multicollinearity)</li>
+</ul>
+</li>
+<li><strong>Run the regression</strong>: Use OLS regression<ul>
+<li>Outcome variable (Y): <code class="fixed-width">total_cost</code></li>
+<li>Predictor variables (X): <code class="fixed-width">volume</code>, Q2 indicator, Q3 indicator, Q4 indicator</li>
+</ul>
+</li>
+<li><strong>Report the results</strong>: Take a screenshot of your regression output</li>
+<li><strong>Compare to Exercise 1</strong>:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Volume Only (Ex 1)</th>
+<th>Volume + Quarter FE (Ex 3)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R<sup>2</sup></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>RMSE</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MAE</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MAPE (%)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 class="ada-h4" id="332-questions-to-answer">3.3.2. Questions to Answer</h4>
+<ol>
+<li>Verify that the coefficient on <code class="fixed-width">volume</code> basically did not change when you added quarter fixed effects. What does this mean economically?</li>
+<li>Why do we only include 3 quarter indicators instead of 4? What does the intercept represent in this model?</li>
+<li>Which quarter has the highest baseline costs (holding volume constant)? Which has the lowest? <em>Note</em>: consider your answer to the question above!</li>
+<li>Are the quarter effects statistically significant? What does this tell you about seasonal patterns in production costs?</li>
+<li>How much did R<sup>2</sup> improve by adding quarter fixed effects? Is this a meaningful improvement? What does this tell you about the importance of seasonality in predicting these costs?</li>
+</ol>
+<h3 class="ada-h3" id="34-exercise-4-out-of-sample-validation">3.4. Exercise 4: Out-of-Sample Validation</h3>
+<p><strong>Objective</strong>: Assess model performance using a train/test split to evaluate out-of-sample prediction accuracy.</p>
+<p>The real test of a cost model is out-of-sample performance, or how well it predicts future costs that weren't used to train the model. This is critical for budgeting: you build a cost model using historical data, then use it to forecast future period costs.</p>
+<h4 class="ada-h4" id="341-tasks">3.4.1. Tasks</h4>
+<ol>
+<li><strong>Split the data</strong>:<ul>
+<li>Training set: <code class="fixed-width">year &lt; 2023</code> (8 years of historical data)</li>
+<li>Test set: <code class="fixed-width">year &gt;= 2023</code> (most recent 2 years)</li>
+<li><em>Note</em>: You can literally split the data, or just omit the test years when training the model</li>
+</ul>
+</li>
+<li><strong>Train the volume model on training data only</strong>:<ul>
+<li>Outcome variable (Y): <code class="fixed-width">total_cost</code></li>
+<li>Predictor variable (X): <code class="fixed-width">volume</code></li>
+</ul>
+</li>
+<li><strong>Make predictions on both train and test sets</strong>:<ul>
+<li>Apply model coefficients to <strong>both</strong> training data and test data to calculate <code class="fixed-width">total_cost_hat</code> across all years</li>
+<li>Calculate residuals for all years: <code class="fixed-width">residual = total_cost - total_cost_hat</code></li>
+</ul>
+</li>
+<li><strong>Calculate error metrics</strong>:<ul>
+<li>Calculate RMSE, MAE, MAPE separately for training and test sets</li>
+</ul>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>RMSE</th>
+<th>MAE</th>
+<th>MAPE (%)</th>
+<th># Observations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Training (2015-2022)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Testing (2023-2024)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 class="ada-h4" id="342-questions-to-answer">3.4.2. Questions to Answer</h4>
+<ol>
+<li>How did RMSE for the test set compare to training set RMSE? What does this tell you about model performance on new data?</li>
+<li>How did the in-sample MAPE (i.e., for the training data) compare to the in-sample MAPE from Exercise 1 (<em>note</em>, this is the exact same model as Exercise 1, just trained on all but the last 2 years of data)? What do you think is happening here?</li>
+<li>What is the MAE for the test set, in plain English? For example, "On average, monthly cost predictions for 2024 were off by $____"</li>
+<li>What is the MAPE for the test set, in plain English? For example, "On average, monthly cost predictions for 2024 were off by ____%"</li>
+</ol>
+<h2 class="ada-h2" id="4-cost-accounting-insights">4. Cost Accounting Insights</h2>
+<p>This lab demonstrates several important cost accounting principles:</p>
+<p><strong>Volume-Based Costing vs. Activity-Based Costing</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Complexity</th>
+<th>Accuracy</th>
+<th>When to Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Volume-Based</strong> (Exercise 1)</td>
+<td>Low - only tracks production volume</td>
+<td>Moderate (R<sup>2</sup> ≈ 80%)</td>
+<td>Simple products, limited overhead, quick estimates</td>
+</tr>
+<tr>
+<td><strong>Activity-Based</strong> (Exercise 2)</td>
+<td>High - tracks multiple cost drivers</td>
+<td>High (R<sup>2</sup> ≈ 90%)</td>
+<td>Complex processes, significant overhead, pricing decisions</td>
+</tr>
+<tr>
+<td><strong>Volume + Quarter FE</strong> (Exercise 3)</td>
+<td>Low-Medium - tracks volume + seasonality</td>
+<td>Moderate (R<sup>2</sup> ≈ 80%)</td>
+<td>When seasonal patterns are important</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Intended Takeaways</strong>:</p>
+<ul>
+<li>ABC drivers provide improvement over simple volume-based costing (~10% R<sup>2</sup> increase in this dataset)</li>
+<li>Quarter fixed effects capture seasonal patterns but add less predictive power than ABC drivers</li>
+<li>Out-of-sample validation is critical for assessing real-world model performance</li>
+</ul>
+<p><strong>Practical Applications</strong>:</p>
+<ol>
+<li><strong>Budgeting</strong>: Build cost models from historical data, predict future period costs</li>
+<li><strong>Pricing</strong>: Understand true marginal costs to inform pricing decisions</li>
+<li><strong>Process Improvement</strong>: Identify which cost drivers have biggest impact on total cost</li>
+<li><strong>Variance Analysis</strong>: Compare actual costs to model predictions, investigate significant deviations</li>
+<li><strong>Model Validation</strong>: Use train/test splits to assess real-world prediction accuracy</li>
+</ol>
+<h2 class="ada-h2" id="5-technical-guidance">5. Technical Guidance</h2>
+<p>This section provides step-by-step instructions for implementing the lab exercises in your tool of choice.</p>
+<h3 class="ada-h3" id="51-excel-implementation">5.1. Excel Implementation</h3>
+<h4 class="ada-h4" id="511-running-regressions-in-excel-with-data-analysis-toolpak">5.1.1. Running Regressions in Excel with <em>Data Analysis ToolPak</em></h4>
+<ol>
+<li>Go to <strong>Data</strong> → <strong>Data Analysis</strong> → <strong>Regression</strong><ul>
+<li>If you don't see "Data Analysis", enable it: <ul>
+<li>Windows: File → Options → Add-ins → Analysis ToolPak</li>
+<li>Mac: Tools → Add-ins → Analysis ToolPak</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Set <strong>Input Y Range</strong>: Select <code class="fixed-width">total_cost</code> column (including header)</li>
+<li>Set <strong>Input X Range</strong>: Select <code class="fixed-width">volume</code> column (including header)<ul>
+<li>You can select multiple columns side-by-side for multiple predictors, e.g. for Exercise 2.</li>
+</ul>
+</li>
+<li>Check <strong>Labels</strong> (since you included headers)</li>
+<li>Choose <strong>Output Range</strong> (click on a cell where you want the output, or select "New Worksheet")</li>
+<li>Check <strong>Residuals</strong> to get predicted values automatically (but note, this won't give you residuals for out-of-sample data, you'll need to calculate those manually)</li>
+<li>Click <strong>OK</strong></li>
+</ol>
+<h4 class="ada-h4" id="512-running-regressions-in-excel-with-linest-function">5.1.2. Running Regressions in Excel with <code class="fixed-width">LINEST</code> Function</h4>
+<p>The <code class="fixed-width">LINEST</code> function (<a href="https://support.microsoft.com/en-us/office/linest-function-84d7d0d9-6e50-4101-977a-fa7abf772b6d" target="_blank">documentation</a>) provides a compact way to get regression coefficients and statistics. While it's output is a bit more inscrutable than the Data Analysis ToolPak, it can be far easier to use just a single excel formula instead of clicking through menus.</p>
+<ol>
+<li>Make your data a table (ctrl/cmd + T), for <em>far</em> easier range selection. Let's assume your table is named <code class="fixed-width">Table1</code> (which it would be by default).</li>
+<li>Enter the following formula: <code class="fixed-width">=LINEST(Table1[total_cost], Table1[volume], TRUE, TRUE)</code><ul>
+<li>To select multiple columns, it would be: <code class="fixed-width">=LINEST(Table1[total_cost], Table1[[material_lbs]:[num_inspections]], TRUE, TRUE)</code></li>
+</ul>
+</li>
+<li>Press Enter<ul>
+<li>On some versions of Excel, you might have to press <strong>Ctrl + Shift + Enter</strong> to enter as an array formula. Try just hitting Enter first, and if it doesn't work, try the array formula method.</li>
+</ul>
+</li>
+<li>The output will be a 5-row by N-column array, where N is the number of predictors plus one (for intercept). The rows contain:<ul>
+<li>Row 1: Coefficients (intercept last, then predictors in reverse order. <span class="small">Totally logical and straightforward. Duh.</span>)</li>
+<li>Row 2: Standard errors</li>
+<li>Row 3: R Square, Standard Error of Y estimate, F statistic, Degrees of Freedom</li>
+<li>Row 4: Regression SS, Residual SS, Total SS</li>
+<li>Row 5: Regression MS, Residual MS, F statistic again</li>
+<li>Diagram from MS support documents:<br /><img alt="LINEST output layout" src="https://support.microsoft.com/images/en-us/e0d97b28-95d9-4cb2-888c-78db54378381?format=avif&amp;w=800" title="LINEST output layout diagram" /></li>
+</ul>
+</li>
+</ol>
+<h4 class="ada-h4" id="513-creating-quarter-indicator-variables">5.1.3. Creating Quarter Indicator Variables</h4>
+<p>To create indicators in Excel, create one column for each unique value, then use an <code class="fixed-width">IF</code> formula. Here's how to create quarter indicators:</p>
+<ol>
+<li><strong>Create new columns</strong> for Q2, Q3, Q4 indicators (<em>note</em>: no Q1 indicator)</li>
+<li><strong>Q2 indicator formula</strong> (assuming your data is in a table):<ul>
+<li>In a new column: <code class="fixed-width">=IF([@quarter]=2,1,0)</code></li>
+<li>Copy down for all rows (automatically done if you made your data a table)</li>
+<li>If you want to be fancy, you can use <code class="fixed-width">=--([@quarter]=2)</code> to get 1/0 directly</li>
+</ul>
+</li>
+<li><strong>Q3 indicator formula</strong>: <code class="fixed-width">=IF([@quarter]=3,1,0)</code></li>
+<li><strong>Q4 indicator formula</strong>: <code class="fixed-width">=IF([@quarter]=4,1,0)</code></li>
+</ol>
+<p class="tip"><em>Tip</em>: If you want to put these in the regression with your other predictors (e.g. <code class="fixed-width">volume</code>), make sure all these columns are adjacent when selecting the Input X Range in the regression dialog. So that will mean making 3 new columns next to <code class="fixed-width">volume</code>for Q2, Q3, Q4 indicators.</p>
+<h4 class="ada-h4" id="514-calculating-error-metrics">5.1.4. Calculating Error Metrics</h4>
+<p>The Residual Output gives you predicted values, but you need to calculate metrics manually. You also need to calculate residuals manually for out-of-sample data, so I will show you how to first calculate predicted values, then residuals, then metrics. The below also assumes you made your data a table for easy referencing, called <code class="fixed-width">Table1</code>.</p>
+<ol>
+<li>
+<p><strong>Calculate predicted values</strong> from any regression model:</p>
+<ul>
+<li>Create a new column, and let's call it <code class="fixed-width">total_cost_hat</code><ul>
+<li class="small">TL;DR: hat indicates predicted value. If you're curious, "hat" denotes predicted value because in statistics we write the predicted <code class="fixed-width">y</code> as <code class="fixed-width">ŷ</code>, and that little caret is called a "hat". If you're even more curious, that hat symbol is called a circumflex symbol (ˆ), and is an accent mark derived from the ancient Greek "perispōménē" and the Latin "circumflexus," meaning "bent around".</li>
+</ul>
+</li>
+<li>Assuming the intercept is in cell <code class="fixed-width">AB2</code> and volume coefficient is in cell <code class="fixed-width">AA2</code>.</li>
+<li>In the new column, enter <code class="fixed-width">=$AB$2 + [@volume] * $AA$2</code><ul>
+<li><em>Note</em>: If this new column is not in your table, you have to add the table reference manually: <code class="fixed-width">= $AB$2 + Table1[@[volume]] * $AA$2</code>, because in the same table, Excel assumes the <code class="fixed-width">Table1</code> reference for you.</li>
+</ul>
+</li>
+<li>The <code class="fixed-width">$</code> freezes the cell reference so it doesn't change when you copy the formula down, and always points to the same coefficient.</li>
+<li><em>Note 1</em>: if you have multiple predictors, just add each of them in the same way: <code class="fixed-width">= $AB$2 + [@material_lbs] * $AA$2 + [@labor_hours] * $Z$2 + ...</code></li>
+<li><em>Note 2</em>: You can copy this formula down the entire column, even when you have out-of-sample data. This is because you calculate predicted values out-of-sample using the model you fit with on your training data, but that's just the coefficients you calculated in your regression (that's what defines the "model"). In other words, the only thing changing when you calculate in-sample and out-of-sample statistics is <em>which</em> rows you include in your calculations.</li>
+</ul>
+</li>
+<li>
+<p><strong>Calculate residuals</strong>:</p>
+<ul>
+<li>Create a new column, call it <code class="fixed-width">residuals</code></li>
+<li>In the new column, enter <code class="fixed-width">= [@total_cost] - [@total_cost_hat]</code></li>
+<li><em>Note 1</em>: Again, you can copy this formula down the entire column, even for out-of-sample data.</li>
+<li><em>Note 2</em>: This will be the same no matter how many predictors you have, because the predictors just go into calculating the predicted value of total cost.</li>
+</ul>
+</li>
+<li>
+<p><strong>Calculate RMSE</strong>:</p>
+<ul>
+<li>In a cell: <code class="fixed-width">=SQRT(AVERAGE(Table1[residuals]^2))</code><ul>
+<li>This cell should not be in/next to your table because this isn't a whole column, and so you need the explicit <code class="fixed-width">Table1</code> reference</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Calculate MAE</strong>:</p>
+<ul>
+<li>In a cell: <code class="fixed-width">=AVERAGE(ABS(Table1[residuals]))</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Calculate MAPE</strong>:</p>
+<ul>
+<li>In a cell: <code class="fixed-width">=AVERAGE(ABS(Table1[residuals]/Table1[total_cost]))*100</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Calculate metrics separately for train/test sets</strong>:</p>
+<ul>
+<li>You can use <code class="fixed-width">FILTER</code> function to filter rows by year (<a href="https://support.microsoft.com/en-us/office/filter-function-f4f7cb66-82eb-4767-8f7c-4877ad80c759" target="_blank">FILTER documentation</a>)</li>
+<li>For example, RMSE for training set (2015-2022):<ul>
+<li><code class="fixed-width">=SQRT(AVERAGE(FILTER(Table1[residuals], Table1[year]&lt;2023)^2))</code></li>
+</ul>
+</li>
+<li>RMSE for test set (2023-2024):<ul>
+<li><code class="fixed-width">=SQRT(AVERAGE(FILTER(Table1[residuals], Table1[year]&gt;=2023)^2))</code></li>
+</ul>
+</li>
+<li>Similarly for MAE and MAPE, just wrap the <code class="fixed-width">ABS</code> function in a <code class="fixed-width">FILTER</code> function. <ul>
+<li><em>Note</em>: just make sure the filter comes <em>before</em> any aggregation function like <code class="fixed-width">AVERAGE</code> (which is why outside the <code class="fixed-width">ABS</code> is fine). Example MAPE: `=AVERAGE(FILTER(ABS(Table1[residuals]/Table1[total_cost]),Table1[year]&gt;=2023))*100</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 class="ada-h3" id="52-python-implementation">5.2. Python Implementation</h3>
+<p>The following is example code for implementing the lab exercises in Python. You could think of each section as a cell in your colab notebook, but note that the code below doesn't just copy/paste complete the Lab. It does, however, cover all the code you need to complete the exercises, you just have to duplicate and combine as needed for each exercise.</p>
+<h4 class="ada-h4" id="521-setup-and-data-loading">5.2.1. Setup and Data Loading</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Load Imports</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;production_costs_daily.csv&#39;</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+<span class="c1"># View first 2 rows</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<h4 class="ada-h4" id="522-running-a-regression">5.2.2. Running a regression</h4>
+<p>Below is some example code for running models, and showing the output for the first exercise.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run simple regression: total_cost ~ volume</span>
+<span class="n">exercise1_volume_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ volume&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">exercise2_abc_model</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ material_lbs + labor_hours + machine_hours + num_batches + num_inspections&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Output regression output for submission screenshot</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">exercise1_volume_model</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</code></pre></div>
+<p>To include quarter fixed effects, you can either create indicator variables manually (like those Excel folk are doing as we speak), or, because Python is awesome, use the convenient syntax for making dummy variables: <code class="fixed-width">C(quarter)</code>. So that would look like:</p>
+<div class="highlight"><pre><span></span><code><span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ volume + C(quarter)&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</code></pre></div>
+<p>I hope you start seeing how fantastic statsmodels is for regression work. And if you want to start making fancy tables with multiple models side-by-side, you can use the <code class="fixed-width">statsmodels</code> <code class="fixed-width">summary_col</code> function. Here's a quick example:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.iolib.summary2</span><span class="w"> </span><span class="kn">import</span> <span class="n">summary_col</span>
+<span class="n">model_volume</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ volume&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">model_abc</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ material_lbs + labor_hours + machine_hours + num_batches + num_inspections&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">model_volume_qfe</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ volume + C(quarter)&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">results_table</span> <span class="o">=</span> <span class="n">summary_col</span><span class="p">([</span><span class="n">model_volume</span><span class="p">,</span> <span class="n">model_abc</span><span class="p">,</span> <span class="n">model_volume_qfe</span><span class="p">],</span>
+                            <span class="n">stars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">model_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Volume Only&#39;</span><span class="p">,</span> <span class="s1">&#39;ABC Model&#39;</span><span class="p">,</span> <span class="s1">&#39;Volume + Q FE&#39;</span><span class="p">],</span>
+                            <span class="n">info_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;R-squared&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">rsquared</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                       <span class="s1">&#39;Adj. R-squared&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">rsquared_adj</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                       <span class="s1">&#39;No. observations&#39;</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">nobs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results_table</span><span class="p">)</span>
+</code></pre></div>
+<h4 class="ada-h4" id="523-error-calculations">5.2.3. Error Calculations</h4>
+<p>This is Python, of course the calculations we need are already written up for us in some library. In this case, it's <code class="fixed-width">sklearn.metrics</code>. <em>Note</em>: <code class="fixed-width">sklearn</code> is short for "scikit-learn", a popular machine learning library in Python that includes many useful tools for model evaluation. <em>Also note</em>: <a href="https://github.com/ypeleg/HungaBunga" target="_blank">yes, you can absolutely abuse sklearn for awesome</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">mean_absolute_percentage_error</span>
+
+<span class="c1"># Calculate predictions and residuals, and put them in the dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost_hat_e1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exercise1_volume_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;residual_e1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost_hat_e1&#39;</span><span class="p">]</span> <span class="c1"># not necessary</span>
+
+<span class="c1"># Calculate error metrics</span>
+<span class="n">rmse_e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost_hat_e1&#39;</span><span class="p">]))</span>
+<span class="n">mae_e1</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost_hat_e1&#39;</span><span class="p">])</span>
+<span class="n">mape_e1</span> <span class="o">=</span> <span class="n">mean_absolute_percentage_error</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost_hat_e1&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">In-sample error metrics:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RMSE: $</span><span class="si">{</span><span class="n">rmse_e1</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAE: $</span><span class="si">{</span><span class="n">mae_e1</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MAPE: </span><span class="si">{</span><span class="n">mape_e1</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h4 class="ada-h4" id="524-traintest-split">5.2.4. Train/Test Split</h4>
+<p>Conceptually, you could split your dataset into train/test sets by creating two separate dataframes. However, it's often easier to just filter the dataframe when training the model, then use the same model to predict on the full dataset (both train and test). This is because the model coefficients are what define the model, and once you have those, you can apply them to any data.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Train volume model on training data only</span>
+<span class="n">model_train</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s1">&#39;total_cost ~ volume&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2023</span><span class="p">])</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Make predictions on both train and test sets at once</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_cost_hat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_train</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># Calculate metrics for both datasets</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calc_metrics</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">actual</span><span class="o">=</span><span class="s1">&#39;total_cost&#39;</span><span class="p">,</span> <span class="n">predicted</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">predicted</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">predicted</span> <span class="o">=</span> <span class="n">actual</span> <span class="o">+</span> <span class="s1">&#39;_hat&#39;</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">actual</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">predicted</span><span class="p">]))</span>
+    <span class="n">mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">actual</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">predicted</span><span class="p">])</span>
+    <span class="n">mape</span> <span class="o">=</span> <span class="n">mean_absolute_percentage_error</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">actual</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="n">predicted</span><span class="p">])</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="k">return</span> <span class="p">{</span> <span class="s1">&#39;RMSE&#39;</span><span class="p">:</span> <span class="n">rmse</span><span class="p">,</span> <span class="s1">&#39;MAE&#39;</span><span class="p">:</span> <span class="n">mae</span><span class="p">,</span> <span class="s1">&#39;MAPE&#39;</span><span class="p">:</span> <span class="n">mape</span> <span class="p">,</span> <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="n">actual</span><span class="p">,</span> <span class="n">predicted</span><span class="p">]))}</span>
+
+<span class="c1"># Training metrics</span>
+<span class="n">train_metrics</span> <span class="o">=</span> <span class="n">calc_metrics</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">2023</span><span class="p">])</span>
+
+<span class="c1"># Testing metrics</span>
+<span class="n">test_metrics</span> <span class="o">=</span> <span class="n">calc_metrics</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2023</span><span class="p">])</span>
+
+<span class="c1"># Print comparison table</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">train_metrics</span><span class="p">,</span> <span class="n">test_metrics</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Training (2015-2022)&#39;</span><span class="p">,</span> <span class="s1">&#39;Testing (2023-2024)&#39;</span><span class="p">])</span>
+</code></pre></div>
+<h3 class="ada-h3" id="53-common-issues-and-troubleshooting">5.3. Common Issues and Troubleshooting</h3>
+<ul>
+<li>
+<p><strong>Problem</strong>: Excel "Regression" option not available in Data Analysis</p>
+<ul>
+<li><strong>Cause</strong>: Analysis ToolPak not enabled</li>
+<li><strong>Solution</strong>: File → Options → Add-ins → Manage Excel Add-ins → Check "Analysis ToolPak" → OK. On MacOS: Tools → Add-ins → Check "Analysis ToolPak" → OK</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Excel won't run regression with non-adjacent columns</p>
+<ul>
+<li><strong>Cause</strong>: Input X Range must be contiguous columns</li>
+<li><strong>Solution</strong>: Copy your predictor columns to new columns next to each other, then run regression</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: R<sup>2</sup> is not around 80% for volume model or 90% for ABC model</p>
+<ul>
+<li><strong>Cause</strong>: Using wrong variables or wrong dataset</li>
+<li><strong>Solution</strong>: Verify you're using <code class="fixed-width">total_cost</code> as outcome variable, and correct predictors</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Negative coefficients on cost drivers</p>
+<ul>
+<li><strong>Cause</strong>: If predictor is insignificant, random noise could make it negative</li>
+<li><strong>Solution</strong>: Ignore it, insignificance has an economic meaning (no relationship)</li>
+</ul>
+</li>
+<li>
+<p><strong>Problem</strong>: Test set error much higher than training set error</p>
+<ul>
+<li><strong>Cause</strong>: Model overfitting and/or conditions changed in test period</li>
+<li><strong>Solution</strong>: This can happen. If it were real-world data, you would document the degradation and consider possible explanations (inflation spike, supply chain disruption, etc.)</li>
+</ul>
+</li>
+</ul>
+<p class="note">Hi, those of you who have scrolled to the bottom! You might have noticed that my instruction formatting is less horrificly plain. That's because I went to Claude Code, pointed it at my last set of instructions, and said "Write some CSS to make these instructions aesthetically pleasing" and this is what it came up with. Including dynamically adding emoji to the headers, learning objectives, etc. I hope you enjoy! And sorry it took me so long to do.</p>
+</body>
+</html>

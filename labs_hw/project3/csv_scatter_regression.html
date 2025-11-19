@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSV Scatter + Regression (D3)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --accent2: #8b5cf6
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, 'Helvetica Neue', Arial
+    }
+
+    body {
+      background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 60%);
+      color: #1e293b;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px
+    }
+
+    .card {
+      width: 980px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px
+    }
+
+    .uploader {
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    input[type=file] {
+      background: transparent;
+      color: var(--muted)
+    }
+
+    select option {
+      background: var(--card)
+    }
+
+    .controls {
+      margin-top: 8px;
+      display: flex;
+      gap: 12px;
+      align-items: center
+    }
+
+    select {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(203, 213, 225, 0.6);
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: inherit
+    }
+
+    button {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer
+    }
+
+    .meta {
+      margin-left: auto;
+      text-align: right;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .plot-row {
+      display: flex;
+      gap: 20px
+    }
+
+    .plot {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(226, 232, 240, 0.4);
+    }
+
+    .stats {
+      width: 240px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.4);
+      color: var(--muted)
+    }
+
+    .stat-item {
+      margin-bottom: 10px
+    }
+
+    .stat-key {
+      font-size: 12px;
+      color: #64748b
+    }
+
+    .stat-val {
+      font-size: 16px;
+      color: #1e293b;
+      font-weight: 700
+    }
+
+    .message {
+      color: #d97706;
+      font-size: 13px;
+      margin-top: 8px
+    }
+
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(30, 41, 59, 0.95);
+      color: white;
+      font-size: 12px;
+      border: 1px solid rgba(203, 213, 225, 0.3);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center
+    }
+
+    .legend {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.4);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .legend-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #475569;
+    }
+
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(203, 213, 225, 0.4);
+    }
+
+    .colorbar {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.4);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .colorbar-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #475569;
+    }
+
+    .colorbar-gradient {
+      height: 20px;
+      border-radius: 4px;
+      margin: 8px auto;
+      max-width: 300px;
+      border: 1px solid rgba(203, 213, 225, 0.4);
+    }
+
+    .colorbar-labels {
+      display: flex;
+      justify-content: space-between;
+      max-width: 300px;
+      margin: 4px auto 0;
+    }
+
+    @media (max-width:1000px) {
+      .card {
+        width: 100%
+      }
+
+      .plot-row {
+        flex-direction: column
+      }
+
+      .stats {
+        width: 100%
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card" role="main">
+    <div class="top">
+      <div class="uploader">
+        <label style="font-weight:700;letter-spacing:0.2px">CSV Scatter + Regression</label>
+        <input id="file-input" type="file" accept=".csv" />
+      </div>
+      <div class="meta">Drop a CSV file. Columns will populate the X/Y dropdowns.</div>
+    </div>
+
+    <div class="controls">
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px;color:var(--muted);">Y</label>
+        <select id="y-select"></select>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px;color:var(--muted);">X</label>
+        <select id="x-select"></select>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px;color:var(--muted);">Hue</label>
+        <select id="hue-select">
+          <option value="">(none)</option>
+        </select>
+        <button id="clear-hue-btn" style="padding:4px 8px;font-size:12px">Clear</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:4px">
+          <input type="checkbox" id="show-ci" checked style="margin:0">
+          Show 90% CI
+        </label>
+      </div>
+      <div class="message" id="message" style="margin-left:8px"></div>
+    </div>
+
+    <div class="plot-row" style="margin-top:12px">
+      <div class="plot" id="plot-area">
+        <svg id="svg" width="100%" height="480"></svg>
+      </div>
+      <div class="stats">
+        <div style="font-weight:700;margin-bottom:8px">Regression Stats</div>
+        <div class="stat-item">
+          <div class="stat-key">Slope (β)</div>
+          <div id="slope" class="stat-val">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">Intercept (α)</div>
+          <div id="intercept" class="stat-val">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">R²</div>
+          <div id="r2" class="stat-val">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">RMSE</div>
+          <div id="rmse" class="stat-val">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">N (points used)</div>
+          <div id="npts" class="stat-val">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="legend-container"></div>
+
+    <footer>Built with D3, ChatGPT, and Claude Code.</footer>
+  </div>
+  <div id="tooltip" class="tooltip" style="display:none"></div>
+
+  <script>
+    // Utilities
+    const fileInput = document.getElementById('file-input');
+    const xSelect = document.getElementById('x-select');
+    const ySelect = document.getElementById('y-select');
+    const hueSelect = document.getElementById('hue-select');
+    const clearHueBtn = document.getElementById('clear-hue-btn');
+    const showCiCheckbox = document.getElementById('show-ci');
+    const messageEl = document.getElementById('message');
+    const slopeEl = document.getElementById('slope');
+    const interceptEl = document.getElementById('intercept');
+    const r2El = document.getElementById('r2');
+    const rmseEl = document.getElementById('rmse');
+    const nptsEl = document.getElementById('npts');
+    const tooltip = d3.select('#tooltip');
+    const legendContainer = document.getElementById('legend-container');
+    let lastData = null;
+
+    fileInput.addEventListener('change', async (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const text = await f.text();
+      loadCSV(text);
+    });
+
+
+    function loadCSV(text) {
+      try {
+        const parsed = d3.csvParse(text);
+        lastData = parsed;
+        const cols = parsed.columns || Object.keys(parsed[0] || {});
+        populateSelects(cols);
+        message('Loaded CSV — choose X and Y.');
+        // auto-select first two numeric-ish columns if possible
+        autoSelectColumns(cols, parsed);
+        draw();
+      } catch (err) {
+        message('Failed to parse CSV: ' + err, true);
+      }
+    }
+
+    function populateSelects(cols) {
+      xSelect.innerHTML = ''; ySelect.innerHTML = '';
+      // Keep the (none) option for hue
+      hueSelect.innerHTML = '<option value="">(none)</option>';
+
+      // Separate numeric and all columns
+      const numericCols = getNumericColumns(cols);
+
+      // Populate X and Y with only numeric columns
+      numericCols.forEach(c => {
+        const ox = document.createElement('option'); ox.value = c; ox.textContent = c; xSelect.appendChild(ox);
+        const oy = document.createElement('option'); oy.value = c; oy.textContent = c; ySelect.appendChild(oy);
+      });
+
+      // Populate Hue with all columns (categorical variables useful for coloring)
+      cols.forEach(c => {
+        const oh = document.createElement('option'); oh.value = c; oh.textContent = c; hueSelect.appendChild(oh);
+      });
+    }
+
+    function getNumericColumns(cols) {
+      if (!lastData || lastData.length === 0) return cols;
+
+      return cols.filter(col => {
+        const vals = lastData.map(d => d[col]).filter(v => v !== undefined && v !== '' && v !== null);
+        if (vals.length === 0) return false;
+
+        // Count how many values are numeric
+        let numericCount = 0;
+        vals.forEach(v => {
+          if (!isNaN(+v) && isFinite(+v)) numericCount++;
+        });
+
+        // Consider a column numeric if at least 80% of non-empty values are numeric
+        return (numericCount / vals.length) >= 0.8;
+      });
+    }
+
+    function autoSelectColumns(cols, parsed) {
+      // Use the numeric columns for auto-selection
+      const numericCols = getNumericColumns(cols);
+      if (numericCols.length >= 2) {
+        ySelect.value = numericCols[0];
+        xSelect.value = numericCols[1];
+      } else if (numericCols.length === 1) {
+        ySelect.value = numericCols[0];
+        // If there's only one numeric column, try to use it for both (user can change)
+        xSelect.value = numericCols[0];
+      }
+    }
+
+    function message(txt, warn = false) {
+      messageEl.textContent = txt;
+      messageEl.style.color = warn ? '#ffb4a2' : '#ffdca8';
+    }
+
+    clearHueBtn.addEventListener('click', () => {
+      hueSelect.value = '';
+      draw();
+    });
+
+    // Auto-update on dropdown changes
+    xSelect.addEventListener('change', draw);
+    ySelect.addEventListener('change', draw);
+    hueSelect.addEventListener('change', draw);
+    showCiCheckbox.addEventListener('change', draw);
+
+    // Drawing
+    const svg = d3.select('#svg');
+    const margin = { top: 20, right: 20, bottom: 50, left: 70 };
+    function clearSVG() { svg.selectAll('*').remove(); }
+
+    function draw() {
+      clearSVG();
+      clearLegend();
+      if (!lastData) { message('No CSV loaded yet — load a file or sample.'); return; }
+      const xcol = xSelect.value; const ycol = ySelect.value; const huecol = hueSelect.value;
+      if (!xcol || !ycol) { message('Please select both X and Y columns', true); return; }
+
+      // extract numeric pairs
+      const pairs = lastData.map(d => {
+        // Treat empty strings and whitespace-only strings as missing (NaN)
+        const xVal = (d[xcol] === '' || d[xcol] === null || d[xcol] === undefined || (typeof d[xcol] === 'string' && d[xcol].trim() === '')) ? NaN : +d[xcol];
+        const yVal = (d[ycol] === '' || d[ycol] === null || d[ycol] === undefined || (typeof d[ycol] === 'string' && d[ycol].trim() === '')) ? NaN : +d[ycol];
+        return { x: xVal, y: yVal, rawX: d[xcol], rawY: d[ycol], hue: huecol ? d[huecol] : null, row: d };
+      }).filter(d => isFinite(d.x) && isFinite(d.y));
+
+      if (pairs.length === 0) { message('No numeric pairs found for the selected columns.', true); updateStats(null); return; }
+
+      // Clear message when plot is successfully created
+      message('');
+
+      updateStats(null);
+
+      const width = parseInt(svg.style('width')) || svg.node().getBoundingClientRect().width;
+      const height = parseInt(svg.style('height')) || svg.node().getBoundingClientRect().height;
+      const w = width - margin.left - margin.right; const h = height - margin.top - margin.bottom;
+
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      const xExtent = d3.extent(pairs, d => d.x);
+      const yExtent = d3.extent(pairs, d => d.y);
+      // add small padding
+      const xPad = (xExtent[1] - xExtent[0]) * 0.06 || 1;
+      const yPad = (yExtent[1] - yExtent[0]) * 0.06 || 1;
+
+      const xScale = d3.scaleLinear().domain([xExtent[0] - xPad, xExtent[1] + xPad]).range([0, w]).nice();
+      const yScale = d3.scaleLinear().domain([yExtent[0] - yPad, yExtent[1] + yPad]).range([h, 0]).nice();
+
+      // Set up color scale if hue is selected
+      let colorScale = null;
+      let hueInfo = null;
+      if (huecol) {
+        hueInfo = setupHueColors(pairs, huecol);
+        colorScale = hueInfo ? hueInfo.colorScale : null;
+      }
+
+      // axes
+      const xAxis = d3.axisBottom(xScale).ticks(6).tickSizeOuter(0);
+      const yAxis = d3.axisLeft(yScale).ticks(6).tickSizeOuter(0);
+
+      g.append('g').attr('transform', `translate(0,${h})`).call(xAxis).call(g => g.selectAll('.domain').attr('stroke', '#cbd5e1'));
+      g.append('g').call(yAxis).call(g => g.selectAll('.domain').attr('stroke', '#cbd5e1'));
+
+      // axis labels
+      svg.append('text').attr('x', margin.left + w / 2).attr('y', height - 6).attr('text-anchor', 'middle').attr('fill', '#64748b').text(xcol);
+      svg.append('text').attr('transform', `translate(14, ${margin.top + h / 2}) rotate(-90)`).attr('text-anchor', 'middle').attr('fill', '#64748b').text(ycol);
+
+      // gridlines for nicer look
+      g.append('g').attr('class', 'grid').selectAll('line').data(yScale.ticks(6)).enter().append('line')
+        .attr('x1', 0).attr('x2', w).attr('y1', d => yScale(d)).attr('y2', d => yScale(d)).attr('stroke', 'rgba(203,213,225,0.4)');
+
+      // points
+      const pointGroup = g.append('g').attr('class', 'points');
+      pointGroup.selectAll('circle').data(pairs).enter().append('circle')
+        .attr('cx', d => xScale(d.x)).attr('cy', d => yScale(d.y)).attr('r', 4.5)
+        .attr('fill', d => {
+          if (!colorScale) return '#3b82f6'; // Default blue when no hue
+          const color = colorScale(d.hue);
+          // If color is invalid (null, undefined, or results in black from failed mapping), use default blue
+          return (color && color !== '#000000') ? color : '#3b82f6';
+        }).attr('opacity', 0.8)
+        .on('mouseenter', function (event, d) {
+          let tooltipText = `<div>${ycol}: ${d.y}</div>`;
+          tooltipText += `<div>${xcol}: ${d.x}</div>`;
+          if (huecol && d.hue !== null && d.hue !== undefined) {
+            tooltipText += `<div>${huecol}: ${d.hue}</div>`;
+          }
+          tooltip.style('display', 'block').style('left', (event.pageX + 10) + 'px').style('top', (event.pageY + 8) + 'px')
+            .html(tooltipText);
+          d3.select(this).attr('r', 6);
+        }).on('mouseleave', function (event, d) {
+          tooltip.style('display', 'none');
+          d3.select(this).attr('r', 4.5);
+        });
+
+      // regression (least squares)
+      const reg = linearRegression(pairs.map(d => d.x), pairs.map(d => d.y));
+
+      // Draw confidence interval if checkbox is checked
+      if (showCiCheckbox.checked && reg.n > 2) {
+        const ciPoints = [];
+        const steps = 50;
+        const xRange = xExtent[1] - xExtent[0];
+
+        for (let i = 0; i <= steps; i++) {
+          const x = xExtent[0] + (xRange * i / steps);
+          const yPred = reg.intercept + reg.slope * x;
+
+          // Standard error for confidence interval of the mean at point x
+          const seY = reg.se * Math.sqrt(1/reg.n + Math.pow(x - reg.meanX, 2) / reg.sxx);
+          const margin = reg.tValue * seY;
+
+          ciPoints.push({
+            x: x,
+            yUpper: yPred + margin,
+            yLower: yPred - margin
+          });
+        }
+
+        // Create path for confidence interval
+        const upperLine = d3.line()
+          .x(d => xScale(d.x))
+          .y(d => yScale(d.yUpper));
+
+        const lowerLine = d3.line()
+          .x(d => xScale(d.x))
+          .y(d => yScale(d.yLower));
+
+        // Draw CI as filled area
+        const area = d3.area()
+          .x(d => xScale(d.x))
+          .y0(d => yScale(d.yLower))
+          .y1(d => yScale(d.yUpper));
+
+        g.append('path')
+          .datum(ciPoints)
+          .attr('d', area)
+          .attr('fill', '#000000')
+          .attr('opacity', 0.25);
+      }
+
+      // line endpoints
+      const x0 = xExtent[0] - xPad; const x1 = xExtent[1] + xPad;
+      const y0 = reg.intercept + reg.slope * x0;
+      const y1 = reg.intercept + reg.slope * x1;
+
+      // draw line (now black)
+      g.append('line').attr('x1', xScale(x0)).attr('y1', yScale(y0)).attr('x2', xScale(x1)).attr('y2', yScale(y1))
+        .attr('stroke', '#000000').attr('stroke-width', 2.5).attr('stroke-linecap', 'round').attr('opacity', 0.9);
+
+      // draw equation text
+      svg.append('text').attr('x', margin.left + 12).attr('y', margin.top + 20).attr('fill', '#374151').style('font-weight', '700').style('font-size', '16px')
+        .text(`${ycol} = ${reg.slope.toFixed(3)}×${xcol} + ${reg.intercept.toFixed(3)}`);
+
+      updateStats(reg);
+
+      // Create legend/colorbar if hue is used and valid
+      if (hueInfo && hueInfo.colorScale) {
+        if (hueInfo.isCategorical) {
+          createLegend(hueInfo.uniqueValues, hueInfo.colorScale, huecol);
+        } else {
+          createColorbar(hueInfo.domain, hueInfo.colorScale, huecol);
+        }
+      } else if (huecol) {
+        // Show a message when hue variable has too many values
+        const notice = document.createElement('div');
+        notice.className = 'legend';
+        notice.innerHTML = `<div class="legend-title">${huecol}</div><div style="color: var(--muted); font-style: italic;">Too many unique values (≥100) - using default color</div>`;
+        legendContainer.appendChild(notice);
+      }
+    }
+
+    function updateStats(reg) {
+      if (!reg) { slopeEl.textContent = '—'; interceptEl.textContent = '—'; r2El.textContent = '—'; rmseEl.textContent = '—'; nptsEl.textContent = '—'; return; }
+      slopeEl.textContent = reg.slope.toFixed(4);
+      interceptEl.textContent = reg.intercept.toFixed(4);
+      r2El.textContent = reg.r2.toFixed(4);
+      rmseEl.textContent = reg.rmse.toFixed(4);
+      nptsEl.textContent = reg.n;
+    }
+
+    function linearRegression(xs, ys) {
+      // return slope, intercept, r2, rmse, n, and CI data
+      const n = xs.length; if (n === 0) return { slope: NaN, intercept: NaN, r2: NaN, rmse: NaN, n: 0 };
+      let sumx = 0, sumy = 0, sumxy = 0, sumxx = 0, sumyy = 0;
+      for (let i = 0; i < n; i++) { const x = xs[i], y = ys[i]; sumx += x; sumy += y; sumxy += x * y; sumxx += x * x; sumyy += y * y; }
+      const slope = (n * sumxy - sumx * sumy) / (n * sumxx - sumx * sumx);
+      const intercept = (sumy - slope * sumx) / n;
+      const meanX = sumx / n;
+      const meanY = sumy / n;
+
+      // R^2 and RMSE
+      let ssRes = 0, ssTot = 0;
+      for (let i = 0; i < n; i++) { const y = ys[i], x = xs[i]; const ypred = intercept + slope * x; ssRes += (y - ypred) * (y - ypred); ssTot += (y - meanY) * (y - meanY); }
+      const r2 = 1 - ssRes / ssTot;
+      const rmse = Math.sqrt(ssRes / n);
+
+      // Standard error for confidence interval (90% = 1.645 for large n, using t-distribution)
+      const mse = ssRes / (n - 2); // Mean squared error
+      const sxx = sumxx - (sumx * sumx) / n; // Sum of squares of x deviations
+      const se = Math.sqrt(mse); // Standard error of residuals
+      const tValue = n > 30 ? 1.645 : getTValue90(n - 2); // t-value for 90% CI
+
+      return {
+        slope, intercept, r2: isFinite(r2) ? r2 : 0, rmse: isFinite(rmse) ? rmse : 0, n,
+        meanX, se, sxx, tValue, mse
+      };
+    }
+
+    // Approximation of t-values for 90% confidence interval
+    function getTValue90(df) {
+      // Simplified t-values for 90% CI for small samples
+      const tValues = {1: 6.314, 2: 2.920, 3: 2.353, 4: 2.132, 5: 2.015, 6: 1.943, 7: 1.895, 8: 1.860, 9: 1.833, 10: 1.812, 15: 1.753, 20: 1.725, 25: 1.708, 30: 1.697};
+      if (df in tValues) return tValues[df];
+      if (df <= 30) return 1.697;
+      return 1.645; // Normal approximation for large df
+    }
+
+    // Hue color functions
+    function setupHueColors(pairs, huecol) {
+
+      const hueValues = pairs.map(d => d.hue).filter(v => v !== null && v !== undefined && v !== '');
+
+      const uniqueValues = [...new Set(hueValues)];
+
+      // Determine if categorical or continuous
+      let isCategorical = true;
+      let numericValues = [];
+
+      // Check if values are numeric
+      numericValues = hueValues.map(v => +v).filter(v => isFinite(v));
+
+      const allNumeric = numericValues.length === hueValues.length;
+
+      // If too many unique values (≥100) and NOT all numeric, don't use hue coloring - return null to use default blue
+      if (uniqueValues.length >= 100 && !allNumeric) {
+        return null;
+      }
+
+      if (allNumeric && uniqueValues.length > 20) {
+        // All values are numeric and there are many unique values - treat as continuous
+        isCategorical = false;
+      }
+
+      let colorScale;
+      let domain;
+
+      if (isCategorical) {
+        // Use categorical color scale
+        const colors = ['#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#10b981', '#f97316', '#6366f1', '#06b6d4', '#84cc16', '#ec4899'];
+        colorScale = d3.scaleOrdinal()
+          .domain(uniqueValues)
+          .range(colors);
+        domain = uniqueValues;
+      } else {
+        // Use continuous color scale
+        const extent = d3.extent(numericValues);
+        // If extent is invalid, return null to use default coloring
+        if (extent[0] === undefined || extent[0] === null || !isFinite(extent[0]) ||
+            extent[1] === undefined || extent[1] === null || !isFinite(extent[1])) {
+          return null;
+        }
+        colorScale = d3.scaleSequential(d3.interpolateViridis)
+          .domain(extent);
+        domain = extent;
+      }
+
+
+      return {
+        colorScale,
+        isCategorical,
+        uniqueValues: isCategorical ? uniqueValues : null,
+        domain,
+        numericValues
+      };
+    }
+
+    function clearLegend() {
+      legendContainer.innerHTML = '';
+    }
+
+    function createLegend(uniqueValues, colorScale, huecol) {
+      const legend = document.createElement('div');
+      legend.className = 'legend';
+
+      const title = document.createElement('div');
+      title.className = 'legend-title';
+      title.textContent = huecol;
+      legend.appendChild(title);
+
+      const items = document.createElement('div');
+      items.className = 'legend-items';
+
+      // Sort values: try numeric sort first, fall back to alphabetic
+      const sortedValues = [...uniqueValues].sort((a, b) => {
+        const aNum = +a;
+        const bNum = +b;
+        if (isFinite(aNum) && isFinite(bNum)) {
+          return aNum - bNum; // Numeric sort
+        }
+        return String(a).localeCompare(String(b)); // Alphabetic sort
+      });
+
+      sortedValues.forEach(value => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+
+        const colorBox = document.createElement('div');
+        colorBox.className = 'legend-color';
+        colorBox.style.backgroundColor = colorScale(value);
+
+        const label = document.createElement('span');
+        label.textContent = value;
+
+        item.appendChild(colorBox);
+        item.appendChild(label);
+        items.appendChild(item);
+      });
+
+      legend.appendChild(items);
+      legendContainer.appendChild(legend);
+    }
+
+    function createColorbar(domain, colorScale, huecol) {
+      const colorbar = document.createElement('div');
+      colorbar.className = 'colorbar';
+
+      const title = document.createElement('div');
+      title.className = 'colorbar-title';
+      title.textContent = huecol;
+      colorbar.appendChild(title);
+
+      // Create gradient bar
+      const gradient = document.createElement('div');
+      gradient.className = 'colorbar-gradient';
+
+      // Create CSS gradient
+      const steps = 20;
+      const gradientStops = [];
+      for (let i = 0; i <= steps; i++) {
+        const value = domain[0] + (domain[1] - domain[0]) * (i / steps);
+        const color = colorScale(value);
+        const percent = (i / steps) * 100;
+        gradientStops.push(`${color} ${percent}%`);
+      }
+
+      gradient.style.background = `linear-gradient(to right, ${gradientStops.join(', ')})`;
+      colorbar.appendChild(gradient);
+
+      // Create labels
+      const labels = document.createElement('div');
+      labels.className = 'colorbar-labels';
+
+      const minLabel = document.createElement('span');
+      minLabel.textContent = domain[0].toFixed(2);
+
+      const maxLabel = document.createElement('span');
+      maxLabel.textContent = domain[1].toFixed(2);
+
+      labels.appendChild(minLabel);
+      labels.appendChild(maxLabel);
+      colorbar.appendChild(labels);
+
+      legendContainer.appendChild(colorbar);
+    }
+
+  </script>
+</body>
+
+</html>

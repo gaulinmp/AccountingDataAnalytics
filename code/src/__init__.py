@@ -39,6 +39,8 @@ else:
 
 CODE_DIR = ROOT_DIR / "code"
 DATA_DIR = ROOT_DIR / "data"
+LAB_DIR = ROOT_DIR / "labs_hw"
+SLIDE_DIR = ROOT_DIR / "slides"
 
 # Local logger
 _logger = logging.getLogger(__name__)

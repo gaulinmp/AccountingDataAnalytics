@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+ /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+ /* Make horizontal lines connect through column boundaries */
+ /* table {
+     border-collapse: collapse;
+ } */
+ /* General styling of all cells */
+ table > :is(thead, tbody) > tr > :is(th, td) {
+     padding: 3px;
+     text-align: left;
+ }
+ table > thead > tr > :is(th, td) {
+     border-top: 2px solid; /* Top thick line */
+     border-bottom: 1px solid; /* Below head thin line */
+ }
+ table > tbody > tr:last-child > :is(th, td) {
+     border-bottom: 2px solid; /* Bottom thick line */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    /* width: 100%; */
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    /* background-color: white; */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="lab-8-4-stages-of-analytics">Lab 8: 4 Stages of Analytics</h1>
+<p>Lab 8 introduces you to the 4 stages of analytics:</p>
+<ul>
+<li>Descriptive: <em>What</em> happened?</li>
+<li>Diagnostic: <em>Why</em> did it happen?</li>
+<li>Predictive: What <em>will</em> happen?</li>
+<li>Prescriptive: What <em>should</em> we make happen?</li>
+</ul>
+<div class="toc">
+<ul>
+<li><a href="#lab-8-4-stages-of-analytics">Lab 8: 4 Stages of Analytics</a><ul>
+<li><a href="#1-assignment">1. Assignment</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-tools">1.2. Tools</a></li>
+</ul>
+</li>
+<li><a href="#2-data">2. Data</a><ul>
+<li><a href="#21-data-source">2.1. Data Source</a></li>
+<li><a href="#22-data-dictionary">2.2. Data Dictionary</a></li>
+</ul>
+</li>
+<li><a href="#3-question-outline">3. Question Outline</a><ul>
+<li><a href="#31-descriptive-analytics-what-happened">3.1. Descriptive Analytics: What happened?</a></li>
+<li><a href="#32-diagnostic-analytics-why-did-it-happen">3.2. Diagnostic Analytics: Why did it happen?</a></li>
+<li><a href="#33-predictive-analytics-what-will-happen-homework-8-but-here-for-continuity-and-a-heads-up">3.3. Predictive Analytics: What will happen? (Homework 8, but here for continuity and a heads up)</a></li>
+<li><a href="#34-prescriptive-analytics-what-should-we-do-homework-8-but-here-for-continuity-and-a-heads-up">3.4. Prescriptive Analytics: What should we do? (Homework 8, but here for continuity and a heads up)</a></li>
+</ul>
+</li>
+<li><a href="#4-guidance-for-completing-the-lab">4. Guidance for Completing the Lab</a><ul>
+<li><a href="#41-general-workflow-all-tools">4.1. General Workflow (All Tools)</a></li>
+<li><a href="#42-expected-r2-patterns">4.2. Expected R2 Patterns</a></li>
+<li><a href="#43-excel-steps">4.3. Excel Steps</a></li>
+<li><a href="#44-python-steps">4.4. Python Steps</a></li>
+<li><a href="#45-tableau-steps">4.5. Tableau Steps</a></li>
+</ul>
+</li>
+<li><a href="#5-reflection-questions">5. Reflection Questions</a></li>
+<li><a href="#6-data-dictionary">6. Data Dictionary</a></li>
+<li><a href="#7-sql-code-to-generate-dataset">7. SQL Code to Generate Dataset</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
+<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading visualizations in image form (<a href="https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b#id0edd=windows_10" target="_blank">win10/11</a>, <a href="https://support.apple.com/en-in/guide/mac-help/mh26782/mac" target="_blank">macOS</a>):</p>
+<ol>
+<li><strong>Descriptive Analytics</strong>: scatter plots with trend line showing R<sup>2</sup></li>
+<li><strong>Diagnostic Analytics</strong>: explanations of the <em>why</em> behind relationships</li>
+<li><strong>Predictive Analytics</strong>: exploring future, predictive relationships</li>
+<li><strong>Prescriptive Analytics</strong>: tying analyses to decision-making</li>
+</ol>
+<p><em>Note</em>: Consider the aesthetics of your visualizations. Clear, well-organized visuals with readable axis labels and titles will help convey your findings more effectively.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Understand and apply the 4 stages of analytics: Descriptive, Diagnostic, Predictive, and Prescriptive</li>
+<li>Use linear regression and R<sup>2</sup> to measure relationship strength between financial variables</li>
+<li>Interpret goodness-of-fit measures to evaluate model quality</li>
+<li>Distinguish between relationships that explain the past vs. predict the future</li>
+<li>Recognize the difference between strong explanatory relationships (balance sheet/operations) and weak predictive relationships (fundamentals to returns)</li>
+<li>Consider how analytical insights can inform business decisions through the lens of understanding economic and market mechanisms</li>
+</ul>
+<h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
+<p>As always, you can use Excel, Python, or Tableau for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.</p>
+<p><em>However</em>, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available <a href="https://utah.instructure.com/courses/1171903/pages/regression-eda" target="_blank">on canvas</a>, and you can download it there to run it locally on your computer.</p>
+<p>I used an initial one-line prompt (collapsed, below) in ChatGPT to generate a first draft, then used Claude Code to add more features, then asked Claude to re-generate a prompt that would cover all the features I had added (also collapsed, below). You can copy/paste that prompt into your own LLM to generate your own version of the app, and modify it to add more features if you like. I use this as a further demonstration of how, with a good prompt, LLMs can help you quickly generate useful code to generate very valuable tools.</p>
+<details>
+<summary>Initial prompt</summary>
+<p>Make me a simple one-page website that takes a csv file upload, then populates a two dropdowns: x and y from the column headers of the CSV. Those dropdowns should show all the variables from the CSV, and they will be used to set the Y and X axis of the plot, which will be beneath the side-by-side dropdowns. The graph should be plotted in D3, aesthetically pleasing, and show a scatterplot of the two variables, and overlay the regression line of Y on X. The regression statistics should also be plotted, including slope, intercept, and R2.</p>
+</details>
+<details>
+<summary>Claude generated prompt for full features (you can copy/paste this into an LLM to get your own version, add features, etc.)</summary>
+<p>Create a single-file HTML page with embedded JavaScript using D3.js that:</p>
+<ol>
+<li>Allows users to upload a CSV file</li>
+<li>Automatically populates three dropdowns:<ul>
+<li>X axis: numeric columns only</li>
+<li>Y axis: numeric columns only</li>
+<li>Hue: all columns, with "(none)" option and clear button</li>
+</ul>
+</li>
+<li>Auto-selects the first two numeric columns for X and Y</li>
+<li>Displays a scatter plot with:<ul>
+<li>Points colored by hue variable (if selected)</li>
+<li>OLS regression line overlaid</li>
+<li>Optional 90% confidence interval band (toggleable checkbox)</li>
+<li>Hover tooltips showing Y, X, and Hue values with variable names</li>
+</ul>
+</li>
+<li>Shows regression statistics: slope, intercept, R<sup>2</sup>, RMSE, and N</li>
+<li>Displays the regression equation as text on the plot</li>
+<li>Handles hue coloring:<ul>
+<li>Categorical (≤20 unique values): discrete color palette with legend</li>
+<li>Numeric (&gt;20 unique values): continuous Viridis colorscale with colorbar</li>
+<li>Non-numeric with ≥100 values: default to single color</li>
+<li>Numeric with any number of values: always use continuous colorscale</li>
+</ul>
+</li>
+<li>Filters out non-numeric, empty, and whitespace-only values from X/Y calculations</li>
+<li>Updates plot automatically when any dropdown or checkbox changes</li>
+</ol>
+</details>
+<h2 class="ada-h2" id="2-data">2. Data</h2>
+<p>The dataset for this lab contains annual financial statement data from Compustat merged with stock return data from CRSP for the 10 largest companies in each GICS sector from 2015 to present.</p>
+<h3 class="ada-h3" id="21-data-source">2.1. Data Source</h3>
+<p>The data is provided as a CSV file containing financial fundamentals and market returns for thousands of firm-year observations. A sample of the data is shown at the top of this document. For those curious, I've included the SQL code used to generate the dataset at the end of the document.</p>
+<h3 class="ada-h3" id="22-data-dictionary">2.2. Data Dictionary</h3>
+<p>Full data dictionary is provided at the end of this document. Key variables include:</p>
+<ul>
+<li><strong>Firm Identifiers</strong><ul>
+<li><code class="fixed-width">firm_id</code>: Unique firm identifier (different from previous datasets, i.e. can't be merged with prior data)</li>
+<li><code class="fixed-width">ticker</code>: Stock ticker symbol</li>
+<li><code class="fixed-width">firm_name</code>: Company name</li>
+<li><code class="fixed-width">fyear</code>: Fiscal year</li>
+<li><code class="fixed-width">gics_sector_name</code>: GICS sector classification</li>
+</ul>
+</li>
+<li><strong>Balance Sheet Variables</strong><ul>
+<li><code class="fixed-width">at</code>: Total assets (millions of dollars)</li>
+<li><code class="fixed-width">lt</code>: Total liabilities (millions of dollars)</li>
+<li><code class="fixed-width">act</code>: Current assets (millions of dollars)</li>
+<li><code class="fixed-width">lct</code>: Current liabilities (millions of dollars)</li>
+<li><code class="fixed-width">bve</code>: Book value of equity (millions of dollars)</li>
+</ul>
+</li>
+<li><strong>Income Statement Variables</strong><ul>
+<li><code class="fixed-width">revt</code>: Total revenue (millions of dollars)</li>
+<li><code class="fixed-width">sale</code>: Sales/revenue (millions of dollars)</li>
+<li><code class="fixed-width">cogs</code>: Cost of goods sold (millions of dollars)</li>
+<li><code class="fixed-width">ni</code>: Net income (millions of dollars)</li>
+<li><code class="fixed-width">ebitda</code>: Earnings before interest, taxes, depreciation, and amortization (millions of dollars)</li>
+<li><code class="fixed-width">xrd</code>: Research and development expense (millions of dollars)</li>
+</ul>
+</li>
+<li><strong>Market Variables</strong><ul>
+<li><code class="fixed-width">mve</code>: Market value of equity (millions of dollars)</li>
+<li><code class="fixed-width">bhret_year_prev</code>: Buy and hold return for trading days starting from the trading day <em>after</em> the previous year's earnings announcement, through the trading day <em>before</em> the earnings announcement date(decimal, e.g., 0.15 = 15%)</li>
+<li><code class="fixed-width">bhret_year_next</code>: Buy and hold return for trading days starting from the trading day <em>after</em> the earnings announcement date, to the trading day <em>before</em> the next earnings announcement (decimal, e.g., 0.10 = 10%)</li>
+<li><code class="fixed-width">bhret_0</code>: Stock return on earnings announcement date (or first trading day after, if the EA does not land on a trading day) (decimal)</li>
+<li><code class="fixed-width">bhret_m1_p1</code>: 3-day return around earnings announcement (day -1 to +1)</li>
+<li><code class="fixed-width">positive_ea_return</code>: Indicator variable for whether the earnings announcement return (<code class="fixed-width">bhret_0</code>) is positive (1 = positive return, 0 = negative return)</li>
+</ul>
+</li>
+<li><strong>Calculated Ratios</strong><ul>
+<li><code class="fixed-width">rd_sales</code>: R&amp;D intensity, calculated as <code class="fixed-width">xrd / sale</code> (R&amp;D expense as % of sales)</li>
+<li><code class="fixed-width">gross_margin</code>: Gross profit margin, <code class="fixed-width">(revt - cogs) / revt</code></li>
+<li><code class="fixed-width">current_ratio</code>: Current assets / current liabilities</li>
+<li><code class="fixed-width">debt_equity</code>: Total debt / book value of equity</li>
+</ul>
+</li>
+</ul>
+<h2 class="ada-h2" id="3-question-outline">3. Question Outline</h2>
+<p>This lab walks you through the four stages of analytics using financial data. You'll discover that while some relationships are very strong (and explainable), predicting future stock returns from accounting fundamentals is surprisingly difficult.</p>
+<h3 class="ada-h3" id="31-descriptive-analytics-what-happened">3.1. Descriptive Analytics: <em>What</em> happened?</h3>
+<p>Descriptive analytics answers the question <em>what relationships exist in our data?</em> In this lab, we will achieve this by useing scatter plots with trend lines and R<sup>2</sup> values to measure how strongly variables are related. R<sup>2</sup> ranges from 0 to 1, where:</p>
+<ul>
+<li><strong>R<sup>2</sup> = 1</strong>: Perfect linear relationship</li>
+<li><strong>R<sup>2</sup> = 0.7-0.9</strong>: Very strong relationship</li>
+<li><strong>R<sup>2</sup> = 0.4-0.7</strong>: Moderate relationship</li>
+<li><strong>R<sup>2</sup> &lt; 0.1</strong>: Weak or no relationship</li>
+<li><strong>R<sup>2</sup> &lt; 0.01</strong>: Where most stock-return relationships fall (and why active trading almost never beats the diversified market portfolio on the long run)</li>
+</ul>
+<ol>
+<li>How related are revenue and cost of goods sold?<ul>
+<li>Create a scatter plot with <code class="fixed-width">revt</code> and <code class="fixed-width">cogs</code> with a linear trend line and display the R<sup>2</sup> value</li>
+<li>Expected finding: Strong relationship (R<sup>2</sup> &gt; 0.8)</li>
+</ul>
+</li>
+<li>How related are current assets and current liabilities?<ul>
+<li>Create a scatter plot with <code class="fixed-width">act</code> and <code class="fixed-width">lct</code></li>
+<li>Add a linear trend line and display the R<sup>2</sup> value</li>
+<li>Expected finding: Strong relationship (R<sup>2</sup> &gt; 0.8)</li>
+</ul>
+</li>
+<li>How related are market value and book value of equity?<ul>
+<li>Create a scatter plot with <code class="fixed-width">bve</code> and <code class="fixed-width">mve</code> with a linear trend line and display the R<sup>2</sup> value</li>
+<li>Expected finding: Moderate to weak relationship (R<sup>2</sup> ≈ 0.2-0.6)</li>
+</ul>
+</li>
+<li>How related are consecutive year stock returns?<ul>
+<li>Create a scatter plot with <code class="fixed-width">bhret_year_prev</code> and <code class="fixed-width">bhret_year_next</code> with a linear trend line and display the R<sup>2</sup> value</li>
+<li>What does the R<sup>2</sup> tell you about return momentum or mean reversion?</li>
+</ul>
+</li>
+<li>Choose your own adventure relationship: look through the relationships between variables, and choose one you find interesting.<ul>
+<li>Create a scatter plot with your variables</li>
+<li>Add a linear trend line and display the R<sup>2</sup> value</li>
+</ul>
+</li>
+</ol>
+<!-- <span style="font-family: monospace; background-color: #eeeeee;">act</span> -->
+
+<hr />
+<h3 class="ada-h3" id="32-diagnostic-analytics-why-did-it-happen">3.2. Diagnostic Analytics: <em>Why</em> did it happen?</h3>
+<p>Diagnostic analytics seeks to answer <em>why do these relationships exist?</em> We move beyond just observing patterns to explaining the business and economic reasons behind them.</p>
+<ol>
+<li>Why are <code class="fixed-width">revt</code> and <code class="fixed-width">cogs</code> strongly related?<ul>
+<li>What is the direct operational connection?</li>
+<li>How does producing more revenue affect costs?
+<!-- * *Expected reasoning*: Direct operational relationship—generating more sales requires more inventory, materials, and production capacity, creating proportional cost of goods sold. This is especially true for manufacturing and retail firms where COGS is a major component of the income statement. --></li>
+</ul>
+</li>
+<li>Why are <code class="fixed-width">act</code> and <code class="fixed-width">lct</code> strongly related?<ul>
+<li>What is working capital?</li>
+<li>How do firms manage short-term assets and liabilities together?</li>
+<li>What operational cycle creates this relationship?
+<!-- * *Expected reasoning*: Working capital management—firms match short-term assets (receivables, inventory) with short-term liabilities (payables). The operational cycle (buying inventory, selling on credit, collecting cash, paying suppliers) creates a natural relationship. More current assets typically mean more operations, which requires more short-term financing. --></li>
+</ul>
+</li>
+<li>Why are <code class="fixed-width">mve</code> and <code class="fixed-width">bve</code> related but not perfectly?<ul>
+<li>What does book value measure vs. market value?</li>
+<li>What factors might cause them to diverge?</li>
+<li>Why might some firms trade at a premium or discount to book value?
+<!-- * *Expected reasoning*: Market value reflects investor expectations about future earnings, growth prospects, and risk, while book value is historical accounting cost. Market value includes intangible assets (brand value, intellectual property) not fully captured in book value. High-growth firms may trade at high market-to-book ratios, while distressed firms may trade below book value. --></li>
+</ul>
+</li>
+<li>Why are (or aren't) <code class="fixed-width">bhret_year_prev</code> and <code class="fixed-width">bhret_year_next</code> strongly related?<ul>
+<li>If markets are efficient, should past returns predict future returns?</li>
+<li>What does momentum vs. mean reversion mean in finance?</li>
+<li>What might the R<sup>2</sup> from your descriptive analysis suggest about market efficiency?
+<!-- * *Expected reasoning*: If R<sup>2</sup> is low, it suggests market efficiency—past returns don't reliably predict future returns because information is already incorporated into prices. If there's some relationship, it might suggest momentum effects or industry trends, but the relationship should still be weak. --></li>
+</ul>
+</li>
+<li>Explain the relationship you chose in Q5 of the descriptive section.<ul>
+<li>Why do you think these variables are related?</li>
+<li>What did you find interesting about this relationship?</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 class="ada-h3" id="33-predictive-analytics-what-will-happen-homework-8-but-here-for-continuity-and-a-heads-up">3.3. Predictive Analytics: What <em>will</em> happen? (Homework 8, but here for continuity and a heads up)</h3>
+<p>Homework 8 will continue on with predictive analytics, which asks <em>can we use current data to predict future outcomes?</em> This is where things get conceptually (and statistically) more difficult, because while understanding the past is like understanding a test question studying the solution, understanding the future is like answering the test question on your own. You've hopefully seen that while balance sheet and income statement relationships are strong (high R<sup>2</sup>), predicting future stock returns from accounting fundamentals is extremely difficult (low R<sup>2</sup>).</p>
+<ol>
+<li>Can net income (<code class="fixed-width">ni</code>) predict next year's stock returns (<code class="fixed-width">bhret_next_year</code>)?**<ul>
+<li><em>To ponder</em>: Why might this be/not be the case? Isn't stock price discounted future cash flows?</li>
+</ul>
+</li>
+<li>Can <em>scaled</em> NI (<code class="fixed-width">roa</code>) predict next year's stock returns (<code class="fixed-width">bhret_next_year</code>)?**<ul>
+<li><em>To ponder</em>: Why might scaling NI by assets (ROA) help/hurt predictive power?</li>
+</ul>
+</li>
+<li>How predictable is current net income (<code class="fixed-width">ni</code>) from past net income (<code class="fixed-width">ni_prev</code>)?**<ul>
+<li><em>To ponder</em>: If this year's net income is predictable from last year's net income, then what "news" is conveyed when announcing current earnings? If earnings are predictable (high R<sup>2</sup>), why would they generate abnormal returns (low R<sup>2</sup> in Q1)? What does this tell you about market efficiency?</li>
+</ul>
+</li>
+<li>Can R&amp;D intensity (<code class="fixed-width">rd_sales</code>) predict next year's stock returns (<code class="fixed-width">bhret_next_year</code>)?**<ul>
+<li><em>To ponder</em>: R&amp;D is an investment in future output, so should it predict future returns? When would/wouldn't this be the case?</li>
+</ul>
+</li>
+<li>Compare multiple predictors of next year's stock returns (<code class="fixed-width">bhret_next_year</code>):<ul>
+<li>Which accounting variable or ratio has the strongest relationship with <code class="fixed-width">bhret_next_year</code>?<ul>
+<li><em>Note to Excel users</em>: You might want to know about the function <code class="fixed-width">=RSQ(Ys, Xs)</code> which calculates R<sup>2</sup>s</li>
+</ul>
+</li>
+<li>How do the R<sup>2</sup> values for stock returns compare to those we looked at involving solely accounting measures?</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 class="ada-h3" id="34-prescriptive-analytics-what-should-we-do-homework-8-but-here-for-continuity-and-a-heads-up">3.4. Prescriptive Analytics: What <em>should</em> we do? (Homework 8, but here for continuity and a heads up)</h3>
+<p>Homework 8 will also delve into prescriptive analytics, which asks <em>how can we use these insights to make better decisions?</em> This stage leverages findings from the previous stages to develop data-driven recommendations for decision-makers.</p>
+<ol>
+<li>Given your analysis of <code class="fixed-width">rd_sales</code> and future stock returns, what investment strategy might be promising? What are the risks and limitations of this strategy?
+    <!-- *Expected reasoning*: Focus on R&D-intensive firms in growth industries (technology, pharmaceuticals, etc.) since R&D represents forward-looking investment. However, the low R<sup>2</sup> means this shouldn't be the sole investment criterion. Combine with other factors: competitive position, management quality, industry trends, valuation metrics. --></li>
+<li>Should analysts focus more on balance sheet or income statement metrics for predicting returns?
+    <!-- * *Expected reasoning*: Neither strongly predicts returns individually (both have low R<sup>2</sup>). This supports the efficient market hypothesis—publicly available accounting data is already priced in. Investors should: (1) use comprehensive analysis including qualitative factors, (2) focus on forward-looking information, (3) employ diversification strategies, (4) consider longer time horizons. --></li>
+<li>Identifying Unusual Firms Using Descriptive Relationships: how can the ACT/LCT relationship identify risky firms?<ul>
+<li>What if a firm has much higher LCT than predicted by ACT?</li>
+<li>What if a firm is significantly away from the trend line?
+<!-- * *Expected reasoning*: Firms far above the trend line (higher liabilities than predicted) may have liquidity problems or aggressive working capital management. Firms below the line may be underleveraged or have conservative working capital policies. Significant deviations warrant further investigation into: Cash conversion cycle, Industry norms, Seasonal effects, Credit terms with suppliers/customers --></li>
+</ul>
+</li>
+<li>Management Actions Based on Deviations: what might you conclude if your firm's metrics deviate significantly from the average relationships found in Lab 8?<ul>
+<li>What operational issues might be present?</li>
+<li>How would you benchmark against peers?
+<!-- * *Expected reasoning*: **ACT/LCT deviation**: Investigate inventory management, receivables collection, or payables strategy, **REVT/COGS deviation**: Examine pricing strategy, cost controls, product mix changes, or industry margin compression, **MVE/BVE deviation**: If trading below book value, consider buybacks, asset sales, or strategic restructuring; if high M/B ratio, ensure growth investments justify premium valuation --></li>
+</ul>
+</li>
+</ol>
+<h2 class="ada-h2" id="4-guidance-for-completing-the-lab">4. Guidance for Completing the Lab</h2>
+<p>This section provides technical guidance for completing the lab using your preferred tool.</p>
+<h3 class="ada-h3" id="41-general-workflow-all-tools">4.1. General Workflow (All Tools)</h3>
+<ol>
+<li><strong>Load the data</strong>: Import the financial dataset (provided as CSV or pre-loaded in starter notebook)</li>
+<li><strong>Data exploration</strong>: Familiarize yourself with variables, check for missing values, understand the scale of variables</li>
+<li><strong>Create scatter plots</strong>: For each question, create a scatter plot with:<ul>
+<li>Appropriate X and Y variables</li>
+<li>Linear trend line</li>
+<li>R<sup>2</sup> value displayed on the chart</li>
+<li>Clear axis labels (remembering that the accounting values are in <strong>millions of dollars</strong>) and title</li>
+</ul>
+</li>
+<li><strong>Interpret R<sup>2</sup> values</strong>:<ul>
+<li>R<sup>2</sup> &gt; 0.7 = strong relationship</li>
+<li>R<sup>2</sup> = 0.4-0.7 = moderate relationship</li>
+<li>R<sup>2</sup> &lt; 0.1 = weak/no relationship</li>
+</ul>
+</li>
+<li><strong>Answer diagnostic questions</strong>: Use business reasoning to explain WHY relationships exist</li>
+<li><strong>Compare across stages</strong>: Notice the dramatic difference in R<sup>2</sup> between descriptive and predictive questions</li>
+<li><strong>Develop recommendations</strong>: Synthesize insights into actionable prescriptive advice</li>
+</ol>
+<h3 class="ada-h3" id="42-expected-r2-patterns">4.2. Expected R<sup>2</sup> Patterns</h3>
+<p>To help you verify your work, here are the expected patterns:</p>
+<ul>
+<li>Descriptive Analytics (explaining the past):<ul>
+<li><code class="fixed-width">act</code> vs <code class="fixed-width">lct</code>: High R<sup>2</sup> (&gt; 0.7) for working capital relationship</li>
+<li><code class="fixed-width">revt</code> vs <code class="fixed-width">cogs</code>: Very high R<sup>2</sup> (&gt; 0.7) for direct operational relationship</li>
+<li><code class="fixed-width">bve</code> vs <code class="fixed-width">mve</code>: Moderate to Weak R<sup>2</sup> (≈ 0.2-0.6) because value estimates are related but diverge based on growth/risk/industry/business model</li>
+<li><code class="fixed-width">bhret_year_next</code> vs <code class="fixed-width">bhret_year_prev</code>: Low R<sup>2</sup> (≈ 0.0) for returns being predicted from past returns</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="43-excel-steps">4.3. Excel Steps</h3>
+<ul>
+<li>Trend line and R<sup>2</sup><ul>
+<li>Select the two columns you want to plot (e.g., <code class="fixed-width">act</code> and <code class="fixed-width">lct</code>)</li>
+<li>Go to Insert &gt; Scatter (X, Y) chart</li>
+<li>Click on a data point, then right-click &gt; Add Trendline (also accessible from Chart Design &gt; Add Chart Element &gt; Trendline)</li>
+<li>In Trendline Options, check "Display Equation on chart" and "Display R-squared value on chart" (I would also increase the font size so it's legible)</li>
+<li>Format the chart with clear title and axis labels</li>
+<li>Adjust axis scales if outliers compress the main data</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="44-python-steps">4.4. Python Steps</h3>
+<p>Basic workflow:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;financial_data.csv&#39;</span><span class="p">)</span> <span class="c1"># load your data</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;act&#39;</span>
+<span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;lct&#39;</span>
+<span class="n">_tmpdf</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;any&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e3</span> <span class="c1"># scale to billions for readability</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">_tmpdf</span><span class="p">,</span> <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">.1</span><span class="p">},</span> <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="s1">&#39;black&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Current Assets vs Liabilities with Trend&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Current Liabilities ($ billions)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Current Assets ($ billions)&#39;</span><span class="p">)</span>
+
+<span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r_value</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">_tmpdf</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">_tmpdf</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;R&lt;sup&gt;2&lt;/sup&gt; = </span><span class="si">{</span><span class="n">r_value</span><span class="o">**</span><span class="mi">2</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+</code></pre></div>
+<h3 class="ada-h3" id="45-tableau-steps">4.5. Tableau Steps</h3>
+<p><a href="https://10ay.online.tableau.com/#/site/accounting-data-analytics/home" target="_blank">Tableau Cloud Link</a></p>
+<ul>
+<li>Drag the X-variable (e.g., <code class="fixed-width">act</code>) to Columns</li>
+<li>Drag the Y-variable (e.g., <code class="fixed-width">lct</code>) to Rows</li>
+<li>Go to the "Analysis" menu and ensure "Aggregate Measures" is unchecked</li>
+<li>Right-click on the plot &gt; Trend Lines &gt; Show Trend Lines<ul>
+<li>I have found no way of displaying R<sup>2</sup> directly on the plot in Tableau, but if you hover over the trend line at the far right of the graph, it will show R<sup>2</sup> in the tooltip and that will show up in your screenshot.</li>
+</ul>
+</li>
+<li>Add descriptive titles and axis labels (note, accounting values are in millions)</li>
+</ul>
+<h2 class="ada-h2" id="5-reflection-questions">5. Reflection Questions</h2>
+<p>After completing the lab, consider:</p>
+<ol>
+<li>What surprised you most? The difference between descriptive R<sup>2</sup> and predictive R<sup>2</sup>?</li>
+<li>What do your findings suggest about the efficient market hypothesis?</li>
+<li>If you were a portfolio manager, how would you use these insights?</li>
+<li>What are the limitations of using R<sup>2</sup> and linear regression for these analyses?</li>
+<li>What other variables or methods might improve return predictions?</li>
+</ol>
+<h2 class="ada-h2" id="6-data-dictionary">6. Data Dictionary</h2>
+<p>The following variables are included in the dataset, in addition to those described <a href="#22-data-dictionary">above</a>.</p>
+<p><strong>Accounting variables:</strong></p>
+<ul>
+<li><code class="fixed-width">firm_id</code>: ID to identify individual firms, preserving continuity through M&amp;A activities</li>
+<li><code class="fixed-width">fyear</code>: Fiscal Year (based on majority of year, so 2000 connotes fiscal year ends between 7/1/1999 and 6/30/2000)</li>
+<li><code class="fixed-width">fiscal_year_end</code>: Fiscal Year End</li>
+<li><code class="fixed-width">fiscal_year_end_prev</code>: Fiscal Year End of the previous year</li>
+<li><code class="fixed-width">fiscal_year_end_next</code>: Fiscal Year End of the next year</li>
+<li><code class="fixed-width">earn_annc_date</code>: Earnings announcement date</li>
+<li><code class="fixed-width">earn_annc_date_prev</code>: Earnings announcement date of the previous year</li>
+<li><code class="fixed-width">earn_annc_date_next</code>: Earnings announcement date of the next year</li>
+<li><code class="fixed-width">firm_name</code>: Firm Name</li>
+<li><code class="fixed-width">ticker</code>: Ticker Symbol</li>
+<li><code class="fixed-width">age_years</code>: Age (post IPO) of firm, in years (calculated as the number of years since the first filed 10-K)</li>
+<li><code class="fixed-width">accruals</code>: Total Accruals (calculated as income before extraordinary items - operating cash flow)</li>
+<li><code class="fixed-width">act</code>: Current Assets</li>
+<li><code class="fixed-width">ap</code>: Accounts Payable - Trade</li>
+<li><code class="fixed-width">at</code>: Total Assets</li>
+<li><code class="fixed-width">auditor</code>: Name of Auditor</li>
+<li><code class="fixed-width">auop</code>: Auditor Opinion</li>
+<li><code class="fixed-width">auopic</code>: Auditor Opinion - Internal Control</li>
+<li><code class="fixed-width">bign</code>: Big N Auditor (calculated from <code class="fixed-width">au</code>)</li>
+<li><code class="fixed-width">bve</code>: Book Value of Equity</li>
+<li><code class="fixed-width">capx</code>: Capital Expenditures</li>
+<li><code class="fixed-width">che</code>: Cash and Cash Equivalents</li>
+<li><code class="fixed-width">cogs</code>: Cost of Goods Sold</li>
+<li><code class="fixed-width">dvt</code>: Dividends - Total</li>
+<li><code class="fixed-width">ebit</code>: Earnings Before Interest &amp; Taxes</li>
+<li><code class="fixed-width">ebitda</code>: Earnings Before Interest</li>
+<li><code class="fixed-width">emp</code>: Number of employees (in full-time equivalents, <em>not</em> in thousands)</li>
+<li><code class="fixed-width">epspi</code>: Earnings Per Share (Basic) - Including Extraordinary Items (amount in $ / share)</li>
+<li><code class="fixed-width">epspx</code>: Earnings Per Share (Basic) - Excluding Extraordinary Items (amount in $ / share)</li>
+<li><code class="fixed-width">ib</code>: Income Before Extraordinary Items</li>
+<li><code class="fixed-width">invt</code>: Inventory  </li>
+<li><code class="fixed-width">lct</code>: Current Liabilities  </li>
+<li><code class="fixed-width">lt</code>: Total Liabilities  </li>
+<li><code class="fixed-width">mve</code>: Market Value of Equity</li>
+<li><code class="fixed-width">ni</code>: Net Income  </li>
+<li><code class="fixed-width">oancf</code>: Operating Cash Flow</li>
+<li><code class="fixed-width">pi</code>: Pretax Income</li>
+<li><code class="fixed-width">re</code>: Retained Earnings</li>
+<li><code class="fixed-width">recd</code>: Receivables - Estimated Doubtful</li>
+<li><code class="fixed-width">rect</code>: Accounts Receivable  </li>
+<li><code class="fixed-width">revt</code>: Revenue - Total</li>
+<li><code class="fixed-width">sale</code>: Sales/Turnover (Net)  </li>
+<li><code class="fixed-width">seq</code>: Shareholders' Equity  </li>
+<li><code class="fixed-width">share_price</code>: Price Close - Annual - Fiscal</li>
+<li><code class="fixed-width">shares_outstanding</code>: Common Shares Outstanding</li>
+<li><code class="fixed-width">total_debt</code>: Total Debt</li>
+<li><code class="fixed-width">xad</code>: Advertising Expense</li>
+<li><code class="fixed-width">xint</code>: Interest Expense  </li>
+<li><code class="fixed-width">xrd</code>: R&amp;D Expense</li>
+<li><code class="fixed-width">xsga</code>: SG&amp;A Expense  </li>
+</ul>
+<p><strong>Industry Classification Variables</strong>:</p>
+<ul>
+<li><code class="fixed-width">gics_sector_name</code>: GICS Sector code</li>
+<li><code class="fixed-width">gics_group_name</code>: GICS Group code</li>
+<li><code class="fixed-width">gics_industry_name</code>: GICS Industry code</li>
+<li><code class="fixed-width">gics_subindustry_name</code>: GICS Subindustry code</li>
+</ul>
+<p><strong>Financial Ratios</strong>:</p>
+<ul>
+<li>
+<p>Profitability Ratios:</p>
+<ul>
+<li><code class="fixed-width">gross_margin</code>: Gross profit margin, calculated as <code class="fixed-width">(sale - cogs) / sale</code></li>
+<li><code class="fixed-width">operating_margin</code>: Operating profit margin, calculated as <code class="fixed-width">ebit / sale</code></li>
+<li><code class="fixed-width">roa</code>: Return on assets, calculated as <code class="fixed-width">ni / at_prev</code></li>
+<li><code class="fixed-width">roa_noex</code>: Return on assets, excluding extraordinary items, calculated as <code class="fixed-width">ib / at_prev</code></li>
+<li><code class="fixed-width">roe</code>: Return on equity, calculated as <code class="fixed-width">ni / seq_prev</code></li>
+<li><code class="fixed-width">ep</code>: Earnings-to-price ratio, calculated as <code class="fixed-width">ni / mve</code></li>
+</ul>
+</li>
+<li>
+<p>Liquidity Ratios:</p>
+<ul>
+<li><code class="fixed-width">current_ratio</code>: Current ratio, calculated as <code class="fixed-width">act / lct</code></li>
+<li><code class="fixed-width">quick_ratio</code>: Quick ratio (acid-test ratio), calculated as <code class="fixed-width">(act - invt) / lct</code></li>
+</ul>
+</li>
+<li>
+<p>Efficiency Ratios:</p>
+<ul>
+<li><code class="fixed-width">inventory_turnover</code>: Inventory turnover, calculated as <code class="fixed-width">cogs / ((invt + invt_prev) / 2)</code></li>
+<li><code class="fixed-width">receivables_turnover</code>: Receivables turnover, calculated as <code class="fixed-width">sale / ((rect + rect_prev) / 2)</code></li>
+</ul>
+</li>
+<li>
+<p>Leverage Ratios:</p>
+<ul>
+<li><code class="fixed-width">debt_equity</code>: Debt-to-equity ratio, calculated as <code class="fixed-width">total_debt / seq</code></li>
+<li><code class="fixed-width">interest_coverage</code>: Interest coverage ratio, calculated as <code class="fixed-width">ebit / xint</code></li>
+</ul>
+</li>
+<li>
+<p>Growth and Investment Ratios:</p>
+<ul>
+<li><code class="fixed-width">capex_sales</code>: Capital expenditure intensity, calculated as <code class="fixed-width">capx / sale</code></li>
+<li><code class="fixed-width">ni_growth</code>: Growth in net income, calculated as <code class="fixed-width">ni / ni_prev</code></li>
+<li><code class="fixed-width">rd_sales</code>: R&amp;D intensity, calculated as <code class="fixed-width">xrd / sale</code> (with <code class="fixed-width">xrd</code> filled to 0 if missing)</li>
+<li><code class="fixed-width">sga_sales</code>: SG&amp;A intensity, calculated as <code class="fixed-width">xsga / sale</code> (with <code class="fixed-width">xsga</code> filled to 0 if missing)</li>
+</ul>
+</li>
+<li>
+<p>Cash Flow Ratios:</p>
+<ul>
+<li><code class="fixed-width">fcf_ni</code>: Free cash flow to net income ratio, calculated as <code class="fixed-width">(oancf - capx) / ni</code></li>
+<li><code class="fixed-width">accruals_at</code>: Accruals to average total assets ratio, calculated as <code class="fixed-width">accruals / ((at + at_prev) / 2)</code></li>
+</ul>
+</li>
+</ul>
+<h2 class="ada-h2" id="7-sql-code-to-generate-dataset">7. SQL Code to Generate Dataset</h2>
+<p>Below (expandable) is the SQL code used to generate the dataset, for those interested. You do not need to run this code, as the dataset is provided.</p>
+<details>
+<summary>SQL Code:</summary>
+<div class="highlight"><pre><span></span><code><span class="k">WITH</span>
+<span class="n">event_window_numbered</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">rdq</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">ticker</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="nb">date</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">ret</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="nb">date</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">trade_date_num</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="w">    </span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">d</span>
+<span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">rdq_prev</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">rdq_next</span>
+<span class="p">),</span>
+<span class="n">event_data_with_relative_day</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span><span class="p">,</span><span class="w"> </span><span class="n">ticker</span><span class="p">,</span><span class="w"> </span><span class="nb">date</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="p">,</span>
+<span class="w">        </span><span class="p">(</span><span class="n">trade_date_num</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">rdq</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">trade_date_num</span><span class="w"> </span><span class="k">END</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">relative_trade_day</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">event_window_numbered</span>
+<span class="p">),</span>
+<span class="n">bhret_yr_prev</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span><span class="p">,</span><span class="w"> </span><span class="n">EXP</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">LN</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ret</span><span class="p">)))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bhret_year_prev</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">event_data_with_relative_day</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">relative_trade_day</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span>
+<span class="p">),</span>
+<span class="n">bhret_yr_next</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span><span class="p">,</span><span class="w"> </span><span class="n">EXP</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">LN</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ret</span><span class="p">)))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bhret_year_next</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">event_data_with_relative_day</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">relative_trade_day</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span>
+<span class="p">),</span>
+<span class="n">bhret_m1p1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span><span class="p">,</span><span class="w"> </span><span class="n">EXP</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">LN</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ret</span><span class="p">)))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bhret_m1_p1</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">event_data_with_relative_day</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">relative_trade_day</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span>
+<span class="p">),</span>
+<span class="n">bhret_0</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">fyear</span><span class="p">,</span><span class="w"> </span><span class="n">ticker</span><span class="p">,</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">bhret_0</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">event_data_with_relative_day</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">relative_trade_day</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="k">SELECT</span>
+<span class="w">    </span><span class="k">c</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m4</span><span class="p">.</span><span class="n">ticker</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m1</span><span class="p">.</span><span class="n">bhret_year_prev</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m2</span><span class="p">.</span><span class="n">bhret_year_next</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m3</span><span class="p">.</span><span class="n">bhret_m1_p1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">m4</span><span class="p">.</span><span class="n">bhret_0</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">df</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">c</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">bhret_yr_prev</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">m1</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m1</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m1</span><span class="p">.</span><span class="n">fyear</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">bhret_yr_next</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">m2</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m2</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m2</span><span class="p">.</span><span class="n">fyear</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">bhret_m1p1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">m3</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m3</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m3</span><span class="p">.</span><span class="n">fyear</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">bhret_0</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">m4</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m4</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m4</span><span class="p">.</span><span class="n">fyear</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">gvkey</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span>
+</code></pre></div>
+</details>
+<p>This query takes approximately 7 seconds to run in <code class="fixed-width">python</code> with <code class="fixed-width">duckdb</code> on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data on the PostgreSQL server). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.</p>
+</body>
+</html>

@@ -1,33 +1,33 @@
-# Files
-labs_hw/*.html
-labs_hw/*/*.html
-labs_hw/cases/
-
 # Folders
-literature/
-data/
 code/da_scenes/
-syllabus/design material/
+data/
+labs_hw/cases/
+labs_hw/week12_AI/demo1/
+literature/
+slides/
+syllabus/
 
 # File types
 *.pdf
 *.docx
 *.pptx
-
-# pixi environments
-.pixi
-*.egg-info
-.envrc
-pixi.lock
+*.xlsx
+*.csv
+*.tsv
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info
 .ipynb_checkpoints/
+*.lock
+.pixi/
+
+# Editors
+.vscode/
 
 # OS nonsense
 .DS_Store
 Thumbs.db
 desktop.ini
-

@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid;
+    border-right: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="lab-12-ai-assisted-web-scraping">Lab 12: AI-Assisted Web Scraping</h1>
+<p>Lab 12 introduces you to using AI tools (specifically <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a>) to assist with development environment setup, coding, and web scraping tasks. You will install and configure <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>, use Copilot Chat to install <a href="https://www.python.org/" target="_blank">Python</a> and web scraping tools, and then build a local event scraper using <a href="https://playwright.dev/" target="_blank">Playwright</a> to collect event data from websites and export to Excel and calendar formats. This lab emphasizes learning to work effectively with AI coding assistants, understanding when to trust AI suggestions, and developing the skills to verify and debug AI-generated code.</p>
+<p class="note"><em>Note</em>: This lab is meant to demonstrate the power of AI-assisted development. For those of you who haven't been using Python for these labs and homework, I want to clarify that using Copilot to install, write, run, and test python code is far easier than doing it more manually, e.g. in Colab. This lab isn't intended to force you to learn to program, but instead demonstrate how AI tools can make development easier for beginners and experts alike. Focus on learning to use Copilot effectively rather than struggling with low-level Python details.</p>
+<div class="toc">
+<ul>
+<li><a href="#lab-12-ai-assisted-web-scraping">Lab 12: AI-Assisted Web Scraping</a><ul>
+<li><a href="#1-assignment">1. Assignment</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning objectives</a></li>
+<li><a href="#12-tools">1.2. Tools</a></li>
+</ul>
+</li>
+<li><a href="#2-background-ai-assisted-development-vibe-coding">2. Background: AI-assisted development (vibe coding)</a><ul>
+<li><a href="#21-about-local-event-scraping">2.1. About local event scraping</a></li>
+<li><a href="#22-what-is-web-scraping">2.2. What is web scraping?</a></li>
+</ul>
+</li>
+<li><a href="#3-step-by-step-instructions">3. Step-by-step instructions</a><ul>
+<li><a href="#31-install-vs-code-and-github-copilot">3.1. Install VS Code and GitHub Copilot</a></li>
+<li><a href="#32-build-a-local-event-scraper-with-copilot-agent">3.2. Build a local event scraper with Copilot Agent</a></li>
+</ul>
+</li>
+<li><a href="#4-technical-guidance">4. Technical guidance</a><ul>
+<li><a href="#41-effective-copilot-agent-prompting">4.1. Effective Copilot Agent prompting</a></li>
+<li><a href="#42-troubleshooting-with-agent-mode">4.2. Troubleshooting with Agent mode</a></li>
+<li><a href="#43-understanding-what-agent-creates">4.3. Understanding what Agent creates</a></li>
+<li><a href="#44-going-further-optional-improvements-if-youre-feeling-adventurous">4.4. Going further (optional improvements, if you're feeling adventurous)</a></li>
+<li><a href="#45-ethical-considerations-checklist">4.5. Ethical considerations checklist</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
+<p>To complete this lab, complete the Canvas quiz by uploading your final working python script, and your excel output. The general steps will be:</p>
+<ol>
+<li><strong>VS Code Setup</strong>: Install Visual Studio Code and GitHub Copilot extension</li>
+<li><strong>Python Environment</strong>: Use Copilot Chat to guide installation of Python and virtual environment setup</li>
+<li><strong>Playwright Installation</strong>: Install Playwright web scraping framework with Copilot's assistance</li>
+<li><strong>Event Scraper Implementation</strong>: Build a command-line event scraper that finds and collects local events</li>
+<li><strong>Data Export</strong>: Export scraped events to Excel and iCalendar formats for analysis</li>
+</ol>
+<p>This lab demonstrates how AI tools can accelerate development workflows while teaching you to critically evaluate AI-generated solutions. You'll learn when to accept Copilot's suggestions, when to ask for clarification, and how to troubleshoot when things don't work as expected. This lab is not meant to be a slog through programming and environment setup details, if you're stuck on anything before you get to the Copilot Agent step (or after as well, of course), don't hesitate and reach out to me for help. I don't want you discouraged by computer shenanigans, but rather amazed by AI doing everything for you.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning objectives</h3>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Install and configure Visual Studio Code as a development environment</li>
+<li>Use GitHub Copilot Chat effectively to solve development problems</li>
+<li>Vibe-code a command-line application with multiple functional modes</li>
+<li>Scrape data from websites</li>
+<li>Export data to multiple formats (Excel, iCalendar)</li>
+<li>Debug issues with AI assistance</li>
+</ul>
+<h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
+<p>This lab focuses on learning to use professional development tools with AI assistance:</p>
+<ul>
+<li><strong><a href="https://code.visualstudio.com/" target="_blank">VS Code</a></strong>: A powerful, free code editor from Microsoft</li>
+<li><strong><a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a></strong>: AI pair programmer that provides code suggestions and answers questions</li>
+<li><strong><a href="https://www.python.org/" target="_blank">Python</a></strong>: Programming language for scripting and data manipulation</li>
+<li><strong><a href="https://playwright.dev/" target="_blank">Playwright</a></strong>: Modern web automation and scraping framework</li>
+<li><strong><a href="https://pandas.pydata.org/" target="_blank">pandas</a></strong>: Data manipulation library for Python</li>
+<li><strong><a href="https://icalendar.readthedocs.io/" target="_blank">icalendar</a></strong>: Library for creating calendar files</li>
+</ul>
+<hr />
+<h2 class="ada-h2" id="2-background-ai-assisted-development-vibe-coding">2. Background: AI-assisted development (vibe coding)</h2>
+<p>Modern software development increasingly involves AI coding assistants like <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a>, <a href="https://www.anthropic.com/claude" target="_blank">Claude</a>, <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>, and others. These tools can dramatically accelerate development by:</p>
+<ul>
+<li>Suggesting code completions as you type</li>
+<li>Answering technical questions about libraries, syntax, and best practices</li>
+<li>Generating boilerplate code for common patterns</li>
+<li>Explaining unfamiliar code in natural language</li>
+<li>Debugging errors by analyzing error messages</li>
+</ul>
+<p>However, AI assistants have important limitations:</p>
+<ul>
+<li>They can be confidently wrong: suggestions may look correct but contain subtle bugs</li>
+<li>They don't understand your full context: you need to provide clear, specific prompts</li>
+<li>They may suggest outdated approaches: libraries and best practices evolve (e.g. yours will probably use <code class="fixed-width">argparse</code> instead of, e.g., <code class="fixed-width">click</code>)</li>
+<li>They can't replace understanding: you still need to verify and understand the code if you want to use it in a robust, professional environment</li>
+</ul>
+<p>This lab gives you practice with AI assisted development, including:</p>
+<ol>
+<li>Writing clear prompts that specify what you need</li>
+<li>Evaluating whether AI suggestions make sense</li>
+<li>Testing and verifying AI-generated code</li>
+<li>Debugging with natural language when code doesn't work</li>
+</ol>
+<h3 class="ada-h3" id="21-about-local-event-scraping">2.1. About local event scraping</h3>
+<p>For this lab, you'll build a tool that scrapes local events from city event websites and event aggregators. Your scraper will:</p>
+<ul>
+<li>Find event websites: Use Google search to discover event sites for any city</li>
+<li>Extract event data: Collect event names, dates, locations, and URLs</li>
+<li>Categorize events: Automatically classify events (Music, Arts, Sports, Food, etc.)</li>
+<li>Export multiple formats: Save to Excel for analysis and iCalendar for importing to calendar apps</li>
+</ul>
+<p>This is a practical, real-world application because:</p>
+<ul>
+<li>Useful output: You can actually use the calendar files to track events</li>
+<li>Flexible design: Works for any city, not just one hardcoded website</li>
+<li>Professional patterns: Command-line interface, configuration files, error handling</li>
+<li>Multiple data formats: Excel for analysis, iCalendar for productivity</li>
+<li>Educational value: Demonstrates full software development lifecycle</li>
+</ul>
+<p>Example sites you might scrape include:</p>
+<ul>
+<li>City tourism websites (e.g., Visit Salt Lake, NYC Tourism)</li>
+<li>Eventbrite listings for specific cities</li>
+<li>Local venue calendars and event listings</li>
+</ul>
+<p class="note"><em>Note</em>: Always check a website's <code class="fixed-width">robots.txt</code> file and terms of service before scraping (<a href="https://en.wikipedia.org/wiki/Robots.txt" target="_blank">explanation</a>). Be respectful - don't make too many requests too quickly.</p>
+<h3 class="ada-h3" id="22-what-is-web-scraping">2.2. What is web scraping?</h3>
+<p><strong>Web scraping</strong> is the automated process of extracting data from websites. While humans browse websites and read information, web scrapers programmatically download web pages, parse the HTML structure, and extract specific data elements.</p>
+<p>Common use cases include:</p>
+<ul>
+<li>Price monitoring to track competitor pricing across e-commerce sites</li>
+<li>Market research to collect product reviews, ratings, and customer feedback</li>
+<li>Lead generation to gather business contact information</li>
+<li>Financial analysis to extract financial data from company websites</li>
+<li>Academic research to collect data for research studies</li>
+<li>News aggregation to monitor news sources for relevant stories</li>
+<li>Project 4 maybe?</li>
+</ul>
+<p><strong>Ethical and Legal Considerations:</strong></p>
+<ul>
+<li>Respect robots.txt - This file tells scrapers which parts of a site can be accessed</li>
+<li>Check terms of service - Some sites explicitly prohibit scraping</li>
+<li>Rate limiting - Don't overwhelm servers with too many requests</li>
+<li>Personal data - Be careful with personally identifiable information (GDPR, etc.)</li>
+<li>Copyright - Scraped content may be protected by copyright</li>
+<li>Authentication - Don't scrape behind login walls without permission</li>
+</ul>
+<p><strong>Why Playwright?</strong></p>
+<p>We're using <strong>Playwright</strong> instead of simpler tools like <code class="fixed-width">requests</code> + <code class="fixed-width">BeautifulSoup</code> because it handles JavaScript-rendered content, is reliable and fast (developed by Microsoft and used in production environments), can be run "headed" which means you can watch the browser window as it operates, and works with Chrome, Firefox, Safari, etc. </p>
+<p>If you don't want to use Playwright, you could try using <code class="fixed-width">requests</code> + <code class="fixed-width">BeautifulSoup</code>, but you'll likely run into issues with modern websites that heavily rely on JavaScript for content rendering.</p>
+<hr />
+<h2 class="ada-h2" id="3-step-by-step-instructions">3. Step-by-step instructions</h2>
+<p>This lab walks you through setting up a complete development environment using AI assistance, then building a web scraper.</p>
+<h3 class="ada-h3" id="31-install-vs-code-and-github-copilot">3.1. Install VS Code and GitHub Copilot</h3>
+<p>VS Code is a free, powerful code editor from Microsoft that has quickly become one of the most widely used IDEs (code editor). GitHub Copilot is an AI pair programmer that provides code suggestions and answers questions directly in the editor, and can directly write, edit, and debug code for you, as well as run scripts (like python), meaning you could conceivably never touch the command line yourself, and just interact with copilot in plain English.</p>
+<ol>
+<li>
+<p><strong>Download and install VS Code</strong></p>
+<ul>
+<li>Go to <a href="https://code.visualstudio.com/Download" target="_blank">code.visualstudio.com</a></li>
+<li>Download the installer for your operating system (Windows, Mac, or Linux)</li>
+<li>Run the installer and follow the prompts (default settings are fine)</li>
+<li>Launch VS Code when installation completes</li>
+</ul>
+</li>
+<li>
+<p><strong>Sign in to GitHub</strong> (required for Copilot)</p>
+<ul>
+<li>If you don't have a GitHub account, create one at <a href="https://github.com/signup" target="_blank">github.com</a></li>
+<li>In VS Code, click the account icon in the bottom-left corner</li>
+<li>Choose "Sign in with GitHub" and follow the authentication flow</li>
+<li>Verify you're signed in (your GitHub username should appear in the bottom-left)</li>
+</ul>
+</li>
+<li>
+<p><strong>Activate GitHub Copilot</strong></p>
+<ul>
+<li>(Optional) As a student, you get free access to GitHub Copilot. Go to <a href="https://education.github.com/pack" target="_blank">education.github.com/pack</a> and sign up for the Student Developer Pack</li>
+<li>Install the "GitHub Copilot" and "GitHub Copilot Chat" in VSCode by clicking <a href="vscode://github.copilot-chat">this link</a> (if it works on your computer) or manually installing extensions:<ul>
+<li>Click the Extensions icon in the left sidebar (or press <code class="fixed-width">Ctrl+Shift+X</code>/<code class="fixed-width">Cmd+Shift+X</code>)</li>
+<li>Search for "GitHub Copilot"</li>
+<li>Click "Install" on both "GitHub Copilot" and "GitHub Copilot Chat"</li>
+</ul>
+</li>
+<li>After installation, you may need to restart VS Code</li>
+</ul>
+</li>
+<li>
+<p><strong>Test Copilot Chat</strong></p>
+<ul>
+<li>Open Copilot Chat by clicking the chat icon in the left sidebar (or press <code class="fixed-width">Ctrl+Alt+I</code>/<code class="fixed-width">Cmd+Ctrl+I</code>)<ul>
+<li>You may need to click some approval dialogs the first time you open it</li>
+</ul>
+</li>
+<li>Type a test question, such as "What are some tips and tricks for using Copilot effectively?"</li>
+<li>Verify you get a response</li>
+</ul>
+</li>
+<li>
+<p><strong>Enable Agent Mode</strong></p>
+<ul>
+<li>In Copilot Chat, click the Down arrow next to the "Send" button, and select "Agent"</li>
+<li>Verify that Agent mode is enabled by asking it to perform a simple task: "list the files in the current directory"</li>
+</ul>
+</li>
+<li>
+<p><strong>Check Python installation</strong></p>
+<ul>
+<li>Python may already be installed on your system</li>
+<li>Ask Copilot: "check for an existing python installation"</li>
+<li>If Python is not installed, ask Copilot: "install miniconda python"<ul>
+<li><em>Mac OS note:</em> if you're on a Mac, Copilot might try to install XCode Command Line Tools as part of the python installation, and that might say it'll take hours. To avoid this, make sure to specify <code class="fixed-width">miniconda</code>. This will be much faster.</li>
+</ul>
+</li>
+<li><em>Note</em>: If Copilot doesn't automatically install python for you, you can always ask it for directions and follow them manually. This is less "Vibe" more "coding", but still useful.</li>
+<li>Verify that python is installed, by asking Copilot: "what's my python version?" or running <code class="fixed-width">python --version</code> or <code class="fixed-width">python3 --version</code> in a terminal (open a terminal in VS Code <code class="fixed-width">Ctrl+`</code>, which is control key and the backtick key, on both Windows and Mac (a rare instance of <code class="fixed-width">ctrl</code> not <code class="fixed-width">cmd</code> on Mac))</li>
+</ul>
+</li>
+</ol>
+<p class="note"><em>Note</em>: You could also use other AI coding assistants like <a href="https://geminicli.com/" target="_blank">Gemini CLI</a> or <a href="https://claude.com/product/claude-code" target="_blank">Claude Code</a>, if you prefer those and have accounts, feel free to use them instead (but I'll leave translating these instructions to those approaches up to you).</p>
+<h3 class="ada-h3" id="32-build-a-local-event-scraper-with-copilot-agent">3.2. Build a local event scraper with Copilot Agent</h3>
+<p>This is where you'll use Copilot Agent to build a complete command-line tool. You'll provide the high-level requirements and let Copilot create, run, and debug the code for you. You might be thinking "but I haven't done anything yet, how can code run?" Great question! The point of vibe coding with Copilot Agent is that we will ask it to, as part of the scraping script we write, add some code to automatically install the required software we need to do the scraping. What a world!</p>
+<p>This whole lab basically boils down to the prompt that you will now give to Copilot Agent. Everything else is just scaffolding to get you to this point. Below is an example prompt, but feel free to modify it as you see fit. The key is to be as clear and specific as possible about what you want the scraper to do.</p>
+<ol>
+<li>
+<p><strong>Create the event scraper</strong>:</p>
+<ul>
+<li>Ask Copilot Agent: </li>
+</ul>
+<div class="highlight"><pre><span></span><code>Build a Python command-line tool that scrapes local events from websites and exports them to Excel and calendar formats. The tool should have three commands:
+
+1. `install` automatically installs all dependencies including playwright, pandas, openpyxl, icalendar, and pytz, then installs Playwright&#39;s chromium browser
+2. `init` uses Playwright to search Google for event websites in the specified city, extracts relevant URLs from search results, and saves them to a JSON configuration file (event_sites_config.json) that stores the city name, last update timestamp, and a list of sites with their URLs and CSS selectors (this function should account for the initial load of google search might bring up a bot check, so wait for the user to conduct said check, then let the script continue). The script should default to &quot;Salt Lake City&quot; if no city is provided, and should have an optional `--max-sites` argument to limit the number of sites saved (default 5).
+3. `scrape` reads the configuration file, visits each configured website using Playwright, extracts event information (name, date, location, URL) using CSS selectors, automatically categorizes events into types like Music, Arts, Sports, Food, Festival, Education, Community, Family, Outdoor, Nightlife, or Other based on keywords in the event name, then exports the results to both an Excel spreadsheet (sorted by date with columns: Date, Name, Category, Location, URL) and an iCalendar .ics file that can be imported into any calendar app. There should be some optional arguments, including `--output` to speficy an output filename prefix, and `--start-date` / `--end-date` to only include events between certain dates (default to today / 1 month from now).
+
+The scraper should use good, easy to maintain python software architecture. The init script should be able to flexibly find event websites for any city. The scraper should extract events of all types, categorize them where possible, parse dates to YYYY-MM-DD format, and export to Excel and iCalendar. The tool should handle errors gracefully with try/except blocks, network timeouts, and failed element extraction, use `headless=False` so users can see the browser, add waits for JavaScript to load, and include proper imports wrapped in try/except blocks so the script can run for help/install commands even without dependencies installed. There should also be a --debug flag to enable more verbose logging.
+
+Please make sure the code is clear and well commented, so new programmers can understand how it works.
+</code></pre></div>
+</li>
+<li>
+<p><strong>Babysit Copilot Agent as it writes the code</strong></p>
+<ul>
+<li>As Copilot chugs away, it may ask you questions, or for permission to create files and run commands. Be responsive and guide it as needed, but if it wants to run some commands that you do not recognize, copy the command into a ChatGPT or other LLM chat and ask it to explain what the command does before allowing Copilot to run it.</li>
+<li>If any part seems confusing or overly complex, ask: "can you simplify the [specific section] of the code?"</li>
+</ul>
+</li>
+<li>
+<p><strong>Test the install command</strong></p>
+<ul>
+<li>Ask Copilot Agent: "run the install command"</li>
+<li>This should install all dependencies and Playwright browsers</li>
+<li>If it fails, simply tell Copilot: "got an error, please fix it" (and include the error message if it's not already visible)</li>
+<li>Another possible fix for installation issues is to ask Copilot to "use uv to create and manage a virtual environment for this project"</li>
+</ul>
+</li>
+<li>
+<p><strong>Test the init command</strong></p>
+<ul>
+<li>Ask Copilot Agent: "run the init command for Salt Lake City"</li>
+<li>Watch the browser open and search Google<ul>
+<li>you may have to verify that you're not a bot, which will require interacting with the browser window. If the window disappears while you're doing this, it's most likely because the code isn't waiting for you to complete the task. This is a great time to debug by telling Copilot that you have to do a manual check, so it should wait for you to do so, and then continue with the automated portion of the script. This is an example of that "Human in the Loop" issue that we discussed in our week on Automation, and a good reminder about how it's not always possible to fully automate everything.</li>
+</ul>
+</li>
+<li>Ask Copilot Agent: "show me the contents of the config file"</li>
+<li>Verify it contains at least some event site (if not, time for debugging! Consider asking Copilot to "improve the selectors used to extract event site URLs from Google search results" or "here are some sites to include: [list of event sites you found manually for your city]")</li>
+</ul>
+</li>
+<li>
+<p><strong>Test the scrape command</strong></p>
+<ul>
+<li>Ask Copilot Agent: "run the scrape command"</li>
+<li>Watch the browser visit each configured site</li>
+<li>Wait for scraping to complete</li>
+<li>Ask Copilot Agent: "show me the first 10 rows of the excel output"</li>
+<li>At this point, you may see event data, but you may not. If not, continue on to the next step for debugging. If you do, then verify that the data looks correct (dates parsed correctly, categories assigned, etc.) and celebrate your success!</li>
+</ul>
+</li>
+<li>
+<p><strong>Debug and refine</strong></p>
+<ul>
+<li>If scraping fails or finds no events, you could try:<ul>
+<li>"the scraper isn't finding any events, please debug and fix" (this likely won't work, because it's too vague, but it's worth demonstrating that fact)</li>
+<li>"inspect the CSS selectors for the event websites and update the code if needed" (this is less vague, but still unlikely to work because Copilot can't actually see the website structure unless you give it that information</li>
+<li>"use playwright to save the HTML of one of the event pages to a file, so we can inspect it, and then use that HTML page to refine the CSS selectors" (this is a great way to get the HTML structure so you can then provide it to Copilot for further debugging)</li>
+</ul>
+</li>
+<li>If dates aren't parsing correctly:<ul>
+<li>"the date parsing isn't working correctly, improve the function to handle more formats"</li>
+<li>"use the python library dateutil to help parse dates more robustly"</li>
+</ul>
+</li>
+<li>Let Copilot Agent make the fixes and re-run tests</li>
+<li>Keep iterating until your scraper works reliably</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 class="ada-h2" id="4-technical-guidance">4. Technical guidance</h2>
+<p>This section provides additional context and troubleshooting tips for working with Copilot Agent.</p>
+<h3 class="ada-h3" id="41-effective-copilot-agent-prompting">4.1. Effective Copilot Agent prompting</h3>
+<p>Getting good results from Copilot Agent requires clear, action-oriented prompts. Here are tips:</p>
+<ul>
+<li>
+<p>Good Agent prompts are:</p>
+<ul>
+<li><em>Direct</em>: Tell Agent what to do, not ask how to do it</li>
+<li><em>Action-oriented</em>: "create a file..." "run the script..." "install packages..."</li>
+<li><em>Specific about outcomes</em>: "improve the scrape function to allow for a human verification step" not "make it better"</li>
+<li><em>Include program output for debugging</em>: Specify logging, error handling, and verbose output so Copilot can see what's happening</li>
+</ul>
+</li>
+<li>
+<p>Follow up on prompts</p>
+<ul>
+<li>Try out the code Agent creates, then ask for fixes if it doesn't work (see below)</li>
+<li>Review what Agent did and ask for explanations: "explain the code you just created"</li>
+<li>Ask for new features, or for features to work better/more simply</li>
+<li>Iterate until satisfied</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="42-troubleshooting-with-agent-mode">4.2. Troubleshooting with Agent mode</h3>
+<p>When things go wrong, Copilot Agent can help fix issues directly:</p>
+<ul>
+<li>
+<p>Script not working or has errors</p>
+<ul>
+<li>Simply tell Agent: "the script has an error, please fix it"</li>
+<li>Agent can see the error output and will modify the code</li>
+<li>If Agent's fix doesn't work: "that didn't fix it, try a different approach"</li>
+</ul>
+</li>
+<li>
+<p>Dependencies not installing</p>
+<ul>
+<li>Tell Agent: "install the missing dependencies"</li>
+<li>Agent should automatically run pip install commands</li>
+<li>If there's a conflict: "resolve the dependency conflict"</li>
+<li>Also consider asking Agent to "use uv to create and manage a virtual environment for this project"<ul>
+<li>The nice thing about vibe coding is you don't necessarily have to care about the details of virtual environments, Agent can handle that for you. It's not bad to ask what it's doing though, if you're curious and want to learn.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Date parsing not working</p>
+<ul>
+<li>Tell Agent: "dates aren't parsing correctly, improve the date parser to handle more formats"</li>
+<li>Agent will modify the appropriate function</li>
+<li>Ask Agent to: "test the date parser with some example dates"</li>
+</ul>
+</li>
+<li>
+<p>Google blocks the bot during init</p>
+<ul>
+<li>The script should already pause for manual verification</li>
+<li>If it doesn't: "add a pause with <code class="fixed-width">input()</code> when Google might ask for verification"</li>
+<li>Complete the verification manually, then press Enter (in the terminal that VS Code opened)</li>
+</ul>
+</li>
+<li>
+<p>General debugging approach with Agent</p>
+<ol>
+<li>Describe the problem: "the scraper isn't working"</li>
+<li>Agent will try to fix it</li>
+<li>If the fix doesn't work: "that didn't solve it, try another approach"</li>
+<li>Ask for explanations: "explain what you changed and why"</li>
+<li>Ask for logging so Agent gets more information to help it: "add logging to a file so you can see error messages"</li>
+<li>Iterate until it works</li>
+<li>Ask me for help if you're stuck!</li>
+</ol>
+</li>
+</ul>
+<p class="tip"><em>Tip</em>: Agent mode can access files, run commands, and see output automatically. You shouldn't need to copy/paste error messages - just describe what's wrong and Agent will investigate. If it can't see the error output, ask it to add logging to file so that it can.</p>
+<h3 class="ada-h3" id="43-understanding-what-agent-creates">4.3. Understanding what Agent creates</h3>
+<p>When Copilot Agent generates the event scraper, the key concepts remain the same as traditional coding:</p>
+<ul>
+<li>
+<p>Command-line interface (CLI)</p>
+<ul>
+<li>Copilot (or you, as you get more advanced) needs to run the Python script somehow. A command-line interface is a common way to do this. It's kind of like when you run an app on your computer, but instead of clicking an icon, you type commands in a terminal window.</li>
+<li>The three commands (<code class="fixed-width">install</code>, <code class="fixed-width">init</code>, <code class="fixed-width">scrape</code>) are like different modes of the same app - each does a different job</li>
+</ul>
+</li>
+<li>
+<p>Configuration management</p>
+<ul>
+<li>Think of configuration files like a settings file that remembers information between runs</li>
+<li>The script saves a JSON file (just a text file with structured data) that stores:<ul>
+<li>Which city you're searching for events in</li>
+<li>Which websites have events for that city</li>
+<li>How to find the event information on each website (the "selectors")</li>
+</ul>
+</li>
+<li>This way, you only need to find the event websites once, and can reuse them for future scrapes</li>
+</ul>
+</li>
+<li>
+<p>Playwright basics</p>
+<ul>
+<li>Playwright is a tool that controls a web browser automatically</li>
+<li>Instead of you clicking and scrolling, the script does it for you</li>
+<li>Key actions:<ul>
+<li>Opening a browser window that you can see (<code class="fixed-width">headless=False</code> means "show me the browser")</li>
+<li>Going to websites (like typing a URL in the address bar)</li>
+<li>Waiting for pages to load (websites often load content slowly or use animations)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Webpages getting data from them (HTML and selectors)</p>
+<ul>
+<li>Webpages are written in HTML, which is a relatively simple language that tells the browser what text/images/data to display</li>
+<li>HTML organizes information into elements (pieces of text/images/data) like:<ul>
+<li>A heading for an event name</li>
+<li>A paragraph with the date and time</li>
+<li>A link to buy tickets</li>
+</ul>
+</li>
+<li>Each element can have labels (called "classes" or "ids") to identify what it is</li>
+<li>Selectors are patterns that point to specific elements on a page, like giving directions:<ul>
+<li>"Find the element labeled 'event-title'" (to get event names)</li>
+<li>"Find all elements labeled 'date'" (to get all event dates)</li>
+<li>"Find the link inside the event box" (to get ticket URLs)</li>
+</ul>
+</li>
+<li>When websites change their design, the selectors might need to be updated because the labels changed</li>
+<li><em>Note</em>: pre-specified selectors are notoriously brittle. For production use, we would use want more robust modern methods like an LLM-based extraction when selectors fail.</li>
+</ul>
+</li>
+<li>
+<p>Data export</p>
+<ul>
+<li>Once the script collects event data, it needs to save it in useful formats</li>
+<li>Excel format (<code class="fixed-width">.xlsx</code>) because we're Accountants, and it's just the best for viewing data in rows and columns, sorting, filtering</li>
+<li>Calendar format (<code class="fixed-width">.ics</code>) so that we can import it into Outlook, Apple/Google Calendar, etc.</li>
+<li>The script creates one file of each type so you can use the data however you prefer</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="44-going-further-optional-improvements-if-youre-feeling-adventurous">4.4. Going further (optional improvements, if you're feeling adventurous)</h3>
+<p>If you want to explore more, try asking Copilot Agent to add more features, here are some example prompts:</p>
+<ol>
+<li>
+<p><strong>Add command-line options</strong>: </p>
+<ul>
+<li><code class="fixed-width">add a --max-sites option to the init command to limit how many event sites to save</code></li>
+<li><code class="fixed-width">add --start-date and --end-date filters to the scrape command</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Improve event categorization</strong>: </p>
+<ul>
+<li><code class="fixed-width">use fuzzy string matching for better categorization</code></li>
+<li><code class="fixed-width">generate a hierarchy of categories, e.g. Music -&gt; Concerts, Festivals</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Handle pagination</strong>: </p>
+<ul>
+<li><code class="fixed-width">modify the scraper to scroll down to load more events on infinite scroll pages</code></li>
+<li><code class="fixed-width">modify the scraper to click Next Page buttons and scrape multiple pages</code></li>
+<li><code class="fixed-width">add a --max-pages argument to control pagination</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Better date intelligence</strong>: </p>
+<ul>
+<li><code class="fixed-width">handle date ranges like 'Nov 15-17'</code></li>
+<li><code class="fixed-width">handle recurring events like 'Every Saturday'</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Add project documentation</strong>:</p>
+<ul>
+<li><code class="fixed-width">generate a requirements.txt file for this project</code></li>
+<li><code class="fixed-width">create a README.md with installation and usage instructions</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Add LLM integration</strong> (spoiler alert: this is the homework!):</p>
+<ul>
+<li><code class="fixed-width">add Gemini LLM integration to intelligently extract events, and fall back to using selectors if it fails or no API key is provided</code></li>
+<li>Also consider <code class="fixed-width">add instructions to automate as much of the generation of the API key as possible, to make it user friendly to non-technical users</code></li>
+<li>This uses Google's free Gemini API to parse pages and extract event information more robustly than brittle CSS selectors.</li>
+</ul>
+</li>
+</ol>
+<h3 class="ada-h3" id="45-ethical-considerations-checklist">4.5. Ethical considerations checklist</h3>
+<p class="note"><em>Note</em>: This lab is intended to show you the very basics of vibe coding and web scraping, and as such shouldn't implicate ethical data collection practices broadly. However, these considerations are relevant if you are considering anything beyond this initial investigation into how basic scraping works.</p>
+<p>Before scraping any website, ask yourself:</p>
+<p><input type="checkbox" /> Have I checked the website's <code class="fixed-width">robots.txt</code> file? (always at the root of the domain, e.g., <a href="https://www.yelp.com/robots.txt" target="_blank">yelp.com/robots.txt</a>) <br />
+<input type="checkbox" /> Have I read the terms of service? <br />
+<input type="checkbox" /> Am I making requests at a reasonable rate? (3+ seconds between requests, not <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack" target="_blank">DoS-ing</a>) <br />
+<input type="checkbox" /> Am I respecting user privacy? (not collecting personal data without consent) <br />
+<input type="checkbox" /> Could this data be obtained through an official <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>? (always prefer APIs when available) <br />
+<input type="checkbox" /> Am I properly attributing the data source? <br />
+<input type="checkbox" /> Would I be comfortable if someone scraped my website this way? <br />
+<input type="checkbox" /> Am I only scraping public data? (not bypassing authentication) <br /></p>
+</body>
+</html>

@@ -1,0 +1,46 @@
+[project]
+name = "AccountingDataAnalytics"
+version = "0.1.0"
+description = "Accounting Analytics Course Materials"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "notebook",
+    "nbconvert",
+    "markdown",
+    "PyPDF2",
+    "lxml",
+    "google-genai",
+    "pygments",
+    "pymdown-extensions",
+    "pandas",
+    "duckdb",
+    "scikit-learn",
+    "scikit-image",
+    "seaborn",
+    "sqlalchemy",
+    "statsmodels",
+    "psycopg",
+    "pyodbc",
+    "openpyxl",
+    "umap-learn",
+    "tabulate",
+    "plotly",
+    "stargazer",
+    "pyedgar",
+    "reslib",
+    "click",
+]
+
+
+[project.optional-dependencies]
+geo = [
+    "geopandas",
+    "geoplot",
+    "shapely",
+    "folium",
+]
+
+[tool.uv.sources]
+pyedgar = { path = "../../../Programming/Python/pyedgar", editable = true }
+reslib = { path = "../../../Programming/Python/reslib", editable = true }

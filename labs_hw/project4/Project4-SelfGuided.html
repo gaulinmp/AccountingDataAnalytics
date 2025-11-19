@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+ /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+ /* Make horizontal lines connect through column boundaries */
+ /* table {
+     border-collapse: collapse;
+ } */
+ /* General styling of all cells */
+ table > :is(thead, tbody) > tr > :is(th, td) {
+     padding: 3px;
+     text-align: left;
+ }
+ table > thead > tr > :is(th, td) {
+     border-top: 2px solid; /* Top thick line */
+     border-bottom: 1px solid; /* Below head thin line */
+ }
+ table > tbody > tr:last-child > :is(th, td) {
+     border-bottom: 2px solid; /* Bottom thick line */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    /* width: 100%; */
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    /* background-color: white; */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="project-4-self-guided-data-analytics-project">Project 4: Self-Guided Data Analytics Project</h1>
+<div class="toc">
+<ul>
+<li><a href="#project-4-self-guided-data-analytics-project">Project 4: Self-Guided Data Analytics Project</a><ul>
+<li><a href="#1-scenario">1. Scenario</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-deliverable">1.2. Deliverable</a></li>
+</ul>
+</li>
+<li><a href="#2-grading">2. Grading</a></li>
+<li><a href="#3-requirements-suggested-steps">3. Requirements &amp; Suggested Steps</a><ul>
+<li><a href="#31-topic-selection-guidance">3.1. Topic Selection Guidance</a></li>
+<li><a href="#33-core-requirements">3.3. Core Requirements</a></li>
+<li><a href="#34-suggested-workflow">3.4. Suggested Workflow</a></li>
+<li><a href="#32-data-sources">3.2. Data Sources</a></li>
+<li><a href="#35-technical-considerations">3.5. Technical Considerations</a></li>
+<li><a href="#36-presentation-tips">3.6. Presentation Tips</a></li>
+</ul>
+</li>
+<li><a href="#4-frequently-asked-questions">4. Frequently Asked Questions</a></li>
+<li><a href="#5-example-project-outlines">5. Example Project Outlines</a><ul>
+<li><a href="#example-1-financial-distress-prediction-simple-uses-course-data">Example 1: Financial Distress Prediction (Simple - Uses Course Data)</a></li>
+<li><a href="#example-2-sales-performance-analysis-simple-uses-kaggle-data">Example 2: Sales Performance Analysis (Simple - Uses Kaggle Data)</a></li>
+<li><a href="#example-3-predicting-startup-success-advanced">Example 3: Predicting Startup Success (Advanced)</a></li>
+<li><a href="#example-4-retail-sales-forecasting-advanced">Example 4: Retail Sales Forecasting (Advanced)</a></li>
+<li><a href="#example-5-nfl-player-performance-advanced">Example 5: NFL Player Performance (Advanced)</a></li>
+<li><a href="#example-6-credit-risk-assessment-advanced">Example 6: Credit Risk Assessment (Advanced)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-scenario">1. Scenario</h2>
+<p>Throughout this course, you've developed skills in data manipulation, exploratory data analysis, visualization, and predictive modeling. You've applied these skills to structured scenarios with predefined research questions and datasets. Now, it's your turn to drive the analysis.</p>
+<p>In this self-guided project, you will:</p>
+<ol>
+<li>
+<p><strong>Identify a research question</strong> that interests you and results in some actionable insights. It could be related to accounting, finance, sports, healthcare, consumer behavior, or any other domain where you can access data.</p>
+</li>
+<li>
+<p><strong>Find and combine at least two datasets</strong> to get practice exploring merges across datasets that may not be immediately compatible. This will help you explore relationships between datasets that aren't pre-joined, opening up more possible analyses.</p>
+</li>
+<li>
+<p><strong>Conduct exploratory data analysis</strong> to understand your data's structure, identify patterns, detect anomalies, and motivate your modeling approach.</p>
+</li>
+<li>
+<p><strong>Build and evaluate at least two models</strong> to address your research question. Models can entail any combination of modalities we've covered (regression, classification, clustering, etc.).</p>
+</li>
+<li>
+<p><strong>Present your findings</strong> in a professional presentation that tells a compelling story: what you investigated, why it matters, what you found, and what it means.</p>
+</li>
+</ol>
+<p>This project is an opportunity to demonstrate your ability to independently navigate the full analytics workflow, from problem definition to actionable insights.
+I also hope that you could use this project as the start of an analytics portfolio that you could show to potential employers, or at least draw examples from in interviews.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>This project synthesizes all the skills you've developed throughout the course and gives you experience with self-directed analytical work.</p>
+<p>By completing this project, you will:</p>
+<ul>
+<li><strong>Formulate Research Questions</strong>: Identify a meaningful analytical question and justify its relevance</li>
+<li><strong>Source and Integrate Data</strong>: Find, evaluate, and merge datasets from multiple sources to support your analysis</li>
+<li><strong>Perform Exploratory Data Analysis</strong>: Use descriptive statistics and visualization to understand data characteristics, relationships, and quality</li>
+<li><strong>Apply Modeling Techniques</strong>: Build, estimate, and interpret at least two models appropriate to your research question</li>
+<li><strong>Evaluate Model Performance</strong>: Assess and compare (if applicable) model performance using appropriate metrics</li>
+<li><strong>Communicate Findings</strong>: Present analytical work to a general accounting audience with clarity and professionalism</li>
+</ul>
+<h3 class="ada-h3" id="12-deliverable">1.2. Deliverable</h3>
+<p><strong>Tone</strong>: Professional presentation - clear, engaging, data-driven. Tailored to your classmates who may not be familiar with your project's specific domain.</p>
+<p><strong>Format</strong>: Slide deck for a 10-minute presentation (~10 slides, approximately 1 slide per minute). You may include multiple slides for complex sections, but keep the total presentation focused and concise.</p>
+<p>Slide deck containing:</p>
+<ol>
+<li>
+<p><strong>Title Slide</strong>: Project title, group member names, date</p>
+</li>
+<li>
+<p><strong>Research Question &amp; Motivation</strong>:</p>
+<ul>
+<li>What are you investigating and why does it matter?</li>
+<li>What gap in understanding or business problem motivates this analysis?</li>
+<li>Brief preview of your approach and key findings</li>
+</ul>
+</li>
+<li>
+<p><strong>Setting Details and Description</strong>:</p>
+<ul>
+<li>Background context for your setting/domain/industry</li>
+<li>Key concepts, practices, assumptions, and terminology your audience needs to understand</li>
+<li>Any institutional details that inform your analysis (e.g., regulatory environment, market structure, common practices, what a quaffle is, etc.)</li>
+<li>If applicable, why this setting is interesting or important for your research question</li>
+<li><em>Note:</em> The further your topic is from accounting/finance, the more detail you'll need here</li>
+</ul>
+</li>
+<li>
+<p><strong>Data Sources &amp; Integration</strong>:</p>
+<ul>
+<li>Description of each dataset (source, scope, key variables)</li>
+<li>How you merged the datasets and what decisions you had to make</li>
+<li>Final analytical sample (number of observations, time period, unit of analysis)</li>
+<li>Any significant data quality issues and how you addressed them</li>
+</ul>
+</li>
+<li>
+<p><strong>Exploratory Data Analysis</strong>:</p>
+<ul>
+<li>Summary statistics for key variables, where relevant</li>
+<li>Visualizations showing distributions, relationships, and patterns</li>
+<li>Key insights from EDA that motivated your modeling approach</li>
+<li>Any data transformations or feature engineering performed</li>
+</ul>
+</li>
+<li>
+<p><strong>Modeling Approach</strong>:</p>
+<ul>
+<li>Clear statement of what you're predicting/classifying/explaining (your outcome variable)</li>
+<li>Description of predictor variables and why you chose them</li>
+<li>Formal model specification (equation notation) for each model, defining all variables</li>
+<li>Description and explanation/justification of the models you're using (e.g. why/how will your chosen analytics help you answer your research question?)</li>
+</ul>
+</li>
+<li>
+<p><strong>Model Results</strong>:</p>
+<ul>
+<li>Model results and evaluation (coefficients, significance, fit metrics)</li>
+<li>Interpretation of which variables drive the predictions</li>
+<li>Assessment of model performance</li>
+<li>Any diagnostics or validation checks performed</li>
+</ul>
+</li>
+<li>
+<p><strong>Analysis &amp; Interpretation</strong>:</p>
+<ul>
+<li>Description of take-aways from your models<ul>
+<li>If comparing models, side-by-side comparison of models and performance</li>
+</ul>
+</li>
+<li>Visualizations comparing predictions, errors, or fit</li>
+<li>How did the models specifically speak to your research question?</li>
+<li>What can you conclude from your analysis? What was the economic or business significance of your findings?</li>
+</ul>
+</li>
+<li>
+<p><strong>Conclusions &amp; Recommendations</strong>:</p>
+<ul>
+<li>Summary of key findings</li>
+<li>Practical implications or recommendations based on your analysis</li>
+<li>Limitations and caveats</li>
+<li>Potential next steps or extensions</li>
+</ul>
+</li>
+<li>
+<p><strong>Thank You</strong> / Questions</p>
+</li>
+<li>
+<p><strong>Appendix</strong> (if needed): Additional technical details, sensitivity analyses, extended results tables, data dictionary</p>
+</li>
+</ol>
+<p>Additionally, you will have to submit a "proposal" quiz in canvas in Week 11, that outlines your RQ and data sources. This is just to make sure you're on the right track and so we can catch any potential issues early.</p>
+<ul>
+<li><strong>Week 11 Project 4 Proposal</strong>: Submit the canvas quiz with three questions:</li>
+<li>Your research question and what's the takeaway</li>
+<li>Description of your two data sources (with URLs/citations)</li>
+<li>Confirmation that you can have accessed the data already</li>
+</ul>
+<hr />
+<h2 class="ada-h2" id="2-grading">2. Grading</h2>
+<p>Your project will be graded based on the following criteria:</p>
+<p><strong>Note:</strong> The goal is to demonstrate your ability to independently execute a complete analytics project, not to achieve "perfect" model performance. Thoughtful analysis of modest results is more valuable than superficial treatment of strong results.</p>
+<ol>
+<li>
+<p><strong>Research Question &amp; Motivation</strong>: How clearly defined and well-motivated is your research question? Is the business or analytical relevance explained?</p>
+<ul>
+<li><strong>Excellent</strong>: Clear, specific research question with compelling motivation. Audience understands why this matters and what you're trying to accomplish.</li>
+<li><strong>Good</strong>: Reasonable research question with basic motivation, but could be more specific or compelling.</li>
+<li><strong>Needs Work</strong>: Vague or poorly motivated research question.</li>
+</ul>
+</li>
+<li>
+<p><strong>Data Sourcing &amp; Integration</strong>: How well-explained and appropriate are your data sources? Are their sources cited? Is the data merge correctly executed and well-documented?</p>
+<ul>
+<li><strong>Excellent</strong>: Appropriate, high-quality datasets from cited sources. Merge strategy clearly documented with merge keys identified. Data quality issues acknowledged and addressed appropriately.</li>
+<li><strong>Good</strong>: Reasonable datasets with adequate merge documentation, minor issues with data quality or documentation.</li>
+<li><strong>Needs Work</strong>: Inappropriate data sources, poorly executed merge, or inadequate documentation of data integration.</li>
+</ul>
+</li>
+<li>
+<p><strong>Exploratory Data Analysis</strong>: How concise and insightful is your EDA? Do your visualizations or summary statistics effectively communicate important data characteristics?</p>
+<ul>
+<li><strong>Excellent</strong>: Comprehensive EDA with effective visualizations or summaries. Clear insights about distributions, relationships, and data quality. EDA clearly motivates modeling choices.</li>
+<li><strong>Good</strong>: Basic EDA with reasonable visualizations, but limited depth or unclear connection to modeling approach.</li>
+<li><strong>Needs Work</strong>: Superficial or absent EDA, poor visualizations, or no connection between EDA and modeling.</li>
+</ul>
+</li>
+<li>
+<p><strong>Modeling Approach &amp; Justification</strong>: Are your modeling choices appropriate for your research question? Are they clearly documented and justified?</p>
+<ul>
+<li><strong>Excellent</strong>: Modeling choices well-suited to research question with clear justification. Variables chosen based on sound reasoning. Potential issues (e.g., look-ahead bias, multicollinearity) avoided/mitigated or acknowledged as necessary.</li>
+<li><strong>Good</strong>: Reasonable modeling choices with limited justification, or minor specification issues.</li>
+<li><strong>Needs Work</strong>: Inappropriate models for the research question, poor variable choices, or inadequate justification.</li>
+</ul>
+</li>
+<li>
+<p><strong>Technical Execution</strong>: Are the models correctly implemented? Are results clearly presented and interpreted?</p>
+<ul>
+<li><strong>Excellent</strong>: Models correctly estimated and validated. Results clearly presented with appropriate metrics. Output professionally formatted and easy to interpret.</li>
+<li><strong>Good</strong>: Models generally correct with minor technical issues or unclear presentation.</li>
+<li><strong>Needs Work</strong>: Significant technical errors, incorrect model estimation, or poorly presented results.</li>
+</ul>
+</li>
+<li>
+<p><strong>Analysis &amp; Conclusions</strong>: How effectively do your analyses directly address and answer your research question? Are your conclusions clearly supported by your results?</p>
+<ul>
+<li><strong>Excellent</strong>: Clear connection between analyses and research question. Results directly address what you set out to investigate. Conclusions are well-supported by evidence and logically follow from your findings. Economic or practical significance is clearly articulated.</li>
+<li><strong>Good</strong>: Analyses address the research question with some clarity, but connections could be stronger or conclusions could be better supported.</li>
+<li><strong>Needs Work</strong>: Weak connection between analyses and research question, conclusions not clearly supported by results, or findings fail to address the original question.</li>
+</ul>
+</li>
+<li>
+<p><strong>Recommendations &amp; Limitations</strong>: Do you provide actionable recommendations while appropriately acknowledging limitations?</p>
+<ul>
+<li><strong>Excellent</strong>: Clear, actionable recommendations or conclusions directly tied to your findings. Thoughtful discussion of limitations (data, model, scope) that appropriately qualifies your recommendations without undermining them. Practical next steps or implications identified.</li>
+<li><strong>Good</strong>: Reasonable recommendations with basic acknowledgment of limitations, though connections could be stronger.</li>
+<li><strong>Needs Work</strong>: Vague or missing recommendations, limitations ignored entirely, or recommendations not supported by your analysis.</li>
+</ul>
+</li>
+<li>
+<p><strong>Analytical difficulty or novelty</strong>: Does your project demonstrate creativity, complexity, or novel application of techniques?</p>
+<ul>
+<li><strong>Excellent</strong>: Project demonstrates significant creativity or complexity. Use of advanced techniques, novel data sources, or unique combinations of methods. Clear evidence of independent thinking and problem-solving.</li>
+<li><strong>Good</strong>: Some creativity or complexity, but could be more ambitious or novel.</li>
+<li><strong>Needs Work</strong>: Project is overly simplistic or derivative, lacking in creativity or complexity.</li>
+</ul>
+</li>
+<li>
+<p><strong>Presentation Quality &amp; Communication</strong>: How effectively does your presentation communicate your work to the target audience (accounting analytics students)?</p>
+<ul>
+<li><strong>Excellent</strong>: Clear narrative arc from question to findings. Appropriate level of technical detail for audience. Complex ideas explained accessibly. Professional visualizations and formatting.</li>
+<li><strong>Good</strong>: Generally clear presentation with some organizational or communication issues.</li>
+<li><strong>Needs Work</strong>: Unclear narrative, inappropriate level of detail, or unprofessional presentation.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 class="ada-h2" id="3-requirements-suggested-steps">3. Requirements &amp; Suggested Steps</h2>
+<h3 class="ada-h3" id="31-topic-selection-guidance">3.1. Topic Selection Guidance</h3>
+<p><strong>Choose a domain that interests you.</strong> You'll be spending significant time with this data, so pick something you find genuinely interesting.</p>
+<p><strong>Pre-Flight Checklist</strong>: Before committing to a topic, complete this checklist:</p>
+<ul>
+<li><input type="checkbox" /> Can I download/access the data RIGHT NOW (not "I'll get access eventually")?</li>
+<li><input type="checkbox" /> Can I actually open and view the datasets to verify they contain what I expect?</li>
+<li><input type="checkbox" /> After merging, will I have at least 50-100 observations?</li>
+<li><input type="checkbox" /> Do I have the technical skills to merge these specific datasets (or time to learn, or willingness to ask Mac for help)?</li>
+<li><input type="checkbox" /> Are my key variables actually present in the data, not just implied by the dataset description?</li>
+<li><input type="checkbox" /> Have I verified that the datasets are compatible for merging (common keys, time periods align, etc.), or do I have a "cross walk" to connect them?</li>
+</ul>
+<p><strong>Consider data availability early.</strong> Before committing to a topic, verify that:</p>
+<ul>
+<li>Data exists and is accessible (free or within your means)</li>
+<li>You can obtain at least two datasets that can be meaningfully merged</li>
+<li>The data has sufficient observations for modeling (generally 50+ observations minimum, 100+ preferred)</li>
+<li>Key variables are available or can be constructed</li>
+</ul>
+<p><strong>Think about your audience.</strong> The further your topic is from accounting/finance, the more context you'll need to provide in your presentation. This isn't necessarily bad, just budget time for explanation.</p>
+<p><strong>Example topic ideas</strong> (you are not limited to these):</p>
+<ul>
+<li><em>Accounting/Finance:</em><ul>
+<li>Analyzing audit fee determinants using firm characteristics and auditor data</li>
+<li>Modeling IPO underpricing using company fundamentals and market conditions (Jay Ritter <a href="https://site.warrington.ufl.edu/ritter/ipo-data/" target="_blank">provides IPO data</a>)</li>
+<li>Predicting sales growth using CPI basket subsets by business model (e.g. Walmart vs. Ralph Lauren)</li>
+</ul>
+</li>
+<li><em>Healthcare:</em><ul>
+<li>Predicting hospital readmission rates using patient demographics and clinical data</li>
+<li>Analyzing drug effectiveness using clinical trial data and patient characteristics</li>
+<li>Classifying disease risk using genetic markers and lifestyle factors</li>
+</ul>
+</li>
+<li><em>Sports:</em><ul>
+<li>Predicting NBA player performance using historical stats and physical attributes</li>
+<li>Analyzing factors that determine team success in college football</li>
+<li>Classifying whether tennis players will win tournaments based on performance metrics</li>
+</ul>
+</li>
+<li><em>Other:</em><ul>
+<li>Predicting real estate prices using property characteristics and neighborhood data</li>
+<li>Analyzing movie success using budget, cast, and social media data</li>
+<li>Classifying customer churn using transaction history and demographic data</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="33-core-requirements">3.3. Core Requirements</h3>
+<p>Your project must include:</p>
+<ol>
+<li>
+<p><strong>At least two datasets</strong> that you merge together</p>
+<ul>
+<li>Datasets can come from any source: public databases, course materials, company reports, web scraping, APIs, etc.</li>
+<li>The merge must be meaningful (i.e., the combined dataset enables analysis not possible with either dataset alone)</li>
+<li>Document your merge key(s) and any data quality issues encountered</li>
+</ul>
+</li>
+<li>
+<p><strong>Exploratory Data Analysis (EDA)</strong> for yourself to understand the data, but not necessarily entirely included in your presentation. Your presentation should just include the most relevant EDA results that help tell your story. But for your edification, a helpful EDA checklist includes:</p>
+<ul>
+<li>Summary statistics for key variables</li>
+<li>Identification and resolution of data issues (missing values, outliers, duplicates)</li>
+<li>Visualizations that are useful and provide specific insights (e.g. distributions, correlations, trends, etc.)</li>
+<li><em>For your presentation</em>: each visualization or table should further the audience's understanding of a key part of your analysis (e.g., why certain predictors matter, how the outcome variable behaves, what data quality issues you addressed)</li>
+</ul>
+<p><strong>Note</strong>: Focus on quality over quantity. A few well-chosen, clearly explained visualizations are better than many generic plots.</p>
+</li>
+<li>
+<p><strong>At least two predictive models</strong> that address the same outcome variable. Both models must be meaningfully different, such as:</p>
+<ul>
+<li>Two different model types (e.g., linear regression vs. logistic regression, OLS vs. regularized regression)<ul>
+<li>For example: a classifier to predict default, and a regression to measure the magnitude of loss given default</li>
+</ul>
+</li>
+<li>Same model type with substantively different approaches, variables, time, etc.<ul>
+<li>Example: a cross-sectional and a time-series regression</li>
+<li>Example: modeling differences over time with models pre-2020 vs. post-2020</li>
+</ul>
+</li>
+<li>An unsupervised first step leading into a supervised model<ul>
+<li>Example: dimensionality reduction on a large feature set followed by a regression or classification model</li>
+</ul>
+</li>
+<li>The point is to have some variation in your analytics, so any combination that achieves some demonstration of breadth is acceptable. I don't want you to feel concerned about this requirement; I want to teach you that that where one model can provide some insight, multpile provide even more.</li>
+</ul>
+</li>
+<li>
+<p><strong>Model validation</strong> appropriate to your analysis:</p>
+<ul>
+<li>For predictive models: Train/test split, cross-validation, or out-of-sample validation</li>
+<li>For explanatory models: Appropriate verification of validity (e.g. cross-sectional analyses of robustness, sensitivity analyses, etc.)</li>
+<li>Documentation of validation approach and results</li>
+</ul>
+</li>
+<li>
+<p><strong>Model evaluation</strong> using appropriate metrics for your model type:</p>
+<ul>
+<li>Regression: R-squared, RMSE, MAE, etc.</li>
+<li>Classification: Accuracy, precision, recall, F1-score, AUC, etc.</li>
+<li>Analysis of model performance and variable significance (economic and statistical)</li>
+</ul>
+</li>
+<li>
+<p><strong>Professional presentation</strong> (10 minutes) following the deliverable structure in Section 1.2</p>
+</li>
+</ol>
+<h3 class="ada-h3" id="34-suggested-workflow">3.4. Suggested Workflow</h3>
+<p>The following steps provide a roadmap for completing the project. You don't need to follow them exactly, but they represent a logical progression:</p>
+<ol>
+<li><strong>Initial Research Question</strong><ul>
+<li>Brainstorm topics of interest</li>
+<li>Identify potential data sources</li>
+<li>Formulate an initial research question</li>
+<li>Verify data availability and accessibility</li>
+</ul>
+</li>
+<li><strong>Data Collection &amp; Integration</strong><ul>
+<li>Obtain datasets from identified sources</li>
+<li>Document data sources, scope, and limitations</li>
+<li>Perform the merge, documenting merge keys and match rates</li>
+<li>Create your analytical sample</li>
+</ul>
+</li>
+<li><strong>Data Cleaning &amp; Preparation</strong><ul>
+<li>Handle missing values</li>
+<li>Identify and address outliers</li>
+<li>Create any derived variables or transformations needed</li>
+<li>Verify data quality</li>
+</ul>
+</li>
+<li><strong>Exploratory Data Analysis</strong><ul>
+<li>Calculate summary statistics</li>
+<li>Create visualizations of distributions and relationships</li>
+<li>Identify patterns, trends, and anomalies</li>
+<li>Develop hypotheses about what might predict your outcome</li>
+</ul>
+</li>
+<li><strong>Research Question Refinement</strong><ul>
+<li>Refine your research question based on EDA insights</li>
+<li>Decide on the specific outcome variable to model</li>
+<li>Select predictor variables informed by EDA</li>
+</ul>
+</li>
+<li><strong>Model Development</strong><ul>
+<li>Choose appropriate model types for your research question</li>
+<li>If needed, split data into training/testing sets</li>
+<li>Estimate your models</li>
+</ul>
+</li>
+<li><strong>Model Evaluation &amp; Comparison</strong><ul>
+<li>Calculate appropriate performance metrics</li>
+<li>Interpret model coefficients and significance</li>
+<li>Create visualizations / tabulations of model results</li>
+</ul>
+</li>
+<li><strong>Presentation Development</strong><ul>
+<li>Build slide deck following deliverable structure</li>
+<li>Create clear visualizations for presentation</li>
+<li>Practice explaining technical concepts to non-experts</li>
+<li>Prepare for Q&amp;A</li>
+</ul>
+</li>
+<li><strong>Practice &amp; Refinement</strong><ul>
+<li>Rehearse presentation, alone or with peers</li>
+<li>Refine slides based on feedback</li>
+<li>Prepare for potential questions</li>
+<li>Polish final deliverable</li>
+<li>Rehearse timing to fit within 10 minutes (this is harder than you think, ten minutes flies by!)</li>
+</ul>
+</li>
+</ol>
+<h3 class="ada-h3" id="32-data-sources">3.2. Data Sources</h3>
+<p>Here are some potential sources for data, tagged by difficulty level. This is not exhaustive list by any means, feel free to use others:</p>
+<ol>
+<li>
+<p><strong>Beginner-Friendly</strong> (Well-documented, easy to download, CSV/Excel format):</p>
+<ul>
+<li>Wharton Research Data Services (<a href="https://wrds.wharton.upenn.edu/" target="_blank">wrds.wharton.upenn.edu</a>)<ul>
+<li>WRDS is the source of the course datasets (Compustat, CRSP)</li>
+</ul>
+</li>
+<li>Kaggle datasets (<a href="https://www.kaggle.com/datasets" target="_blank">kaggle.com/datasets</a>)</li>
+<li>UCI Machine Learning Repository (<a href="https://archive.ics.uci.edu/ml" target="_blank">archive.ics.uci.edu/ml</a>)</li>
+<li>Federal Reserve Economic Data (FRED, <a href="https://fred.stlouisfed.org/" target="_blank">data</a>, <a href="https://fred.stlouisfed.org/fred-addin/" target="_blank">excel plugin</a>)</li>
+<li>U.S. government data (<a href="https://www.data.gov/" target="_blank">data.gov</a>)</li>
+<li>Academic paper replication data (many journals require data sharing)</li>
+</ul>
+</li>
+<li>
+<p><strong>Intermediate</strong> (May require basic scripting, account creation, or data cleaning):</p>
+<ul>
+<li>Yahoo Finance, Alpha Vantage (stock prices, returns)</li>
+<li>Google Dataset Search (<a href="https://datasetsearch.research.google.com/" target="_blank">datasetsearch.research.google.com</a>)</li>
+<li>Baseball Reference, Basketball Reference, etc. (downloadable stats)</li>
+<li>ESPN, Sports Reference family of sites</li>
+<li>Zillow Research Data, Realtor.com</li>
+<li>World Bank, IMF, BLS (Bureau of Labor Statistics)</li>
+<li>CDC data (<a href="https://wonder.cdc.gov/" target="_blank">wonder.cdc.gov</a>)</li>
+<li>Medicare/Medicaid data (<a href="https://data.cms.gov/" target="_blank">data.cms.gov</a>)</li>
+</ul>
+</li>
+<li>
+<p><strong>Advanced</strong> (Requires API knowledge, web scraping, or specialized tools):</p>
+<ul>
+<li>SEC EDGAR filings (financial statements, disclosures), requires parsing, perhaps with my <a href="https://github.com/gaulinmp/pyedgar/" target="_blank">pyedgar</a> package</li>
+<li>Twitter API, Reddit API (rate limits, authentication required)</li>
+<li>Clinical trial registries (<a href="https://clinicaltrials.gov/" target="_blank">clinicaltrials.gov</a>)</li>
+<li>Company investor relations websites</li>
+<li>County assessor offices</li>
+</ul>
+</li>
+</ol>
+<h3 class="ada-h3" id="35-technical-considerations">3.5. Technical Considerations</h3>
+<ul>
+<li>
+<p><strong>Data Merging:</strong></p>
+<ul>
+<li>Document your merge strategy clearly</li>
+<li>Check merge quality: how many observations matched? How many didn't? Why?</li>
+<li>Consider whether you need 1:1, 1:many, or many:many merges</li>
+<li>Handle non-matches appropriately (drop, keep, investigate?)</li>
+</ul>
+</li>
+<li>
+<p><strong>Model Selection:</strong></p>
+<ul>
+<li>For regression: OLS is a great starting point; consider more advanced alternatives for many predictors (or consider dimensionality reduction first)</li>
+<li>For classification: logistic regression is interpretable; tree-based methods (Random Forest, Gradient Boosting) can capture non-linearities</li>
+<li>Consider whether you need train/test splits (generally yes for predictive models)</li>
+<li>Think about whether you're doing explanation (understanding relationships) vs. prediction (forecasting accurately)</li>
+</ul>
+</li>
+<li>
+<p><strong>Common Pitfalls to Avoid:</strong></p>
+<ul>
+<li><strong>Look-ahead bias</strong>: Don't use information that wouldn't have been available at the time of prediction</li>
+<li><strong>Data leakage</strong>: Don't use information about the outcome to create predictors</li>
+<li><strong>Overfitting</strong>: Models that fit training data perfectly but fail on new data</li>
+<li><strong>Ignoring missing data</strong>: Document how you handle missing values</li>
+<li><strong>Mechanical relationships</strong>: Don't predict ROA using Assets when ROA is mathematically derived from Assets (NI / Assets)</li>
+<li><strong>Insufficient data</strong>: Some models need more data than others; be realistic about what you can estimate</li>
+</ul>
+</li>
+<li>
+<p><strong>Red Flags - Stop and Reconsider If:</strong></p>
+<ul>
+<li>Your merged dataset has &lt;50 observations after merging</li>
+<li>Your models achieve &gt;98% accuracy (likely indicates data leakage)</li>
+<li>You can't explain why you chose your specific predictor variables</li>
+<li>Your EDA findings have no connection to your choice of model variables</li>
+<li>Your merge match rate is &lt;30% (not a problem necessarily), and you don't know why (this is the problem)</li>
+<li>You're predicting an outcome variable using a predictor that's mathematically derived from it</li>
+<li>Your two models are nearly identical (e.g., same model with one variable added/removed)</li>
+</ul>
+</li>
+<li>
+<p><strong>Getting Help:</strong></p>
+<ul>
+<li>Me! Don't hesitate!</li>
+<li>Labs and project instructions were all designed to provide a roadmap &amp; foundation to build from</li>
+<li>Classmates</li>
+<li>LLMs for idea generation, coding, debugging, etc.</li>
+</ul>
+</li>
+</ul>
+<h3 class="ada-h3" id="36-presentation-tips">3.6. Presentation Tips</h3>
+<ul>
+<li>
+<p><strong>Tell a story:</strong> Your presentation should have a clear narrative arc:</p>
+<ol>
+<li>Here's an interesting question</li>
+<li>Here's how I investigated it</li>
+<li>Here's what I found</li>
+<li>Here's what it means</li>
+</ol>
+</li>
+<li>
+<p><strong>Know your audience:</strong> Your classmates are accounting analytics students. They:</p>
+<ul>
+<li>Understand basic statistics and modeling concepts</li>
+<li>May not know your specific domain (sports, healthcare, etc.)</li>
+<li>Care about business implications, not just technical details</li>
+</ul>
+</li>
+<li>
+<p><strong>Visualize effectively:</strong></p>
+<ul>
+<li>Every chart should have a clear purpose</li>
+<li>Use visualization best practices we covered, and clearly highlight the key takeaway on each chart</li>
+<li>Label axes, include legends, use readable fonts</li>
+<li>Don't clutter slides with too dense information (remember, a picture is worth a thousand words)</li>
+</ul>
+</li>
+<li>
+<p><strong>Practice:</strong></p>
+<ul>
+<li>Rehearse multiple times</li>
+<li>Time yourself (aim for 10 minutes)</li>
+<li>Anticipate questions and prepare answers</li>
+<li>Be ready to defend your choices</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 class="ada-h2" id="4-frequently-asked-questions">4. Frequently Asked Questions</h2>
+<p><strong>Q: Can I use only course datasets (e.g., Compustat and CRSP)?</strong>
+A: Yes, as long as you're merging at least two distinct datasets and addressing a research question of your own design.</p>
+<p><strong>Q: What if my models don't perform well?</strong>
+A: That's okay! The goal is to demonstrate the analytical process, not achieve perfect predictive accuracy. Thoughtful analysis of <em>why</em> models don't perform well is valuable.</p>
+<p><strong>Q: Can my group have X many people?</strong>
+A: Yes.</p>
+<p><strong>Q: How many observations do I need?</strong>
+A: It depends on your model complexity, but generally aim for at least 50-100 observations. For complex models, you may need many many more. Simple rule of thumb: you should have at least some variables be significant.</p>
+<p><strong>Q: What if I can't find two datasets to merge?</strong>
+A: Come talk to me early. I can help you identify data sources or adjust your research question.</p>
+<p><strong>Q: Can I use Python/Excel/Tableau?</strong>
+A: Use whatever tools you're comfortable with. Hopefully by now you know what the tools are good and bad at (e.g. Tableau can't do advanced statistical modeling, Excel struggles past basic supervised learning techniques).</p>
+<p><strong>Q: Can I use R?</strong>
+A: Eww. Fine.</p>
+<p><strong>Q: What if my EDA reveals data quality issues?</strong>
+A: Document them and explain how you addressed them (dropping observations, imputing values, etc.). Part of being a good analyst is handling imperfect data.</p>
+<p><strong>Q: How technical should my presentation be?</strong>
+A: Technical enough to demonstrate competence, but accessible enough for your classmates to understand. Think: clear explanation of what you did and why, not every line of code.</p>
+<p><strong>Q: Can I use data I've collected myself (e.g., surveys)?</strong>
+A: Yes, but ensure you have sufficient data quality and can meaningfully merge it with another dataset.</p>
+<p><strong>Q: What if my two models perform almost identically?</strong>
+A: Analyze why! Sometimes different approaches yield similar results, that's an interesting finding worth exploring.</p>
+<p><strong>Q: How much code should I show in my presentation?</strong>
+A: Generally, very little to none. Focus on methods and results, not implementation details. Code can go in an appendix if needed.</p>
+<p><strong>Q: Can I use this project for another class?</strong>
+A: Sure, but a) check with that instructor first, and b) ensure this project meets all the above requirements. I would suggest, however, that you at least do some additional work to push your learning further. Practice is necessary to master any skill, especially analytics.</p>
+<p><strong>Q: What if my datasets don't merge well (e.g., only 50% match rate)?</strong>
+A: Document the merge quality issues and explain why they occurred. If the match rate is too low (&lt;30%), you may need to reconsider your data sources or merge strategy. You also should realize that sometimes merges will just occur on a subset of firms by design, think merging in bankruptcy data where the un-matched firms just didn't go bankrupt (so fill with 0s)</p>
+<p><strong>Q: Can I change my topic partway through the project?</strong>
+A: You can work on whatever topic you want up until the due date in Canvas. Obviously, though, changing topics late in the project will require a lot of work to catch up.</p>
+<p><strong>Q: How do I cite data sources?</strong>
+A: Include a bibliography or references slide in your appendix with full citations for all data sources, including URLs and access dates where applicable.</p>
+<hr />
+<h2 class="ada-h2" id="5-example-project-outlines">5. Example Project Outlines</h2>
+<p>These brief outlines illustrate the range of possible projects. Your project should be more detailed and complete. We provide both simpler examples using readily-available data and more ambitious examples to show the full range of possibilities.</p>
+<h3 class="ada-h3" id="example-1-financial-distress-prediction-simple-uses-course-data">Example 1: Financial Distress Prediction (Simple - Uses Course Data)</h3>
+<ul>
+<li><strong>Research Question</strong>: Can we predict financial distress using accounting ratios and stock market performance?</li>
+<li><strong>Data Source 1</strong>: Compustat financial data (from course materials) - balance sheet and income statement items</li>
+<li><strong>Data Source 2</strong>: CRSP stock returns data (from course materials) - stock returns and volatility</li>
+<li><strong>Merge</strong>: Company identifier (GVKEY/PERMNO link)</li>
+<li><strong>Models</strong>: Logistic regression with accounting ratios only vs. logistic regression with accounting ratios + market-based measures (returns, volatility)</li>
+<li><strong>Comparison</strong>: AUC, precision, and recall to assess whether market data improves distress prediction beyond accounting information</li>
+</ul>
+<h3 class="ada-h3" id="example-2-sales-performance-analysis-simple-uses-kaggle-data">Example 2: Sales Performance Analysis (Simple - Uses Kaggle Data)</h3>
+<ul>
+<li><strong>Research Question</strong>: What drives retail product sales?</li>
+<li><strong>Data Source 1</strong>: Kaggle retail sales dataset (product-level sales, prices, promotions)</li>
+<li><strong>Data Source 2</strong>: Kaggle customer demographics dataset (store location demographics)</li>
+<li><strong>Merge</strong>: Store ID</li>
+<li><strong>Models</strong>: OLS regression with product characteristics only vs. OLS with product characteristics + demographic controls</li>
+<li><strong>Comparison</strong>: R-squared and out-of-sample RMSE to evaluate whether demographics improve sales predictions</li>
+</ul>
+<h3 class="ada-h3" id="example-3-predicting-startup-success-advanced">Example 3: Predicting Startup Success (Advanced)</h3>
+<ul>
+<li><strong>Research Question</strong>: What factors predict whether a startup will receive Series B funding?</li>
+<li><strong>Data Source 1</strong>: Crunchbase data on startups (funding rounds, industry, location)</li>
+<li><strong>Data Source 2</strong>: LinkedIn company data (employee growth, executive backgrounds)</li>
+<li><strong>Merge</strong>: Company name/ID</li>
+<li><strong>Models</strong>: Logistic regression (baseline model with just funding/industry variables) vs. Random Forest (incorporating employee growth and executive experience)</li>
+<li><strong>Comparison</strong>: Precision, recall, and AUC to determine which factors are most predictive</li>
+</ul>
+<h3 class="ada-h3" id="example-4-retail-sales-forecasting-advanced">Example 4: Retail Sales Forecasting (Advanced)</h3>
+<ul>
+<li><strong>Research Question</strong>: Can we improve retail sales forecasts by incorporating local economic indicators?</li>
+<li><strong>Data Source 1</strong>: Retailer store-level sales data</li>
+<li><strong>Data Source 2</strong>: County-level unemployment and income data from BLS/Census</li>
+<li><strong>Merge</strong>: Store location to county</li>
+<li><strong>Models</strong>: Linear regression with store characteristics only vs. linear regression with store characteristics plus local economic indicators</li>
+<li><strong>Comparison</strong>: Out-of-sample RMSE to assess whether local economic data improves forecast accuracy</li>
+</ul>
+<h3 class="ada-h3" id="example-5-nfl-player-performance-advanced">Example 5: NFL Player Performance (Advanced)</h3>
+<ul>
+<li><strong>Research Question</strong>: Does college performance predict NFL success for quarterbacks?</li>
+<li><strong>Data Source 1</strong>: College football statistics (passing yards, completion %, wins)</li>
+<li><strong>Data Source 2</strong>: NFL combine measurements and first 3 years NFL statistics</li>
+<li><strong>Merge</strong>: Player name</li>
+<li><strong>Models</strong>: Ridge regression (regularized to handle many correlated college stats) vs. simpler OLS with just key college metrics</li>
+<li><strong>Comparison</strong>: R-squared and MAE for predicting NFL QB rating</li>
+</ul>
+<h3 class="ada-h3" id="example-6-credit-risk-assessment-advanced">Example 6: Credit Risk Assessment (Advanced)</h3>
+<ul>
+<li><strong>Research Question</strong>: What drives small business loan default?</li>
+<li><strong>Data Source 1</strong>: SBA loan data (loan amount, industry, location, default status)</li>
+<li><strong>Data Source 2</strong>: Economic indicators by region (GDP growth, unemployment)</li>
+<li><strong>Merge</strong>: Location and time period</li>
+<li><strong>Models</strong>: Logistic regression vs. Gradient Boosted Trees</li>
+<li><strong>Comparison</strong>: Classification metrics (accuracy, precision, recall) and feature importance</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<h1 class="ada-h1" id="lab-4-exploratory-data-analysis">Lab 4: Exploratory Data Analysis</h1>
+<p>Lab 4 introduces you to initial investigation of a dataset, continuing on the initial manipulations and visualizations that were started in Lab 3.
+The dataset is the General Ledger dataset (similar to Lab 2, but now with fraud!) from KPMG's case on forensic accounting.
+The GL data is for a fictitious company operating in California (4 locations), Colorado, and Hawaii.</p>
+<p>This lab and homework are intended to get you familiar with a long general ledger dataset, and comfortable pivoting it to use for analyses.
+You will first explore revenue and cogs, then combine them for a (very rough) approximation of profit.</p>
+<p>Reminder: Labs no longer give extra credit for multiple modalities.</p>
+<div class="toc">
+<ul>
+<li><a href="#lab-4-exploratory-data-analysis">Lab 4: Exploratory Data Analysis</a><ul>
+<li><a href="#1-assignment">1. Assignment</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+</ul>
+</li>
+<li><a href="#2-data">2. Data</a><ul>
+<li><a href="#21-data-dictionary">2.1. Data Dictionary</a></li>
+</ul>
+</li>
+<li><a href="#3-how-to-steps">3. How-to Steps</a><ul>
+<li><a href="#31-excel-steps">3.1. Excel Steps</a></li>
+<li><a href="#32-tableau-steps">3.2. Tableau Steps</a></li>
+<li><a href="#33-python-steps">3.3. Python Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
+<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading visualizations in image form (<a href="https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b#id0edd=windows_10" target="_blank">windows instructions</a>, <a href="https://support.apple.com/en-in/guide/mac-help/mh26782/mac" target="_blank">macOS instructions</a>):</p>
+<ol>
+<li>Line chart of monthly revenue and COGS over time (2 lines on one chart)</li>
+<li>Line chart of monthly revenue by account and COGS over time (4 lines on one chart)</li>
+<li>Line chart of calculated profit over time</li>
+</ol>
+<p><em>Note</em>: Consider the aesthetics of your visualizations. Clear, well-organized visuals will help convey your findings more effectively. You are welcome to do any filtering, winsorizing, or other data transformations as needed to make the graphs more informative and visually appealing.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Import and explore large-scale general ledger accounting data</li>
+<li>Perform transforms required to extract accounting insight from general ledger data</li>
+<li>Build visualizations to aid in interpreting and understanding accounting transactions</li>
+</ul>
+<h2 class="ada-h2" id="2-data">2. Data</h2>
+<p>The dataset for this lab is <code class="fixed-width">Lab4-GeneralLedger.xlsx</code>, an Excel file containing General Ledger entries for a fictitous company operating in 6 cities across 4 states.</p>
+<h3 class="ada-h3" id="21-data-dictionary">2.1. Data Dictionary</h3>
+<ul>
+<li><code class="fixed-width">Account Number</code>: Number associated with the account (used for lookup in Chart of Accounts)</li>
+<li><code class="fixed-width">Account Name</code>: Name of the account (e.g. Rent Expense, Bonds Payable, etc.)</li>
+<li><code class="fixed-width">Account Category</code>: Category of the account (e.g. COGS, SG&amp;A, Cash, etc.)</li>
+<li><code class="fixed-width">Post Date</code>: Date the journal entry was posted to the ledger</li>
+<li><code class="fixed-width">Period</code>: Fiscal period (month) of the journal entry</li>
+<li><code class="fixed-width">User ID</code>: Identifier of the user who made the entry (either a person or "Automated" system entry)</li>
+<li><code class="fixed-width">Manual</code>: Whether the entry was made manually (Yes/No)</li>
+<li><code class="fixed-width">Description</code>: Memo line description of the journal entry</li>
+<li><code class="fixed-width">Transaction Number</code>: Unique identifier for the transaction (a transaction comprises multiple journal entries, e.g. debit and credit entries)</li>
+<li><code class="fixed-width">City</code>: City where the transaction took place</li>
+<li><code class="fixed-width">State</code>: State where the transaction took place</li>
+<li><code class="fixed-width">Amount</code>: Amount of the journal entry (positive for debits, negative for credits)</li>
+</ul>
+<h2 class="ada-h2" id="3-how-to-steps">3. How-to Steps</h2>
+<p>The general outline for Lab 3 will be:</p>
+<ol>
+<li>Load the data (it's cleaned, no need to repeat Lab 2)</li>
+<li>Explore the data, looking for which accounts pertain to revenue and cogs</li>
+<li>Filter to keep just journal entries related to those accounts</li>
+<li>Pivot to get monthly revenue and cogs</li>
+<li>Calculate a rough profit (revenue - cogs)</li>
+<li>Visualize the results</li>
+</ol>
+<p>My notes on the difficulty of each modality:</p>
+<ul>
+<li><strong>Excel:</strong> Some manual copy/pasting, but otherwise normal pivots and plots.</li>
+<li><strong>Tableau:</strong> Some custom calculations required (mostly for changing signs of debits/credits).</li>
+<li><strong>Python:</strong> Difficulty based on your knowledge of pandas, <code class="fixed-width">groupby</code>, and <code class="fixed-width">pivot_table</code>.</li>
+</ul>
+<h3 class="ada-h3" id="31-excel-steps">3.1. Excel Steps</h3>
+<ol>
+<li>
+<p><strong>Load and explore the data</strong></p>
+<ol>
+<li>Open <code class="fixed-width">Lab4-GeneralLedger.xlsx</code> in Excel</li>
+<li>Examine the data structure and identify the different <code class="fixed-width">Account Name</code>s and <code class="fixed-width">Account Category</code>s<ul>
+<li>Try looking at <code class="fixed-width">Transaction Number</code> 2468 to see how a typical sale transaction is recorded</li>
+<li>Note that, because KPMG simulated this dataset, the matching between inventory and revenue timing is... odd.</li>
+</ul>
+</li>
+<li>Use filters on the <code class="fixed-width">Account Name</code> column to filter down to just those accounts related to:<ul>
+<li>Revenue (search for "Revenue" in the <code class="fixed-width">Account Name</code> filter)</li>
+<li>Cost of Goods Sold (there's just one "COGS" account)</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>Filter transactions by relevant accounts</strong></p>
+<ol>
+<li>Create a new worksheet</li>
+<li>Copy the filtered data to keep only rows where <code class="fixed-width">Account Name</code> contains revenue and COGS-related accounts</li>
+<li>Make the new data a table (Ctrl/Cmd + T) for easier filtering and manipulation</li>
+<li><strong>Alternatively:</strong> You could also just add filters to the pivot table below, if you know that <code class="fixed-width">Account Category</code> has the same 4 relevant accounts.</li>
+</ol>
+</li>
+<li>
+<p><strong>Pivot the data for monthly analysis</strong></p>
+<ol>
+<li>Select any cell in your new table</li>
+<li>Insert a pivot table (Insert &gt; PivotTable)</li>
+<li>Set up the pivot table:<ul>
+<li>Drag <code class="fixed-width">Period</code> to Rows</li>
+<li>Drag <code class="fixed-width">Account Name</code> to Columns</li>
+<li>Drag <code class="fixed-width">Amount</code> to Values (ensure it's set to Sum)</li>
+</ul>
+</li>
+<li>This will give you monthly totals for the revenue accounts and COGS. Note the signs on the values.</li>
+</ol>
+</li>
+<li>
+<p><strong>Calculate profit</strong></p>
+<ol>
+<li>In your pivot table or in a new area, create a column for "Profit"</li>
+<li>For each period, calculate: Revenue - COGS</li>
+<li>You may need to be careful about the sign of the amounts</li>
+</ol>
+</li>
+<li>
+<p><strong>Create visualizations for submission</strong></p>
+<ol>
+<li>Line chart of monthly revenue and COGS over time (2 lines on one chart)</li>
+<li>Line chart of monthly revenue by account and COGS over time (4 lines on one chart)</li>
+<li>Line chart of calculated profit over time</li>
+<li><em>Optional:</em> Enhance your visualizations<ol>
+<li>Add clear titles to each chart (e.g., "Monthly Revenue and COGS Trends")</li>
+<li>Format axis labels to show currency where appropriate</li>
+<li>Use consistent colors (e.g., green for revenue, red for COGS)</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 class="ada-h3" id="32-tableau-steps">3.2. Tableau Steps</h3>
+<p><a href="https://10ay.online.tableau.com/#/site/accounting-data-analytics/home" target="_blank">Tableau Cloud Link</a></p>
+<ol>
+<li>
+<p><strong>Load and explore the data</strong></p>
+<ol>
+<li>Open Tableau and connect to <code class="fixed-width">Lab4-GeneralLedger.xlsx</code></li>
+<li>Examine the data structure in the Data Source tab</li>
+<li>Create a new worksheet</li>
+<li>Drag <code class="fixed-width">Account Name</code> to Rows and <code class="fixed-width">Amount</code> to Text "Marks" (and change to COUNT) to see the different accounts and how many journal entries each has</li>
+<li>Note which Accounts are related to Revenue or COGS</li>
+</ol>
+</li>
+<li>
+<p><strong>Explore the Transaction format</strong>: Examine <code class="fixed-width">Transaction Number</code> 2468 in the data to understand how sales transactions are recorded</p>
+<ol>
+<li>Create a new worksheet</li>
+<li>Drag <code class="fixed-width">Transaction Number</code> to Filters and set to 2468</li>
+<li>Drag <code class="fixed-width">Account Name</code>, <code class="fixed-width">Amount</code>, and <code class="fixed-width">Description</code> to Rows to see the details (all variable bubbles should be blue, which means they are "Discrete" "Dimensions")</li>
+</ol>
+</li>
+<li>
+<p><strong>Filter and identify relevant accounts</strong></p>
+<ol>
+<li>Create a new worksheet</li>
+<li>Drag <code class="fixed-width">Account Name</code> to the Filters shelf</li>
+<li>Filter to show only accounts containing "Revenue" and "COGS" (which you identified in step 1.5)</li>
+<li>I renamed this worksheet to "Filter Template" and then duplicated it for each of the 3 charts below. That way I only had to set the filter once.<ul>
+<li>Expert tableau users will probably laugh at me for this roundabout solution.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>Create Chart 1: Monthly Revenue and COGS over time (2 lines)</strong></p>
+<ol>
+<li>Duplicate the "Filter Template" worksheet (if you're using that method, otherwise create a new worksheet and manually set the filters, then wonder why you didn't just duplicate)</li>
+<li>Drag <code class="fixed-width">Post Date</code> to Columns, and set it to Month (you can right-click the field to change the date granularity from year all the way to day)</li>
+<li>Drag <code class="fixed-width">Amount</code> to Rows. It will default to SUM, but be negative, which you can solve in optional step 6 below.</li>
+<li>Drag <code class="fixed-width">Account Name</code> to Color (this will create separate lines). We want to combine all the revenue accounts into one line, and the COGS account into another line. There are two ways to do this:<ol>
+<li>Create a calculation in the shelf to combine all revenue accounts into one, and COGS into another:<ol>
+<li>Right-click on the <code class="fixed-width">Account Name</code> pill, and select "Edit in Shelf"</li>
+<li>Enter the following Formula: <code class="fixed-width">IF CONTAINS([Account Name], "Revenue") THEN "Revenue" ELSE "COGS" END</code></li>
+<li>Press "Enter" to apply</li>
+</ol>
+</li>
+<li>Use the "Combine Members" feature:<ol>
+<li>Select all the revenue accounts (you can Shift+Click to select multiple), and click "Combine"</li>
+<li>Rename the new combined member to "Revenue" (right click and "Edit Alias")</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><em>Optional</em>: Change the signs of the values by right-clicking the <code class="fixed-width">SUM(Amount)</code> pill in Rows, selecting "Edit in Shelf", and setting the formula to <code class="fixed-width">IF CONTAINS([Account Name], "Revenue") THEN -[Amount] ELSE [Amount] END</code></li>
+<li><em>Optional</em>: Format the chart with clear title and axis labels </li>
+</ol>
+</li>
+<li>
+<p><strong>Create Chart 2: Monthly Revenue by Account and COGS over time (4 lines)</strong></p>
+<ol>
+<li>Duplicate Chart 1.</li>
+<li>Remove the <code class="fixed-width">Account Name</code> pill from Color (this is important, because it is a new calculated "Group", and if you ungroup the Revenues, that will apply to your other worksheet and Chart 1)</li>
+<li>Drag the original <code class="fixed-width">Account Name</code> field to Color (this will create separate lines for each revenue account and COGS)</li>
+<li><em>Optional</em>: Format the chart with clear title and axis labels, and colors</li>
+</ol>
+</li>
+<li>
+<p><strong>Create Chart 3: Calculated Profit over time</strong></p>
+<ol>
+<li>Duplicate the "Filter Template" worksheet (if you're using that method, otherwise create a new worksheet and manually set the filters, then wonder why you didn't just duplicate)</li>
+<li>Drag <code class="fixed-width">Post Date</code> to Columns, and set it to Month (you can right-click the field to change the date granularity from year all the way to day)</li>
+<li>Drag <code class="fixed-width">Amount</code> to Rows. Because revenues and COGS have different signs, we can just sum them to get a rough profit, but it will be negative, so we can right click the <code class="fixed-width">SUM(Amount)</code> pill in Rows, select "Edit in Shelf", and set the formula to <code class="fixed-width">-[Amount]</code>.</li>
+<li><em>Optional</em>: Format the chart with clear title and axis labels</li>
+</ol>
+</li>
+</ol>
+<h3 class="ada-h3" id="33-python-steps">3.3. Python Steps</h3>
+<p>The following steps assume you have opened Colab, uploaded the <code class="fixed-width">Lab4-GeneralLedger.xlsx</code> file.</p>
+<ol>
+<li>
+<p><strong>Load and explore the data</strong></p>
+<ul>
+<li>Load the libaries and data: 
+    <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;Lab4-GeneralLedger.xlsx&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+<li>Then examine the data structure and identify the different <code class="fixed-width">Account Name</code>s:
+    <div class="highlight"><pre><span></span><code><span class="c1"># Examine the data structure</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></li>
+<li>Then examine transaction 2468 to see how a typical inventory sale is recorded
+    <div class="highlight"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Transaction Number&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2468</span><span class="p">]</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>Filter for revenue and COGS accounts</strong></p>
+<ul>
+<li>Keep just the rows where <code class="fixed-width">Account Name</code> contains revenue and COGS-related accounts:
+    <div class="highlight"><pre><span></span><code><span class="c1"># Filter for Account names that match Revenue OR COGS (the | is OR in regex)</span>
+<span class="n">rev_cogs_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;Revenue|COGS&#39;</span><span class="p">)]</span>
+<span class="c1"># Then verify it worked</span>
+<span class="n">rev_cogs_df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>Create Chart 2: Monthly Revenue by Account and COGS over time (4 lines)</strong></p>
+<ul>
+<li>We're going to do this chart first, because it's a one-liner in seaborn:
+    <div class="highlight"><pre><span></span><code><span class="c1"># Period is monthly, so we can just use seaborn&#39;s lineplot to do our aggregation</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Account Name&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></li>
+<li>Well almost, now we have to fix the signs, because revenue is negative in the dataset (credits are negative, debits are positive)
+    <div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+    <span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Revenue&quot;</span><span class="p">),</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">])),</span>
+    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Account Name&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></li>
+<li>Remember to format the axes and labels for aesthetics (see the end for an elaborate example)</li>
+</ul>
+</li>
+<li>
+<p><strong>Create Chart 2: Monthly Revenue and COGS over time (2 lines)</strong></p>
+<ul>
+<li>We can do this by creating a new column that has just two values, "Revenue" and "COGS", then using that column as our "hue" in seaborn:
+    <div class="highlight"><pre><span></span><code><span class="c1"># Create a new column for Account</span>
+<span class="n">rev_cogs_df</span><span class="p">[</span><span class="s1">&#39;Account&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rev_cogs_df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;Revenue&#39;</span> <span class="k">if</span> <span class="s1">&#39;Revenue&#39;</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">else</span> <span class="s1">&#39;COGS&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Then same plot as above</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+    <span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Revenue&quot;</span><span class="p">,</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">])),</span>
+    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Account&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>Create Chart 3: Calculated Profit over time</strong></p>
+<ul>
+<li>Calculating the profit is pretty trivial, because within each month, we can just sum all transactions because the revenue and COGS have opposite signs:
+<div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]),</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ol>
+<p>For aesthetics, I usually format axes, and set limits on the graphs.</p>
+<details>
+<summary>For example, formatting a line graph would be:</summary>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="c1"># This just formats the axes nicely, allowing for the fact that the data in the</span>
+<span class="c1"># dataset is in &quot;millions&quot;, so needs to * 1_000_000 to get the units right.</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mbt_ff</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">FuncFormatter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mbt_string_fmt</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span>
+        <span class="n">decimals</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{l_paren}{prefix}</span><span class="s2">{x:,.</span><span class="si">{decimals}</span><span class="s2">f}</span><span class="si">{mbt}{suffix}{r_paren}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">zero_fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{prefix}</span><span class="s2">0&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;suffix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">suffix</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;decimals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decimals</span>
+
+        <span class="k">if</span> <span class="s2">&quot;l_paren&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;l_paren&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">*</span> <span class="nb">bool</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;r_paren&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;r_paren&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;)&quot;</span> <span class="o">*</span> <span class="nb">bool</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">zero_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">mbt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">x</span> <span class="o">/=</span> <span class="mf">1000.0</span>
+
+        <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">mbt</span><span class="o">=</span><span class="n">mbt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">mbt_string_fmt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+<span class="c1"># Once the above code is run, you can just run the following to make a nice graph</span>
+<span class="c1"># of current assets vs. current liabilities</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="s1">&#39;talk&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="c1"># The actual plot itself</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;fyear&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;at&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Average Assets&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Fiscal Year&quot;</span><span class="p">)</span>
+<span class="c1"># limit the axes</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+<span class="c1"># format the axes labels (uses that function defined above)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mbt_ff</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;$&quot;</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mbt_ff</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;$&quot;</span><span class="p">))</span>
+</code></pre></div>
+</details>
+
+<style>
+details.inline-image {
+   color: #BE0000;
+}
+details[open].inline-image {
+    font-weight: bold;
+}
+details[open].inline-image > p {
+    border-left: 5px solid #BE0000;
+    margin-left: 1em;
+    padding-left: 1em;
+}
+.detail-image {
+    max-height: 500px;
+    max-width: 1000px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+}
+
+.fixed-width {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* padding: 2px 4px; */
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table {
+    border-collapse: collapse;
+}
+/* General styling of all cells */
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
+}
+
+/* Generated with pygmentize -S STYLE -f html -a .highlight > STYLE.css */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>

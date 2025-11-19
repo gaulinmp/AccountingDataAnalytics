@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+ /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+ /* Make horizontal lines connect through column boundaries */
+ /* table {
+     border-collapse: collapse;
+ } */
+ /* General styling of all cells */
+ table > :is(thead, tbody) > tr > :is(th, td) {
+     padding: 3px;
+     text-align: left;
+ }
+ table > thead > tr > :is(th, td) {
+     border-top: 2px solid; /* Top thick line */
+     border-bottom: 1px solid; /* Below head thin line */
+ }
+ table > tbody > tr:last-child > :is(th, td) {
+     border-bottom: 2px solid; /* Bottom thick line */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    /* width: 100%; */
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    /* background-color: white; */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="project-2-merging-financials-and-stock-returns">Project 2: Merging Financials and Stock Returns</h1>
+<div class="toc">
+<ul>
+<li><a href="#project-2-merging-financials-and-stock-returns">Project 2: Merging Financials and Stock Returns</a><ul>
+<li><a href="#1-scenario">1. Scenario:</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-deliverable">1.2. Deliverable</a></li>
+</ul>
+</li>
+<li><a href="#2-grading">2. Grading</a><ul>
+<li><a href="#21-grading-rubric">2.1 Grading Rubric</a></li>
+</ul>
+</li>
+<li><a href="#3-data-sources">3. Data Sources</a><ul>
+<li><a href="#31-data-access-options">3.1. Data Access Options</a></li>
+<li><a href="#34-data-dictionary">3.4. Data Dictionary</a></li>
+</ul>
+</li>
+<li><a href="#4-suggested-workflow">4. Suggested Workflow</a></li>
+<li><a href="#5-technical-implementation-suggestions">5. Technical Implementation Suggestions</a><ul>
+<li><a href="#51-bin-calculations">5.1. Bin Calculations</a></li>
+<li><a href="#52-return-calculations">5.2. Return Calculations</a></li>
+<li><a href="#53-dataset-combination">5.3. Dataset Combination</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-scenario">1. Scenario:</h2>
+<p><strong>Three Months Later: From Analysis to Implementation</strong></p>
+<p>You are the same junior equity research analyst from Project 1, and your FSA ratio analysis was a hit with the portfolio team! Your presentation on cross-sectional differences in financial ratios caught the attention of Sarah Chen, the portfolio manager, who now has a follow-up assignment for you.</p>
+<p>"Your Project 1 analysis was excellent," Sarah says, "but now I need to know the <em>so what</em>. You identified clear patterns in financial ratios across [whatever you did]—but do these patterns actually translate into investment returns? We need to test whether the FSA ratios you highlighted can generate alpha."</p>
+<p><strong>The Trading Hypothesis</strong>: The portfolio team wants to test whether the FSA ratio patterns you identified in Project 1 relate to earnings announcement returns. For example, if you found that high-ROA firms systematically outperform in the Technology sector, can we build a trading strategy around that insight?</p>
+<p>You are given access to the same Compustat fundamental data from Project 1 (now limited to S&amp;P 500 constituents only, for easier computation), along with CRSP daily stock return data for these same firms. Your job is to explore whether the FSA ratio patterns you identified in Project 1 show observable relationships with stock returns.</p>
+<p>Your task: <strong>Explore the relationship between your Project 1 FSA ratio findings and stock returns</strong>. This involves:</p>
+<ol>
+<li>Connect to the provided PostgreSQL database containing Compustat and CRSP data</li>
+<li>Recreate your FSA ratio(s) and groupings from Project 1, (you can also look at more or fewer ratios, or entirely different ratios / cross sections if you wish)</li>
+<li>Merge the compustat data with stock return data (merge keys being <code class="fixed-width">ticker</code>, <code class="fixed-width">shrcls</code>, and date variables like <code class="fixed-width">earn_annc_date</code> or <code class="fixed-width">fiscal_year_end</code>), ensuring proper timing alignment</li>
+<li>Analyze whether firms with different ratio characteristics show different return patterns</li>
+<li>Present your findings as preliminary evidence for potential investment strategies.</li>
+</ol>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>This project directly builds on your Project 1 FSA ratio analysis, extending it with market data. The intent is to build on your existing work, while adding new skills in data merging and return analysis.</p>
+<p>By completing this project, you will:</p>
+<ul>
+<li><strong>Practice Data Merging</strong>: Merge financial statement data with market return data in Power Query, Tableau, or Python</li>
+<li><strong>Practice Visualization</strong>: Create visualizations to illustrate return patterns across FSA ratio groupings</li>
+<li><strong>Explore Return Patterns</strong>: Analyze firm stock return patterns based on FSA ratio groupings</li>
+<li><strong>Test Practical Relevance</strong>: Determine if your Project 1 findings have observable relationships with market performance</li>
+<li><strong>Optional: Practice Return Aggregation</strong>: Calculate cumulative returns over different horizons (e.g., 3-day, 1-month, 3-month) around earnings announcements. This is optional but necessary if you want to explore longer-horizon future return effects of your trading strategy.</li>
+</ul>
+<h3 class="ada-h3" id="12-deliverable">1.2. Deliverable</h3>
+<p><strong>Tone</strong>: targeted to accounting and finance executives, minimal jargon, clear and concise.</p>
+<p>Slide-deck (<code class="fixed-width">.pptx</code> or <code class="fixed-width">.pdf</code>) containing, at most:</p>
+<ol>
+<li><strong>Title Slide</strong>: Project title, group member names, date</li>
+<li><strong>Research Question</strong>: Clear description of the economic relationship between your FSA ratio findings and stock returns (this is your hypothesis or research question)</li>
+<li><strong>Data Description and Methodology</strong>:<ul>
+<li>FSA ratio(s) used (from Project 1 or new analysis)</li>
+<li>Data merging process and timing decisions (merge keys, alignment choices), and sample description (firms, time period, data quality considerations)</li>
+</ul>
+</li>
+<li><strong>Key Findings</strong> (1 or more slides):<ul>
+<li>Return patterns across FSA ratio groups with compelling visualizations</li>
+<li><em>Optional</em>: Multiple perspectives on the data (group comparisons, time trends, robustness)</li>
+<li><em>Optional</em>: Tabular evidence quantifying differences (or lack thereof) between high/low ratio firms</li>
+</ul>
+</li>
+<li><strong>Conclusions and Investment Implications</strong>:<ul>
+<li>Clear assessment of whether or not FSA patterns translate to observable return differences</li>
+<li>Investment relevance and practical trading considerations</li>
+<li>Limitations and caveats</li>
+</ul>
+</li>
+<li><strong>Thank You / Questions</strong></li>
+<li><strong>Appendix</strong> (if needed, should be after the "last" slide): Additional charts, technical details, sensitivity analyses</li>
+</ol>
+<hr />
+<h2 class="ada-h2" id="2-grading">2. Grading</h2>
+<p>Your project will be graded based on the following criteria:</p>
+<ol>
+<li><strong>FSA Reasoning &amp; Hypothesis</strong>: How well does the analysis build on sound FSA reasoning? Is there a clear research question connecting FSA ratios to returns? (This could be the same reasoning as Project 1 if you kept the same ratios, or new reasoning if you changed your approach.)</li>
+<li><strong>Data Merging &amp; Documentation</strong>: Is the data merging process well-executed and documented? Are merge keys, timing decisions, and data quality issues properly addressed?</li>
+<li><strong>Return Analysis &amp; Visualizations</strong>: Are the return patterns across FSA ratio groups clearly analyzed and visualized? Do the charts effectively show differences between high/low ratio firms?</li>
+<li><strong>Presentation</strong>: Is the final presentation well-organized, professional, and tells a coherent story from Project 1 to investment implications?</li>
+</ol>
+<p>Note: The focus is on demonstrating data merging skills, exploring return patterns, and connecting findings back to your Project 1 analysis. You don't need to prove that your FSA ratios create profitable trading strategies - the goal is to explore whether observable return differences exist and present your findings professionally.</p>
+<h3 class="ada-h3" id="21-grading-rubric">2.1 Grading Rubric</h3>
+<ol>
+<li><strong>FSA Reasoning</strong>: How well does the analysis build on sound FSA reasoning with a clear research question<ul>
+<li><strong>Excellent</strong>: Clear FSA economic/accounting reasoning, well-articulated relationship between FSA ratios and returns, acknowledges limitations</li>
+<li><strong>Good</strong>: Limited FSA reasoning, weak ties between ratios and returns</li>
+<li><strong>Needs Work</strong>: No FSA reasoning</li>
+</ul>
+</li>
+<li><strong>Data Merging &amp; Documentation</strong>: How well-executed and documented the data merging process is<ul>
+<li><strong>Excellent</strong>: Merge keys and timing alignment clearly explained, data quality issues identified and handled, reproducible process</li>
+<li><strong>Good</strong>: Successful merge with limited or no explanation of decisions and quality checks</li>
+<li><strong>Needs Work</strong>: Poor or unsuccessful merge, or significant data issues unaddressed</li>
+</ul>
+</li>
+<li><strong>Return Analysis &amp; Visualizations</strong>: How clearly return patterns across FSA ratio groups are analyzed and visualized. <em>Note: the efficient market hypothesis might suggest no patterns exist, but you should still explore and present the data, even if you find no patterns in returns.</em><ul>
+<li><strong>Excellent</strong>: Compelling charts showing any potential differences (or similarities) between ratio groups, multiple perspectives (high vs. low, quintiles, time trends), insights highlighted</li>
+<li><strong>Good</strong>: Visualizations showing return differences across ratio groups with limited analysis or insights</li>
+<li><strong>Needs Work</strong>: Poor visualization quality or no clear return pattern analysis</li>
+</ul>
+</li>
+<li><strong>Evidence &amp; Analysis Quality</strong>: How well the evidence supports or rejects the hypothesis about FSA ratios and returns<ul>
+<li><strong>Excellent</strong>: Multiple forms of evidence (e.g., statistical tests, group comparisons, sensitivity analysis), quantified differences, robust analysis tying evidence to conclusion</li>
+<li><strong>Good</strong>: Some evidence with basic comparisons between ratio groups and return patterns, or limited connection between evidence and conclusion</li>
+<li><strong>Needs Work</strong>: Little or no meaningful analysis of ratio-return relationships</li>
+</ul>
+</li>
+<li><strong>Conclusions &amp; Investment Relevance</strong>: Whether conclusions about investment implications are presented clearly<ul>
+<li><strong>Excellent</strong>: Clear conclusions about whether FSA patterns do or do not translate to observable return differences, practical investment relevance discussed</li>
+<li><strong>Needs Work</strong>: No conclusions presented or completely disconnected from analysis</li>
+</ul>
+</li>
+<li><strong>Storytelling &amp; Slide Flow</strong>: How cohesive the presentation flows from FSA findings (from Project 1 or new) to investment implications<ul>
+<li><strong>Excellent</strong>: Clear narrative arc from FSA findings → hypothesis → analysis → investment conclusions, executive-ready presentation</li>
+<li><strong>Good</strong>: Some connection of FSA work to return analysis with reasonable cohesion</li>
+<li><strong>Needs Work</strong>: Poor organization, disconnected chain of logic, unclear narrative</li>
+</ul>
+</li>
+<li><strong>Professionalism &amp; Formatting</strong>: How aesthetic and professional the slides appear<ul>
+<li><strong>Excellent</strong>: Aesthetic, professional slides, consistent formatting, appropriate for executive audience</li>
+<li><strong>Good</strong>: Some formatting issues, generally professional and appropriate</li>
+<li><strong>Needs Work</strong>: Unprofessional appearance, significant formatting problems</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 class="ada-h2" id="3-data-sources">3. Data Sources</h2>
+<h3 class="ada-h3" id="31-data-access-options">3.1. Data Access Options</h3>
+<p>All students will access the same PostgreSQL database but can choose their preferred tool for data extraction and merging:</p>
+<p><strong>Database Details:</strong>
+* Connection details in Canvas
+* <em>Database</em>: <code class="fixed-width">ADA_SQL</code>
+    * <em>Excel:</em> Can connect via Power Query
+    * <em>Tableau:</em> Built-in database connectivity
+    * <em>Python:</em> See Lab 5 starter notebook for connecting
+    * <em>Tables</em>: 
+        * <code class="fixed-width">compustat_annual</code>: S&amp;P 500 fundamental data (2015-2025, same structure as Project 1)
+        * <code class="fixed-width">crsp_daily</code>: Daily stock return data for S&amp;P 500 firms</p>
+<h3 class="ada-h3" id="34-data-dictionary">3.4. Data Dictionary</h3>
+<p><strong>CRSP Variables</strong>:</p>
+<ul>
+<li><code class="fixed-width">ticker</code>: Ticker Symbol</li>
+<li><code class="fixed-width">shrcls</code>: Share Class (e.g., 'A', 'B', 'C', etc.)</li>
+<li><code class="fixed-width">date</code>: Return date (skips weekends and holidays)</li>
+<li><code class="fixed-width">ret</code>: Total return (including dividends)</li>
+<li><code class="fixed-width">prc</code>: Price per share</li>
+<li><code class="fixed-width">shrout</code>: Shares outstanding (thousands)</li>
+<li><code class="fixed-width">vol</code>: Trading volume (number of shares traded)</li>
+<li><code class="fixed-width">bid</code>: End of day bid price</li>
+<li><code class="fixed-width">ask</code>: End of day ask price</li>
+</ul>
+<p><strong>Compustat Variables</strong>:</p>
+<ul>
+<li><code class="fixed-width">firm_id</code>: ID to identify individual firms, preserving continuity through M&amp;A activities</li>
+<li><code class="fixed-width">fyear</code>: Fiscal Year (based on majority of year, so 2000 connotes fiscal year ends between 7/1/1999 and 6/30/2000)</li>
+<li><code class="fixed-width">fiscal_year_end</code>: Fiscal Year End</li>
+<li><code class="fixed-width">fiscal_year_end_prev</code>: Fiscal Year End of the previous year</li>
+<li><code class="fixed-width">fiscal_year_end_next</code>: Fiscal Year End of the next year</li>
+<li><code class="fixed-width">earn_annc_date</code>: Earnings announcement date</li>
+<li><code class="fixed-width">earn_annc_date_prev</code>: Earnings announcement date of the previous year</li>
+<li><code class="fixed-width">earn_annc_date_next</code>: Earnings announcement date of the next year</li>
+<li><code class="fixed-width">name</code>: Firm Name</li>
+<li><code class="fixed-width">ticker</code>: Ticker Symbol</li>
+<li><code class="fixed-width">shrcls</code>: Share Class (e.g., 'A', 'B', 'C', etc.)</li>
+<li><code class="fixed-width">age_days</code>: Age (post IPO) of firm, in days (calculated as the number of days since the first filed 10-K)</li>
+<li><code class="fixed-width">act</code>: Current Assets</li>
+<li><code class="fixed-width">ap</code>: Accounts Payable - Trade</li>
+<li><code class="fixed-width">at</code>: Total Assets</li>
+<li><code class="fixed-width">auditor</code>: Name of Auditor</li>
+<li><code class="fixed-width">auop</code>: Auditor Opinion</li>
+<li><code class="fixed-width">auopic</code>: Auditor Opinion - Internal Control</li>
+<li><code class="fixed-width">bign</code>: Big N Auditor (calculated from <code class="fixed-width">au</code>)</li>
+<li><code class="fixed-width">bve</code>: Book Value of Equity</li>
+<li><code class="fixed-width">capx</code>: Capital Expenditures</li>
+<li><code class="fixed-width">che</code>: Cash and Cash Equivalents</li>
+<li><code class="fixed-width">cogs</code>: Cost of Goods Sold</li>
+<li><code class="fixed-width">dvt</code>: Dividends - Total</li>
+<li><code class="fixed-width">ebit</code>: Earnings Before Interest &amp; Taxes</li>
+<li><code class="fixed-width">ebitda</code>: Earnings Before Interest</li>
+<li><code class="fixed-width">emp</code>: Employees (in thousands)</li>
+<li><code class="fixed-width">epspi</code>: Earnings Per Share (Basic) - Including Extraordinary Items (amount in $ / share)</li>
+<li><code class="fixed-width">epspx</code>: Earnings Per Share (Basic) - Excluding Extraordinary Items (amount in $ / share)</li>
+<li><code class="fixed-width">gics_sector_name</code>: GICS Sector code name (string)</li>
+<li><code class="fixed-width">gics_sector</code>: GICS Sector code (numeric)</li>
+<li><code class="fixed-width">gics_group</code>: GICS Group code (numeric)</li>
+<li><code class="fixed-width">gics_industry</code>: GICS Industry code (numeric)</li>
+<li><code class="fixed-width">gics_subindustry</code>: GICS Subindustry code (numeric)</li>
+<li><code class="fixed-width">ib</code>: Income Before Extraordinary Items</li>
+<li><code class="fixed-width">invt</code>: Inventory  </li>
+<li><code class="fixed-width">lct</code>: Current Liabilities  </li>
+<li><code class="fixed-width">lt</code>: Total Liabilities  </li>
+<li><code class="fixed-width">mve</code>: Market Value of Equity  (calculated as <code class="fixed-width">MAX(prcc_f * csho, mkvalt)</code>)</li>
+<li><code class="fixed-width">ni</code>: Net Income  </li>
+<li><code class="fixed-width">oancf</code>: Operating Cash Flow</li>
+<li><code class="fixed-width">pi</code>: Pretax Income</li>
+<li><code class="fixed-width">re</code>: Retained Earnings</li>
+<li><code class="fixed-width">recd</code>: Receivables - Estimated Doubtful</li>
+<li><code class="fixed-width">rect</code>: Accounts Receivable  </li>
+<li><code class="fixed-width">revt</code>: Revenue - Total</li>
+<li><code class="fixed-width">sale</code>: Sales/Turnover (Net)  </li>
+<li><code class="fixed-width">seq</code>: Shareholders' Equity  </li>
+<li><code class="fixed-width">share_price</code>: Price Close - Annual - Fiscal (<code class="fixed-width">prcc_f</code>)</li>
+<li><code class="fixed-width">shares_outstanding</code>: Common Shares Outstanding (<code class="fixed-width">csho</code>)</li>
+<li><code class="fixed-width">total_debt</code>: Total Debt (calculated as <code class="fixed-width">dltt + dlc</code>)</li>
+<li><code class="fixed-width">xad</code>: Advertising Expense</li>
+<li><code class="fixed-width">xint</code>: Interest Expense  </li>
+<li><code class="fixed-width">xrd</code>: R&amp;D Expense (many missing for non-tech firms, treat as zero if needed) </li>
+<li><code class="fixed-width">xsga</code>: SG&amp;A Expense  </li>
+</ul>
+<hr />
+<h2 class="ada-h2" id="4-suggested-workflow">4. Suggested Workflow</h2>
+<ol>
+<li>
+<p><strong>Database Setup &amp; Exploration</strong></p>
+<ul>
+<li>Establish PostgreSQL connection in your modality</li>
+<li>Explore data schema, understand table relationships and date timing</li>
+</ul>
+</li>
+<li>
+<p><strong>Data Integration</strong></p>
+<ul>
+<li>Merge Compustat fundamentals with CRSP returns via <code class="fixed-width">ticker</code>, <code class="fixed-width">shrcls</code>, and some date</li>
+<li>Decide on timing (e.g. align returns with fiscal year-end or earnings announcement)</li>
+<li>Address missing data and ensure timing decisions are well documented</li>
+</ul>
+</li>
+<li>
+<p><strong>Recreate Project 1 FSA Analysis</strong></p>
+<ul>
+<li>Calculate the FSA ratios and groupings from Project 1. Alternatively, calcluate new ratios and findings.</li>
+<li>Apply the same (or new) cross-sectional analyses</li>
+<li>Document the initial FSA patterns still hold in the S&amp;P 500 subset, and provide a basis from which to start the returns investigation</li>
+</ul>
+</li>
+<li>
+<p><strong>Return Pattern Analysis</strong></p>
+<ul>
+<li>Calculate returns around earnings announcements (e.g. 1-day, 3-day, 1-week, 1-month windows). <em>Note</em>: the timing of the returns is up to you, but academic research has shown that much of the information released in the earnings announcement does not get impounded into price immediately, thus longer windows may yield more interesting results.</li>
+<li>Group firms by FSA ratio bins. Again, you can choose your bins, such as median cut (low/high), terciles (low/mid/high), quintiles, etc.</li>
+<li>Compare returns across bins. You should decide and justify measuring average or median returns, whether you look at all bins or just the lowest/highest, etc.</li>
+<li>Consider multiple forms of evidence on differences or lack thereof</li>
+</ul>
+</li>
+<li>
+<p><strong>Visualization &amp; Evidence Development</strong></p>
+<ul>
+<li>Create charts showing return patterns across FSA ratio groups</li>
+<li>Develop visualizations that clearly demonstrate any relationships (or lack thereof)</li>
+<li>Consider multiple time horizons and robustness checks</li>
+<li>Document data quality issues and limitations</li>
+</ul>
+</li>
+<li>
+<p><strong>Conclusion and Investment Strategy Recommendation</strong></p>
+<ul>
+<li>Assess whether FSA ratio patterns translate to actionable trading opportunities, or should be avoided as fruitless</li>
+<li>Consider timing of information, and whether trading strategies are feasible (or require knowing information before it is made public)</li>
+<li>Present findings as preliminary evidence for portfolio management decisions</li>
+</ul>
+</li>
+</ol>
+<h2 class="ada-h2" id="5-technical-implementation-suggestions">5. Technical Implementation Suggestions</h2>
+<h3 class="ada-h3" id="51-bin-calculations">5.1. Bin Calculations</h3>
+<p><strong>Tableau Bin Calculations</strong></p>
+<div class="highlight"><pre><span></span><code>IF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.2)} THEN &quot;1 - Low&quot;
+    ELSEIF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.4)} THEN &quot;2 - Mid-low&quot;
+    ELSEIF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.6)} THEN &quot;3 - Middle&quot;
+    ELSEIF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.8)} THEN &quot;4 - Mid-high&quot;
+    ELSE &quot;5 - High&quot;
+END
+</code></pre></div>
+<p><strong>Python Bin Calculations</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1"># For quintile bins by year</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;roa_quintile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;fyear&#39;</span><span class="p">)[</span><span class="s1">&#39;roa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">qcut</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1 - Low&#39;</span><span class="p">,</span> <span class="s1">&#39;2 - Mid-low&#39;</span><span class="p">,</span> <span class="s1">&#39;3 - Middle&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;4 - Mid-high&#39;</span><span class="p">,</span> <span class="s1">&#39;5 - High&#39;</span><span class="p">],</span> <span class="n">duplicates</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># Alternative approach using percentile ranks</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;roa_quintile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;fyear&#39;</span><span class="p">)[</span><span class="s1">&#39;roa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>
+                     <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.2</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.4</span><span class="p">),</span>
+                           <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.6</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span>
+                     <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1 - Low&#39;</span><span class="p">,</span> <span class="s1">&#39;2 - Mid-low&#39;</span><span class="p">,</span> <span class="s1">&#39;3 - Middle&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;4 - Mid-high&#39;</span><span class="p">,</span> <span class="s1">&#39;5 - High&#39;</span><span class="p">],</span>
+                     <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="c1"># For simple high/low median split</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;roa_bin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;fyear&#39;</span><span class="p">)[</span><span class="s1">&#39;roa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;High&#39;</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="o">.</span><span class="n">median</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;Low&#39;</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 class="ada-h3" id="52-return-calculations">5.2. Return Calculations</h3>
+<p>Combining daily returns into, say, weekly is the process of calculating cumulative returns, or buy-and-hold returns.
+Returns are calculated as the percentage change in price, or (P[@t] - P[@t-1]) / P[@t-1] which simplifies to P[@t] / P[@t-1] - 1. 
+To cumulate returns over multiple periods, use the product of (1 + ret), then subtract 1.
+Writing out the algebra will show you why, because the 1 + ret = P[@t] / P[@t-1], and multiplying that by the next period P[@t-1] / P[@t-2] results in P[@t] / P[@t-2]).</p>
+<p>Often the software used will have functionality for summing a column of values, but not necessarily taking the product.
+For this reason, we sometimes calculate cumulative returns using a log trick, because multiplication and division become addition and subtraction with logs.
+For example, in Tableau, you can calculate cumulative returns with the equation: <code class="fixed-width">(EXP(SUM(LN(1 + [Ret]))) - 1)</code> (a similar trick can be used in SQL).
+In Excel, I have found it helpful to create a new column that is just <code class="fixed-width">[@ret] + 1</code>, and then use the formula <code class="fixed-width">=PRODUCT([@ret_plus1]) - 1</code>.
+A simiple python solution would be <code class="fixed-width">df['return_yearly'] = df.groupby(['ticker', 'fyear'])['ret'].agg(lambda x: (1+x).prod()-1)</code></p>
+<h3 class="ada-h3" id="53-dataset-combination">5.3. Dataset Combination</h3>
+<p>You may find it convenient to do the merge in SQL, and only deal with one, cleanly combined dataset.
+You could also just get the raw datasets from the database, save those as, e.g. CSV files, then use your software to to the merges yourself.
+Or you could download and merge in Python, create a clean dataset, and do the analysis in Tableau.
+In general, because each modality we use has its strengths and weaknesses, I suggest trying to use the "right tool for the job" in each separate step of the project.</p>
+<p><em>Data merging example for 1 day of returns</em>:
+<div class="highlight"><pre><span></span><code><span class="c1">-- Merge fundamentals with returns on earnings announcement date</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">acct</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ret</span>
+<span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">ticker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="n">ticker</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">acct</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="nb">date</span>
+<span class="p">;</span>
+</code></pre></div></p>
+<p><em>Data merging example for next year of returns</em>:
+<div class="highlight"><pre><span></span><code><span class="c1">-- Merge fundamentals with returns on earnings announcement date</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">acct</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ret</span>
+<span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">ticker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="n">ticker</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">acct</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">earn_annc_date_next</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">DAY</span>
+<span class="p">;</span>
+</code></pre></div></p>
+<p>Getting a fixed number of return days after the earnings announcement date is a bit trickier, because stock doesn't trade on weekends so you can't just take date + 3 and assume it will be 3 days of returns. 
+This is one of those examples of real world data being tricky to deal with.
+The solution to this is usually to just number the trading days sequentially, so you can keep any number of them and not worry about weekends.</p>
+<p>To demonstrate how you could use LLMs to write SQL code for you, I prompted Gemini with the following prompt, and got the SQL code below as an output:</p>
+<blockquote style="background-color: #f9f9f9; border-left: 10px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px;">
+please suggest an sql merge of annual data (table name 'compustat_annual AS f') onto stock returns (table name 'crsp_daily AS r', date variable 'date'), keeping the first three days of returns starting on 'f.earn_annc_date'. The merge needs to handle the fact that stock is only traded on the weekdays, so it can't just be 3 calendar days after f.earn_annc_date. The pertinent variables are f.ticker, f.fyear, f.earn_annc_date, and r.ticker, r.date, r.ret.
+</blockquote>
+
+<div class="highlight"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">RankedReturns</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="c1">-- Step 1: Join returns to financials and rank the trading days</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">ticker</span><span class="p">,</span>
+<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">fyear</span><span class="p">,</span>
+<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="p">,</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">trading_date</span><span class="p">,</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">ret</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">ticker</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">ASC</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">trading_day_rank</span>
+<span class="w">    </span><span class="k">FROM</span>
+<span class="w">        </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="c1">-- your annual data table</span>
+<span class="w">    </span><span class="k">JOIN</span>
+<span class="w">        </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="c1">-- your stock returns table</span>
+<span class="w">            </span><span class="k">ON</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">ticker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">ticker</span>
+<span class="w">            </span><span class="k">AND</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="c1">-- Join returns on or after the report date</span>
+<span class="w">            </span><span class="k">AND</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">DATE_ADD</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="p">,</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;10 DAY&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1">-- Limit to a reasonable window to avoid excessive data</span>
+<span class="p">)</span>
+<span class="c1">-- Step 2: Select only the first three ranked trading days</span>
+<span class="k">SELECT</span>
+<span class="w">    </span><span class="n">ticker</span><span class="p">,</span>
+<span class="w">    </span><span class="n">fyear</span><span class="p">,</span>
+<span class="w">    </span><span class="n">earn_annc_date</span><span class="p">,</span>
+<span class="w">    </span><span class="n">trading_date</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ret</span><span class="p">,</span>
+<span class="w">    </span><span class="n">trading_day_rank</span>
+<span class="k">FROM</span>
+<span class="w">    </span><span class="n">RankedReturns</span>
+<span class="k">WHERE</span>
+<span class="w">    </span><span class="n">trading_day_rank</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span>
+<span class="w">    </span><span class="n">ticker</span><span class="p">,</span>
+<span class="w">    </span><span class="n">fyear</span><span class="p">,</span>
+<span class="w">    </span><span class="n">trading_day_rank</span>
+<span class="p">;</span>
+</code></pre></div>
+</body>
+</html>

@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instructions</title>
+    <style>
+/* Lab Instructions Styling */
+/* Optimized for markdown-to-HTML lab materials */
+
+/* Mac's Customized CSS */
+
+details.inline-image {
+    color: #BE0000;
+ }
+ details[open].inline-image {
+     font-weight: bold;
+ }
+ details[open].inline-image > p {
+     border-left: 5px solid #BE0000;
+     margin-left: 1em;
+     padding-left: 1em;
+ }
+ .detail-image {
+     max-height: 500px;
+     max-width: 1000px;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+     margin: 10px 0;
+ }
+
+ .fixed-width {
+     font-family: "Courier New", Courier, monospace;
+     background-color: #f5f5f5;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     /* padding: 2px 4px; */
+ }
+
+ /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+ /* Make horizontal lines connect through column boundaries */
+ /* table {
+     border-collapse: collapse;
+ } */
+ /* General styling of all cells */
+ table > :is(thead, tbody) > tr > :is(th, td) {
+     padding: 3px;
+     text-align: left;
+ }
+ table > thead > tr > :is(th, td) {
+     border-top: 2px solid; /* Top thick line */
+     border-bottom: 1px solid; /* Below head thin line */
+ }
+ table > tbody > tr:last-child > :is(th, td) {
+     border-bottom: 2px solid; /* Bottom thick line */
+ }
+
+/* Claud's generated CSS */
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #333;
+    background-color: #ebebeb;
+}
+
+/* Main Content Container */
+article, main {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    color: #0066cc;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.4rem;
+    margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: #2c5282;
+}
+
+h4 {
+    font-size: 1.15rem;
+    color: #2d3748;
+}
+
+/* Section Delineation */
+h2::before {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin-bottom: 1rem;
+}
+
+/* Add visual breaks between major sections */
+h2 {
+    margin-top: 3rem;
+    padding-top: 2rem;
+}
+
+/* Numbered sections (e.g., "1. Assignment", "2. Data") */
+h2:first-of-type {
+    margin-top: 1.5rem;
+    padding-top: 0;
+}
+
+/* Subsection styling */
+h3 {
+    margin-top: 1.8rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid #0066cc;
+}
+
+h4 {
+    margin-top: 1.3rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #cbd5e0;
+}
+
+/* Paragraphs and Lists */
+p {
+    margin: 1rem 0;
+    text-align: justify;
+}
+
+ul, ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+li {
+    margin: 0.5rem 0;
+}
+
+li > p {
+    margin: 0.25rem 0;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+    margin: 0.25rem 0;
+}
+
+/* Code Blocks and Inline Code */
+code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    border: 1px solid #e0e0e0;
+}
+
+pre {
+    background-color: #2d2d2d;
+    color: #f8f8f2;
+    padding: 1.25rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 4px solid #0066cc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Code block language labels */
+pre[class*="language-"]::before {
+    content: attr(class);
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Tables */
+table {
+    /* width: 100%; */
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    /* background-color: white; */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+tr:nth-child(even) {
+    background-color: hsla(0, 0%, 0%, 0.1);
+}
+
+/* Blockquotes and Notes */
+blockquote {
+    border-left: 4px solid #0066cc;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    background-color: #f0f4f8;
+    border-radius: 4px;
+    color: #2c5282;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Special callout boxes */
+.note, .warning, .tip {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+    border-left: 5px solid;
+}
+
+.note {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+}
+
+.tip {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+/* Emphasis for key terms */
+em {
+    font-style: italic;
+    color: #2c5282;
+}
+
+strong {
+    font-weight: 600;
+    color: #1a202c;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.2s;
+}
+
+a:hover {
+    border-bottom-color: #0066cc;
+}
+
+/* Task/Exercise sections */
+h3[id*="exercise"]::before,
+h3[id*="task"]::before {
+    content: '📝 ';
+    margin-right: 0.5rem;
+}
+
+/* Questions sections */
+h4[id*="question"]::before {
+    content: '❓ ';
+    margin-right: 0.5rem;
+}
+
+/* Technical guidance sections */
+h3[id*="implementation"]::before,
+h3[id*="guidance"]::before {
+    content: '🔧 ';
+    margin-right: 0.5rem;
+}
+
+/* Horizontal Rules */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #0066cc, transparent);
+    margin: 2.5rem 0;
+}
+
+/* TOC Styling */
+nav, .toc {
+    background-color: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 6px;
+    margin: 1.5rem 0;
+    border: 1px solid #e0e0e0;
+}
+
+nav ul, .toc ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+
+nav li, .toc li {
+    margin: 0.4rem 0;
+}
+
+/* Submission/Assignment boxes */
+section[id*="assignment"] {
+    background-color: #fff8e1;
+    padding: 1.5rem;
+    border-radius: 6px;
+    border-left: 5px solid #ffa726;
+    margin: 1.5rem 0;
+}
+
+/* Learning objectives lists */
+h3[id*="learning"] ~ ul:first-of-type,
+h3[id*="objective"] ~ ul:first-of-type {
+    background-color: #f0f4f8;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 6px;
+    list-style-type: "💡";
+}
+
+/* Formulas and math expressions */
+.math, .formula {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+    background-color: #f9f9f9;
+    padding: 0.5rem 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+/* Variable names in text */
+var, .variable {
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-style: normal;
+    background-color: #f5f5f5;
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+    font-weight: 500;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background-color: white;
+        padding: 0;
+    }
+
+    article, main {
+        box-shadow: none;
+        padding: 0;
+    }
+
+    pre {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+
+    h2, h3, h4 {
+        page-break-after: avoid;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    article, main {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        padding: 1rem;
+        font-size: 0.85rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+</style><style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #dadada; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+</style>
+</head>
+<body>
+    <h1 class="ada-h1" id="project-1-investigating-financial-statement-analysis-fsa-ratios">Project 1: Investigating Financial-Statement-Analysis (FSA) Ratios</h1>
+<div class="toc">
+<ul>
+<li><a href="#project-1-investigating-financial-statement-analysis-fsa-ratios">Project 1: Investigating Financial-Statement-Analysis (FSA) Ratios</a><ul>
+<li><a href="#1-scenario-your-first-week-as-a-new-equity-research-analyst">1. Scenario: Your First Week as a New Equity Research Analyst</a><ul>
+<li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-deliverable">1.2. Deliverable</a></li>
+<li><a href="#13-suggested-week-by-week-milestones">1.3. Suggested Week-by-Week Milestones</a></li>
+</ul>
+</li>
+<li><a href="#2-grading">2. Grading</a><ul>
+<li><a href="#21-grading-rubric">2.1 Grading Rubric</a></li>
+</ul>
+</li>
+<li><a href="#3-data">3. Data</a><ul>
+<li><a href="#31-fsa-ratio-suggestions">3.1. FSA Ratio Suggestions</a></li>
+<li><a href="#32-cross-sectional-variables">3.2. Cross-Sectional Variables</a></li>
+<li><a href="#33-data-dictionary">3.3. Data Dictionary</a></li>
+</ul>
+</li>
+<li><a href="#4-suggested-workflow">4. Suggested Workflow</a><ul>
+<li><a href="#41-data-handling-suggestions">4.1. Data handling suggestions</a></li>
+<li><a href="#42-example-gross-margin-by-gics-sector">4.2. Example: Gross Margin by GICS Sector</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 class="ada-h2" id="1-scenario-your-first-week-as-a-new-equity-research-analyst">1. Scenario: Your First Week as a New Equity Research Analyst</h2>
+<p>You have just joined a mid-sized asset management firm as a junior analyst. Your portfolio lead hands you your first assignment: "Before we greenlight any portfolio sorts this quarter, I want to know which fundamental ratios truly differentiate firms right now. Don't run regressions yet, just start by understanding the shape and spread of core financial statement ratios across the economy."</p>
+<p>You are given a raw Compustat (S&amp;P Accounting Data) annual extract covering more than a decade of U.S. public firms from all sectors. The portfolio team doesn't want a flowery pitch, they want a concise, visual slide deck that answers:</p>
+<ol>
+<li>Which ratios show clear, economically intuitive separation across meaningful groups (industry structure, life‑cycle, firm size)?</li>
+<li>Are the observed gaps stable (persistent) or temporary (transient)?</li>
+<li>Which ratio(s) + grouping pair would you prioritize for deeper investigation?</li>
+</ol>
+<p>Your task: Initiate that analysis workflow and pitch the preliminary results. Construct a small set of ratios from raw fields (so the team trusts the numbers), profile their cross‑sectional distribution, and articulate an initial hypothesis (e.g., "High intangible intensity sectors sustain structurally higher gross margins with low dispersion"). Then, provide evidence for your hypothesis with a concise set of visualizations and clearly demonstrate your findings.</p>
+<h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
+<p>By completing this project, you will:</p>
+<ul>
+<li>Become familiar with industry standard financial accounting information, and practice ratio calculation and interpretation</li>
+<li>Gain an initial sense for cross-sectional and time-series analyses</li>
+<li>Practice executive-level data storytelling</li>
+<li>Learn to handle real-world data quality issues and outliers</li>
+</ul>
+<h3 class="ada-h3" id="12-deliverable">1.2. Deliverable</h3>
+<p>Slide-deck (<code class="fixed-width">.pptx</code> or <code class="fixed-width">.pdf</code>) containing, at most:</p>
+<ol>
+<li>Title Slide, group names</li>
+<li>Question statement</li>
+<li>Data description and summary</li>
+<li>Preliminary findings and analysis</li>
+<li>Conclusions and recommendations</li>
+<li>Thank you / questions slide</li>
+<li>Appendix (if needed, should be after the "last" slide)</li>
+</ol>
+<p>Tone: targeted to accounting and finance executives, minimal jargon, clear and concise.</p>
+<h3 class="ada-h3" id="13-suggested-week-by-week-milestones">1.3. Suggested Week-by-Week Milestones</h3>
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>Suggested Milestone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>Choose your group</strong> &ndash; Assemble your fearless crew of 1-5.<br><strong>Download &amp; Load Data</strong> &ndash; Pull data, keep 2010-2024 fiscal years.<br><strong>Get to Know Data</strong> &ndash; Describe data, inspect missings, compute summary stats, look for outliers and consider how to address them.</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>Choose Ratio(s) &amp; Groups</strong> &ndash; Select <strong>1-2 ratios</strong> and <strong>one grouping dimension</strong> (industry, age, size); create box/violin plots &amp; median trends.<br><strong>Pose Hypothesis</strong> &ndash; Draft rationale grounded in accounting/econ theory.</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>Support Hypothesis</strong> &ndash; Compare means/medians (t-tests if you're feeling fancy!), heatmaps, relative-difference metrics; stress-test with alternative buckets.<br><strong>Make Presentation</strong> &ndash; Assemble slide deck.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 class="ada-h2" id="2-grading">2. Grading</h2>
+<p>Your project will be graded based on the following criteria:</p>
+<ol>
+<li><strong>Clarity of Hypothesis</strong>: Does the analysis provide a clear research question? Is it easy to understand the logic behind the research question?</li>
+<li><strong>Data Preparation &amp; Documentation</strong>: Is the data well-described and summarized? Are key characteristics and potential issues highlighted?</li>
+<li><strong>Findings and Analyses</strong>: Are the initial findings clearly presented? Is there a logical flow from the data to the findings? Are the visualizations aesthetic, clear, and informative?</li>
+<li><strong>Presentation</strong>: Is the final presentation well-organized and professional?</li>
+</ol>
+<p>Note, while you need to include a slide for "Conclusions and Recommendations", note that below the rubric is merely verifying its presence, not its content. This is because I do not want you to stress about the specific recommendations at this stage, nor whether your evidence "supports" some imaginary trading strategy. I want you to focus on the data, visualization, and presentation, with some consideration of an economic story behind FSA ratios thrown in for good luck.</p>
+<h3 class="ada-h3" id="21-grading-rubric">2.1 Grading Rubric</h3>
+<ol>
+<li><strong>Clarity of Hypothesis</strong>: How well presented, clear, and logical the hypothesis is<ul>
+<li><strong>Excellent</strong>: Theory-grounded with specific, quantified predictions; acknowledges limitations; connects to business context</li>
+<li><strong>Good</strong>: Clear hypothesis with solid economic reasoning</li>
+<li><strong>Needs Work</strong>: Basic hypothesis but weak theoretical foundation</li>
+<li><strong>Poor</strong>: Vague predictions without economic foundation</li>
+</ul>
+</li>
+<li><strong>Data Preparation &amp; Documentation</strong>: How well explained, justified, and reasonable the data preparation is<ul>
+<li><strong>Excellent</strong>: Systematic approach to outliers with clear rationale, documented cleaning decisions, fully reproducible workflow, handles edge cases thoughtfully</li>
+<li><strong>Good</strong>: Basic cleaning with some documentation, addresses most data quality issues</li>
+<li><strong>Needs Work</strong>: Ad-hoc cleaning, undocumented decisions, missing steps</li>
+<li><strong>Poor</strong>: Minimal data preparation, no documentation</li>
+</ul>
+</li>
+<li><strong>Visuals</strong>: How compelling, informative, clear, and comprehensive the visual evidence is<ul>
+<li><strong>Excellent</strong>: Compelling, well-designed charts with clear annotations, multiple perspectives (cross-sectional + time-series), insights clearly highlighted</li>
+<li><strong>Good</strong>: Good visualizations with some annotations and insights</li>
+<li><strong>Needs Work</strong>: Basic charts with limited insight generation</li>
+<li><strong>Poor</strong>: Poor chart design, no clear insights</li>
+</ul>
+</li>
+<li><strong>Evidence &amp; "Testing"</strong>: How well the evidence supports the hypothesis<ul>
+<li><strong>Excellent</strong>: Multiple forms of evidence clearly tied to hypothesis, quantified differences, sensitivity analysis (e.g. time-series persistence, outlier impact, etc.)</li>
+<li><strong>Good</strong>: Some evidence with basic comparisons, tied to hypothesis</li>
+<li><strong>Needs Work</strong>: Limited evidence provided, no clear link to hypothesis</li>
+<li><strong>Poor</strong>: Weak or missing evidence</li>
+</ul>
+</li>
+<li><strong>Conclusions &amp; Recommendations</strong>: Whether there is a conclusion presented. The focus of this project is on the data cleaning and visualization, thus the conclusion slide is merely being graded on its existence<ul>
+<li><strong>Excellent</strong>: The conclusion is presented clearly, regardless of its economic feasibility</li>
+<li><strong>Poor</strong>: No conclusion is presented</li>
+</ul>
+</li>
+<li><strong>Storytelling &amp; Slide Flow</strong>: How cohesive the slides are, whether they incorporate good storytelling elements visually and logically<ul>
+<li><strong>Excellent</strong>: Clear narrative arc, effective text, strong takeaway headlines, executive-ready presentation</li>
+<li><strong>Good</strong>: Good flow with reasonable cohesion</li>
+<li><strong>Needs Work</strong>: Basic presentation, limited connection between slides</li>
+<li><strong>Poor</strong>: Poor organization and design</li>
+</ul>
+</li>
+<li><strong>Professionalism &amp; Formatting</strong>: How aesthetic and professional the slides appear<ul>
+<li><strong>Excellent</strong>: Aesthetic, professional slides, consistent formatting</li>
+<li><strong>Good</strong>: Minor formatting issues, otherwise professional and aesthetic</li>
+<li><strong>Needs Work</strong>: Several formatting/grammar issues, or inconsistent design elements</li>
+<li><strong>Poor</strong>: Unprofessional appearance, significant formatting problems</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 class="ada-h2" id="3-data">3. Data</h2>
+<ul>
+<li><strong>Source:</strong> Compustat North America Fundamentals Annual file <code class="fixed-width">CompustatAnnual.csv</code>.</li>
+<li><strong>Identifying Variables</strong> (keys): <code class="fixed-width">firm_id</code> and <code class="fixed-width">fyear</code> (Fiscal Year).</li>
+<li><strong>Accounting Variables</strong>: See Section <a href="#42-data-dictionary">3.3 below</a> for definition of all variables.</li>
+</ul>
+<h3 class="ada-h3" id="31-fsa-ratio-suggestions">3.1. FSA Ratio Suggestions</h3>
+<p>The following suggestions are based on common financial ratios used in Financial Statement Analysis, and some brief economic ideas as to their variance across the three cross sections: Industry, Firm Age, and Firm Size.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Ratio</strong></th>
+<th><strong>Formula</strong></th>
+<th><strong>Industry</strong></th>
+<th><strong>Firm Age</strong></th>
+<th><strong>Firm Size</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gross Margin</strong></td>
+<td><code class="fixed-width">(Revenue - COGS) / Revenue</code></td>
+<td>Varies widely (e.g., software vs. retail)</td>
+<td></td>
+<td>Economies of scale may increase it</td>
+</tr>
+<tr>
+<td><strong>Operating Margin</strong></td>
+<td><code class="fixed-width">EBIT / Revenue</code></td>
+<td>Capital vs. labor-intensive firms</td>
+<td>Improves with scale and learning</td>
+<td>Larger firms may have better margins</td>
+</tr>
+<tr>
+<td><strong>ROA (Return on Assets)</strong></td>
+<td><code class="fixed-width">Net Income / Avg Total Assets</code></td>
+<td>Asset-light vs. asset-heavy</td>
+<td>Increases with maturity</td>
+<td>Larger firms often more efficient</td>
+</tr>
+<tr>
+<td><strong>ROE (Return on Equity)</strong></td>
+<td><code class="fixed-width">Net Income / Avg Shareholders' Equity</code></td>
+<td>Influenced by leverage norms</td>
+<td>Mature firms may stabilize</td>
+<td>May be inflated by buybacks</td>
+</tr>
+<tr>
+<td><strong>Current Ratio</strong></td>
+<td><code class="fixed-width">Current Assets / Current Liabilities</code></td>
+<td>Manufacturing &gt; tech</td>
+<td>Young firms may hoard cash</td>
+<td>Larger firms more efficient in WC</td>
+</tr>
+<tr>
+<td><strong>Quick Ratio</strong></td>
+<td><code class="fixed-width">(Current Assets - Inventory) / Current Liabilities</code></td>
+<td>Retail (low) vs. services (high)</td>
+<td>Low for new firms</td>
+<td>Stronger liquidity with size</td>
+</tr>
+<tr>
+<td><strong>Inventory Turnover</strong></td>
+<td><code class="fixed-width">COGS / Avg Inventory</code></td>
+<td>Retail/high-volume &gt; SaaS</td>
+<td></td>
+<td>Larger firms better supply chains</td>
+</tr>
+<tr>
+<td><strong>Receivables Turnover</strong></td>
+<td><code class="fixed-width">Revenue / Avg Accounts Receivable</code></td>
+<td>Varies by sales model</td>
+<td>Slower turnover in early stages</td>
+<td>Larger firms may negotiate better terms</td>
+</tr>
+<tr>
+<td><strong>Debt/Equity</strong></td>
+<td><code class="fixed-width">Total Debt / Shareholders' Equity</code></td>
+<td>Utilities &gt; Tech</td>
+<td>Increases with access to capital</td>
+<td>Large firms access capital markets</td>
+</tr>
+<tr>
+<td><strong>Interest Coverage</strong></td>
+<td><code class="fixed-width">EBIT / Interest Expense</code></td>
+<td>Capital-intensive firms vary</td>
+<td>Grows with earnings stability</td>
+<td>Larger firms usually better</td>
+</tr>
+<tr>
+<td><strong>CapEx / Sales</strong></td>
+<td><code class="fixed-width">Capital Expenditures / Revenue</code></td>
+<td>Telecom &gt; Services</td>
+<td>Higher for young firms</td>
+<td>Declines with maturity</td>
+</tr>
+<tr>
+<td><strong>R&amp;D / Sales</strong></td>
+<td><code class="fixed-width">R&amp;D Expense / Revenue</code></td>
+<td>Pharma/Tech &gt; Industrials</td>
+<td>High in early-stage firms</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>SG&amp;A / Sales</strong></td>
+<td><code class="fixed-width">SG&amp;A Expense / Revenue</code></td>
+<td>Lean ops vs. high-touch</td>
+<td>Declines with experience</td>
+<td>Economies of scale reduce it</td>
+</tr>
+<tr>
+<td><strong>Free Cash Flow / Net Income</strong></td>
+<td><code class="fixed-width">(Operating CF - CapEx) / Net Income</code></td>
+<td>More stable in mature industries</td>
+<td>Negative in early years</td>
+<td>Improves with efficiency</td>
+</tr>
+<tr>
+<td><strong>Revenue Growth (YoY)</strong></td>
+<td><code class="fixed-width">(Revenue_t - Revenue_{t-1}) / Revenue_{t-1}</code></td>
+<td>High-growth sectors differ</td>
+<td>Higher in young firms</td>
+<td>Slower growth for larger firms</td>
+</tr>
+</tbody>
+</table>
+<h3 class="ada-h3" id="32-cross-sectional-variables">3.2. Cross-Sectional Variables</h3>
+<p>I suggest the following measures, included in the dataset, for potentially interesting cross-sectional analysis:</p>
+<ul>
+<li><strong>Industry</strong>: The GICS industry classification of the firm.</li>
+<li><strong>Firm Age</strong>: The age of the firm (post-IPO) in days.</li>
+<li><strong>Firm Size</strong>: Measured by total assets or market capitalization.</li>
+</ul>
+<p>It is up to you which cross-sectional variable you may wish to use, or you may choose to create your own (e.g. use one FSA variable to split the firms, and analyze the difference in another FSA variable? We'd call that an interaction effect, and boy would it be neat!).</p>
+<p>While Industry, being a categorical variable already, is relatively straightforward to use, Firm Age and Firm Size (continuous variables) will likely require "binning," which is the process of creating "bins" or categories to group firms. For example, you could take firms from 0-5 years as one bin, 6-10 years as another, and so on. How you choose to bin these variables is an important analytical choice, and in the real world would depend on the specific research question you are interested in. Here, I suggest trying different bin sizes and looking at the distribution of ratios within each bin to help you choose a good binning strategy.</p>
+<h3 class="ada-h3" id="33-data-dictionary">3.3. Data Dictionary</h3>
+<p>The following variables are provided in <code class="fixed-width">CompustatAnnual.csv</code>. Unless otherwise specified, financial numbers are all in millions of USD.</p>
+<ul>
+<li><code class="fixed-width">firm_id</code>: ID to identify individual firms, preserving continuity through M&amp;A activities</li>
+<li><code class="fixed-width">fyear</code>: Fiscal Year (based on majority of year, so 2000 connotes fiscal year ends between 7/1/1999 and 6/30/2000)</li>
+<li><code class="fixed-width">fiscal_year_end_month</code>: Fiscal Year End Month (1 - January, 12 - December)</li>
+<li><code class="fixed-width">name</code>: Firm Name (<code class="fixed-width">conm</code>)</li>
+<li><code class="fixed-width">tic</code>: Ticker Symbol</li>
+<li><code class="fixed-width">age_days</code>: Age (post IPO) of firm, in days (calculated as the number of days since the first filed 10-K)</li>
+<li><code class="fixed-width">act</code>: Current Assets</li>
+<li><code class="fixed-width">ap</code>: Accounts Payable - Trade</li>
+<li><code class="fixed-width">at</code>: Total Assets</li>
+<li><code class="fixed-width">bve</code>: Book Value of Equity</li>
+<li><code class="fixed-width">capx</code>: Capital Expenditures</li>
+<li><code class="fixed-width">che</code>: Cash and Cash Equivalents</li>
+<li><code class="fixed-width">cogs</code>: Cost of Goods Sold</li>
+<li><code class="fixed-width">dvt</code>: Dividends - Total</li>
+<li><code class="fixed-width">ebit</code>: Earnings Before Interest &amp; Taxes</li>
+<li><code class="fixed-width">ebitda</code>: Earnings Before Interest</li>
+<li><code class="fixed-width">epspi</code>: Earnings Per Share (Basic) - Including Extraordinary Items (amount in $ / share)</li>
+<li><code class="fixed-width">epspx</code>: Earnings Per Share (Basic) - Excluding Extraordinary Items (amount in $ / share)</li>
+<li><code class="fixed-width">gics_sector</code>: GICS Sector code</li>
+<li><code class="fixed-width">gics_sector_name</code>: GICS Sector code name</li>
+<li><code class="fixed-width">gics_group</code>: GICS Group code</li>
+<li><code class="fixed-width">gics_industry</code>: GICS Industry code</li>
+<li><code class="fixed-width">gics_subindustry</code>: GICS Subindustry code</li>
+<li><code class="fixed-width">ib</code>: Income Before Extraordinary Items</li>
+<li><code class="fixed-width">invt</code>: Inventory  </li>
+<li><code class="fixed-width">lct</code>: Current Liabilities  </li>
+<li><code class="fixed-width">lt</code>: Total Liabilities  </li>
+<li><code class="fixed-width">mve</code>: Market Value of Equity  (calculated as <code class="fixed-width">MAX(prcc_f * csho, mkvalt)</code>)</li>
+<li><code class="fixed-width">ni</code>: Net Income  </li>
+<li><code class="fixed-width">oancf</code>: Operating Cash Flow</li>
+<li><code class="fixed-width">pi</code>: Pretax Income</li>
+<li><code class="fixed-width">re</code>: Retained Earnings</li>
+<li><code class="fixed-width">recd</code>: Receivables - Estimated Doubtful</li>
+<li><code class="fixed-width">rect</code>: Accounts Receivable  </li>
+<li><code class="fixed-width">revt</code>: Revenue - Total</li>
+<li><code class="fixed-width">sale</code>: Sales/Turnover (Net)  </li>
+<li><code class="fixed-width">seq</code>: Shareholders' Equity  </li>
+<li><code class="fixed-width">share_price</code>: Price Close - Annual - Fiscal (<code class="fixed-width">prcc_f</code>)</li>
+<li><code class="fixed-width">shares_outstanding</code>: Common Shares Outstanding (<code class="fixed-width">csho</code>)</li>
+<li><code class="fixed-width">total_debt</code>: Total Debt (calculated as <code class="fixed-width">dltt + dlc</code>)</li>
+<li><code class="fixed-width">xad</code>: Advertising Expense</li>
+<li><code class="fixed-width">xint</code>: Interest Expense  </li>
+<li><code class="fixed-width">xrd</code>: R&amp;D Expense  </li>
+<li><code class="fixed-width">xsga</code>: SG&amp;A Expense  </li>
+<li><code class="fixed-width">auditor</code>: Name of Auditor</li>
+<li><code class="fixed-width">auop</code>: Auditor Opinion</li>
+<li><code class="fixed-width">auopic</code>: Auditor Opinion - Internal Control</li>
+<li><code class="fixed-width">bign</code>: Big N Auditor (calculated from <code class="fixed-width">au</code>)</li>
+<li><code class="fixed-width">emp</code>: Employees (in thousands)</li>
+</ul>
+<hr />
+<h2 class="ada-h2" id="4-suggested-workflow">4. Suggested Workflow</h2>
+<ol>
+<li>Download and filter <code class="fixed-width">CompustatAnnual.csv</code>, keeping years 2010&ndash;2024 and dropping missing values for the variables of interest.</li>
+<li>Add values from previous years (called lags) for calculating year-over-year changes, and averages if necessary.</li>
+<li>Perform initial exploratory analysis (e.g. summary statistics, correlations) to understand the data landscape.</li>
+<li>Compute candidate ratios, handling zero denominators and addressing outliers.</li>
+<li>Select 1&ndash;2 FSA ratios to calculate, considering the composite story they might tell (i.e. how they interact or jointly provide insights into firm performance).</li>
+<li>Pick a grouping dimension from: industry (via <a href="https://en.wikipedia.org/wiki/Global_Industry_Classification_Standard" target="_blank">GICS</a>), or firm age or size buckets (you determine the buckets, e.g. &lt; 5 years, 5-10 years, &gt; 10 years for age).</li>
+<li>Investigate distributions across firms (e.g. using boxplots) and over time.</li>
+<li>Draft a hypothesis with a simple economic and accounting story about differences in these ratios across your group (i.e. by industry or over time/firm age).</li>
+<li>Test your hypothesis via comparisons (median gaps, stability over time, simple difference ratios, sensitivity to alternative buckets or trimming). <em>Note, this is not rigorous hypothesis testing, but rather a way to explore the data and see if it seems to support your hypothesis.</em></li>
+<li>Build slide deck with the story arc: Question &rarr; Data &rarr; Evidence &rarr; Conclusion.</li>
+</ol>
+<h3 class="ada-h3" id="41-data-handling-suggestions">4.1. Data handling suggestions</h3>
+<p>Suggestions for handling data quality issues, which you should document in the Appendix if needed (these are neither required nor exhaustive):</p>
+<ul>
+<li><strong>Outlier Treatment</strong>: Consider <a href="https://en.wikipedia.org/wiki/Winsorizing" target="_blank">winsorizing</a> at 1st/99th percentiles rather than simple exclusion. Consider whether to handle outliers before or after calculating ratios.</li>
+<li><strong>Negative Denominators</strong>: Consider cases where denominators are negative (e.g., negative revenue)</li>
+<li><strong>Fiscal Year Timing</strong>: Account for different fiscal year-ends when comparing firms</li>
+<li><strong>Missing Data</strong>: Document your approach to missing values (exclude, interpolate, or flag)</li>
+</ul>
+<h3 class="ada-h3" id="42-example-gross-margin-by-gics-sector">4.2. Example: Gross Margin by GICS Sector</h3>
+<ol>
+<li>
+<p><strong>Data Preparation</strong></p>
+<ul>
+<li>Download data, keep years 2010 - 2024, and drop observations with missing values of <code class="fixed-width">sale</code> or <code class="fixed-width">cogs</code></li>
+<li>Keep columns <code class="fixed-width">firm_id</code>, <code class="fixed-width">fyear</code>, <code class="fixed-width">sale</code>, <code class="fixed-width">cogs</code>, <code class="fixed-width">gics_sector_name</code></li>
+<li><strong>Code snippet for outlier detection:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Observe outliers</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;sale != 0 and cogs.notnull()&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;gross_margin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">sale</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">cogs</span><span class="p">)</span><span class="o">/</span><span class="n">df</span><span class="o">.</span><span class="n">sale</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;variable&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span>
+        <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s1">&#39;winzorized mean&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="p">(</span><span class="n">_1</span> <span class="o">:=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)),</span> <span class="n">upper</span><span class="o">=</span><span class="p">(</span><span class="n">_99</span> <span class="o">:=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.99</span><span class="p">)))</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+        <span class="s1">&#39;1%&#39;</span><span class="p">:</span> <span class="n">_1</span><span class="p">,</span>
+        <span class="s1">&#39;# &lt; 1%&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1"> &lt; </span><span class="si">{</span><span class="n">_1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)),</span>
+        <span class="s1">&#39;25%&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">),</span>
+        <span class="s1">&#39;50%&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.5</span><span class="p">),</span>
+        <span class="s1">&#39;75%&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">),</span>
+        <span class="s1">&#39;99%&#39;</span><span class="p">:</span> <span class="n">_99</span><span class="p">,</span>
+        <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+        <span class="s1">&#39;# &gt; 99%&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1"> &gt; </span><span class="si">{</span><span class="n">_99</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)),</span>
+    <span class="p">}</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">,</span> <span class="s1">&#39;cogs&#39;</span><span class="p">,</span> <span class="s1">&#39;gross_margin&#39;</span><span class="p">]</span>
+<span class="p">])</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;variable&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>Ratio Construction</strong></p>
+<ul>
+<li>Create new column: Gross Margin = (sale − cogs) / sale</li>
+<li><strong>Economic meaning</strong>: Portion of revenue that represents profit; varies with capital intensity, product mix, and scalability of production (operating leverage)</li>
+<li><strong>Handle edge cases</strong>: Zero sales (or very small values), negative sales or COGS, missing values</li>
+</ul>
+</li>
+<li>
+<p><strong>Initial Analysis</strong></p>
+<ul>
+<li>Observe 5 number summary of <code class="fixed-width">gross_margin</code>, and again over time (by <code class="fixed-width">fyear</code>)</li>
+<li>Note that the mean is <code class="fixed-width">-8</code> and the median is <code class="fixed-width">0.4</code> - remember about outliers and skewed distributions</li>
+<li><strong>Decision on outliers</strong>: Remove any gross_margin &lt; 0 or &gt; 1 (document this choice in appendix)</li>
+</ul>
+</li>
+<li>
+<p><strong>Cross-sectional Analysis</strong></p>
+<ul>
+<li>Make a boxplot of <code class="fixed-width">gross_margin</code> by <code class="fixed-width">gics_sector_name</code> for 2024, noting those industries that stand out</li>
+<li><strong>Create industry benchmarks</strong>: Calculate sector medians, quartiles, and ranges</li>
+</ul>
+</li>
+<li>
+<p><strong>Time-series Analysis</strong></p>
+<ul>
+<li>Make a time-series plot of <code class="fixed-width">gross_margin</code> over <code class="fixed-width">fyear</code> for each <code class="fixed-width">gics_sector_name</code>, noting the change over time of each sector</li>
+<li><strong>Check for dispersion</strong>: Examine the spread of <code class="fixed-width">gross_margin</code> values within each sector over time, for example the interquartile range (IQR) or standard deviation (or scaled versions of either, e.g. coefficient of variation, which is the ratio of the standard deviation to the mean).</li>
+</ul>
+</li>
+<li>
+<p><strong>Hypothesis Formation</strong></p>
+<ul>
+<li>Summarize an economic story based on insights from the visualizations</li>
+<li><strong>Hypothesis Example</strong>: "Asset‑light or IP‑heavy sectors (Information Technology, Health Care) exhibit persistently higher gross margins than Industrials and Consumer Staples due to lower variable production costs; the median margin difference exceeds 10 percentage points over the entire time period."</li>
+</ul>
+</li>
+<li>
+<p><strong>Evidence Gathering</strong></p>
+<ul>
+<li>Choose descriptive statistics and visualizations that best capture your story. For example:<ul>
+<li><strong>Median difference</strong> = median(GM_high_sector) − median(GM_low_sector)</li>
+<li><strong>Relative difference</strong> = difference / median(low_sector)</li>
+<li><strong>Stability</strong>: Standard deviation of annual difference across years</li>
+<li><strong>Sensitivity</strong>: Recompute after excluding top/bottom 5% of GM within each sector</li>
+<li><strong>Multi-line plot</strong>: Sector median GM by year, highlight top vs bottom sector</li>
+<li><strong>Boxplot</strong>: 2024 data sorted by sector median; highlight top 2, bottom 2</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Slide Deck Assembly</strong>
+* Assemble slide deck with a clear, visually appealing slide for each step: Question &rarr; Data (including the cleaning/filtering/etc. choices you made) &rarr; Evidence (concise slides with your visualizations) &rarr; Conclusion (connecting your evidence to your hypothesis). Slide outlines:</p>
+<ul>
+<li>
+<p><strong>Slide 1 (Title &amp; Team)</strong></p>
+<ul>
+<li>Project title, team member names, date</li>
+<li>Professional formatting consistent throughout deck</li>
+</ul>
+</li>
+<li>
+<p><strong>Slide 2 (Business Context &amp; Question)</strong></p>
+<ul>
+<li>Clear research question with measurable outcomes: "Does [ratio] vary materially by [industry]?"</li>
+<li>Economic rationale: "We expect this difference because [brief explanation]"</li>
+<li>Frame as investment decision: "Should we control for [industry] when building our portfolio on [ratio]?"</li>
+<li>Optionally include specific decision framework: "What action would different findings trigger?"</li>
+</ul>
+</li>
+<li>
+<p><strong>Slide 3 (Data &amp; Cleaning Choices)</strong></p>
+<ul>
+<li>Description of data (what, from where, when, etc.)</li>
+<li>Sample size (after cleaning)</li>
+<li>Time period and industry coverage</li>
+<li>Optional (keeping slides clear and concise): Summary statistics, basic summary visualization</li>
+</ul>
+</li>
+<li>
+<p><strong>Slide 4 (Key Visuals)</strong></p>
+<ul>
+<li>A cross-sectional view (e.g., boxplot by industry)</li>
+<li>A time-series view (e.g., trends over years)</li>
+<li>Clear axis labels, legends, and takeaway headlines</li>
+<li>Annotate key insights directly on charts (e.g. line-thickness, opacity, labels, etc.)</li>
+</ul>
+</li>
+<li>
+<p><strong>Slide 5 (Evidence of Difference)</strong></p>
+<ul>
+<li>Size of differences: "Technology firms show 18pp higher median margins"</li>
+<li>Economic significance: "Gap maintained over 10-year period with &lt;2pp variation"</li>
+<li>Optional: Sensitivity analysis results (e.g. excluding top/bottom 5% of GM within each sector)</li>
+</ul>
+</li>
+<li>
+<p><strong>Slide 6 (Conclusion &amp; Implications)</strong></p>
+<ul>
+<li>Connect evidence back to original business question</li>
+<li>Specific recommendations for executive team (e.g. adjust portfolio construction based on industry)</li>
+<li>Optional: Acknowledge limitations and suggest further analysis</li>
+</ul>
+</li>
+<li>
+<p><strong>[Optional] Slides 7+ (Appendix)</strong></p>
+<ul>
+<li><em>Note: the idea of an appendix slide is resources you would show if an audience member wants to dig deeper into the analysis. As such, it does not have to be as clear and concise as the main slides, but should still be professional.</em></li>
+<li>Data cleaning choices and their effects (dropping firms, bias from winsorization, etc.)</li>
+<li>Ratio formulas and calculation methods</li>
+<li>More complex vizualiations</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</body>
+</html>

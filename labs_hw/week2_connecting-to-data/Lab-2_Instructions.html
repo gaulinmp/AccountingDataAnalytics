@@ -38,24 +38,6 @@ details.inline-image {
      /* padding: 2px 4px; */
  }
 
- /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
- /* Make horizontal lines connect through column boundaries */
- /* table {
-     border-collapse: collapse;
- } */
- /* General styling of all cells */
- table > :is(thead, tbody) > tr > :is(th, td) {
-     padding: 3px;
-     text-align: left;
- }
- table > thead > tr > :is(th, td) {
-     border-top: 2px solid; /* Top thick line */
-     border-bottom: 1px solid; /* Below head thin line */
- }
- table > tbody > tr:last-child > :is(th, td) {
-     border-bottom: 2px solid; /* Bottom thick line */
- }
-
 /* Claud's generated CSS */
 /* Base Styles */
 body {
@@ -212,11 +194,27 @@ pre[class*="language-"]::before {
 
 /* Tables */
 table {
-    /* width: 100%; */
     border-collapse: collapse;
     margin: 1.5rem 0;
-    /* background-color: white; */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
 }
 
 tr:nth-child(even) {
@@ -244,9 +242,10 @@ blockquote p:last-child {
 /* Special callout boxes */
 .note, .warning, .tip {
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem;
     border-radius: 6px;
     border-left: 5px solid;
+    border-right: 5px solid;
 }
 
 .note {
@@ -273,6 +272,11 @@ em {
 strong {
     font-weight: 600;
     color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
 }
 
 /* Links */
@@ -521,16 +525,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><a href="#2-data">2. Data</a></li>
 <li><a href="#3-how-to-steps">3. How-to Steps</a><ul>
 <li><a href="#31-excel-steps">3.1. Excel Steps</a></li>
-<li><a href="#32-tableau-desktop-steps">3.2. Tableau Desktop Steps</a></li>
-<li><a href="#33-python-steps">3.3. Python Steps</a></li>
+<li><a href="#32-python-steps">3.2. Python Steps</a></li>
 </ul>
 </li>
 <li><a href="#4-submission">4. Submission</a></li>
 <li><a href="#5-optional-pivot-tables-overview">5. Optional Pivot Tables Overview</a><ul>
 <li><a href="#51-excel-pivot-tables">5.1. Excel Pivot Tables</a></li>
-<li><a href="#52-tableau-pivot-tables-cross-tabs">5.2. Tableau Pivot Tables (Cross-Tabs)</a></li>
-<li><a href="#53-python-pivot-tables">5.3. Python Pivot Tables</a></li>
-<li><a href="#54-comparing-approaches">5.4. Comparing Approaches</a></li>
+<li><a href="#52-python-pivot-tables">5.2. Python Pivot Tables</a></li>
+<li><a href="#53-comparing-approaches">5.3. Comparing Approaches</a></li>
 </ul>
 </li>
 </ul>
@@ -538,9 +540,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ul>
 </div>
 <h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
-<p><strong>Submission:</strong> a PDF document with two screenshots:</p>
+<p><strong>Submission:</strong> Two screenshots:</p>
 <ul>
-<li>One of the cleaned dataset (at least including all columns and the first few rows)</li>
+<li>One of the cleaned dataset (at least including all columns and the first 10 rows)</li>
 <li>One of the unique User IDs associated with the journal entries</li>
 </ul>
 <h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
@@ -552,31 +554,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Perform initial exploration of data content.</li>
 </ul>
 <h3 class="ada-h3" id="12-rubric-and-grading">1.2. Rubric and Grading</h3>
-<ol>
-<li><strong>Submitted</strong>: <em>Submitted the assignment</em><ul>
-<li><strong>3 - Successful:</strong> Submitted a completed solution. (80 pts)</li>
-<li><strong>2 - Successful - late:</strong> Submitted a completed solution after the deadline. (70 pts)</li>
-<li><strong>1 - Incomplete:</strong> Submitted a partial result. (50 pts)</li>
-<li><strong>0 - No Evidence:</strong> No submission. (0 pts)</li>
+<p>The intent of this submission is to produce a cleanly formatted dataset that could be handed off to a client or supervisor. It should look professional and require no further cleaning by the recipient.</p>
+<ul>
+<li><em>5 points</em>: No mistakes. The dataset is cleanly formatted (no extra whitespace, numbers are properly formatted, etc.), and column headers are correct.</li>
+<li><em>4 points</em>: Some mistakes (e.g., leftover whitespace like newlines or spaces at the beginning of the cell, unformatted numbers, correctable header issues).</li>
+<li><em>3 points</em>: Significant errors.</li>
+<li><em>2 points</em>: Incomplete submission.</li>
 </ul>
-</li>
-<li><strong>Mastery</strong>: <em>Submitted the assignment in more than one modality. Expectation is just one, this is for more points and more experience.</em><ul>
-<li><strong>2 - Exceeds:</strong> Submitted in three or more modalities, amazing job! (10 pts)</li>
-<li><strong>1 - Mastery:</strong> Submitted in two modalities, fantastic job! (5 pts)</li>
-<li><strong>0 - Expected:</strong> Submitted one modality, great job! (0 pts)</li>
-</ul>
-</li>
-<li><strong>Subjective</strong> quality: <em>Subjective estimate of the quality of the output. For this lab, that will be based on the appearance and clarity of the output and tables demonstrated in your screenshots.</em><ul>
-<li><strong>3 - High Quality:</strong> Beautiful, graceful, clever, or otherwise high quality product. (15 pts)</li>
-<li><strong>2 - Good Quality:</strong> Aesthetic, elegant, logical, or otherwise good quality. (10 pts)</li>
-<li><strong>1 - Low Quality:</strong> Messy, quick, illogical, confusing, or otherwise low quality product. (5 pts)</li>
-<li><strong>0 - None:</strong> No submission. (0 pts)</li>
-</ul>
-</li>
-</ol>
-<p><em>AI useage note: I developed a rubric in Canvas, then I took a screenshot of it, pasted it into Gemini with the prompt "Please transcribe this rubric to markdown format", and got the above text. I tell you this as a reminder of little uses of LLMs that add up to save a whole lot of time.</em></p>
 <h2 class="ada-h2" id="2-data">2. Data</h2>
-<p>The dataset for this lab is <code class="fixed-width">JEA Detail.txt</code>, a <strong>tab-separated value (TSV)</strong> file containing journal entry line items. This is a type of <strong>delimited text file</strong>, which is a common ways to store and exchange tabular data. Instead of a special format like an Excel <code class="fixed-width">.xlsx</code> file, these are simple text files that can be opened by almost any application.</p>
+<p>The dataset for this lab is <code class="fixed-width">JEA Detail Raw.txt</code> (<a href="https://utah.instructure.com/courses/1243774/files/192656669/download?download_frd=1" target="_blank">link</a>), a <strong>tab-separated value</strong> file containing journal entry line items. This is a type of <strong>delimited text file</strong>, which is a common ways to store and exchange tabular data. Instead of a special format like an Excel <code class="fixed-width">.xlsx</code> file, these are simple text files that can be opened by almost any application.</p>
 <details>
 <summary>More information on delimited files</summary>
 <p>In delimited files, columns are separated by a specific character, the <strong>delimiter</strong>. Common delimiters include:</p>
@@ -667,40 +653,8 @@ Account            Category  Date       Period  ID         Manual  Description  
 </ul>
 </li>
 </ol>
-<h3 class="ada-h3" id="32-tableau-desktop-steps">3.2. Tableau Desktop Steps</h3>
-<p>Tableau Desktop's Data Source tab offers tools to clean data upon import. </p>
-<p><em>Note:</em> If you are using Tableau Cloud, for some reason the "Data Interpreter" feature does not work as expected on text files. The workaround is to open the text file in Excel, and then save it as an excel file. Don't do any cleaning, don't touch anything, just save as an excel file. That's all. Then the magic Tableau AI data cleaning will work. You could also do all the cleaning in Excel as outlined above, then import that cleaned file into Tableau for pivoting / analysis / visualization. This kind of hybrid workflow is very common in industry, and it lets each modality's strengths shine!</p>
-<ol>
-<li><strong>Connect to Data:</strong><ul>
-<li>Open Tableau.</li>
-<li>On the "Connect" pane, click on <code class="fixed-width">Text File</code>.</li>
-<li>Navigate to and select <code class="fixed-width">JEA Detail.txt</code>. <strong>Note:</strong> If using Tableau Cloud, first open the text file in Excel and save it as an Excel file, then connect to that Excel file instead.</li>
-</ul>
-</li>
-<li><strong>Clean the Data with Data Interpreter:</strong> <ul>
-<li>Tableau will open the Data Source tab. It will misinterpret the file structure initially.</li>
-<li>In the left pane, under "Sheets", turn on the <code class="fixed-width">Data Interpreter</code> checkbox.</li>
-<li>Data Interpreter will analyze the file and identify the actual data table, often correctly removing headers and footers.<ul>
-<li>I had to rename a few columns, e.g. <code class="fixed-width">F3</code> &rarr; <code class="fixed-width">Post Date</code>. See table snippet above for column names.</li>
-</ul>
-</li>
-<li>Review the results to ensure the data looks correct.</li>
-<li>You may need to add filters to remove any remaining unwanted rows.</li>
-<li>Screenshot the first few rows of this table for submission.</li>
-</ul>
-</li>
-<li><strong>Go to Worksheet and Explore:</strong><ul>
-<li>Click on "Sheet 1" to open the analysis / visualization step.</li>
-</ul>
-</li>
-<li><strong>Initial Analysis:</strong> Pivot Tables in Tableau Cloud are almost default functionality, which is great!<ol>
-<li>Drag the <code class="fixed-width">User ID</code> dimension from the Data pane (on the left) to either the "Rows", "Columns", or "Marks" shelves. Which you prefer to screenshot for submission is up to your sense of Aesthetics</li>
-<li><em>Tip for Later</em>: If you drag another dimension to a different shelf, e.g. <code class="fixed-width">User ID</code> to "Rows" and <code class="fixed-width">Period</code> to "Columns", and some value to calculate, say <code class="fixed-width">Amount</code> to "Marks", Tableau will create a cross-tab view (e.g. Pivot Table).</li>
-</ol>
-</li>
-</ol>
-<h3 class="ada-h3" id="33-python-steps">3.3. Python Steps</h3>
-<p>Note to Python users: as with all programming, our lives are simultaneously easier and harder. Easier, because we are in control of every byte of data and can set up automation to be far more robust. Harder, because we must control of every byte of data and must set up automation to be far more robust. In this Lab, that means we need to be explicit about handling each data issue in the file that tools like Excel and Tableau might manage for us. To get you started, I have prepared a notebook that you can open on Colab. Merely click the link below to open Colab, then drag the <code class="fixed-width">JEA Detail.txt</code> file into the Colab file explorer so the code can access it.</p>
+<h3 class="ada-h3" id="32-python-steps">3.2. Python Steps</h3>
+<p>Note to Python users: as with all programming, our lives are simultaneously easier and harder. Easier, because we are in control of every byte of data and can set up automation to be far more robust. Harder, because we must control of every byte of data and must set up automation to be far more robust. In this Lab, that means we need to be explicit about handling each data issue in the file that tools like Excel might manage for us. To get you started, I have prepared a notebook that you can open on Colab. Merely click the link below to open Colab, then either drag the <code class="fixed-width">JEA Detail Raw.txt</code> file into the Colab file explorer so the code can access it, or add it to your Google Drive, mount said drive, copy the path, and paste it in to your code (as we did in Lab 1).</p>
 <p><a href="https://colab.research.google.com/github/gaulinmp/AccountingDataAnalytics/blob/main/labs_hw/week2_connecting-to-data/Lab 2 - Opening and Cleaning Data.ipynb" target="_blank" target="_parent">
 <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a></p>
@@ -708,7 +662,7 @@ Account            Category  Date       Period  ID         Manual  Description  
 <ol>
 <li><strong>Setup Notebook:</strong><ul>
 <li>Open my starter notebook in Google Colab (or a local Jupyter Notebook if you're adventurous).</li>
-<li>If in Colab, upload the <code class="fixed-width">JEA Detail.txt</code> file to your session storage.</li>
+<li>If in Colab, upload the <code class="fixed-width">JEA Detail Raw.txt</code> file to your session storage.</li>
 </ul>
 </li>
 <li><strong>Load and clean the data:</strong><ul>
@@ -731,13 +685,12 @@ Account            Category  Date       Period  ID         Manual  Description  
 </li>
 </ol>
 <h2 class="ada-h2" id="4-submission">4. Submission</h2>
-<p>To complete this lab, provide screenshots that you have successfully cleaned the data and performed the initial analysis in one or more modalities.</p>
-<p>For each modality you wish to submit (please combine all screenshots into a single document), attach in a PDF:</p>
+<p>To complete this lab, provide screenshots that you have successfully cleaned the data and performed the initial analysis in whatever modality you wish:</p>
 <ul>
 <li>Capture a screenshot of the cleaned data table.</li>
 <li>Capture a screenshot of the unique <code class="fixed-width">User ID</code> names.</li>
 </ul>
-<p><em>Note</em>: Consider the aesthetics of your screenshots. Clear, well-organized visuals will help convey your findings more effectively.</p>
+<p><em>Note</em>: Consider the aesthetics of your screenshots. Clear, well-organized tables/results will help convey your findings more effectively.</p>
 <h2 class="ada-h2" id="5-optional-pivot-tables-overview">5. Optional Pivot Tables Overview</h2>
 <p>A crucial skill in data analytics is the ability to summarize and cross-tabulate data using pivot tables. 
 Pivot tables allow you to reorganize and aggregate data to reveal patterns that might not be obvious in the raw data format.
@@ -777,38 +730,7 @@ You do not have to use Pivot Tables for this lab, but we are going to be explori
 </ul>
 </li>
 </ol>
-<h3 class="ada-h3" id="52-tableau-pivot-tables-cross-tabs">5.2. Tableau Pivot Tables (Cross-Tabs)</h3>
-<p>Tableau calls pivot tables "cross-tabs" and integrates them seamlessly with visualization:</p>
-<ol>
-<li>
-<p><strong>Creating a Cross-Tab:</strong> <a href="https://www.youtube.com/watch?v=A4UTrZw-2jY" target="_blank">Tutorial</a></p>
-<ul>
-<li>Drag dimensions to Rows and Columns shelves</li>
-<li>Drag measures to the Marks card, typically to Text</li>
-<li>Use the "Show Me" panel and select the cross-tab option</li>
-<li>Right-click to add totals and grand totals</li>
-</ul>
-</li>
-<li>
-<p><strong>Tableau Advantages:</strong></p>
-<ul>
-<li>Immediate visual feedback</li>
-<li>Easy to convert to other chart types</li>
-<li>Built-in statistical functions</li>
-<li>Can handle very large datasets efficiently</li>
-<li>Interactive filtering and highlighting</li>
-</ul>
-</li>
-<li>
-<p><strong>Best Practices:</strong></p>
-<ul>
-<li>Use color coding to highlight important values</li>
-<li>Add reference lines or bands for context</li>
-<li>Consider using calculated fields for custom aggregations</li>
-</ul>
-</li>
-</ol>
-<h3 class="ada-h3" id="53-python-pivot-tables">5.3. Python Pivot Tables</h3>
+<h3 class="ada-h3" id="52-python-pivot-tables">5.2. Python Pivot Tables</h3>
 <p>Python pandas provides flexible pivot table functionality with the <code class="fixed-width">pivot_table()</code> function:</p>
 <ol>
 <li>
@@ -843,13 +765,12 @@ You do not have to use Pivot Tables for this lab, but we are going to be explori
 </ul>
 </li>
 </ol>
-<h3 class="ada-h3" id="54-comparing-approaches">5.4. Comparing Approaches</h3>
+<h3 class="ada-h3" id="53-comparing-approaches">5.3. Comparing Approaches</h3>
 <p>Each tool has its strengths for different use cases:</p>
 <ul>
-<li><strong>Excel</strong>: Best for ad-hoc analysis and sharing with non-technical users</li>
-<li><strong>Tableau</strong>: Best for interactive dashboards and visual exploration</li>
-<li><strong>Python</strong>: Best for automated analysis and complex data transformations</li>
+<li><em>Excel</em>: Best for ad-hoc analysis and sharing with non-technical users</li>
+<li><em>Python</em>: Best for automated analysis and complex data transformations</li>
 </ul>
-<p>The key insight is that all three approaches can produce similar analytical results, but the choice depends on your audience, the complexity of your analysis, and your need for automation or interactivity.</p>
+<p>The key insight is that both approaches can produce similar analytical results, but the choice depends on your audience, the complexity of your analysis, and your need for automation.</p>
 </body>
 </html>

@@ -7,9 +7,9 @@ Lab 2 builds on our first lab by moving from simply opening a clean, well-struct
 ## 1. Assignment
 
 
-**Submission:** a PDF document with two screenshots:
+**Submission:** Two screenshots:
 
-  * One of the cleaned dataset (at least including all columns and the first few rows)
+  * One of the cleaned dataset (at least including all columns and the first 10 rows)
   * One of the unique User IDs associated with the journal entries
 
 
@@ -25,28 +25,19 @@ By the end of this lab, you will be able to:
 
 ### 1.2. Rubric and Grading
 
-1. **Submitted**: *Submitted the assignment*
-    * **3 - Successful:** Submitted a completed solution. (80 pts)
-    * **2 - Successful - late:** Submitted a completed solution after the deadline. (70 pts)
-    * **1 - Incomplete:** Submitted a partial result. (50 pts)
-    * **0 - No Evidence:** No submission. (0 pts)
-2. **Mastery**: *Submitted the assignment in more than one modality. Expectation is just one, this is for more points and more experience.*
-    * **2 - Exceeds:** Submitted in three or more modalities, amazing job! (10 pts)
-    * **1 - Mastery:** Submitted in two modalities, fantastic job! (5 pts)
-    * **0 - Expected:** Submitted one modality, great job! (0 pts)
-3. **Subjective** quality: *Subjective estimate of the quality of the output. For this lab, that will be based on the appearance and clarity of the output and tables demonstrated in your screenshots.*
-    * **3 - High Quality:** Beautiful, graceful, clever, or otherwise high quality product. (15 pts)
-    * **2 - Good Quality:** Aesthetic, elegant, logical, or otherwise good quality. (10 pts)
-    * **1 - Low Quality:** Messy, quick, illogical, confusing, or otherwise low quality product. (5 pts)
-    * **0 - None:** No submission. (0 pts)
+The intent of this submission is to produce a cleanly formatted dataset that could be handed off to a client or supervisor. It should look professional and require no further cleaning by the recipient.
 
-*AI useage note: I developed a rubric in Canvas, then I took a screenshot of it, pasted it into Gemini with the prompt "Please transcribe this rubric to markdown format", and got the above text. I tell you this as a reminder of little uses of LLMs that add up to save a whole lot of time.*
+* *5 points*: No mistakes. The dataset is cleanly formatted (no extra whitespace, numbers are properly formatted, etc.), and column headers are correct.
+* *4 points*: Some mistakes (e.g., leftover whitespace like newlines or spaces at the beginning of the cell, unformatted numbers, correctable header issues).
+* *3 points*: Significant errors.
+* *2 points*: Incomplete submission.
+
 
 
 
 ## 2. Data
 
-The dataset for this lab is `JEA Detail.txt`, a **tab-separated value (TSV)** file containing journal entry line items. This is a type of **delimited text file**, which is a common ways to store and exchange tabular data. Instead of a special format like an Excel `.xlsx` file, these are simple text files that can be opened by almost any application.
+The dataset for this lab is `JEA Detail Raw.txt` ([link](https://utah.instructure.com/courses/1243774/files/192656669/download?download_frd=1)), a **tab-separated value** file containing journal entry line items. This is a type of **delimited text file**, which is a common ways to store and exchange tabular data. Instead of a special format like an Excel `.xlsx` file, these are simple text files that can be opened by almost any application.
 
 ??? "More information on delimited files"
     In delimited files, columns are separated by a specific character, the **delimiter**. Common delimiters include:
@@ -128,34 +119,9 @@ This lab can be done using base Excel, or by testing out Excel's Power Query (Ge
 
 
 
-### 3.2. Tableau Desktop Steps
+### 3.2. Python Steps
 
-Tableau Desktop's Data Source tab offers tools to clean data upon import. 
-
-*Note:* If you are using Tableau Cloud, for some reason the "Data Interpreter" feature does not work as expected on text files. The workaround is to open the text file in Excel, and then save it as an excel file. Don't do any cleaning, don't touch anything, just save as an excel file. That's all. Then the magic Tableau AI data cleaning will work. You could also do all the cleaning in Excel as outlined above, then import that cleaned file into Tableau for pivoting / analysis / visualization. This kind of hybrid workflow is very common in industry, and it lets each modality's strengths shine!
-
-1. **Connect to Data:**
-    * Open Tableau.
-    * On the "Connect" pane, click on `Text File`.
-    * Navigate to and select `JEA Detail.txt`. **Note:** If using Tableau Cloud, first open the text file in Excel and save it as an Excel file, then connect to that Excel file instead.
-2. **Clean the Data with Data Interpreter:** 
-    * Tableau will open the Data Source tab. It will misinterpret the file structure initially.
-    * In the left pane, under "Sheets", turn on the `Data Interpreter` checkbox.
-    * Data Interpreter will analyze the file and identify the actual data table, often correctly removing headers and footers.
-        * I had to rename a few columns, e.g. `F3` &rarr; `Post Date`. See table snippet above for column names.
-    * Review the results to ensure the data looks correct.
-    * You may need to add filters to remove any remaining unwanted rows.
-    * Screenshot the first few rows of this table for submission.
-3. **Go to Worksheet and Explore:**
-    * Click on "Sheet 1" to open the analysis / visualization step.
-4. **Initial Analysis:** Pivot Tables in Tableau Cloud are almost default functionality, which is great!
-    1. Drag the `User ID` dimension from the Data pane (on the left) to either the "Rows", "Columns", or "Marks" shelves. Which you prefer to screenshot for submission is up to your sense of Aesthetics
-    2. *Tip for Later*: If you drag another dimension to a different shelf, e.g. `User ID` to "Rows" and `Period` to "Columns", and some value to calculate, say `Amount` to "Marks", Tableau will create a cross-tab view (e.g. Pivot Table).
-
-
-### 3.3. Python Steps
-
-Note to Python users: as with all programming, our lives are simultaneously easier and harder. Easier, because we are in control of every byte of data and can set up automation to be far more robust. Harder, because we must control of every byte of data and must set up automation to be far more robust. In this Lab, that means we need to be explicit about handling each data issue in the file that tools like Excel and Tableau might manage for us. To get you started, I have prepared a notebook that you can open on Colab. Merely click the link below to open Colab, then drag the `JEA Detail.txt` file into the Colab file explorer so the code can access it.
+Note to Python users: as with all programming, our lives are simultaneously easier and harder. Easier, because we are in control of every byte of data and can set up automation to be far more robust. Harder, because we must control of every byte of data and must set up automation to be far more robust. In this Lab, that means we need to be explicit about handling each data issue in the file that tools like Excel might manage for us. To get you started, I have prepared a notebook that you can open on Colab. Merely click the link below to open Colab, then either drag the `JEA Detail Raw.txt` file into the Colab file explorer so the code can access it, or add it to your Google Drive, mount said drive, copy the path, and paste it in to your code (as we did in Lab 1).
 
 <a href="https://colab.research.google.com/github/gaulinmp/AccountingDataAnalytics/blob/main/labs_hw/week2_connecting-to-data/Lab 2 - Opening and Cleaning Data.ipynb" target="_parent">
 <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
@@ -165,7 +131,7 @@ We will use the `pandas` library in a Jupyter Notebook to programmatically clean
 
 1. **Setup Notebook:**
     * Open my starter notebook in Google Colab (or a local Jupyter Notebook if you're adventurous).
-    * If in Colab, upload the `JEA Detail.txt` file to your session storage.
+    * If in Colab, upload the `JEA Detail Raw.txt` file to your session storage.
 2. **Load and clean the data:**
     * We will import the data, but since it's poorly formatted, we'll need to handle the import carefully. The starter notebook I've provided walks you through that, as well as debugging you might do in a real scenario.
 3. **Initial Analysis:**
@@ -186,14 +152,12 @@ We will use the `pandas` library in a Jupyter Notebook to programmatically clean
 
 ## 4. Submission
 
-To complete this lab, provide screenshots that you have successfully cleaned the data and performed the initial analysis in one or more modalities.
-
-For each modality you wish to submit (please combine all screenshots into a single document), attach in a PDF:
+To complete this lab, provide screenshots that you have successfully cleaned the data and performed the initial analysis in whatever modality you wish:
 
 * Capture a screenshot of the cleaned data table.
 * Capture a screenshot of the unique `User ID` names.
 
-*Note*: Consider the aesthetics of your screenshots. Clear, well-organized visuals will help convey your findings more effectively.
+*Note*: Consider the aesthetics of your screenshots. Clear, well-organized tables/results will help convey your findings more effectively.
 
 
 
@@ -228,30 +192,7 @@ Excel provides powerful pivot table functionality through its "Data" tab:
     * Consider using slicers for interactive filtering
 
 
-### 5.2. Tableau Pivot Tables (Cross-Tabs)
-
-Tableau calls pivot tables "cross-tabs" and integrates them seamlessly with visualization:
-
-1. **Creating a Cross-Tab:** [Tutorial](https://www.youtube.com/watch?v=A4UTrZw-2jY)
-    * Drag dimensions to Rows and Columns shelves
-    * Drag measures to the Marks card, typically to Text
-    * Use the "Show Me" panel and select the cross-tab option
-    * Right-click to add totals and grand totals
-
-2. **Tableau Advantages:**
-    * Immediate visual feedback
-    * Easy to convert to other chart types
-    * Built-in statistical functions
-    * Can handle very large datasets efficiently
-    * Interactive filtering and highlighting
-
-3. **Best Practices:**
-    * Use color coding to highlight important values
-    * Add reference lines or bands for context
-    * Consider using calculated fields for custom aggregations
-
-
-### 5.3. Python Pivot Tables
+### 5.2. Python Pivot Tables
 
 Python pandas provides flexible pivot table functionality with the `pivot_table()` function:
 
@@ -281,12 +222,11 @@ Python pandas provides flexible pivot table functionality with the `pivot_table(
     * Format output for readability using styling options
 
 
-### 5.4. Comparing Approaches
+### 5.3. Comparing Approaches
 
 Each tool has its strengths for different use cases:
 
-* **Excel**: Best for ad-hoc analysis and sharing with non-technical users
-* **Tableau**: Best for interactive dashboards and visual exploration
-* **Python**: Best for automated analysis and complex data transformations
+* *Excel*: Best for ad-hoc analysis and sharing with non-technical users
+* *Python*: Best for automated analysis and complex data transformations
 
-The key insight is that all three approaches can produce similar analytical results, but the choice depends on your audience, the complexity of your analysis, and your need for automation or interactivity.
+The key insight is that both approaches can produce similar analytical results, but the choice depends on your audience, the complexity of your analysis, and your need for automation.

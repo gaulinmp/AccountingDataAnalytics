@@ -1,7 +1,7 @@
 # Lab 1: Opening Software
 
 
-Lab 1 will be an overview of the three "modalities" that I suggest for completing the labs: Microsoft Excel, Tableau, and Python. This initial lab is designed to ensure you can access and open a dataset in each environment. We will perform the same basic task of opening a data file on all three platforms to familiarize you with the initial steps of a data analytics workflow and to get a very preliminary feel for each tool (and see their differences).
+Lab 1 will be an overview of the main tools we will use for completing the labs: Microsoft Excel and Python. This initial lab is designed to ensure you can access and open a dataset in each environment. We will perform the same basic task of opening a data file on both platforms to get a very preliminary familiarity with each tool.
 
 [TOC]
 
@@ -12,29 +12,27 @@ Lab 1 will be an overview of the three "modalities" that I suggest for completin
 By the end of this lab, you will be able to:
 
   * Successfully download a dataset and locate it on your computer.
-  * Open and view a data file in Microsoft Excel, Tableau, and a Python Jupyter Notebook.
+  * Open and view a data file in Microsoft Excel (using Power Query) and a Python Jupyter Notebook.
   * Begin to understand the differences between each piece of software, their strengths, and weaknesses.
 
 ### Submission Expectations
 
-  * Submit PDF document with screenshots demonstrating successful loading of data in three modalities described below.
+  * Submit screenshots demonstrating successful loading of data in the two modalities described below.
 
 ### Rubric and Grading
 
-  * For Lab 1, on-time submission of screenshots of all three modalities will get full marks.
+  * For Lab 1, on-time submission of screenshots of both modalities will get full marks.
 
 ### A Note on Platforms (Windows, macOS, Linux)
 
-All three of the "modalities" in this course are available in desktop form on Windows and macOS, while (I believe) only Python is available on Linux. All three tools are available online, however, which is primarily what the instructions below are intended to show. My intent is that these labs can be completed on any machine (maybe even your phone?). If you find this isn't the case, or if you find an issue related to operating systems, please let me know!
+Both tools are available in desktop form on Windows and macOS, while (I believe) only Python is available on Linux. Both are available online/cloud-based as well. My intent is that these labs can be completed on any machine. If you find this isn't the case, or if you find an issue related to operating systems, please let me know!
 
 
 ## Data
 
-The dataset we will be opening in all three pieces of software is from the [University of Utah Analytics](https://data.utah.edu/) team, specifically the Post-Secondary Employment Outcomes (PSEO), which is from the Census Bureau and tracks salaries for institutions by institution (i.e. University of Utah). The Analytics group has a nice Tableau dashboard using this data [here](https://data.utah.edu/data-dashboard/salary-outcomes/).
+The dataset we will be opening in both tools is a **Tab-Separated Value** file containing journal entry line items. This is a common format for exporting data from accounting systems.
 
-The data is an Excel spreadsheet ([link](https://uofutah.sharepoint.com/:x:/s/AccountingDataAnalytics/Efsc48FWDS1LoRMKZPoNBVwB8iNdL2uE3M-gnFw_nPKbHQ?e=cd0PAh)) located on the class [Sharepoint](https://uofutah.sharepoint.com/sites/AccountingDataAnalytics/ADA%20Data/Forms/AllItems.aspx).
-
-![Screenshot showing Sharepoint and the download field highlighted in the flyout menu](sharepoint_data_selected.png "Screenshot: Sharepoint Download")
+The file is named `JAE Detail.txt` ([link](https://utah.instructure.com/courses/1243774/files/191522756/download?download_frd=1)).
 
 
 
@@ -42,92 +40,122 @@ The data is an Excel spreadsheet ([link](https://uofutah.sharepoint.com/:x:/s/Ac
 
 The following outline how to perform the lab in each modality.
 
-### Step 1 \- Excel
+### Step 0 - Set up class folder
 
-The first software will be Excel. Excel, an Accountant's workhorse, is a ubiquitous spreadsheet tool that is excellent for initial data exploration, cleaning, and analysis.
+Before we dive into the data, take a moment to set up your digital workspace. Good data science hygiene starts with organization. Think of your file structure as a **Lab Notebook**, whose purpose is:
 
-1. **Download the Data:** Open the Sharepoint data site ([link](https://uofutah.sharepoint.com/sites/AccountingDataAnalytics/ADA%20Data/Forms/AllItems.aspx)). Find `university_grad_salary_data.xlsx` in the list. You now have two options.
-       1. **Open the file online:** Simply click on the filename `university_grad_salary_data.xlsx`. This will open the spreadsheet directly in your web browser using Excel Online. This is a great way to quickly preview the data without downloading anything. Note that Excel Online has most, but not all, of the features of the desktop application.
-       2. **Download the file locally**: Click the three horizontal dots to the right of the filename, and select "Download." Your browser will download the file. Locate the downloaded file (e.g. in your "Downloads" folder) and double-click to open it in Microsoft Excel (assuming you have Excel installed).
-2. **Browse the Data:** Regardless of online or local, once the dataset is open in Excel, you will see several columns of data. Take a moment to look at the headers and the first few rows to get a general sense of the information. The data is "structured," meaning each row is an observation and each column is a variable.
-   ![Screenshot showing Excel Online](excel_online.png "Screenshot: Excel Online")
-3. **Save the File:** Save a copy of the file to your personal project folder for this course.
+* **Reproducibility:** You (or anyone else) should be able to re-run your analysis later. Keeping data and analysis together is step one.
+* **Documentation:** Clear structure helps you remember what you did weeks or months from now.
+* **Sanity:** Separating tasks prevents files from getting mixed up and overwritten.
 
+While this is entirely optional (it's your computer!), I suggest:
 
-
-### Step 2 \- Tableau
-
-The second software will be Tableau. Tableau is a leading data visualization tool that allows for the creation of interactive dashboards and worksheets.
-
-1. **Open Tableau:** Launch Tableau Desktop or [Tableau Cloud](https://10ay.online.tableau.com/#/site/accounting-data-analytics/personalSpace), depending on which you are using.
-      1. If you don't have an account, you should get an email to `[uid]@utah.edu` to create one. If you want a different email, come see me.
-
-2. **Connect to Data:** Open the Connection pane, and connect to a File (type Microsoft Excel).
-
-       1. *[Tableau Cloud](https://10ay.online.tableau.com/#/site/accounting-data-analytics/personalSpace)*: Create a new Workbook by going to "Personal Space" on the left, and clicking "Create Workbook". On the New Workbook page, under the "Data" menu, select "New Data Source." In the popup titled "Connect to Data", select the "Files" tab, then drag and drop the downloaded Excel file from Step 1.
-          ![Screenshot of tableau cloud connection pane](tableau_cloud_connection_pane.png "Screenshot: Tableau Cloud")
-       2. *Tableau Desktop*: On the start page, under the "Connect" pane on the left, select "Microsoft Excel". A file dialog will open. Navigate to where you saved the data file from Step 1, select it, and click "Open".
-          ![Screenshot of tableau Desktop Connection Pane](tableau_desktop_connection_pane.png "Screenshot: Tableau Desktop")
-
-3. **Verify the Data Source:** Tableau will now show you the "Data Source" tab. You should see the data loaded in a table format, similar to Excel. You can verify the column names and data types here.
-   ![Screenshot of tableau cloud data preview](tableau_cloud_data_loaded.png "Screenshot: Tableau Cloud Data Preview")
-
-4. **(Optional) Go to Worksheet:** In the bottom-left corner (next to "Data Source"), click on "Sheet 1" to move from the data source view to a worksheet, where you can begin building visualizations.
+1.  **Create a main class folder:** somewhere on your computer (e.g., `Documents/ACCT_5150`), create a folder for this course.
+2.  **Create a lab folder:** Inside that class folder, create a new sub-folder named `Lab_1`.
+3.  **Download data to this folder:** Move the `JAE Detail.txt` file you downloaded into this `Lab_1` folder.
 
 
 
-### Step 3 \- Python
+### Step 1 - Excel (Power Query)
 
-The third software will be Python. We will use **Google Colaboratory (Colab)**, a free, cloud-based Jupyter Notebook environment that requires no local installation. Python is a versatile programming language with powerful libraries for data analysis, such as pandas.
+The first software will be Excel. Instead of simply opening the file, we will use **Power Query** to import the data. This is a powerful feature that creates a connection to your data source. This means if you update the data file (e.g., replace it with new data), you can simply "refresh" your Excel model to update the analysis automatically, without re-doing your work.
 
-1. **Go to Google Colab:** Open your web browser and navigate to [colab.research.google.com](https://colab.research.google.com/). You may need to be logged into a Google account, which the University of Utah provides ([link](https://gcloud.utah.edu/)).
-      ![Screenshot of new colab window](colab_new_notebook_pane.png "Screenshot: Google Colab New Page")
-       1. **Alternative:** If you prefer to work locally, you can install python on your own machine (I suggest this\!). You will just need to ensure you have the notebook and pandas libraries installed to follow along. If this is a route you are interested in, I further suggest looking into `mamba` (or `uv`/`pixi` if you're feeling fancy) and using environments.
+1.  **Open Excel:** Open a blank Excel workbook.
+2.  **Import data:**
+    *   Go to the **Data** tab on the ribbon.
+    *   Click `Get Data` > `From File` > `From Text/CSV`.
+    *   Navigate to where you saved `JAE Detail.txt` and select it. Click **Import**.
+3.  **Load data:**
+    *   A preview window will appear. Ensure the **Delimiter** is set to **Tab** (Excel usually detects this automatically).
+    *   Click **Transform Data**. This opens the Power Query Editor, where you can perform data transformations. You can also open the Power Query Editor directly, then add the data by clicking `New Source` > `File` > `From Text/CSV`. 
+4.  **Load data into sheet:** Later, we will use this Power Query window to perform some cleaning/transforms, but for now that's all we need. Click "Close & Load" to load the data into a sheet (see screenshot below).
+    ![Power Query Editor](excel_power_query.png)
+5.  **Save:** Save your workbook as `Lab1_Excel.xlsx`.
+6.  **Screenshot:** Take a screenshot of the data open in **Excel** (showing the table loaded from Power Query, often defaults to green striped rows).
 
-2. **Create a New Notebook:** On the Colab page, go to the File menu and select New notebook. *Note:* if you're logged into a google account, you may see a pop-up window that says "Open Notebook", and you can just click "New Notebook" at the bottom left instead of using the menu.
 
-3. **Upload Data to Session:** Before we can load the data, we must upload it to our Colab session.
+### Step 2 - Python
 
-     1. On the left-hand sidebar, click the **Files** icon (it looks like a folder).
-     2. Click the **Upload to session storage** icon (a page with an upward-pointing arrow).
-     3. In the file browser that opens, find and select the `university_grad_salary_data.xlsx` file you downloaded in Step 1\.
-        ![Screenshot of upload Data to Colab](colab_upload_file.png "Screenshot: Google Colab Upload File")
-        **Important Note:** Files uploaded this way are temporary and will be deleted when the Colab session ends. You will need to re-upload your data file each time you open this notebook. To not lose data, you can store files in your Google Drive (the [university has given you a Google account](https://gcloud.utah.edu/) at `[uid]@gcloud.utah.edu` if you don't have a personal one).
+The second software will be Python. We will primarily use **Google Colaboratory (Colab)**, a free, cloud-based Jupyter Notebook environment that requires no local installation.
 
-4. **Import the pandas Library:** In the first code cell, we need to import the pandas library. Type the following code and press Shift \+ Enter (or click the play button) to run the cell: `import pandas as pd`. We can now access pandas library by using `pd`.
+#### Option A: Google Colab (Cloud)
 
-5. **Load the Data:** We will use the pandas `read_excel` function to read the Excel file. Since we uploaded the file directly to the folder for our session, we only need to use its name (no needing to figure out a file path). So we just have to type and run:
-   ```
+1. **Go to Google Colab:** Navigate to [colab.research.google.com](https://colab.research.google.com/). Log in with your University Google account ([uID]@gcloud.utah.edu) or a personal one. Logging in means that the notebooks you create will be saved to your Google Drive.
+2. **Create a notebook:** Click `File` > `New notebook`.
+3. **Link to Google Drive (recommended):**
+   By default, Colab files are temporary. To save your work and data persistently:
+   1.  Click the "Mount Drive" button in the top-left corner of the Colab interface, or run this code cell to mount your Drive:
+       ```python
+       from google.colab import drive
+       drive.mount('/content/drive')
+       ```
+   2.  Follow the prompts to authorize.
+   3.  You can now access your files at `/content/drive/MyDrive/`. I suggest creating a folder there for this class (e.g. `ACCT_5150`, which will then be `/content/drive/MyDrive/ACCT_5150`).
+4. **Upload/access data:**
+   *   **If using Drive:** Upload the `JAE Detail.txt` file to your Drive folder, then find it in the Colab file pane (left side, folder icon > drive > MyDrive). Right-click the file and "Copy path".
+   *   **If not using Drive:** Click the folder icon on the left, then the upload icon (page with arrow) to upload `JAE Detail.txt` to the temporary session storage.
+5. **Load data with Pandas:**
+   ```python
    import pandas as pd
-   # The file name should be what you uploaded (this line is a comment, because it starts with #)
-   df = pd.read_excel("university_grad_salary_data.xlsx")
+   # Use the path you copied or just the filename if uploaded directly
+   file_path = "JAE Detail.txt" # or "/content/drive/MyDrive/ACCT_5150/JAE Detail.txt"
+   # Note: We use sep='\t' because it is a Tab-Separated Value file
+   df = pd.read_csv(file_path, sep='\t')
    ```
-6. **Display the Data:** To confirm the data has loaded correctly, you can display the first few rows of the data. In a new cell, type the following and run it: `df.head()`. This will display the column headers and the first five rows of your dataset directly in the notebook.
-   ![Screenshot of loaded data via pandas in colab](colab_loaded_data.png)
+6. **View data:**
+   ```python
+   df.head()
+   ```
+   Run the cell to see the first 5 rows.
+7. **Screenshot:** Take a screenshot of the data open in **Colab** (showing the table displayed after the `df.head()` cell).
 
-7. **Optional**: A bit about Pandas: in Pandas, data is stored in a `pd.DataFrame`, which is just an excel table, and each column is a `pd.Series`. If you want multiple sheets, just make multiple dataframes (e.g. `df1`, `df2`, etc.).
+#### Option B: Local Installation (Miniconda)
+
+If you prefer to run Python locally (platform agnostic), **Miniconda** is recommended.
+
+1. **Install Miniconda:** Download/install from [docs.conda.io](https://docs.conda.io/en/latest/miniconda.html).
+2. **Create environment:** Open your terminal/Powershell and run:
+   ```bash
+   conda create -n analytics python pandas jupyter
+   conda activate analytics
+   ```
+3. **Run Jupyter:**
+   ```bash
+   jupyter notebook
+   ```
+   This opens a local notebook interface in your browser.
+4. **Create a notebook:** In the Jupyter interface, click "New" > "Python 3" (or "Notebook") to create a new notebook file (`.ipynb`).
+5. **Load data with Pandas:**
+   ```python
+   import pandas as pd
+   # Use the path you copied or just the filename if your notebook is in the same folder as the data
+   file_path = "JAE Detail.txt"
+   # Note: We use sep='\t' because it is a Tab-Separated Value file
+   df = pd.read_csv(file_path, sep='\t')
+   ```
+6. **View data:**
+   ```python
+   df.head()
+   ```
+   Run the cell to see the first 5 rows.
+7. **Screenshot:** Take a screenshot of the data, showing the table displayed after the `df.head()` cell.
+
+**Tip:**&nbsp;For the local option, I would strongly recommend using [VSCode](https://code.visualstudio.com/), and installing the [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python). This will greatly simplify the process of running Jupyter notebooks, as you can natively open the notebook file in VSCode and run it from there.  {: .tip}
+
 
 
 ## Submission
 
-To complete this lab, you will provide evidence that you have successfully opened the data file in all three modalities.
+To complete this lab, you will provide evidence that you have successfully opened the data file in both tools.
 
-1. **Take Screenshots:**
-    * Capture a screenshot of the data open in **Excel** or **Excel Online**.
-    * Capture a screenshot of the data loaded in the **Tableau** "Data Source" tab.
-    * Capture a screenshot of your **Google Colab** notebook showing the output of the `df.head()` command.
+1. **Take screenshots:**
+    * Capture a screenshot of the data open in **Excel** (showing the green table from Power Query).
+    * Capture a screenshot of your **Google Colab** (or local Jupyter) notebook showing the output of the `df.head()` command.
 
     *Screen-capture notes*:
 
     * *Windows Note:* To take a [screenshot on Windows](https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b), press `Win + Shift + s` and then click-and-drag a rectangle to capture that portion of your screen (to grab the full screen, hit `PrtSc` on the keyboard, or `Alt + PrtSc` to capture just the current window).
     * *macOS Note:* To take a [screenshot on macOS](https://support.apple.com/en-il/102646), `Shift + Command + 5` will open the screenshot app, which is nice, or `Shift + Command + 4` will let you click-and-drag a rectangle to capture that portion of your screen (which I believe saves the screenshot to a file, but I don't know where? If you want to just copy the screen to your clipboard for pasting into word/Google Docs, add Control, so `Control + Shift + Command + 4`).
 
-2. **Create a Document:**
-    * Open a new document in a word processor like Microsoft Word or Google Docs.
-    * Paste all three screenshots into this single document.
-
-3. **Save as PDF:**
-    * Save or export the document as a PDF file. Name it `[your uid]_Lab1.pdf`.
-
-4. **Submit to Canvas:**
-    * Navigate to the "Lab 1" assignment on our course Canvas page and upload your PDF file.
+2. **Submit to Canvas:**
+    * Navigate to the Lab 1 assignment on Canvas and upload your screenshots.

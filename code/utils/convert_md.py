@@ -16,8 +16,8 @@ from markdown.treeprocessors import Treeprocessor
 import xml.etree.ElementTree as etree
 
 # project imports
-_dir = Path(__file__).parent.parent # Assumes this is in code/utils/
-sys.path.append(str(_dir))
+_code_dir = Path(__file__).parent # Assumes this is in code/utils/
+sys.path.append(str(_code_dir.parent))
 from src import LAB_DIR
 
 HTML_TEMPLATE = """<!DOCTYPE html>
@@ -35,7 +35,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 def load_css(file_name="default", wrap_in_style_tag=False):
-    css_file = _dir / f"{file_name}.css"
+    css_file = _code_dir / "themes" / f"{file_name}.css"
     if not css_file.exists():
         raise FileNotFoundError(f"CSS file {css_file} not found.")
     if wrap_in_style_tag:
@@ -210,7 +210,7 @@ def md_to_html_with_inline_images(md_file):
     return output_path
 
 
-def convert_md(md_file, update_if_html_older=True):
+def convert_md(md_file, update_if_html_older=True, debug=False):
     """
     Convert a single markdown file to HTML if needed.
     """
@@ -227,27 +227,30 @@ def convert_md(md_file, update_if_html_older=True):
     print(f"{dt.now():%H:%M:%S} - Detected change in {md_file}.")
     try:
         md_to_html_with_inline_images(md_file)
+        if debug:
+            print(f"Converted {md_file}")
     except Exception as e:
         print(f"Error processing {md_file}: {e}")
         # raise # Don't crash on error
 
 
-def convert_all_md_in_dir(root_dir, update_if_html_older=True):
+def convert_all_md_in_dir(root_dir, update_if_html_older=True, debug=False):
     """
     Scan directory and convert all markdown files.
     """
     for md_file in Path(root_dir).rglob("*.md"):
-        convert_md(md_file, update_if_html_older=update_if_html_older)
+        convert_md(md_file, update_if_html_older=update_if_html_older, debug=debug)
 
 
 @click.command()
 @click.option("--root-dir", default=LAB_DIR, help="Root directory to watch for markdown files.")
-def main(root_dir):
+@click.option("--debug", default=False, help="Debug mode.")
+def main(root_dir, debug=False):
     print(f"Starting at: {Path(root_dir).absolute()}")
 
     # Convert the Markdown file to HTML with inline images
     while True:
-        convert_all_md_in_dir(root_dir, update_if_html_older=True)
+        convert_all_md_in_dir(root_dir, update_if_html_older=True, debug=debug)
 
         try:
             time.sleep(5)
@@ -256,4 +259,4 @@ def main(root_dir):
             break
 
 if __name__ == "__main__":
-    main(LAB_DIR)
+    main()

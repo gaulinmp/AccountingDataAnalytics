@@ -339,6 +339,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -347,6 +353,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {

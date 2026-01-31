@@ -251,7 +251,7 @@ class CompustatAnnualRDQ(_DataFrameCache):
                     AND (DATAFMT = 'STD')
                     AND (POPSRC = 'D')
                     AND (CONSOL = 'C')
-                    AND (fyear >= 1995) AND (fyear < 2025)
+                    AND (fyear >= 1995) AND (fyear < 2029)
                     AND gvkey IS NOT NULL
                     AND fyr IS NOT NULL
                     AND at IS NOT NULL
@@ -298,9 +298,6 @@ class CompustatAnnualRDQ(_DataFrameCache):
                     "gsubind_hgic": "gics_subindustry",
                 }
             )
-        # Add GICS sector labels to gics_sector_name
-        for c in "gics_sector gics_group gics_industry gics_subindustry".split():
-            df[c + '_name'] = df[c].map(GICS_LOOKUP[c])
 
         cols = ['gvkey', 'tic', 'name', 'fyear', 'fyr', 'rdq', 'age_days']
         for c in df:
@@ -332,6 +329,25 @@ class CompustatAnnualRDQ(_DataFrameCache):
         # Add GICS sector labels to gics_sector_name
         for c in "gics_sector gics_group gics_industry gics_subindustry".split():
             df[c + '_name'] = df[c].map(GICS_LOOKUP[c])
+
+        df.loc[df.auditor == "Coopers & Lybrand", 'auditor'] = 'PricewaterhouseCoopers'
+        df.loc[df.auditor == "Touche Ross", 'auditor'] = 'Deloitte & Touche'
+
+        df['auop'] = df['auop'].map({
+            # This code indicates that the financial statements were not audited.
+            0 : "Unaudited",
+            # This code indicates that the financial statements are presented fairly.
+            1 : "Unqualified",
+            # This code indicates that the financial statements are presented fairly, but the auditing firm is concerned about either limitation on the scope of the examination or unsatisfactory financial statement presentations.
+            2 : "Qualified",
+            # This code indicates that the auditing firm does not express an opinion on the financial statements.
+            3 : "No opinion",
+            # This code indicates that the auditing firm's opinion is unqualified, but explanatory language has been added to the standard report.
+            4 : "Unqualified with additional language",
+            # This code indicates that the financial statements are not presented fairly.
+            5 : "Adverse opinion",
+        })
+
         return df
 
 

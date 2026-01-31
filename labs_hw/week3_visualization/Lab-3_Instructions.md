@@ -3,7 +3,6 @@
 
 Lab 3 introduces you to initial investigation of data using visualization. You will work with a dataset containing annual financial statement data for all public companies (a subset of the dataset that is being used for Project 1). Your goal is to create a series of visualizations to gain initial understanding of trends, distributions, and comparisons in key financial measures across time and companies.
 
-**Note: This lab will not give extra credit for multiple modalities.** While I suggest practicing the multiple modalities to visualize the data, you only need to submit four visualizations.
 
 [TOC]
 
@@ -17,11 +16,12 @@ Lab 3 introduces you to initial investigation of data using visualization. You w
 * Scatter plot of Current Assets (`act`) vs. Current Liabilities (`lct`) for 2024
 * Box plot of Market Value (`mve`) for the fiscal years 2020-2024
 
-*Note*: Consider the aesthetics of your visualizations. Clear, well-organized visuals will help convey your findings more effectively. You are welcome to do any filtering, winsorizing, or other data transformations as needed to make the graphs more informative and visually appealing.
+*Note*: Consider the aesthetics of your visualizations. Clear, well-organized visuals will help convey your findings more effectively. You are welcome to do any filtering, winsorizing, or other data transformations as needed to make the graphs more informative and visually appealing. {: .note}
 
 Here is an example image showing the four graphs, if it is a helpful reference:
 
 ![Example Graphs](lab3_example.png "Image of examples of the four graphs")
+
 
 ### 1.1. Learning Objectives
 
@@ -32,21 +32,15 @@ By the end of this lab, you will be able to:
 * Use Excel, Tableau, and/or Python to build effective visualizations
 
 
-
 ### 1.2. Rubric and Grading
 
-Each screen-shot submission will be graded based on the following criteria (for 100pts total):
+Each visualization will be graded based on the following criteria
 
-1. **Submitted**: *Submitted the assignment*
-    * **3 - Successful:** Submitted a completed solution. (20 pts)
-    * **2 - Successful - late:** Submitted a completed solution after the deadline. (18 pts)
-    * **1 - Incomplete:** Submitted a partial result. (10 pts)
-    * **0 - No Evidence:** No submission. (0 pts)
-3. **Subjective quality**: *Subjective estimate of the quality of the output. For this lab, that will be based on the appearance and clarity of the visualizations and captions.*
-    * **3 - High Quality:** Beautiful, clear, well labeled, high quality product. (5 pts)
-    * **2 - Good Quality:** Aesthetic but cluttered, otherwise good quality. (3 pts)
-    * **1 - Low Quality:** Messy, confusing, misleading, or otherwise low quality product. (1 pts)
-    * **0 - None:** No submission. (0 pts)
+1. *Excellent*: Aesthetic, clean, correctly and clearly labeled, well-cropped, high quality product. (5 pts)
+2. *Good*: Aesthetic with minor issues (cluttered, unlabeled, misleading, or other). (4 pts)
+3. *Needs improvement*: Cluttered, confusing, misleading, low quality product. (3 pts)
+
+*Tip*:  In this lab and in the homework (and project!), please be careful to label your axes appropriately, including units (e.g., $ millions, $ billions, etc.), and remember that the financial data in this dataset are in millions of USD. That means you will have to adjust your axis labels accordingly (e.g., if your y-axis goes up to 500,000, that is actually $500 billion). {: .tip}
 
 
 
@@ -58,7 +52,7 @@ The data are a smaller version of the dataset
 
 ### 2.1. Data Dictionary
 
-The following variables are provided in `CompustatAnnual_subset-for-lab3.xlsx`. Unless otherwise specified, financial numbers are all in millions of USD.  
+The following variables are provided in `CompustatAnnual_subset-for-lab3.xlsx`. Unless otherwise specified, **financial numbers are all in millions of USD**.  
 
 * `tic`: Ticker Symbol
 * `fyear`: Fiscal Year (based on majority of year, so 2000 connotes fiscal year ends between 7/1/1999 and 6/30/2000)
@@ -89,13 +83,10 @@ The following variables are provided in `CompustatAnnual_subset-for-lab3.xlsx`. 
 
 ## 3. How-to Steps
 
-The following sections outline how to perform the lab in each modality.
-
-My notes on the difficulty of visualization in each modality:
+The following sections outline how to perform the lab in Excel and Python.
 
 * **Excel:** The first two visualizations can be done with pivot charts, the latter two require more manual data manipulation.
-* **Tableau:** The first three are straight-forward, the box-plot requires more advanced techniques.
-* **Python:** The `seaborn` library has one-line commands for each chart type.
+* **Python:** The `seaborn` library has one-line commands for each chart type. Huzzah!
 
 ### 3.1. Excel Steps
 
@@ -115,34 +106,7 @@ My notes on the difficulty of visualization in each modality:
     2. With the 5 columns selected, I then created a box plot using the "Insert" menu.
     3. I was not able to set the y-axis to a logarithmic scale, which made it difficult to visualize the data effectively.
 
-### 3.2. Tableau Desktop Steps
-
-1. Line graph of Average Total Assets (`at`) over fiscal year (`fyear`)
-    1. Drag `fyear` to Columns as "Dimension"
-    2. Drag `at` to Rows
-    3. Change aggregation of `at` to "Average"
-    4. If not automatically set already, change the mark type to "Line"
-2. Histogram of Net Income (`ni`) for 2024
-    1. Drag `fyear` to Filters and select only 2024
-    2. *Optional*: Drag `ni` to Filters, and select the range you want to include (I chose -1000 to 2000)
-    3. Drag `ni` to Rows, change the measure to "Count"
-    4. Right click `ni` in the data pane on the left, and select "Create" > "Bins"
-    5. Set the bin width (I chose 50)
-    6. Drag the new `ni (bin)` (or whatever you named it) to Columns
-3. Scatter plot of Current Assets (`act`) vs. Current Liabilities (`lct`) for 2024
-    1. Drag `fyear` to Filters and select only 2024
-    2. Drag `act` to Columns
-    3. Drag `lct` to Rows
-    4. If not automatically set already, change the mark type to "Circle"
-4. Box plot of Market Value (`mve`) for the fiscal years 2020-2024
-    1. Drag `fyear` to Filters, and select the range 2020 to 2024
-    2. Drag `fyear` to Columns as "Dimension"
-    3. Drag `mve` to Rows as "Measure" (Average)
-    4. Click on the "Show Me" panel and select "Box Plot"
-    5. For aesthetics, I set the Y axis to logarithmic scale (double click on the axis and click "Logarithmic" in the resultant popup)
-
-
-### 3.3. Python Steps
+### 3.2. Python Steps
 
 The following steps assume you have opened Colab, upload the `CompustatAnnual_subset-for-lab3.xlsx` file, and imported the necessary libraries:
 

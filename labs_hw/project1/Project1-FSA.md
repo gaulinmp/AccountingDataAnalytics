@@ -27,12 +27,12 @@ By completing this project, you will:
 
 ### 1.2. Deliverable
 
-Slide-deck (`.pptx` or `.pdf`) containing, at most:
+Slide-deck (`.pdf`, which you can export from either PowerPoint or Google Slides) containing, at most:
 
 1. Title Slide, group names
 2. Question statement
 3. Data description and summary
-3. Preliminary findings and analysis
+4. Preliminary findings and analysis (one or more slides)
 5. Conclusions and recommendations
 6. Thank you / questions slide
 7. Appendix (if needed, should be after the "last" slide)
@@ -44,13 +44,12 @@ Tone: targeted to accounting and finance executives, minimal jargon, clear and c
 
 | Week | Suggested Milestone |
 |------|---------------------|
-| **1** | **Choose your group** &ndash; Assemble your fearless crew of 1-5.<br>**Download & Load Data** &ndash; Pull data, keep 2010-2024 fiscal years.<br>**Get to Know Data** &ndash; Describe data, inspect missings, compute summary stats, look for outliers and consider how to address them. |
+| **1** | **Choose your group** &ndash; Assemble your fearless crew of 2+.<br>**Download & Load Data** &ndash; Pull data, keep 2010-2024 fiscal years.<br>**Get to Know Data** &ndash; Describe data, inspect missings, compute summary stats, look for outliers and consider how to address them. |
 | **2** | **Choose Ratio(s) & Groups** &ndash; Select **1-2 ratios** and **one grouping dimension** (industry, age, size); create box/violin plots & median trends.<br>**Pose Hypothesis** &ndash; Draft rationale grounded in accounting/econ theory. |
 | **3** | **Support Hypothesis** &ndash; Compare means/medians (t-tests if you're feeling fancy!), heatmaps, relative-difference metrics; stress-test with alternative buckets.<br>**Make Presentation** &ndash; Assemble slide deck. |
 
 
 
----
 ## 2. Grading
 
 Your project will be graded based on the following criteria:
@@ -64,42 +63,35 @@ Note, while you need to include a slide for "Conclusions and Recommendations", n
 
 ### 2.1 Grading Rubric
 
-1. **Clarity of Hypothesis**: How well presented, clear, and logical the hypothesis is
-    * **Excellent**: Theory-grounded with specific, quantified predictions; acknowledges limitations; connects to business context
-    * **Good**: Clear hypothesis with solid economic reasoning
-    * **Needs Work**: Basic hypothesis but weak theoretical foundation
-    * **Poor**: Vague predictions without economic foundation
+1. **Clarity of Hypothesis**: How well presented, clear, and logical the hypothesis is, leveraging your Accounting and Economic reasoning
+    * *Excellent*: Theory-grounded with specific, quantified predictions; acknowledges limitations; connects to business context
+    * *Good*: Basic hypothesis but weak theoretical foundation
+    * *Needs Work*: Vague predictions without economic foundation
 2. **Data Preparation & Documentation**: How well explained, justified, and reasonable the data preparation is
-    * **Excellent**: Systematic approach to outliers with clear rationale, documented cleaning decisions, fully reproducible workflow, handles edge cases thoughtfully
-    * **Good**: Basic cleaning with some documentation, addresses most data quality issues
-    * **Needs Work**: Ad-hoc cleaning, undocumented decisions, missing steps
-    * **Poor**: Minimal data preparation, no documentation
+    * *Excellent*: Systematic approach to outliers with clear rationale, documented cleaning decisions, fully reproducible workflow, handles edge cases thoughtfully
+    * *Good*: Reasonable data preparation with some documentation
+    * *Needs Work*: Ad-hoc cleaning, undocumented decisions, missing steps
 3. **Visuals**: How compelling, informative, clear, and comprehensive the visual evidence is
-    * **Excellent**: Compelling, well-designed charts with clear annotations, multiple perspectives (cross-sectional + time-series), insights clearly highlighted
-    * **Good**: Good visualizations with some annotations and insights
-    * **Needs Work**: Basic charts with limited insight generation
-    * **Poor**: Poor chart design, no clear insights
+    * *Excellent*: Compelling, well-designed charts with clear annotations, multiple perspectives (cross-sectional + time-series), insights clearly highlighted
+    * *Good*: Clear visualizations with basic insights
+    * *Needs Work*: Basic charts with limited insight generation
 4. **Evidence & "Testing"**: How well the evidence supports the hypothesis
-    * **Excellent**: Multiple forms of evidence clearly tied to hypothesis, quantified differences, sensitivity analysis (e.g. time-series persistence, outlier impact, etc.)
-    * **Good**: Some evidence with basic comparisons, tied to hypothesis
-    * **Needs Work**: Limited evidence provided, no clear link to hypothesis
-    * **Poor**: Weak or missing evidence
+    * *Excellent*: Multiple forms of evidence clearly tied to hypothesis, quantified differences, sensitivity analysis (e.g. time-series persistence, outlier impact, etc.)
+    * *Good*: Some evidence with limited comparisons, not clearly tied to hypothesis
+    * *Needs Work*: Weak or missing evidence
 5. **Conclusions & Recommendations**: Whether there is a conclusion presented. The focus of this project is on the data cleaning and visualization, thus the conclusion slide is merely being graded on its existence
-    * **Excellent**: The conclusion is presented clearly, regardless of its economic feasibility
-    * **Poor**: No conclusion is presented
+    * *Excellent*: The conclusion is presented clearly, regardless of its economic feasibility
+    * *Needs Work*: No conclusion is presented
 6. **Storytelling & Slide Flow**: How cohesive the slides are, whether they incorporate good storytelling elements visually and logically
-    * **Excellent**: Clear narrative arc, effective text, strong takeaway headlines, executive-ready presentation
-    * **Good**: Good flow with reasonable cohesion
-    * **Needs Work**: Basic presentation, limited connection between slides
-    * **Poor**: Poor organization and design
+    * *Excellent*: Clear narrative arc, effective text, strong takeaway headlines, executive-ready presentation
+    * *Good*: Reasonable flow with unclear connections between slides
+    * *Needs Work*: Unclear organization, limited connection between slides
 7. **Professionalism & Formatting**: How aesthetic and professional the slides appear
-    * **Excellent**: Aesthetic, professional slides, consistent formatting
-    * **Good**: Minor formatting issues, otherwise professional and aesthetic
-    * **Needs Work**: Several formatting/grammar issues, or inconsistent design elements
-    * **Poor**: Unprofessional appearance, significant formatting problems
+    * *Excellent*: Aesthetic, professional slides, consistent formatting
+    * *Good*: Reasonable appearance with minor formatting inconsistencies
+    * *Needs Work*: Formatting/grammar issues, or inconsistent design elements
 
 
----
 ## 3. Data
 
 * **Source:** Compustat North America Fundamentals Annual file `CompustatAnnual.csv`.
@@ -136,7 +128,7 @@ I suggest the following measures, included in the dataset, for potentially inter
 - **Firm Age**: The age of the firm (post-IPO) in days.
 - **Firm Size**: Measured by total assets or market capitalization.
 
-It is up to you which cross-sectional variable you may wish to use, or you may choose to create your own (e.g. use one FSA variable to split the firms, and analyze the difference in another FSA variable? We'd call that an interaction effect, and boy would it be neat!).
+It is up to you which cross-sectional variable you may wish to use, or you may choose to create your own (e.g. use one FSA variable to split the firms, and analyze the difference in another FSA variable? We'd call that an interaction effect, and gee would it be neat!).
 
 While Industry, being a categorical variable already, is relatively straightforward to use, Firm Age and Firm Size (continuous variables) will likely require "binning," which is the process of creating "bins" or categories to group firms. For example, you could take firms from 0-5 years as one bin, 6-10 years as another, and so on. How you choose to bin these variables is an important analytical choice, and in the real world would depend on the specific research question you are interested in. Here, I suggest trying different bin sizes and looking at the distribution of ratios within each bin to help you choose a good binning strategy.
 
@@ -196,7 +188,6 @@ The following variables are provided in `CompustatAnnual.csv`. Unless otherwise 
 
 
 
----
 ## 4. Suggested Workflow
 
 1. Download and filter `CompustatAnnual.csv`, keeping years 2010&ndash;2024 and dropping missing values for the variables of interest.
@@ -222,6 +213,8 @@ Suggestions for handling data quality issues, which you should document in the A
 
 
 ### 4.2. Example: Gross Margin by GICS Sector
+
+This is just one example workflow; you should choose your own ratios and grouping variables based on your interests. Here, I illustrate the steps using Gross Margin by GICS Sector.
 
 1. **Data Preparation**
     * Download data, keep years 2010 - 2024, and drop observations with missing values of `sale` or `cogs`
@@ -288,12 +281,12 @@ Suggestions for handling data quality issues, which you should document in the A
 
     * **Slide 2 (Business Context & Question)**
         * Clear research question with measurable outcomes: "Does [ratio] vary materially by [industry]?"
-        * Economic rationale: "We expect this difference because [brief explanation]"
-        * Frame as investment decision: "Should we control for [industry] when building our portfolio on [ratio]?"
+        * Economic rationale (important!): "We expect this difference because [brief explanation]" *Note:* This slide needs to have an economic/accounting answer to the "why" you expect to see differences. Otherwise, it's just data mining!
         * Optionally include specific decision framework: "What action would different findings trigger?"
 
     * **Slide 3 (Data & Cleaning Choices)**
         * Description of data (what, from where, when, etc.)
+        * Key cleaning steps taken (outlier treatment, missing data handling, etc.)
         * Sample size (after cleaning)
         * Time period and industry coverage
         * Optional (keeping slides clear and concise): Summary statistics, basic summary visualization
@@ -311,11 +304,11 @@ Suggestions for handling data quality issues, which you should document in the A
 
     * **Slide 6 (Conclusion & Implications)**
         * Connect evidence back to original business question
-        * Specific recommendations for executive team (e.g. adjust portfolio construction based on industry)
-        * Optional: Acknowledge limitations and suggest further analysis
+        * Acknowledge limitations and suggest further analysis
+        * Optional: specific recommendations for executive team (e.g. adjust portfolio construction based on industry)
 
      * **[Optional] Slides 7+ (Appendix)**
         * *Note: the idea of an appendix slide is resources you would show if an audience member wants to dig deeper into the analysis. As such, it does not have to be as clear and concise as the main slides, but should still be professional.*
         * Data cleaning choices and their effects (dropping firms, bias from winsorization, etc.)
         * Ratio formulas and calculation methods
-        * More complex vizualiations
+        * More complex visualizations or statistical tests 

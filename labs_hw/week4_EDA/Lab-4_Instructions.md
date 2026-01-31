@@ -7,7 +7,7 @@ The GL data is for a fictitious company operating in California (4 locations), C
 This lab and homework are intended to get you familiar with a long general ledger dataset, and comfortable pivoting it to use for analyses.
 You will first explore revenue and cogs, then combine them for a (very rough) approximation of profit.
 
-Reminder: Labs no longer give extra credit for multiple modalities.
+Note: **This is a different dataset than Lab 2**, so please make sure you download this new file. Also I've already cleaned it for you, so you don't need to repeat the cleaning steps from Lab 2. {: .note}
 
 
 [TOC]
@@ -15,14 +15,13 @@ Reminder: Labs no longer give extra credit for multiple modalities.
 
 ## 1. Assignment
 
-**Submission:** To complete this lab, complete the Canvas quiz, including uploading visualizations in image form ([windows instructions](https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b#id0edd=windows_10), [macOS instructions](https://support.apple.com/en-in/guide/mac-help/mh26782/mac)):
+**Submission:** To complete this lab, complete the Canvas quiz, including uploading visualizations in image form:
 
 1. Line chart of monthly revenue and COGS over time (2 lines on one chart)
 2. Line chart of monthly revenue by account and COGS over time (4 lines on one chart)
 3. Line chart of calculated profit over time
 
-
-*Note*: Consider the aesthetics of your visualizations. Clear, well-organized visuals will help convey your findings more effectively. You are welcome to do any filtering, winsorizing, or other data transformations as needed to make the graphs more informative and visually appealing.
+*Note*: Consider the aesthetics of your visualizations. Clear, well-organized visuals will help convey your findings more effectively. For example, should revenue and cogs be positive or negative on your graph (hint: both positive). {: .note}
 
 
 
@@ -39,7 +38,7 @@ By the end of this lab, you will be able to:
 
 ## 2. Data
 
-The dataset for this lab is `Lab4-GeneralLedger.xlsx`, an Excel file containing General Ledger entries for a fictitous company operating in 6 cities across 4 states.
+The dataset for this lab is `Lab4-GeneralLedger.xlsx`, an Excel file containing General Ledger entries for a fictitious company operating in 6 cities across 3 states.
 
 ### 2.1. Data Dictionary
 
@@ -59,7 +58,7 @@ The dataset for this lab is `Lab4-GeneralLedger.xlsx`, an Excel file containing 
 
 ## 3. How-to Steps
 
-The general outline for Lab 3 will be:
+The general outline for Lab 4 will be:
 
 1. Load the data (it's cleaned, no need to repeat Lab 2)
 2. Explore the data, looking for which accounts pertain to revenue and cogs
@@ -71,7 +70,6 @@ The general outline for Lab 3 will be:
 My notes on the difficulty of each modality:
 
 * **Excel:** Some manual copy/pasting, but otherwise normal pivots and plots.
-* **Tableau:** Some custom calculations required (mostly for changing signs of debits/credits).
 * **Python:** Difficulty based on your knowledge of pandas, `groupby`, and `pivot_table`.
 
 ### 3.1. Excel Steps
@@ -114,63 +112,12 @@ My notes on the difficulty of each modality:
         2. Format axis labels to show currency where appropriate
         3. Use consistent colors (e.g., green for revenue, red for COGS)
 
-### 3.2. Tableau Steps
-
-[Tableau Cloud Link](https://10ay.online.tableau.com/#/site/accounting-data-analytics/home)
-
-1. **Load and explore the data**
-    1. Open Tableau and connect to `Lab4-GeneralLedger.xlsx`
-    2. Examine the data structure in the Data Source tab
-    3. Create a new worksheet
-    4. Drag `Account Name` to Rows and `Amount` to Text "Marks" (and change to COUNT) to see the different accounts and how many journal entries each has
-    5. Note which Accounts are related to Revenue or COGS
-
-2. **Explore the Transaction format**: Examine `Transaction Number` 2468 in the data to understand how sales transactions are recorded
-    1. Create a new worksheet
-    2. Drag `Transaction Number` to Filters and set to 2468
-    3. Drag `Account Name`, `Amount`, and `Description` to Rows to see the details (all variable bubbles should be blue, which means they are "Discrete" "Dimensions")
-
-3. **Filter and identify relevant accounts**
-    1. Create a new worksheet
-    2. Drag `Account Name` to the Filters shelf
-    3. Filter to show only accounts containing "Revenue" and "COGS" (which you identified in step 1.5)
-    4. I renamed this worksheet to "Filter Template" and then duplicated it for each of the 3 charts below. That way I only had to set the filter once.
-        - Expert tableau users will probably laugh at me for this roundabout solution.
-
-4. **Create Chart 1: Monthly Revenue and COGS over time (2 lines)**
-    1. Duplicate the "Filter Template" worksheet (if you're using that method, otherwise create a new worksheet and manually set the filters, then wonder why you didn't just duplicate)
-    2. Drag `Post Date` to Columns, and set it to Month (you can right-click the field to change the date granularity from year all the way to day)
-    3. Drag `Amount` to Rows. It will default to SUM, but be negative, which you can solve in optional step 6 below.
-    4. Drag `Account Name` to Color (this will create separate lines). We want to combine all the revenue accounts into one line, and the COGS account into another line. There are two ways to do this:
-        1. Create a calculation in the shelf to combine all revenue accounts into one, and COGS into another:
-            1. Right-click on the `Account Name` pill, and select "Edit in Shelf"
-            2. Enter the following Formula: `IF CONTAINS([Account Name], "Revenue") THEN "Revenue" ELSE "COGS" END`
-            3. Press "Enter" to apply
-        2. Use the "Combine Members" feature:
-            1. Select all the revenue accounts (you can Shift+Click to select multiple), and click "Combine"
-            4. Rename the new combined member to "Revenue" (right click and "Edit Alias")
-    5. *Optional*: Change the signs of the values by right-clicking the `SUM(Amount)` pill in Rows, selecting "Edit in Shelf", and setting the formula to `IF CONTAINS([Account Name], "Revenue") THEN -[Amount] ELSE [Amount] END`
-    6. *Optional*: Format the chart with clear title and axis labels 
-
-5. **Create Chart 2: Monthly Revenue by Account and COGS over time (4 lines)**
-    1. Duplicate Chart 1.
-    2. Remove the `Account Name` pill from Color (this is important, because it is a new calculated "Group", and if you ungroup the Revenues, that will apply to your other worksheet and Chart 1)
-    3. Drag the original `Account Name` field to Color (this will create separate lines for each revenue account and COGS)
-    4. *Optional*: Format the chart with clear title and axis labels, and colors
-
-6. **Create Chart 3: Calculated Profit over time**
-    1. Duplicate the "Filter Template" worksheet (if you're using that method, otherwise create a new worksheet and manually set the filters, then wonder why you didn't just duplicate)
-    2. Drag `Post Date` to Columns, and set it to Month (you can right-click the field to change the date granularity from year all the way to day)
-    3. Drag `Amount` to Rows. Because revenues and COGS have different signs, we can just sum them to get a rough profit, but it will be negative, so we can right click the `SUM(Amount)` pill in Rows, select "Edit in Shelf", and set the formula to `-[Amount]`.
-    4. *Optional*: Format the chart with clear title and axis labels
-
-
-### 3.3. Python Steps
+### 3.2. Python Steps
 
 The following steps assume you have opened Colab, uploaded the `Lab4-GeneralLedger.xlsx` file.
 
 1. **Load and explore the data**
-    * Load the libaries and data: 
+    * Load the libraries and data: 
         ```python
         import pandas as pd
         import seaborn as sns
@@ -187,7 +134,7 @@ The following steps assume you have opened Colab, uploaded the `Lab4-GeneralLedg
         df[df['Transaction Number'] == 2468]
         ```
 
-3. **Filter for revenue and COGS accounts**
+2. **Filter for revenue and COGS accounts**
     * Keep just the rows where `Account Name` contains revenue and COGS-related accounts:
         ```python
         # Filter for Account names that match Revenue OR COGS (the | is OR in regex)
@@ -196,21 +143,21 @@ The following steps assume you have opened Colab, uploaded the `Lab4-GeneralLedg
         rev_cogs_df['Account Name'].value_counts()
         ```
 
-5. **Create Chart 2: Monthly Revenue by Account and COGS over time (4 lines)**
+3. **Create Detailed Chart (Revenue by Account & COGS)**
     * We're going to do this chart first, because it's a one-liner in seaborn:
         ```python
         # Period is monthly, so we can just use seaborn's lineplot to do our aggregation
-        sns.lineplot(data=rev_cogs_df, x='Period', y='Amount', hue='Account Name', estimator='sum', ci=None)
+        sns.lineplot(data=rev_cogs_df, x='Period', y='Amount', hue='Account Name', estimator='sum', errorbar=None)
         ```
     * Well almost, now we have to fix the signs, because revenue is negative in the dataset (credits are negative, debits are positive)
         ```python
         sns.lineplot(data=rev_cogs_df.assign(
             Amount=lambda df: -df['Amount'].where(df['Account Name'].str.contains("Revenue"), -df['Amount'])),
-            x='Period', y='Amount', hue='Account Name', estimator='sum', ci=None)
+            x='Period', y='Amount', hue='Account Name', estimator='sum', errorbar=None)
         ```
     * Remember to format the axes and labels for aesthetics (see the end for an elaborate example)
 
-6. **Create Chart 2: Monthly Revenue and COGS over time (2 lines)**
+4. **Create Summary Chart (Total Revenue & COGS)**
     * We can do this by creating a new column that has just two values, "Revenue" and "COGS", then using that column as our "hue" in seaborn:
         ```python
         # Create a new column for Account
@@ -220,13 +167,13 @@ The following steps assume you have opened Colab, uploaded the `Lab4-GeneralLedg
         # Then same plot as above
         sns.lineplot(data=rev_cogs_df.assign(
             Amount=lambda df: -df['Amount'].where(df['Account'] == "Revenue", -df['Amount'])),
-            x='Period', y='Amount', hue='Account', estimator='sum', ci=None)
+            x='Period', y='Amount', hue='Account', estimator='sum', errorbar=None)
         ```
 
-7. **Create Chart 3: Calculated Profit over time**
+5. **Create Profit Chart**
      * Calculating the profit is pretty trivial, because within each month, we can just sum all transactions because the revenue and COGS have opposite signs:
     ```python
-    sns.lineplot(data=rev_cogs_df.assign(Amount=lambda df: -df['Amount']), x='Period', y='Amount', estimator='sum', ci=None)
+    sns.lineplot(data=rev_cogs_df.assign(Amount=lambda df: -df['Amount']), x='Period', y='Amount', estimator='sum', errorbar=None)
     ```
 
 For aesthetics, I usually format axes, and set limits on the graphs.
@@ -237,16 +184,16 @@ For aesthetics, I usually format axes, and set limits on the graphs.
     import seaborn as sns
     from matplotlib import pyplot as plt
 
-    # This just formats the axes nicely, allowing for the fact that the data in the
-    # dataset is in "millions", so needs to * 1_000_000 to get the units right.
-
+    # This just formats the axes nicely.
+    # The Mbt formatter stands for "Millions, Billions, Trillions"
+    
     def mbt_ff(**kwargs):
         from matplotlib.ticker import FuncFormatter
         def mbt_string_fmt(
             x,
             prefix="",
             suffix="",
-            scale=1e6,
+            scale=1,
             decimals=0,
             fmt="{l_paren}{prefix}{x:,.{decimals}f}{mbt}{suffix}{r_paren}",
             zero_fmt="{prefix}0",
@@ -258,14 +205,15 @@ For aesthetics, I usually format axes, and set limits on the graphs.
             kwargs["decimals"] = decimals
 
             if "l_paren" not in kwargs:
-                kwargs["l_paren"] = "(" * bool(x <= 0)
+                kwargs["l_paren"] = "(" * bool(x < 0)
             if "r_paren" not in kwargs:
-                kwargs["r_paren"] = ")" * bool(x <= 0)
+                kwargs["r_paren"] = ")" * bool(x < 0)
             x = abs(x) * scale
 
             if x == 0:
                 return zero_fmt.format(**kwargs)
-
+            
+            # Divide by 1000s to find the right suffix
             for d, mbt in enumerate(["", "K", "M", "B", "T"]):
                 if x < 1000:
                     break
@@ -276,16 +224,16 @@ For aesthetics, I usually format axes, and set limits on the graphs.
         return FuncFormatter(lambda x, p, kwargs=kwargs: mbt_string_fmt(x, position=p, **kwargs))
 
     # Once the above code is run, you can just run the following to make a nice graph
-    # of current assets vs. current liabilities
     sns.set_theme(style="whitegrid", context='talk')
-    ax = plt.figure(figsize=(6, 6)).gca()
-    # The actual plot itself
-    sns.scatterplot(data=df, x="fyear", y="at", ax=ax)
-    ax.set_ylabel("Average Assets")
-    ax.set_xlabel("Fiscal Year")
-    # limit the axes
-    ax.set_xlim(0, 100000); ax.set_ylim(0, 100000)
+    ax = plt.figure(figsize=(10, 6)).gca()
+    
+    # The actual plot itself (Example using the Profit data)
+    sns.lineplot(data=rev_cogs_df.assign(Amount=lambda df: -df['Amount']), 
+                 x='Period', y='Amount', estimator='sum', errorbar=None, ax=ax)
+                 
+    ax.set_ylabel("Profit")
+    ax.set_xlabel("Fiscal Period")
+    
     # format the axes labels (uses that function defined above)
-    ax.xaxis.set_major_formatter(mbt_ff(prefix="$"))
     ax.yaxis.set_major_formatter(mbt_ff(prefix="$"))
     ```

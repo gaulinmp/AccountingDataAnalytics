@@ -33,10 +33,11 @@ class CRSP(_DataFrameCache):
 
     def make_dataset(self):
         # Build sub-queries
-        good_gvkeys = "SELECT DISTINCT gvkey FROM comp.fundq WHERE atq IS NOT NULL AND rdq IS NOT NULL AND prccq * cshoq IS NOT NULL"
+        good_gvkeys = "SELECT DISTINCT gvkey FROM comp.fundq WHERE atq IS NOT NULL AND rdq IS NOT NULL AND prccq IS NOT NULL"
 
-        good_permnos = f"SELECT DISTINCT lpermno FROM crsp.ccmxpf_linktable WHERE lpermno IS NOT NULL AND gvkey IN ({good_gvkeys})"
-
+        good_permnos = f"SELECT DISTINCT lpermno FROM crsp.ccmxpf_lnkhist WHERE lpermno IS NOT NULL AND gvkey IN ({good_gvkeys})"
+        
+        # Ols SIZ format
         sql_dsf = f"""
             SELECT a.permno, ticker, shrcls, date, prc, vol, ret, bid, ask, shrout
             FROM crsp.dsf AS a
@@ -45,6 +46,21 @@ class CRSP(_DataFrameCache):
                 AND a.date BETWEEN COALESCE(b.namedt, '1900-01-01') AND COALESCE(b.nameenddt, current_date)
             WHERE EXTRACT(year from date) >= 1995
                 AND a.permno IN ({good_permnos})
+        """
+
+        sql_dsf = f"""
+        SELECT permno, ticker, dlycaldt AS date,
+            dlyret AS ret, dlyprc AS prc, shrout,
+            dlyvol AS vol, dlybid AS bid, dlyask AS ask
+        FROM crspq.dsf_v2
+        WHERE ShareType = 'NS' 
+            AND SecurityType = 'EQTY' 
+            AND SecuritySubType = 'COM' 
+            AND USIncFlg = 'Y' 
+            AND IssuerType IN ('ACOR', 'CORP')
+            AND primaryexch IN ('N','A', 'Q')
+            AND permno IN ({good_permnos})
+            AND yyyymmdd >= 19940601
         """
 
         with wrds_connection() as conn:

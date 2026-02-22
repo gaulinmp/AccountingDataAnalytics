@@ -4,7 +4,6 @@ data/
 labs_hw/cases/
 labs_hw/week12_AI/demo1/
 literature/
-slides/
 syllabus/
 
 # File types
@@ -23,6 +22,8 @@ __pycache__/
 .ipynb_checkpoints/
 *.lock
 .pixi/
+.venv/
+.env/
 
 # Editors
 .vscode/

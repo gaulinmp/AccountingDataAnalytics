@@ -29,6 +29,8 @@ jobs:
         working-directory: ./site
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: site-rework
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -51,6 +53,8 @@ jobs:
       PUBLIC_OT_TOKEN: ${{ secrets.PUBLIC_OT_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: site-rework
       - name: Write CNAME for a custom domain (only if PUBLIC_CNAME is set)
         if: ${{ vars.PUBLIC_CNAME != '' }}
         run: echo "${{ vars.PUBLIC_CNAME }}" > site/public/CNAME

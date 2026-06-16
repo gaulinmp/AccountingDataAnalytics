@@ -1,0 +1,85 @@
+---
+week: week-08
+title: "Analytical Model Lifecycle"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Modeling Lifecycle">
+
+- Iterative process
+  - Continually consider changing or refining previous stages
+  - Once deployed, define new features or improvements
+
+</Slide>
+
+<Slide title="Define the Goal">
+
+- What question or decision do we have?
+  - What AR are uncollectable?
+  - Whether to impair goodwill or not
+- Define the scope of the question
+  - What decisions will the modeling inform?
+  - How will we measure success?
+  - What is the timeline?
+
+</Slide>
+
+<Slide title="Define the Goal">
+
+- Define the constraints
+  - What can/cannot be concluded from the results?
+  - What are the limitations of the model?
+- Define the concerns and risks
+  - What’s the cost of being “wrong”? (error cost)
+  - How “wrong” is acceptable? (error rates)
+  - What are potential biases in the model or data?
+
+</Slide>
+
+<Slide title="Collect the Data">
+
+- Identify necessary data to fit model
+- Consider limitations of data
+  - Do they affect what the model can address?
+- Automate collection where possible
+- Document data sources, access methods, dates
+- Go back and update the goal definition step depending on data availability, quality, etc.
+
+</Slide>
+
+<Slide title="Develop and fit the Model">
+
+- Choose model type to fit goal
+  - Descriptive, diagnostic, predictive or prescriptive?
+  - Simple KPI dashboard, historical average, neural net?
+- Consider “cost” of model
+  - False positives/negatives: cost of being wrong?
+  - Prediction error: how wrong could we be?
+- Tune the model to fit the data
+  - Feature engineering, K-fold validation, train/test sets
+
+</Slide>
+
+<Slide title="Evaluate Performance">
+
+- Determine how well the model performs
+  - Back-testing: applying model to historical data
+  - Sensitivity analysis: how much does outcome change if inputs are changed (e.g. interest rates, costs, etc.)?
+  - Accuracy: RMSE, AUC, confusion matrix, etc.
+- Assess economic impact
+  - Were predictions of risks or costs/benefits accurate?
+- Update previous steps given assessed performance
+
+</Slide>
+
+<Slide title="Deploy the model">
+
+- Put the model into use
+  - Automated if possible, e.g. dashboards
+  - Requiring minimal interactions if not, e.g. pull new data manually, then run the rest automatically
+- Continual evaluation
+  - Economic effects likely not realized for some time
+- Re-evaluate from step 1 with regularity
+
+</Slide>

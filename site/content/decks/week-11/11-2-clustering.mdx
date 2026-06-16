@@ -1,0 +1,83 @@
+---
+week: week-11
+title: "Clustering"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is clustering?">
+
+- Supervised learning is great at predicting what we want to know
+- What if we don’t know what we don’t know?
+  - Are there customer “types” that we should be aware of
+  - What information is in text disclosures?
+
+</Slide>
+
+<Slide title="General approaches">
+
+- Centroid approach – clusters have “centers” and your assigned cluster is the closest one
+- Density approach – clusters are concentrations of observations, like cities are densely populated areas
+- Hierarchical approach – clusters form a hierarchy, like a tree diagram
+
+</Slide>
+
+<Slide title="Centroid Workhorse – K-means">
+
+- Algorithm:
+  - Choose K random cluster centers, assign every point to its nearest cluster
+  - Recompute the center of each cluster as center of its points, re-assign clusters to each point
+  - Repeat #2 until there is no more movement
+- Choosing K and the first random centers both can have huge impacts on outcome
+
+</Slide>
+
+<Slide title="4-Means Example">
+
+<ImageCaption src="/decks/week-11/11-2-clustering/img1.png" alt="4-Means Example" />
+
+</Slide>
+
+<Slide title="4-Means Example">
+
+<ImageCaption src="/decks/week-11/11-2-clustering/img2.png" alt="4-Means Example" />
+
+</Slide>
+
+<Slide title="4-Means Example">
+
+<ImageCaption src="/decks/week-11/11-2-clustering/img3.gif" alt="4-Means Example" />
+
+</Slide>
+
+<Slide title="Density Clustering">
+
+- Connects areas of “high density” into clusters
+- Discovers # of clusters
+- Outliers in no cluster (good for anomaly detection)
+- Like cities, hard to draw boundaries, hard to compare NYC and Moab
+
+<ImageCaption src="/decks/week-11/11-2-clustering/img4.png" alt="Density Clustering" />
+
+</Slide>
+
+<Slide title="Hierarchical Clustering">
+
+- Determines a hierarchy by:
+  - Splitting dataset – top down
+  - Combining points – bottom up
+- A cluster distance can be set to get N clusters at that point
+  - Smaller distance  more clusters
+- Good for hierarchical data
+
+</Slide>
+
+<Slide title="Cautions and Caveats">
+
+- Lots of accounting and finance data are clustered due to their hierarchical nature (e.g. sub-accounts)
+  - This requires special consideration so the clustering algorithm does not just re-discover the hierarchy
+- Clusters may not “converge” and just be noise
+- Clusters are not always interpretable
+- Clusters may not have business application
+
+</Slide>

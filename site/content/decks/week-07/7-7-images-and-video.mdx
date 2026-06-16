@@ -1,0 +1,170 @@
+---
+week: week-07
+title: "Unstructured Image Data"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Why care about images?">
+
+- Increasingly used in accounting
+  - Images of receipts for reimbursement
+  - Inventory tracking and verification
+  - Evidence for asset write-offs
+- Important to understand caveats and limitations of image processing and use
+
+</Slide>
+
+<Slide title="Image processing basics">
+
+- Image processing used to look like historical NLP, lots of steps, transforms, and heuristics
+  - Line detection, distance/area calculations, thresholding, segmentation
+- Image analysis tasks were very customized and expensive to design, develop, and deploy
+
+</Slide>
+
+<Slide title="Example – counting Sheep">
+
+- Load image
+
+</Slide>
+
+<Slide title="Example – counting Sheep">
+
+- Load image
+- Make greyscale
+
+</Slide>
+
+<Slide title="Example – counting Sheep">
+
+- Load image
+- Make greyscale
+- Threshold to BW
+
+</Slide>
+
+<Slide title="Example – counting Sheep">
+
+- Load image
+- Make greyscale
+- Threshold to BW
+- Remove small objects
+
+</Slide>
+
+<Slide title="Example – counting Sheep">
+
+- Load image
+- Make greyscale
+- Threshold to BW
+- Remove small objects
+- Shrink objects
+
+</Slide>
+
+<Slide title="Example – counting Sheep">
+
+- Load image
+- Make greyscale
+- Threshold to BW
+- Remove small objects
+- Shrink objects
+- Count remaining
+- = 3076 (actually 3067)
+
+</Slide>
+
+<Slide title="Image processing Now">
+
+- Machine learning introduced statistical methods to segment and identify objects in images
+  - Better OCR, object detection and classification, denoising
+- Off the shelf solutions for many tasks
+  - The EY sheep case used: countthings.com
+- Customizing and fine-tuning often necessary
+
+</Slide>
+
+<Slide title="OCR and Receipts">
+
+- This is a receipt from my recent shopping trip. Please transcribe it into a table.
+
+<DataTable
+  columns={["Purchased Items", ""]}
+  rows={[
+    ["LP HOTPOT SAUCE", "$4.39 FTO"],
+    ["Disc. $2.00", ""],
+    ["LKK FRIED TOFU BALL", "$2.99 FTO"],
+    ["ASN SOY BEAN PASTE", "$3.59 FTO"],
+    ["1 @ 3.39/lb $3.39/lb", ""],
+    ["LOTUS ROOT", "$3.90 FY1"],
+    ["MEME", ""],
+    ["XFY SPICY SEASONING BASE", "$4.99 FTO"],
+    ["XFY MUSHROOM SOUP BASE", "$4.99 FTO"],
+    ["XFY SPICY SEASONING BASE", "$4.99 FTO"],
+    ["LP HOTPOT BASE", "$4.99 FTO"],
+    ["Disc. $2.00", ""],
+    ["LP HOTPOT SAUCE", "$4.99 FTO"],
+    ["Disc. $2.00", ""],
+    ["LP HOTPOT BASE", "$4.99 FTO"],
+    ["Disc. $2.00", ""],
+    ["SJX HOT POT BASE", "$13.99 FTO"],
+    ["Summary", ""],
+    ["Item Count:", "11"],
+    ["Subtotal:", "$59.40"],
+    ["Tax:", "$1.79"],
+    ["Total:", "$61.19"],
+    ["Payment:", "$61.19"],
+    ["Cash Change:", "$0.00"],
+    ["You Saved:", "$8.00"],
+    ["Payment Method", ""],
+    ["Type:", "CREDIT SALE"],
+    ["Card:", "VISA ***1190"],
+    ["Entry Method:", "CONTACTLESS"],
+    ["Auth. Code:", "64211"],
+    ["Amount:", "$61.19"],
+  ]}
+/>
+
+- Gemini prompt: This is a receipt from my recent shopping trip. Please transcribe it into a table.
+- Output (including table to right):
+- Store Information:
+- CHINATOWN SUPERMARKET
+- 3390 South State Street
+- Salt Lake City, UT 84115
+- (801) 906-8788
+- Transaction Details:
+- Station 04 2041752958
+- 05/19/2025 12:06:19
+- Cashier #: 275
+- AUTH CODE: 069611
+- ENTRY METHOD: CONTACTLESS
+- ACCT: VISA ************1130
+
+</Slide>
+
+<Slide title="Gemini – Count the Sheep">
+
+- Prompt: This is an image of sheep taken from a drone. Please count the sheep in this image.
+- Answer: I am unable to provide an exact count of the sheep in the image. Due to the high number of sheep, their close proximity, and the aerial perspective, it is very difficult to distinguish and count each individual animal accurately.
+- Attempting a manual count would be prone to significant error. Automated counting through image analysis would require specialized software and would still likely face challenges with overlap and resolution.
+- Therefore, I cannot fulfill your request for an exact count of the sheep in this image.
+
+</Slide>
+
+<Slide title="ChatGPT – Count the Sheep">
+
+- Prompt: This is an image of sheep taken from a drone. Please count the sheep in this image.
+- Answer: Counting the exact number of sheep in this image is challenging due to their dense and overlapping formation. However, I can use image processing techniques to estimate the number. Let me process the image to give you a sheep count estimate.
+- [code]
+- There are approximately 2,347 sheep in the image based on contour detection from the drone photo. Here is the visual overlay showing the detected sheep outlined in green.
+
+</Slide>
+
+<Slide title="Image Analysis Caveats">
+
+- Only as good as the algorithm
+- Off the shelf solution may have noise or bias (based on the assumptions is makes or features it has)
+- Customization is costly, should be balanced against errors (type and amount)
+
+</Slide>

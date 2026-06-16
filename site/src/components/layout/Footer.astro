@@ -1,0 +1,55 @@
+---
+import { getEntry } from 'astro:content';
+
+const course = await getEntry('course', 'course');
+const c = course!.data;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p class="line">
+    © {year} {c.school} · {c.code} {c.title} · {c.term}
+  </p>
+  <p class="line muted">
+    {c.instructors.join(' · ')}
+  </p>
+  <p class="line muted small">
+    Icons by <a href="https://lucide.dev" rel="noopener">Lucide</a> (ISC License).
+  </p>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-12);
+    padding: var(--space-8) var(--space-5);
+    border-top: 1px solid var(--border);
+    background: var(--surface-muted);
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+  }
+
+  .line {
+    margin: 0 0 var(--space-2);
+  }
+
+  .muted {
+    color: var(--gray-600);
+  }
+
+  .small {
+    font-size: var(--fs-xs);
+  }
+
+  .site-footer a {
+    color: var(--brand);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition);
+  }
+
+  .site-footer a:hover {
+    color: var(--brand-hover);
+    text-decoration: underline;
+  }
+</style>

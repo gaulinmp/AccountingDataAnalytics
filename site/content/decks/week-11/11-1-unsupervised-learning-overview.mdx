@@ -1,0 +1,66 @@
+---
+week: week-11
+title: "Unsupervised Learning"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Why unsupervised?">
+
+- Supervised learning is great at predicting what we want to know
+- What if we don’t know what we don’t know?
+  - Are there customer “types” that we should be aware of
+  - What information is in text disclosures?
+
+</Slide>
+
+<Slide title="Analogy – Sorting Skittles">
+
+- A bag of skittles is dumped on the floor, and all measurements taken (color, size, weight, etc.)
+- Clustering – separate skittles into colors
+  - A regression approach might know that lime and green-apple are different, clustering might not
+- Dimensionality Reduction – strongest “factor” is color, then weight, no difference in size
+
+</Slide>
+
+<Slide title="Categorizing Analytical Methods">
+
+<ImageCaption src="/decks/week-11/11-1-unsupervised-learning-overview/img1.png" alt="Categorizing Analytical Methods" />
+
+</Slide>
+
+<Slide title="unsupervised Learning">
+
+- Used when we don’t have outcomes
+- Approaches capture structures and relationships
+- Example: identifying groups, computing factors
+
+<ImageCaption src="/decks/week-11/11-1-unsupervised-learning-overview/img2.png" alt="unsupervised Learning" />
+
+</Slide>
+
+<Slide title="Clustering in Accounting">
+
+- Example: grouping transactions into types
+  - Classification might predict which account applies
+  - Clustering might find non directly labeled clusters such as “discretionary”, “periodic”, “abnormal”, etc.
+  - Clusters could capture factors that span accounts, but have similar features that may be worth monitoring
+
+</Slide>
+
+<Slide title="Dimensionality Reduction in Accounting">
+
+- Example: deriving customers risk “factors”
+  - Regression might predict probability of bad debt
+  - Dimensionality reduction might find risk “factors”, such as financial stability, risk appetite, loyalty, etc.
+  - Factors aid in understanding customer types, such as the stable risk seeker, or safe loyal customer, and can be used to decide services provided or AR terms
+
+</Slide>
+
+<Slide title="Cautions and Caveats">
+
+- Often require a lot of data
+- Need careful consideration of out-of-sample validity
+- Clusters may not have business application
+
+</Slide>

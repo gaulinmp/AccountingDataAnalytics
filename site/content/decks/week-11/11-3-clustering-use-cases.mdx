@@ -1,0 +1,72 @@
+---
+week: week-11
+title: "Using Clustering in Accounting"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Applications of Clustering">
+
+- Anomaly and fraud detection
+- Customer segmentation
+
+</Slide>
+
+<Slide title="Example 1: Anomaly & fraud detection">
+
+- We may have some known cases of errors or fraud
+  - Could train a classifier to predict those, look for other similar cases
+- What about future fraud?
+- Bad actors are likely always looking to change their tactics, so backward looking methodology may fall short
+
+</Slide>
+
+<Slide title="Clustering transactions">
+
+- What if we clustered transactions on all available transaction characteristics (often, more is better)
+- Look into outliers, observations that don’t fit
+  - Point anomaly: observation that always stands out
+  - Contextual anomaly: observation that stands out given some context, or expectations
+  - Collective anomaly: collection of observations that stand out because of their relation and characteristics
+
+</Slide>
+
+<Slide title="Approach to anomaly detection">
+
+- Perform clustering to set a “baseline” of normal (or the vast majority) of the data
+- Determine what “outlier” means given this baseline
+  - Need some measure how far “out” an observation is (e.g., distance from the center of the cluster)
+  - Set a cutoff past which an observation is flagged
+- Identify outliers, and look into them further (i.e., audit by exception)
+
+</Slide>
+
+<Slide title="clustering Value Add">
+
+- Historically fraud detection was rule based
+  - E.g., low income, high consumption/bank activity
+- Clustering analyzes lots of variables simultaneously
+- Identified outliers will have some complex interaction of variables that makes them unlike their peers
+- Past some set of “rule of thumb” approaches, this kind of high dimensional rule making is hard for humans to do
+
+</Slide>
+
+<Slide title="Example 2: Customer Segmentation">
+
+- Classification needs some label to predict
+  - What are the labels for customer “types”?
+- Clustering would provide groups
+  - Up to analyst to interpret groups, e.g. “high volume, prompt payer” and “high churn, low value”
+- Starting conditions, model selection dictate value of identified clusters
+  - Compute is cheap!
+
+</Slide>
+
+<Slide title="Usefulness of Customer Clusters">
+
+- Identify factors associated with customer types that might have been hard to disentangle otherwise
+  - Learn new things about customer behavior patterns
+- Resource allocation – pursue customer types that provide high value
+- Risk identification – learn what correlates with risky type customers, to hedge or avoid
+
+</Slide>

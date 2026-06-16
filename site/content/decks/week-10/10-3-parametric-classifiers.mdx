@@ -1,0 +1,77 @@
+---
+week: week-10
+title: "Parametric Classifier Models"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Classifier Models">
+
+<ImageCaption src="/decks/week-10/10-3-parametric-classifiers/img1.png" alt="Classifier Models" />
+
+- Many different classifiers
+  - Differ in assumptions
+  - Differ in treatment of data
+  - Differ in treatment of “error”
+  - Differ in what the analyst must specify
+
+</Slide>
+
+<Slide title="Most basic: Logistic Regression">
+
+</Slide>
+
+<Slide title="Most basic: Logistic Regression">
+
+<ImageCaption src="/decks/week-10/10-3-parametric-classifiers/img2.png" alt="Most basic: Logistic Regression" />
+
+<ImageCaption src="/decks/week-10/10-3-parametric-classifiers/img3.png" alt="Most basic: Logistic Regression" />
+
+</Slide>
+
+<Slide title="Most basic: Logistic Regression">
+
+- y = m*x + b
+- Logistic regressions compute effect on log odds, or how much the log odds changes given a change in x
+  - Positive is more likely, negative is less
+  - Because this is useless, we calculate marginal effects
+- The variables are treated as independent
+  - Meaning if you put both height in inches and height in cm into the model, it wouldn’t know they are the same
+
+</Slide>
+
+<Slide title="Other Regression Classifiers">
+
+<ImageCaption src="/decks/week-10/10-3-parametric-classifiers/img4.png" alt="Other Regression Classifiers" />
+
+</Slide>
+
+<Slide title="Improving on Regression Classifiers">
+
+- Like OLS, we can add non-linearity in the x variables
+- We can also add more x variables
+- We can handle “unbalanced labels”
+  - Bankruptcy is rare, so mostly 0s, a few 1s
+  - This is the intent of C-log-log
+
+</Slide>
+
+<Slide title="Non-regression Classifiers">
+
+- Regression classifiers try to predict classes as if they were some continuous variable (e.g., probability)
+- Other classifiers just try to learn the best separation
+  - Examples: SVM, perceptron
+
+</Slide>
+
+<Slide title="Classifying without Probability (SVM)">
+
+<ImageCaption src="/decks/week-10/10-3-parametric-classifiers/img5.png" alt="Classifying without Probability (SVM)" />
+
+</Slide>
+
+<Slide title="Selecting Parametric Classifiers">
+
+<ImageCaption src="/decks/week-10/10-3-parametric-classifiers/img6.png" alt="Selecting Parametric Classifiers" />
+
+</Slide>

@@ -1,0 +1,134 @@
+---
+week: week-09
+title: "Regression Models 2.0"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Regression Models">
+
+- Differ in complexity
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img1.png" alt="Regression Models" />
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img2.png" alt="Regression Models" />
+
+</Slide>
+
+<Slide title="Parametric vs Non-parametric">
+
+- Parametric models specify the relationships between variables and the outcome
+  - y = m*x + b
+- Non-parametric doesn’t, just learns the best relationship it can
+  - y = f(x) + random error
+  - f is “learned” by predicting y as best as possible
+
+</Slide>
+
+<Slide title="Why add complexity?">
+
+- Complex patterns are hard to model
+- When using multiple variables, they are often related
+  - Parametric methods require you to explicitly model these relations
+
+</Slide>
+
+<Slide title="Local methods">
+
+- Examples: K-nearest neighbors, kernel regression
+- Fit the line based on just the close points, not all
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img3.gif" alt="Local methods" />
+
+</Slide>
+
+<Slide title="Local Methods">
+
+- Input from analyst is not the model, but “how” the algorithm should learn the line
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img4.gif" alt="Local Methods" />
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img5.gif" alt="Local Methods" />
+
+</Slide>
+
+<Slide title="Tree-based models">
+
+- Decision tree regression is just a bunch of if-thens
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img6.png" alt="Tree-based models" />
+
+</Slide>
+
+<Slide title="Tree-based models">
+
+<ImageCaption src="/decks/week-09/9-5-regression-models-2/img7.gif" alt="Tree-based models" />
+
+</Slide>
+
+<Slide title="When one tree isn’t enough">
+
+- Decision trees can overfit easily (more depth)
+- Can change drastically when training data changes
+- Solution: combine multiple models into “ensembles”
+  - Take the average model output, or weight models based on accuracy
+  - Bagging: train on random slices of the data
+  - Boosting: train subsequent trees to fix errors
+  - Stacking: trees on trees on trees
+
+</Slide>
+
+<Slide title="Random Forest (bagging)">
+
+- Example: Instead of asking one expert’s prediction, ask 100 and take the average or most common answer
+- Train each tree on a random subset of the data to reduce overfitting
+- Train each tree on a random subset of the features to avoid overemphasizing a variable
+  - This also allows for missing data!
+
+</Slide>
+
+<Slide title="Gradient Boosting Regression">
+
+- Example: Ask an expert. Ask a second expert to correct what the first got wrong. Ask a third to correct the second…
+- Models can be simple, or “weak” learners
+- Idea is every step is a model that’s “good enough” because the next step will fix what’s still wrong
+  - Subsequent models just have to predict prior step’s error with less error (i.e., better than a coin flip)
+
+</Slide>
+
+<Slide title="Gradient Boosting Regression">
+
+- Example: Ask an expert. Ask a second expert to correct what the first got wrong. Ask a third to correct the second…
+- Expert 1: pred1 = Y + error1 (Y > error1)
+- Expert 2: pred2 = –error1 + error2 (error1 > error2)
+- Final prediction = pred1 + pred2
+- = Y + error1 – error1 + error2
+- = Y + error2
+
+</Slide>
+
+<Slide title="Stacking: neural networks">
+
+- Example: A manager who uses recommendations from different specialists (e.g., an engineer, a designer, a financial analyst) to make the final executive decision
+- Initial models trained on the data and filter out noise
+- Later models use those predictions to make final decisions
+- The more layers, the more complexity can be learned
+
+</Slide>
+
+<Slide title="In practice">
+
+- Start with XGBoost, if good enough, done
+- Try other models if not
+
+</Slide>
+
+<Slide title="When to avoid more complex models">
+
+- If you know the real relationship, model it with a simple model!
+  - This will perform better out of sample, won’t overfit
+- If you think the relationship is simple
+- If you don’t have much data
+- You need to interpretability
+
+</Slide>

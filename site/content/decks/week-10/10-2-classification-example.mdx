@@ -1,0 +1,113 @@
+---
+week: week-10
+title: "Classification Example: Categorizing Transactions"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Example: categorizing transactions">
+
+- Bank transactions ingested with limited information that need to be categorized into accounts for inclusion in the general ledger
+- Our task is to train a model to predict to which account any given transaction may belong
+- Outline: define, collect, model, evaluate, deploy
+
+</Slide>
+
+<Slide title="Define the goal">
+
+- Categorize transactions from bank data
+  - ETL pulling bank data using API
+  - Develop category prediction model  this video’s focus
+    - Categories should be pulled from accounting system
+  - Load labeled categories into accounting system
+- Preferably flag uncertain labels
+
+</Slide>
+
+<Slide title="Data: Collection">
+
+- Data from internal accounting system
+  - Previously categorized transactions
+- Data from bank (accessed automatically via API):
+  - Vendor name: name of payee
+  - Description: short memo text
+  - Date
+  - Amount
+
+</Slide>
+
+<Slide title="Data: Train/test Split">
+
+- Test set: 10% of categorized transactions
+- Training set: remaining data to train our classifier
+- Ideally, we would only ever once look at the test set
+  - In practice, this is unlikely achievable
+
+</Slide>
+
+<Slide title="Model: Choosing a model">
+
+- Data comprises text, date, and numeric variables
+- The text data is likely the most informative
+  - Vectorization choice is key, but testable!
+  - Need a model that can handle text dimensionality
+- We might think “similarity” will be our approach
+  - K-nearest neighbors needs distance metric
+  - Decision trees don’t, let’s try this first
+  - Neural net is likely overkill, keep as a fallback
+
+</Slide>
+
+<Slide title="Modeling: Fitting the model">
+
+- Try fitting the model with “default” parameters
+  - Defaults in most software are usually a decent lower bound on how well the model might perform
+
+</Slide>
+
+<Slide title="Evaluation">
+
+- Investigate how well first pass at model did
+  - Accuracy: what % of categories were correctly predicted?
+  - Precision: how many predicted “expense” labels were actually expenses?
+  - Recall: how many actual expenses were correctly labeled “expense”?
+- Which do we care about? There are trade-offs
+
+</Slide>
+
+<Slide title="Model 2.0: Choosing Parameters">
+
+- We may want to improve model accuracy
+- K-fold cross-validation helps choose parameters and solve overfitting
+  - Split training data into 80% and 20%
+    - Choose initial parameters, train model on 80%
+    - Test model on 20%
+  - Repeat for each combination of parameters
+  - Choose parameters with best test accuracy
+
+</Slide>
+
+<Slide title="Model 2.0: Choosing Parameters">
+
+- K-fold cross-validation helps choose parameters and solve overfitting
+
+<ImageCaption src="/decks/week-10/10-2-classification-example/img1.png" alt="Model 2.0: Choosing Parameters" />
+
+</Slide>
+
+<Slide title="Deploy">
+
+- Run model on new bank data
+  - Online: automatically pull new data, predict labels, load into accounting system
+  - Offline: manually pull new data, predict labels, check results, enter into accounting system
+- Randomly sample results for review
+
+</Slide>
+
+<Slide title="Iterate">
+
+- Consider further developing methods to continually evaluate categorizing performance
+- Develop method for flagging transactions that are difficult to categorize for manual review
+- Further improve model as more data comes in
+
+</Slide>

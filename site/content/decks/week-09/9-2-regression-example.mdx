@@ -1,0 +1,105 @@
+---
+week: week-09
+title: "Regression Example: Calculating Cost Functions"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Example: Calculating Cost Functions">
+
+- Our task is to calculate more accurate product costs
+- Differentiating between product and period costs is difficult
+- Outline: define, collect, model, evaluate, deploy
+
+</Slide>
+
+<Slide title="Define the goal">
+
+- Estimate product costs across firm’s offerings
+  - ETL combining purchase records, inventory, overheads
+  - Develop cost prediction model  this video’s focus
+  - Create reports and dashboards to communicate historical costs and forecast future costs for planning
+- Outcome is calculations of average costs, in the realm of diagnostic modeling
+  - Potential future expansion for predictive costing
+
+</Slide>
+
+<Slide title="Data: Collection">
+
+- Data from internal systems
+  - Purchase records for materials
+  - Payroll records for labour
+  - Expense records for overheads
+  - Inventory system for accrual tracking
+
+</Slide>
+
+<Slide title="Model: Choosing a model">
+
+- Production costs likely stepwise linear
+  - Potential concavity (economies of scale)
+  - Potential convexity (increasing costs)
+- Try simple linear model to start (OLS)
+  - Interpretable coefficients lead to differentiating between variable and fixed costs
+  - Allows cost prediction as production volume changes
+
+</Slide>
+
+<Slide title="Modeling: Fitting the model">
+
+- Start with most simple approach: TC = FC + VC * X
+  - We know TC and X (volume), predicting fixed and variable costs
+
+<ImageCaption src="/decks/week-09/9-2-regression-example/img1.png" alt="Modeling: Fitting the model" />
+
+</Slide>
+
+<Slide title="Evaluation">
+
+- Investigate how well first pass at model did
+  - R2: how much of our total cost did we explain?
+  - RMSE: what was our average error in dollars?
+- First model was an average cost based on volume
+- Do we want more detail?
+  - Break out product inputs?
+  - Break out each product?
+
+</Slide>
+
+<Slide title="Model 2.0: Break out inputs">
+
+- Instead of volume, let’s use inputs (broad categories)
+- TC = FC + VCL*DL + VCM*DM + VCV*VOH
+- DL: amount of labor, in hours
+- DM: amount of material, e.g. by weight
+- VOH: amount of variable overhead, by cost driver
+
+</Slide>
+
+<Slide title="Model 2.0: Interpretation">
+
+- FC estimate tells us our average fixed cost in dollars
+- VC estimates tell us our $ of cost per driver
+  - E.g. average $ / labour hour
+- These estimates are averages, but we could add more terms to model to do less aggregating
+  - E.g. multiple DMs, e.g. metal and plastic separately
+
+</Slide>
+
+<Slide title="Deploy">
+
+- Apply parameter estimates to the amount of input each product requires
+  - E.g. VCM * material per widget
+- These estimates could be used to cost out future products and perform NPV analyses
+
+</Slide>
+
+<Slide title="Iterate">
+
+- Consider further developing model to more closely mirror the true economic production function
+  - E.g. explicitly model semi-fixed costs like PP&E
+- Test predictions against cost-saving measures to estimate out of sample / predictive accuracy
+  - Fix issues where you identify them
+- Further improve model as more data comes in
+
+</Slide>

@@ -1,0 +1,90 @@
+---
+week: week-08
+title: "Types of Models"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Modeling Overview">
+
+- A model is a description of how the world works
+  - E.g. market equity is discounted cash flows
+- Could be mathematical models
+  - Example: Y = m*X + b
+- Could be flow-charts to formalize decision-making
+  - Example: Lease accounting determination
+
+</Slide>
+
+<Slide title="General Model Intents">
+
+- Descriptive: What happened?
+- Diagnostic: Why did it happen?
+- Predictive: What will happen?
+- Prescriptive: What should we make happen?
+- Significant overlap (not a clean classification)
+  - Because it’s all just modeling
+
+</Slide>
+
+<Slide title="Model Intent Timeline">
+
+- Identify a situation and what occurred (descriptive)
+- Determine why it occurred the way it did (diagnostic)
+- Leverage that knowledge to predict outcomes outside the specific situation (predictive)
+- Consider different outcomes and choose one for some (good) reason (prescriptive)
+
+</Slide>
+
+<Slide title="Descriptive Models">
+
+- Intent is to describe, or capture something
+- Lots of learning about the data and setting
+  - Your accounting domain knowledge is critical here!
+- Typically where we do exploratory data analysis
+- Often utilizing summary statistics, simple regressions
+
+</Slide>
+
+<Slide title="Diagnostic Models">
+
+- Intent is to take the next step and learn why what you observed happened
+- The validity of the results relies entirely on the model
+- This is where most economists live
+  - They are notoriously averse to predicting the future!
+- Often done with regressions/classifications
+  - Outlier analysis for audit / forensic accounting
+  - Growth measurement and seasonality adjustment
+
+</Slide>
+
+<Slide title="Predictive Models">
+
+- Intent is to use your knowledge to model new outcomes (i.e. predicting the future)
+- Also used to understand what would have happened if different decisions had been made
+- Very dependent on model and assumptions
+  - Was data used “normal” or representative?
+  - Will assumptions change going forward (e.g. interest)?
+- Often conflated with diagnostic models
+
+</Slide>
+
+<Slide title="Prescriptive Models">
+
+- Intent is to decide what actions to take
+  - Models with turnable dials to perform what-if analyses
+  - Flow-charts to guide decisions
+- Can result in a firm conclusion, or a data-backed input for decision-makers
+- Should factor in harder to model inputs such as risk
+- Careful about relying on predictive models of causality (the point of choosing is to change things!)
+
+</Slide>
+
+<Slide title="Modeling Caveats">
+
+- Most modeling boils down to using historical data to make inferences about the future
+  - Correlational approaches (most machine learning) often cannot predict what it has not “seen”
+  - Modeling the structure (most economics) often will not pick up real world complexity, and parameters are determined by correlational approaches
+- It all depends on the assumptions (data and model)
+
+</Slide>

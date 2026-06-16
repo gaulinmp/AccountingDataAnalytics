@@ -1,0 +1,97 @@
+---
+week: week-09
+title: "Regression Models"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Regression Models">
+
+- Many different regression models
+  - Differ in assumptions
+  - Differ in treatment of data
+  - Differ in treatment of model “error”
+  - Differ in what the analyst must specify
+
+<ImageCaption src="/decks/week-09/9-4-regression-models-1/img1.png" alt="Regression Models" />
+
+</Slide>
+
+<Slide title="Most basic: OLS">
+
+- y = m*x + b
+- Ordinary Least Squares – linear regression
+  - “Linear” in terms of inputs
+  - Requires feature engineering
+  - Vulnerable to outliers
+
+</Slide>
+
+<Slide title="Most basic: OLS">
+
+- y = m*x + b
+- Coefficients: when x changes by 1, y changes by m
+
+<ImageCaption src="/decks/week-09/9-4-regression-models-1/img2.png" alt="Most basic: OLS" />
+
+</Slide>
+
+<Slide title="Most basic: OLS">
+
+- y = m*x + b
+- OLS computes “conditional mean,” or what would y be if x is ____.
+- The variables are treated as independent
+  - Meaning if you put both height in inches and height in cm into the model, it wouldn’t know they are the same
+
+</Slide>
+
+<Slide title="Improving on OLS – extra-ordinary">
+
+- Add non-linearity for the x variables (polynomial)
+  - y = m1*x + m2*x2 + m3*x3 + b
+- Add more or better x variables (multinomial)
+  - y = m1*x + m2*x + b
+
+<ImageCaption src="/decks/week-09/9-4-regression-models-1/img3.png" alt="Improving on OLS – extra-ordinary" />
+
+<ImageCaption src="/decks/week-09/9-4-regression-models-1/img4.gif" alt="Improving on OLS – extra-ordinary" />
+
+</Slide>
+
+<Slide title="What to do with many x variables?">
+
+- We have to worry about “multicollinearity” which is jargon for x variables measuring the same thing
+- Lasso/ridge regressions “penalize” the variables
+  - They have to be really important to not be eliminated
+  - We can use this to learn which variables matter most
+- Dimensionality reduction (e.g., PCA)
+
+</Slide>
+
+<Slide title="Alternative models">
+
+- What if data is “count” data, such as number of customer transactions?
+  - Poisson regression
+- What if we have outliers?
+  - Quantile regression – instead of mean, conditional median (or other percentile, e.g. 75th percentile)
+
+</Slide>
+
+<Slide title="Parametric vs Non-parametric">
+
+- Parametric models specify the relationships between variables and the outcome
+  - y = m*x + b
+- Non-parametric doesn’t, just learns the best relationship it can
+  - y = f(x) + random error
+  - f is “learned” by predicting y as best as possible
+
+</Slide>
+
+<Slide title="Regression Models">
+
+- Differ in assumptions
+  - Treatment of data
+  - Treatment of model “error”
+- Differ in what the analyst must specify
+
+</Slide>

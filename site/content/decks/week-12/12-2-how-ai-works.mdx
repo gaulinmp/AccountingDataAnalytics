@@ -1,0 +1,169 @@
+---
+week: week-12
+title: "How AI and LLMs work"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="AI is a big regression">
+
+- Still just fitting a line
+  - A very very very complex line
+  - LLMs predict next-word probability
+- Typically fits the line with a neural network
+
+</Slide>
+
+<Slide title="Neural Networks">
+
+- Biological Neural Network
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img1.png" alt="Neural Networks" />
+
+</Slide>
+
+<Slide title="Neural Networks">
+
+- Layers of regressions
+  - Input layer: data inputs
+  - Output layer: final predicted outputs
+  - Hidden layers: everything else in between
+- Design of network based on:
+  - How many layers
+  - How layers are connected
+  - How “neurons” are constructed
+
+</Slide>
+
+<Slide title="Neural Networks">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img2.png" alt="Neural Networks" />
+
+</Slide>
+
+<Slide title="Neurons">
+
+</Slide>
+
+<Slide title="Neurons">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img3.png" alt="Neurons" />
+
+</Slide>
+
+<Slide title="Neurons">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img4.png" alt="Neurons" />
+
+</Slide>
+
+<Slide title="Neurons">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img5.png" alt="Neurons" />
+
+</Slide>
+
+<Slide title="Neurons">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img6.png" alt="Neurons" />
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img7.png" alt="Neurons" />
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img8.png" alt="Neurons" />
+
+</Slide>
+
+<Slide title="How neural networks learn">
+
+- Calculate an output Y’ from inputs X
+- Calculate error (e.g. Y – Y’)
+- Backpropegate this error from the last layer through the first layer, updating the weights and biases based on that neuron’s error
+- Repeat millions of times
+
+</Slide>
+
+<Slide title="Types of Neural Networks">
+
+- Feed-forward NN: what we’ve seen so far
+- Convolutional NN: good for images & videos
+- Recurrent NN: add “memory” to neuron’s inputs
+  - Long Short-Term Memory, Gated Recurrent Unit
+- Auto-encoder: encode and decode information for compression / dimensionality reduction
+- Transformer: attention made all the difference
+
+</Slide>
+
+<Slide title="Transformers: Chat GPT">
+
+- Text is broken into “tokens”
+  - E.g., shareholder equity = assets - liabilities
+- Tokens are embedded
+- Vectors are passed through series of attention heads
+  - Attention: previous words “modify” the current one
+  - Multilayer Perceptron: adds learned information (facts)
+  - Each attention layer is many attention heads in parallel
+- Final network is many attention layers in a row
+
+</Slide>
+
+<Slide title="Attention">
+
+- Example: “Shareholder Equity = Assets - ____”
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img9.png" alt="Attention" />
+
+</Slide>
+
+<Slide title="Large Language/Multimodal Models">
+
+- The next token is predicted based on only the final embedding in the network
+  - E.g. GPT-3 predicts the next token with only 12,287 of the more than 175 billion parameters in the model
+- Trained on the internet of data
+- Output is every token’s probability of being next
+  - Next token is randomly chosen, based on its probability
+  - Temperature: less likely tokens more often selected
+  - Top P: how many tokens are considered*
+
+- * Mathematically this isn’t true, but effectively (and non-linearly) it can be thought of this way.
+
+</Slide>
+
+<Slide title="LLM Defaults">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img10.png" alt="LLM Defaults" />
+
+</Slide>
+
+<Slide title="Top P: More Tokens">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img11.png" alt="Top P: More Tokens" />
+
+</Slide>
+
+<Slide title="Temperature: token weights">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img12.png" alt="Temperature: token weights" />
+
+</Slide>
+
+<Slide title="Low Temp.: less UNlikely words">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img13.png" alt="Low Temp.: less UNlikely words" />
+
+</Slide>
+
+<Slide title="Temperature = 1: No Randomness">
+
+<ImageCaption src="/decks/week-12/12-2-how-ai-works/img14.png" alt="Temperature = 1: No Randomness" />
+
+</Slide>
+
+<Slide title="Wrong or Hallucinating?">
+
+- No sense of “fact” or “truth”, just learned patterns
+- Generates the next token given the entirety of what was learned during training and the rest of your prompt (including chat history)
+- Tokens are predicted one at a time
+  - Randomly choosing a low probability word (high temp) can set the generation off on a very different path
+  - A drunkard’s walk rather than moving towards a target
+
+</Slide>

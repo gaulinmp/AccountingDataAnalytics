@@ -1,0 +1,97 @@
+---
+week: week-06
+title: "How to think about Automation"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is Automation?">
+
+- Automation is just a computer doing something with no intervention
+- Accountants already know the processes
+- Think of it as recording an excel macro
+- Learning objective: not to become a programmer, but a process designer (tools do the programming bits)
+
+</Slide>
+
+<Slide title="What should you automate?">
+
+- Value = # tasks done * time / task * labor cost
+- – cost to automate – cost of automation
+- Good candidates for automation are tasks that are:
+  - Repetitive: the task is done many times, or frequently
+  - Describable: the task’s steps and your decisions are based on clear, consistent rules you can write down
+  - Mundane: it’s a boring or routine task that takes time but not brainpower
+
+</Slide>
+
+<Slide title="Process Components">
+
+- Triggers: something that starts the process
+  - Emailed invoice is received
+- Data: information is processed or affects logic
+  - Invoice amount, high values need routing to approver
+- Flow logic: If-then-else, loops, sub-routines
+  - If amount > 5K, send to approver for signature
+  - For each invoice, trigger invoice sub-process
+- Action: the thing the process does
+  - Create Excel file, send email, wire funds, turn on machine
+
+</Slide>
+
+<Slide title="Think like a computer">
+
+- Look for general rules
+  - One way to see these is look for patterns in your code
+- Parameterize for flexibility
+  - Don’t send result to linda@utah.edu, provide email parameter and send result to &#123;email}
+- Start small then expand
+  - Write an automation for the thing in front of you. Add flexibility (generalizations, parameters) as needed
+
+</Slide>
+
+<Slide title="Flow Diagrams">
+
+- Flow Control
+
+- Amount > $5K?
+
+- Yes
+
+- No
+
+</Slide>
+
+<Slide title="Example: Manual expense reporting">
+
+- Open email with the employee’s expense report
+- Open the attached PDF
+- For every line item over $25, check if receipt is attached
+- Verify the total is within the employee's department budget
+- If everything is okay, forward to manager for approval
+- If not, reply to the employee asking for corrections
+
+</Slide>
+
+<Slide title="Example: Automatic Expense Reporting">
+
+- START Trigger: email arrives in expenses@utah.edu with the subject "Expense Report: u1234567"
+- Action: save the PDF attachment to a “Pending Review” folder.
+- Condition: does ER contain line items over $25 without a receipt?
+  - Yes: Action: reply to the employee: "Your report is missing a required receipt: &#123;missing receipt list}. Please resubmit.“ END
+  - No: continue
+- Condition: is total amount less than $1,000?
+  - Yes: Action: move the report PDF to the “Approved for Payment” folder and notify the payroll department END
+  - No: Action: create approval task to the department manager, send Slack message with link to task in approval portal END
+
+</Slide>
+
+<Slide title="Caveats and Concerns">
+
+- If you don’t know how to solve a problem when you start, you can’t automate it
+  - AI may change this, but be skeptical
+- If you don’t test, you’re not automating, you’re creating liability
+- Monitoring is essential for risk estimation & mitigation
+- More complexity means more bugs & errors
+
+</Slide>

@@ -1,0 +1,67 @@
+---
+week: week-08
+title: "Example of Model Intent: Accounts Receivable"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Model Intent Timeline">
+
+- Identify the situation and what occurred (descriptive)
+- Determine why it occurred the way it did (diagnostic)
+- Leverage that knowledge to predict outcomes outside the specific situation (predictive)
+- Consider different outcomes and choose one for some (good) reason (prescriptive)
+
+</Slide>
+
+<Slide title="Example – Accounts Receivable">
+
+- GAAP treatment for uncollectable AR (bad debt)
+  - Historical %: % bad debt / % credit sales
+  - AR Aging: % bad debt varies by AR age
+  - Risk classification: assess risk based on customer characteristics
+
+</Slide>
+
+<Slide title="Step 1: Descriptive Analysis">
+
+- Collect historical data on sales, credit sales, and uncollected AR, and account characteristics
+- Calculate number and portion of AR that were uncollected for percent of sales method
+- Calculate age of AR for aging AR method
+- Merge account characteristics and calculate their summary statistics by AR type / age
+
+</Slide>
+
+<Slide title="Step 2: Diagnostic Analysis">
+
+- Which approach to use?
+- Study AR collectability variance (e.g. by AR age)
+- Investigate AR collection probability
+  - Look for time-series trends (more default during holidays?)
+  - Look for product or vendor correlations
+  - Correlate account characteristics with collected status
+
+</Slide>
+
+<Slide title="Step 3: Predictive Analysis">
+
+- Which accounts will default?
+- Refine AR collection probability model
+  - Compare various methodological approaches
+  - Select features (use your accounting expertise!)
+  - Test model on new data (called the test set)
+  - Study assumption, inputs, and characteristics of model
+
+</Slide>
+
+<Slide title="Step 4: Prescriptive analysis">
+
+- What should we do about bad debt?
+  - GAAP treatment isn’t the business goal
+- Consider what options are available
+  - Often limited to what was modeled
+- Consider costs and benefits of any changes
+  - E.g. changing AR terms for some customers may result in loss of business, balance that against cost of default
+- Consider externalities and un-modeled impacts
+
+</Slide>

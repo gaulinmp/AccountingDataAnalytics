@@ -1,0 +1,58 @@
+---
+// The deck shell: a horizontal, one-slide-per-page carousel (left/right to change
+// slides) with vertical scroll *within* a long slide. CSS scroll-snap makes the
+// paging native (works even with JS off — you can swipe); the DeckController adds
+// keyboard nav + a pager and tracks the active slide. The reinforcement aside
+// (desktop) shows the current slide's Key Concept + quiz.
+---
+
+<div class="companion" data-deck>
+  <main class="slide-pane"><slot /></main>
+</div>
+
+<style>
+  .companion {
+    max-width: 85rem;
+    width: 100%;
+    margin: 0 auto 0 0;
+    padding: var(--space-5);
+  }
+
+  .slide-pane {
+    display: block;
+  }
+
+  /* By default (no-JS), slides stack vertically and are all visible */
+  .slide-pane :global([data-slide]) {
+    display: block;
+    margin-bottom: var(--space-8);
+  }
+
+  /* When JS interactive mode is activated, only show the active slide */
+  .companion.is-interactive .slide-pane :global([data-slide]) {
+    display: none;
+  }
+
+  .companion.is-interactive .slide-pane :global([data-slide].is-active) {
+    display: block;
+  }
+
+  /* Print: stack every slide vertically so the whole deck prints. */
+  @media print {
+    .companion {
+      display: block;
+      height: auto;
+      padding: 0;
+    }
+    .slide-pane {
+      display: block;
+      height: auto;
+    }
+    .slide-pane :global([data-slide]) {
+      display: block !important;
+      height: auto;
+      break-inside: avoid;
+      margin-bottom: var(--space-8);
+    }
+  }
+</style>

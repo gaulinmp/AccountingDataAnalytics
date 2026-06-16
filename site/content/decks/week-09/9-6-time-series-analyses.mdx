@@ -1,0 +1,102 @@
+---
+week: week-09
+title: "Time Series"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is Time-series data">
+
+- Each observation is related to the next
+- Order matters
+- Example: Revenue data over time
+
+</Slide>
+
+<Slide title="What do we use time-series for?">
+
+- Forecasting revenue, expenses
+- Analyzing transaction trends over time
+- Modeling crash risk, survival analysis
+- Predicting demand for inventory management
+
+</Slide>
+
+<Slide title="Components of time-series">
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img1.gif" alt="Components of time-series" />
+
+- Trend
+- Seasonal
+- Cyclical
+- Noise
+
+</Slide>
+
+<Slide title="Stationarity">
+
+- A stationary process stays in the “same place”
+  - Statistics about the data behave nicely
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img2.png" alt="Stationarity" />
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img3.png" alt="Stationarity" />
+
+</Slide>
+
+<Slide title="Stationarity">
+
+- A non-stationary process “moves” too much
+  - Statistics about the data behave poorly (meaningless?)
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img4.png" alt="Stationarity" />
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img5.png" alt="Stationarity" />
+
+</Slide>
+
+<Slide title="Stationarity – So what?">
+
+- Analytics on a non-stationary will often be wrong
+  - A non-stationary process needs different math
+- A non-stationary process could be “made” stationary
+  - This is why we often study returns, not market cap
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img6.png" alt="Stationarity – So what?" />
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img7.png" alt="Stationarity – So what?" />
+
+</Slide>
+
+<Slide title="Time-Series as supervised learning">
+
+- Predict Sales at time t (Salest) with Salest-1, Salest-2
+- ARIMA model
+  - AR=autoregression: predicting Sales with past Sales
+  - I=integrated: solve the pesky non-stationary problem
+  - MA=moving average: surprises persist over time
+- Could add other features (Interestt-1, GDPt-1, etc.)
+  - E.g., SARIMAX adds seasonality and other features
+
+</Slide>
+
+<Slide title="Time-series with neural networks">
+
+- Like traditional methods, but fancier
+- Pre-trained neural networks on time-series data
+  - E.g., TimesFM from Google, trained on 100 billion observations of real-world time-series data
+  - Unclear if or when these approaches are better
+- Training a complex model requires huge datasets
+  - With less data, parametric models generally dominate
+
+</Slide>
+
+<Slide title="Cautions">
+
+- Training data could economic events that won’t occur in the future (overfitting)
+- New economic events that aren’t modeled can occur (underfitting)
+- Uncertainty increases when forecasting further out
+
+<ImageCaption src="/decks/week-09/9-6-time-series-analyses/img8.png" alt="Cautions" />
+
+</Slide>

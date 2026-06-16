@@ -1,0 +1,152 @@
+---
+week: week-02
+title: "Data Storage"
+subtitle: "Understanding storage media, database servers, and the architecture of data warehouses vs. data lakes."
+estMinutes: 40
+instructors: ["Maclean Gaulin"]
+aiPrompt: "Focus on explaining the trade-offs of physical media (SSD vs. Tape) and the architectural differences between data warehouses and data lakes."
+---
+
+import { Slide, Bullets, Quiz } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 2 · Lecture 3" icon="database">
+  Data Storage
+</Slide>
+
+<Slide title="Data Storage: The Big Picture" icon="database" key="Selecting where and how to store data requires balancing volume, accessibility speed, and security.">
+
+<Bullets items={[
+  { l: 1, h: "**How** — Local drives, private server rooms, or distributed cloud centers." },
+  { l: 1, h: "**Where** — Flat Excel files, relational databases, data warehouses, or data lakes." },
+  { l: 1, h: "**What** — Storing structured tables differently from unstructured logs or media." },
+  { l: 1, h: "**When** — Handling batch uploads (historical) vs. continuous streaming logs." },
+  { l: 1, h: "**Why** — Meeting legal record retention policies and providing fast reporting access." }
+]} />
+
+</Slide>
+
+<Slide title="Physical Storage Mediums" icon="database" key="Firms align their storage medium with operational speed requirements and budget constraints.">
+
+<Bullets items={[
+  { l: 1, h: "**Solid State Drives (SSD)** — Fast I/O speed, high cost. Best for active production databases." },
+  { l: 1, h: "**Magnetic Hard Drives (HDD)** — Slower access, lower cost. Ideal for secondary storage servers." },
+  { l: 1, h: "**Tape Backup** — Very slow sequential access, lowest cost. Used for historical archive retention." },
+  { l: 2, h: "Example: IBM/Fujifilm tape cassettes store up to 580 TB of legacy logs in a single unit." }
+]} />
+
+</Slide>
+
+<Slide title="Physical Location: Where Data Lives" icon="database" key="Enterprise storage has shifted from local hard drives to distributed cloud networks.">
+
+<Bullets items={[
+  { l: 1, h: "**Local Storage** — Directly on the employee's machine (high security risk, zero team collaboration)." },
+  { l: 1, h: "**On-Premises Servers** — Servers located inside the firm's facility, managed by internal IT teams." },
+  { l: 1, h: "**Cloud & Distributed Databases** — Server resources rented in remote data centers." },
+  { l: 2, h: "Data is distributed across multiple data centers to ensure redundancy and high availability." }
+]} />
+
+</Slide>
+
+<Slide title="Logical Storage: Files vs. Databases" icon="layers" key="Relational databases replace individual flat files to manage millions of rows and avoid duplication.">
+
+<Bullets items={[
+  { l: 1, h: "**Flat Files** — Individual spreadsheets (Excel, CSV) and documents (PDF, XML)." },
+  { l: 2, h: "Con: Highly vulnerable to version-control issues and slow to process at scale." },
+  { l: 1, h: "**Database Systems** — Software engines designed to store, query, and manage millions of records." },
+  { l: 2, h: "Protects data integrity by restricting duplicate rows and defining clear datatypes." },
+  { l: 1, h: "**Data Hubs** — Large integrations of multiple databases (Warehouses and Lakes)." }
+]} />
+
+</Slide>
+
+<Slide title="Data Warehouses: Schema-on-Write" icon="database" key="Data warehouses require structuring and cleaning data before it is written to storage.">
+
+<Bullets items={[
+  { l: 1, h: "**Structured Hub** — Consolidates clean data from various internal databases (AIS, CRM, HRM)." },
+  { l: 1, h: "**Schema-on-Write** — Data must match a strict predefined structure *before* it can be saved." },
+  { l: 1, h: "**Analytics-Ready** — Directly optimized for business intelligence tools (Tableau, Power BI) and SQL reporting." },
+  { l: 1, h: "**Governance** — Quality rules are enforced during insertion to prevent dirty records." }
+]} />
+
+</Slide>
+
+<Slide title="Data Lakes: Schema-on-Read" icon="layers" key="Data lakes store all raw records immediately, applying structural definitions only when the data is read.">
+
+<Bullets items={[
+  { l: 1, h: "**Raw Repository** — Stores structured, semi-structured, and unstructured data in native formats." },
+  { l: 1, h: "**Schema-on-Read** — Raw data is stored immediately; structure is applied *only* when a user queries it." },
+  { l: 1, h: "**High Flexibility** — Because storage is cheap, firms save everything raw and determine how to parse it later." },
+  { l: 1, h: "**Risk: Data Swamps** — Without metadata controls, a lake can become an unsearchable clutter of files." }
+]} />
+
+<Quiz
+  id="w2-warehouse-vs-lake"
+  q="A company stores raw customer support emails, product image files, and general ledger SQL records in a single central repository. Which architecture is this?"
+  opts={[
+    "A Data Warehouse (utilizing schema-on-write)",
+    "A Data Lake (utilizing schema-on-read)",
+    "A local Excel flat file database"
+  ]}
+  correct={1}
+  why="A Data Lake is designed to store diverse raw formats (structured tables, unstructured text, media) and applies formatting (schema) only when data is read. Warehouses only accept structured data."
+/>
+
+</Slide>
+
+<Slide title="Database Storage Types: SQL vs. NoSQL" icon="database" key="Structured datasets use relational SQL engines, while unstructured logs use flexible NoSQL databases.">
+
+<Bullets items={[
+  { l: 1, h: "**Relational SQL Databases** — Structured grids linked by keys. Ideal for transactional integrity." },
+  { l: 1, h: "**NoSQL Databases** — Key-value, document, or graph databases without rigid schemas." },
+  { l: 2, h: "Examples: MongoDB (document storage), Redis (fast key-value), Neo4j (graph networks)." },
+  { l: 1, h: "**System Selection** — Accountants primarily query SQL tables, but audit logs are often NoSQL." }
+]} />
+
+</Slide>
+
+<Slide title="Streaming Data & Velocity" icon="layers" key="Real-time transaction volumes require distributed coordination to prevent system lockups.">
+
+<Bullets items={[
+  { l: 1, h: "**Scale of Velocity** — Visa processes ~65,000 payments per second, while Bitcoin processes ~7 transactions per second." },
+  { l: 1, h: "**Historical Bias** — Accountants historically review static, closed periods (month-end, quarter-end)." },
+  { l: 1, h: "**The Streaming Problem** — How do you run audit tests on a database that is constantly changing?" },
+  { l: 2, h: "Requires read-only snapshots and distributed transaction consensus to avoid database locking." }
+]} />
+
+</Slide>
+
+<Slide title="Why Data is Stored: Backups & Redundancy" icon="database" key="Firms employ redundancy standards to prevent permanent data loss from system failures.">
+
+<Bullets items={[
+  { l: 1, h: "**Active vs. Cold Storage** — Active data must be fast to query; archives are stored on slow, cheap media." },
+  { l: 1, h: "**The 3-2-1 Backup Rule** — The gold standard for business continuity and disaster recovery:" },
+  { l: 2, h: "**3** copies of critical data." },
+  { l: 2, h: "**2** different physical media types (e.g., SSD server and magnetic backup drive)." },
+  { l: 2, h: "**1** copy stored securely offsite or in a separate cloud region." },
+  { l: 1, h: "**Egress Costs** — Cloud providers charge 'egress fees' when moving data out of their data centers." }
+]} />
+
+<Quiz
+  id="w2-storage-backup-321"
+  q="According to the industry-standard 3-2-1 backup rule, what is the minimum number of data copies that must be kept offsite?"
+  opts={[
+    "3 copies offsite",
+    "2 copies offsite",
+    "1 copy offsite",
+    "0 copies offsite"
+  ]}
+  correct={2}
+  why="The 3-2-1 rule dictates maintaining 3 total copies of data, across 2 different physical media, with 1 of those copies stored offsite (or in a separate cloud zone) to protect against disaster."
+/>
+
+</Slide>
+
+<Slide title="Storage Takeaways" icon="layers" key="Modern accounting requires querying databases directly rather than waiting for Excel file exports.">
+
+<Bullets items={[
+  { l: 1, h: "**Query Access** — As datasets grow, accountants cannot rely on Excel files. You must write SQL/queries." },
+  { l: 1, h: "**Data-Generating Process** — You must understand how and where data is stored to evaluate its reliability." },
+  { l: 1, h: "**Veracity & Cost** — Safeguarding database veracity requires balancing active storage costs against egress and archiving fees." }
+]} />
+
+</Slide>

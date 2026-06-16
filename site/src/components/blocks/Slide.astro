@@ -1,0 +1,345 @@
+---
+import Icon from '@components/Icon.astro';
+import type { IconName } from '@lib/icons';
+
+interface Props {
+  variant?: 'title' | 'default';
+  title?: string;
+  kicker?: string;
+  icon?: IconName;
+  /** Key Concept reinforcement line. Exposed as data-slide-key for the pane/tutor. */
+  key?: string;
+  /** Per-slide topic for the AI tutor context; overrides the deck-level `topic`.
+   *  Exposed as data-slide-topic and read by AiTutorMount. */
+  topic?: string;
+}
+
+const { variant = 'default', title, kicker, icon, key: conceptKey, topic } = Astro.props;
+const isTitle = variant === 'title';
+---
+
+<section
+  class:list={['slide', { 'slide--title': isTitle }]}
+  data-slide
+  data-slide-key={conceptKey}
+  data-slide-topic={topic}
+>
+  {
+    (kicker || title || icon) && (
+      <header class="slide__head">
+        {kicker && <p class="slide__kicker">{kicker}</p>}
+        {
+          title && (
+            <h2 class="slide__title">
+              {icon && <Icon name={icon} size={28} />}
+              <span>{title}</span>
+            </h2>
+          )
+        }
+        {
+          !title && icon && (
+            <div class="slide__icon-only">
+              <Icon name={icon} size={40} />
+            </div>
+          )
+        }
+      </header>
+    )
+  }
+
+  <div class="slide__body">
+    <slot />
+  </div>
+
+  {conceptKey && (
+    <div class="slide__key-concept rp-key">
+      <p class="rp-label">Key concept</p>
+      <p class="rp-body">{conceptKey}</p>
+    </div>
+  )}
+</section>
+
+<style>
+  .slide {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-premium);
+    margin-bottom: var(--space-6);
+    overflow: hidden;
+    padding: 0;
+    transition: box-shadow var(--transition-smooth);
+  }
+
+  .slide__head {
+    padding: var(--space-6) var(--space-6) var(--space-4);
+    margin-bottom: 0;
+  }
+
+  .slide__kicker {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+
+  .slide__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    font-size: var(--fs-2xl);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+  }
+
+  .slide__title :global(svg) {
+    flex: none;
+    color: var(--brand);
+  }
+
+  .slide__body {
+    padding: 0 var(--space-6) var(--space-6);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-base);
+  }
+
+  .slide__key-concept {
+    display: block;
+    margin-top: var(--space-4);
+  }
+
+  /* Shared key concept styling */
+  .rp-key {
+    position: relative;
+    padding: var(--space-4);
+    padding-top: calc(var(--space-4) + 1.75rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+  }
+
+  .rp-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brand);
+    background: rgba(204, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.1);
+    border-top: 3px solid var(--brand);
+    margin: 0;
+  }
+
+  .rp-body {
+    margin: 0;
+    font-size: var(--fs-base);
+    line-height: var(--lh-base);
+  }
+
+  /* Mobile/default stacked layout columns */
+  .slide__col-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .slide__col-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .slide__col-right:has(*) {
+    margin-top: var(--space-6);
+  }
+
+  /* Callouts & side pane blocks */
+  .slide__col-right > .note,
+  .slide__col-right > .tip,
+  .slide__col-right > .key-learning,
+  .slide__col-right > .key-learnings,
+  .slide__col-right > aside {
+    position: relative;
+    padding: var(--space-4);
+    padding-top: calc(var(--space-4) + 1.75rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-base);
+    line-height: var(--lh-base);
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+  }
+
+  .slide__col-right > .note :first-child,
+  .slide__col-right > .tip :first-child,
+  .slide__col-right > .key-learning :first-child,
+  .slide__col-right > .key-learnings :first-child,
+  .slide__col-right > aside :first-child {
+    margin-top: 0;
+  }
+
+  .slide__col-right > .note :last-child,
+  .slide__col-right > .tip :last-child,
+  .slide__col-right > .key-learning :last-child,
+  .slide__col-right > .key-learnings :last-child,
+  .slide__col-right > aside :last-child {
+    margin-bottom: 0;
+  }
+
+  .slide__col-right > .note::before,
+  .slide__col-right > aside.note::before {
+    content: "NOTE";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.06);
+    border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+    border-top: 3px solid #0284c7;
+  }
+
+  .slide__col-right > .tip::before,
+  .slide__col-right > aside.tip::before {
+    content: "TIP";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #d97706;
+    background: rgba(217, 119, 6, 0.06);
+    border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+    border-top: 3px solid #d97706;
+  }
+
+  .slide__col-right > .key-learning::before,
+  .slide__col-right > .key-learnings::before,
+  .slide__col-right > aside.key-learning::before {
+    content: "KEY LEARNING";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.06);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+    border-top: 3px solid #7c3aed;
+  }
+
+  .slide__col-right > aside:not(.note):not(.tip):not(.key-learning):not(.key-learnings)::before {
+    content: "INFO";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brand);
+    background: rgba(204, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.1);
+    border-top: 3px solid var(--brand);
+  }
+
+  /* Responsive column layouts (JS dynamic structure) */
+  @media (min-width: 901px) {
+    .slide:not(.slide--title) .slide__body:has(.slide__col-right > *) {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 0;
+      align-items: stretch;
+      padding: 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .slide:not(.slide--title) .slide__body:has(.slide__col-right > *) .slide__col-left {
+      padding: var(--space-6) var(--space-6) var(--space-8);
+      border-right: 1px solid var(--border);
+    }
+
+    .slide:not(.slide--title) .slide__body:has(.slide__col-right > *) .slide__col-right {
+      background: var(--surface-muted);
+      padding: var(--space-6) var(--space-5);
+      border-left: 0;
+    }
+
+    .slide__col-right {
+      position: sticky;
+      top: var(--space-4);
+    }
+
+    .slide__col-right:has(*) {
+      margin-top: 0;
+    }
+
+    .slide__key-concept {
+      margin-top: 0;
+    }
+  }
+
+  /* Title / cover variant */
+  .slide--title {
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--surface-muted) 100%);
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .slide--title .slide__icon-only {
+    color: var(--brand);
+    margin-bottom: var(--space-4);
+  }
+
+  .slide--title .slide__body {
+    padding: 0;
+    font-size: var(--fs-3xl);
+    font-weight: 600;
+    line-height: var(--lh-tight);
+    max-width: 24ch;
+  }
+</style>

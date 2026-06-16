@@ -1,0 +1,188 @@
+---
+week: week-04
+title: "Exploratory Analyses"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is exploratory Data analysis?">
+
+- Initial analysis to understand data and its structure
+  - Data types, distributions, statistics
+- Can illuminate data issues
+  - Missing data, outliers, errors
+- Identify broad patterns or regularities
+  - Relationships, clustering, temporal regularity
+- Build intuition and inform hypothesis development
+
+</Slide>
+
+<Slide title="Why use EDA?">
+
+- “You can see a lot, just by looking” ~ Yogi Berra
+- EDA establishes understanding of the data before assumptions are made or complex modeling techniques are applied
+- More EDA now, fewer mistakes later
+- Finds “unknown unknowns”
+- Be curious and judgmental
+  - Skepticism is important, look for errors, bias, misinformation, etc.
+
+</Slide>
+
+<Slide title="Example">
+
+- You are given transaction data for a month
+  - Date, Amount, Payee, Category, Vendor, Notes, Approver
+- Look at data
+  - Columns, data types, missing values, etc.
+  - Five-number analysis
+- Initial plots
+  - Line plot of amount over time (Date)
+  - Bar chart of count by payee, vendor, approver
+  - Word-cloud of Category and Notes
+
+</Slide>
+
+<Slide title="Initial Charts: amount over time">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img1.png" alt="Initial Charts: amount over time" />
+
+</Slide>
+
+<Slide title="Initial Charts: Bar Charts">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img2.png" alt="Initial Charts: Bar Charts" />
+
+</Slide>
+
+<Slide title="Initial Charts: Bar Charts">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img3.png" alt="Initial Charts: Bar Charts" />
+
+</Slide>
+
+<Slide title="Initial Charts: Bar Charts">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img4.png" alt="Initial Charts: Bar Charts" />
+
+</Slide>
+
+<Slide title="Initial Charts: Bar Charts">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img5.png" alt="Initial Charts: Bar Charts" />
+
+</Slide>
+
+<Slide title="Initial Charts: Wordcloud">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img6.png" alt="Initial Charts: Wordcloud" />
+
+</Slide>
+
+<Slide title="Example">
+
+- Next step investigations
+  - Amounts by day of week (box plot)
+  - Amounts over time by approver (line plot)
+  - Distribution of amounts by approver (box plot)
+  - Amounts by vendor (histogram)
+
+</Slide>
+
+<Slide title="Next Step: Day of Week">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img7.png" alt="Next Step: Day of Week" />
+
+</Slide>
+
+<Slide title="Next Step: Over Time by approver">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img8.png" alt="Next Step: Over Time by approver" />
+
+</Slide>
+
+<Slide title="Next Step: Amounts by approver">
+
+<ImageCaption src="/decks/week-04/4-1-eda-intro/img9.png" alt="Next Step: Amounts by approver" />
+
+</Slide>
+
+<Slide title="Familiarization with the data">
+
+- Understanding the broader context of the data
+  - Where did it come from?
+  - How was it collected?
+  - Are there known limitations or potential biases in the collection process?
+
+</Slide>
+
+<Slide title="Familiarization with the data">
+
+- Understanding the dataset at hand
+  - What do the variables represent?
+  - What contextual information should be incorporated into understanding this data? Are merges required?
+
+</Slide>
+
+<Slide title="Initial Inspection">
+
+- Examine the dataset’s dimensions (number of rows and columns)
+- Identify the data types of each variable
+  - numerical continuous/discrete, categorical nominal/ordinal, date/time, text short/long
+- View rows of data to get a sense of the content and structure
+- Identify “special” columns like merge keys, unique IDs
+- Identify how missing observations are represented
+  - Identify whether variables have default values
+  - Investigate whether and how missings can be filled/imputed
+- Identify whether duplicates exist and can be removed
+
+</Slide>
+
+<Slide title="Visual exploration">
+
+- “There is no excuse for failing to plot and look” ~ John Tukey
+- Histograms & Density Plots: Understand the distribution of numerical variables, identify outliers
+- Box Plots: Visualize the distribution, central tendency, spread, and outliers of numerical data, possibly by category
+- Bar Charts: Compare categorical data
+- Scatter Plots: Investigate relationships between numerical variables
+- Line Charts: Show trends over time, across categories
+- Heatmaps: Visualize correlation matrices, missing values, etc.
+
+</Slide>
+
+<Slide title="Exploring Features: Pair plot">
+
+- Pairwise correlation across all features
+- Distribution of features on diagonal
+- Can group by categories
+
+</Slide>
+
+<Slide title="Exploring Data Quality">
+
+- Missing data: drop observations, fill with default, interpolate based on some model
+- Input errors: unit errors, transcription errors (OCR, human input)
+- Processing errors: conversion logic errors (e.g. date formatting), calculation errors (e.g., divide by 0)
+- Duplicates: mistakes or informative
+- Outliers: caused by errors, uninformative observations, informative and necessary to understand
+
+</Slide>
+
+<Slide title="Caveats and Pitfalls">
+
+- Confirmation Bias – the tendency to subconsciously identify, prefer, or interpret information in a way that confirms pre-existing beliefs or hypotheses
+  - Look for patterns that contradict initial ideas or expectations
+  - Require higher burden of proof for conclusions that align with priors
+- Correlation vs. Causation – relationships discovered with EDA do not necessarily entail functional (causal) relationships
+  - Observing that two variables move together during EDA does not prove that one causes the other
+  - Establishing causal relationships requires experiments or causal inference
+  - Note: correlation is not causation, but they are highly correlated
+
+</Slide>
+
+<Slide title="Caveats and Pitfalls">
+
+- Overfitting – Insight found during EDA should be understood to be potentially limited to the specific “pull” of the dataset
+  - Understand conditions of data to determine generalizability
+- Multicollinearity – highly correlated variables identified by EDA may be problematic in subsequent modeling or testing
+
+</Slide>

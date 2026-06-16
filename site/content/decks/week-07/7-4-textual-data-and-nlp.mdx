@@ -1,0 +1,135 @@
+---
+week: week-07
+title: "Textual Data and Language Processing"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Text and Computers">
+
+- Text is stored as numbers, usually by letter
+  - In ASCII, “A” is 65, “B” is 66, “a” is 97, and so on.
+- To perform analysis on text, we need some better representation of text
+- “Preprocessing” is the task of converting text into something usable for analytical purposes
+
+</Slide>
+
+<Slide title="Natural Language Processing">
+
+- NLP addresses understanding language to process and analyze texts
+  - E.g. text classification, information retrieval, speech recognition
+- Old approach: developed rules (grammars) for parsing text
+- New approach: lots of math (machine learning)
+
+</Slide>
+
+<Slide title="NLP Pipeline">
+
+- Preprocessing
+
+- clean text
+
+- tokenize
+
+- stemming
+
+- remove/replace words
+
+- Feature Engineering
+
+- Part of speech tags
+
+- Entity parsing (NER)
+
+- Quantize
+
+- N-gram generation
+
+- Vectorization
+- (e.g. BOW)
+
+- Weighting
+- (e.g. TF-IDF)
+
+- Analysis
+
+- Topic Analysis (clustering)
+
+- Sentiment Analysis
+- (classification)
+
+- Summarization
+
+- Information Retrieval
+
+</Slide>
+
+<Slide title="Preprocessing">
+
+- Tokenization: breaking text into tokens (letters, words, sentences, or whatever is needed)
+  - “University of Utah”  [“University”, “of”, “Utah]
+- Cleaning: (optional) lowercase, remove punctuation, add placeholders (e.g. numbers, dates)
+  - “FYEnd, 12/31/2025”  [“fyend”, “DATE”]
+- Stemming: replacing words with their “root” by removing conjugations and plurality
+  - “She abhors assumptions”  [“she”, “abhor”, “assum”]
+
+</Slide>
+
+<Slide title="Preprocessing Caveats">
+
+- Preprocessing removes information
+  - Uppercase letters can be informative (May vs may)
+  - Punctuation is often important
+  - Conjugation is almost always important
+- When using for analytics, preprocessing is critical for the signal-to-noise tradeoff
+  - Removing noise if case, punctuation, conjugation etc. aren’t important
+  - Removing information if they are
+
+</Slide>
+
+<Slide title="Vectorization">
+
+- Turning text into numbers
+  - “See spot Run. Run Spot run”
+  - [see, 2 * spot, 3 * run]
+  - &lt;1, 2, 3, 0, …, 0>
+- What if we want to keep word the sense of words being together (i.e. word order)
+  - [“see spot”, “spot run”, “run spot”, “spot run”] (“run run”?)
+  - &lt;1, 2, 1, 0, …, 0>
+
+</Slide>
+
+<Slide title="N-Grams">
+
+- Vector of words that are N-tokens long
+- Many more bi-grams than unigrams
+  - From my paper on Executive Compensation:
+    - # of 1-grams: 238,001
+    - # of 2-grams: 2,230,332 (9.4x)
+    - # of 3-grams: 3,459,221 (1.55x)
+    - # of 4-grams: 5,386,503 (1.56x)
+
+</Slide>
+
+<Slide title="Vector Weighting">
+
+- Could count words
+  - “See spot Run. Run Spot run”  &lt;1, 2, 3>
+- Could weigh words by importance
+  -  &lt;1 * 0.1, 2 * 0.5, 3 * 0.33>  &lt;0.1, 1, 1>
+- Term Frequency – Inverse Document Frequency
+  - = # times word occurs / # times word occurs in all docs
+  - Common word (the) in 1000 docs  # / 1000
+  - Rare word (synecdoche) in 1 doc  # / 1
+
+</Slide>
+
+<Slide title="NLP in Accounting">
+
+- Information retrieval: extracting specific information or facts from documents
+- Entity linking: identifying people/places/things and linking them to known entities
+- Relationship extraction: extracting relationships between things or ideas
+  - Ex: company  product, event  date
+- Topic analysis & sentiment analysis
+
+</Slide>

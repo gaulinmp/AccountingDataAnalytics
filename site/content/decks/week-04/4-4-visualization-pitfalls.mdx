@@ -1,0 +1,104 @@
+---
+week: week-04
+title: "Visualization Caveats"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Caution">
+
+- “There are 3 kinds of lies: lies, damned lies, and statistics.” ~ Mark Twain
+- Visualizations can be misleading (intentionally or not)
+- Important to consider whether the interpretation of your visualization will be what is intended
+
+</Slide>
+
+<Slide title="Common mistakes">
+
+- Visual distortion
+- Cherry-picking Data
+  - Outlier treatment
+- Misleading Aggregations
+- Comparing Dissimilar Data
+
+</Slide>
+
+<Slide title="Visual Distortion">
+
+- Truncation: Truncating axes can make variation appear greater or less
+- Scaling: Scaling axes by non-constant amounts distorts visual comparison
+  - Log-scale axes are an example of well-understood non-constant scaling
+  - Twin axes: A second axis can be misleading if using same units as first
+
+</Slide>
+
+<Slide title="Truncated Axes">
+
+</Slide>
+
+<Slide title="Scaled Axes">
+
+</Slide>
+
+<Slide title="Cherry-Picking Data">
+
+- Including only those observations that support a specific conclusion or omitting contradictory evidence
+- Removing outliers without justification can present a cleaner, but potentially misleading, picture
+- Selecting sub-group may imply the results generalize to the full group
+
+</Slide>
+
+<Slide title="Cherry-Picking Example">
+
+<ImageCaption src="/decks/week-04/4-4-visualization-pitfalls/img1.png" alt="Cherry-Picking Example" />
+
+</Slide>
+
+<Slide title="Misleading Aggregation">
+
+- Using the mean for highly skewed data can be misleading, where the median might be better
+- Aggregating data can mask recent changes in trends
+
+</Slide>
+
+<Slide title="mean vs median">
+
+- Mean (expected value) is weighted by values
+- Median is “middle” of data
+- Be careful to assess what you believe your audience will interpret each to mean
+
+- Data: https://www.cbo.gov/publication/60706#_idTextAnchor039
+
+</Slide>
+
+<Slide title="Misleading Axis redux">
+
+</Slide>
+
+<Slide title="Comparing Dissimilar Data">
+
+- Comparing metrics that aren’t truly comparable (e.g., plotting levels and percentages on the same graph without clear labels)
+- Plotting spurious correlations together to imply a relationship
+  - e.g., tylervigen.com/spurious-correlations
+
+</Slide>
+
+<Slide title="Spurious Correlations">
+
+<ImageCaption src="/decks/week-04/4-4-visualization-pitfalls/img2.png" alt="Graphic 6" />
+
+- Credit Tyler Vigen
+
+</Slide>
+
+<Slide title="Conclusion">
+
+- As a producer
+  - Avoid common pitfalls
+  - Consider how yours or the audience’s biases or assumptions affect interpretation of the information
+- As a consumer
+  - Look for common pitfalls
+  - Consider what information may be missing
+  - Consider what assumptions underlie the data
+
+</Slide>

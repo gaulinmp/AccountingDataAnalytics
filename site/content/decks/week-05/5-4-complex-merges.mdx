@@ -1,0 +1,196 @@
+---
+week: week-05
+title: "Complex Merges and Aggregation"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Adding complexity">
+
+- Range merges
+- Multiple merges
+  - Connecting merges
+- Aggregation
+- Windowing
+
+</Slide>
+
+<Slide title="Range Merges">
+
+- Join tables based on data from one being within a range based on columns from the other
+  - E.g. Get last year of transactions (with fiscal year end)
+  - SQL: b.date BETWEEN a.last_fye AND a.fye
+- Used for time-series, binning, finding overlaps, etc.
+- Considering overlaps is key to avoid duplication
+
+</Slide>
+
+<Slide title="Range Merges">
+
+- Most accounting/financial data is time-based, range merges very common
+
+- Returns Dataset
+
+<DataTable
+  columns={["date", "ticker", "returns"]}
+  rows={[
+    ["1/3/2023", "AAPL", "-3.7%"],
+    ["1/4/2023", "AAPL", "1.0%"],
+    ["1/5/2023", "AAPL", "-1.1%"],
+    ["1/6/2023", "AAPL", "3.7%"],
+    ["1/9/2023", "AAPL", "0.4%"],
+    ["…", "…", "…"],
+    ["12/29/2023", "AAPL", "-0.5%"],
+  ]}
+/>
+
+- Financials Dataset
+
+<DataTable
+  columns={["fye", "ticker", "AT"]}
+  rows={[
+    ["12/31/2023", "AAPL", "352,583"],
+    ["12/31/2024", "AAPL", "364,980"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Multiple Merges">
+
+- Sequentially joining multiple tables to combine disparate data
+  - Industrial databases often spread data across many tables
+  - SQL: tabA JOIN tabB ON … JOIN tabC ON …
+- Order matters – left/inner joins filter data
+- Can get complex and hard to read
+  - Use helpful table aliases! (e.g., tabA AS employee)
+
+</Slide>
+
+<Slide title="Multiple Merges">
+
+- Connecting merges are a common use of multiple merges
+- Often built one merge at a time
+
+- Transaction Dataset
+
+- Customer Dataset
+
+- Financials Dataset
+
+<DataTable
+  columns={["customer_id", "Name"]}
+  rows={[
+    ["0", "Alice"],
+    ["1", "Bob"],
+    ["…", "…"],
+  ]}
+/>
+
+<DataTable
+  columns={["date", "customer_id", "amount"]}
+  rows={[
+    ["1/3/2023", "0", "156.34"],
+    ["1/4/2023", "1", "2,000.41"],
+    ["1/5/2023", "1", "75.05"],
+    ["…", "…", "…"],
+  ]}
+/>
+
+<DataTable
+  columns={["fye", "ticker", "AT"]}
+  rows={[
+    ["12/31/2023", "AAPL", "352,583"],
+    ["12/31/2024", "AAPL", "364,980"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Aggregations">
+
+- Calculations across multiple rows
+  - Counting, summing, averaging, regressions, etc.
+- Aggregations collapse multiple rows into one
+- Often combined with merges
+  - E.g. total expenses by vendor within date range
+- Often done in “subquery” and merged
+
+</Slide>
+
+<Slide title="Aggregations">
+
+- Adding yearly returns to financial dataset
+
+- Returns Dataset
+
+- Financials Dataset
+
+- sub-query
+
+<DataTable
+  columns={["fye", "ticker", "AT"]}
+  rows={[
+    ["12/31/2023", "AAPL", "352,583"],
+    ["12/31/2024", "AAPL", "364,980"],
+  ]}
+/>
+
+<DataTable
+  columns={["date", "ticker", "returns"]}
+  rows={[
+    ["1/3/2023", "AAPL", "-3.7%"],
+    ["…", "…", "…"],
+    ["12/29/2023", "AAPL", "-0.5%"],
+    ["1/2/2024", "AAPL", "-3.5%"],
+    ["…", "…", "…"],
+    ["12/29/2024", "AAPL", "-0.7%"],
+    ["1/3/2023", "GOOGL", "-2.5%"],
+    ["…", "…", "…"],
+  ]}
+/>
+
+<DataTable
+  columns={["fyear", "ticker", "ave_ret", "cuml_ret"]}
+  rows={[
+    ["2023", "AAPL", "0.1%", "49.0%"],
+    ["2024", "AAPL", "0.1%", "30.7%"],
+    ["2023", "GOOG", "0.2%", "58.8%"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Window Aggregations">
+
+- Windows are aggregations over related rows without collapsing
+  - Ranking, cumulative sum/mean, lead/lag
+- Window has a few moving parts
+  - Partition: which rows should be included
+  - Order: how rows should be ordered
+  - Optional filter: optionally filter sorted set of rows
+
+</Slide>
+
+<Slide title="Window Aggregations">
+
+- Get yesterday’s return
+- Rank return against last month of returns
+- Get buy-and-hold cumulative returns
+
+- Returns Dataset
+
+<DataTable
+  columns={["date", "ticker", "returns"]}
+  rows={[
+    ["1/3/2023", "AAPL", "-3.7%"],
+    ["1/4/2023", "AAPL", "1.0%"],
+    ["1/5/2023", "AAPL", "-1.1%"],
+    ["1/6/2023", "AAPL", "3.7%"],
+    ["1/9/2023", "AAPL", "0.4%"],
+    ["…", "…", "…"],
+    ["12/29/2023", "AAPL", "-0.5%"],
+  ]}
+/>
+
+</Slide>

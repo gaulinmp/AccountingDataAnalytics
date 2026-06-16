@@ -1,0 +1,12 @@
+number: 2
+title: "Data in Business"
+summary: "Understand data dimensions, sources (internal vs. external), structure, storage solutions, cloud environments, and audit standards."
+description: |
+  Welcome to Week 2! This week we dive into business data. We will examine the characteristics of big data (the 5 Vs), compare internal operational systems with third-party external data, and learn the differences between structured, semi-structured, and unstructured data. We will also introduce data storage architecture (databases, data warehouses, and data lakes), the cloud environment, and the AICPA Audit Data Standards.
+objectives:
+  - Identify the 5 Vs of big data and how they apply to accounting scenarios.
+  - Compare the control and scope trade-offs of internal vs. external business data.
+  - Differentiate between structured, semi-structured, and unstructured data formats, citing examples of each.
+  - Explain the differences between wide and long data formats and their use cases.
+  - Compare the features and database types used in data warehouses vs. data lakes.
+  - Explain the purpose of the AICPA Audit Data Standards (ADS) in auditing analytics.

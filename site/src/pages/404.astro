@@ -1,0 +1,44 @@
+---
+import { href } from '@lib/url';
+import Layout from '@layout/Layout.astro';
+import BrandStrip from '@layout/BrandStrip.astro';
+import Footer from '@layout/Footer.astro';
+---
+
+<Layout title="Page not found · ACCTG 5150">
+  <BrandStrip />
+  <main class="notfound">
+    <p class="code">404</p>
+    <h1>Page not found</h1>
+    <p>That page doesn’t exist — it may have moved or never existed.</p>
+    <p><a class="back" href={href()}>← Back to the course home</a></p>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .notfound {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-5);
+    text-align: center;
+  }
+
+  .code {
+    margin: 0;
+    font-size: var(--fs-4xl);
+    font-weight: 800;
+    color: var(--brand);
+    line-height: 1;
+  }
+
+  .notfound h1 {
+    margin: var(--space-2) 0 var(--space-3);
+    font-size: var(--fs-xl);
+  }
+
+  .back {
+    color: var(--brand);
+    font-weight: 600;
+  }
+</style>

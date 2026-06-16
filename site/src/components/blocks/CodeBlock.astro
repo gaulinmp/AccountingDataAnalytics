@@ -1,0 +1,95 @@
+---
+// Static code block. Astro escapes {code}, so there's no set:html / XSS surface.
+// (No runtime syntax highlighting — keeps the no-JS baseline; build-time Shiki
+// could be added later without changing the API.)
+interface Props {
+  code: string;
+  lang?: string;
+  title?: string;
+}
+
+const { code, lang, title } = Astro.props;
+---
+
+<figure class="codeblock">
+  <figcaption>
+    <div class="window-controls" aria-hidden="true">
+      <span class="control close"></span>
+      <span class="control minimize"></span>
+      <span class="control expand"></span>
+    </div>
+    <div class="meta-info">
+      {title && <span class="title">{title}</span>}
+      {lang && <span class="lang">{lang}</span>}
+    </div>
+  </figcaption>
+  <pre><code>{code}</code></pre>
+</figure>
+
+<style>
+  .codeblock {
+    margin: var(--space-4) 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--gray-900);
+    box-shadow: var(--shadow-1);
+  }
+
+  figcaption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) var(--space-4);
+    background: var(--gray-800);
+    color: var(--gray-300);
+    font-size: var(--fs-xs);
+    border-bottom: 1px solid var(--gray-700);
+  }
+
+  .window-controls {
+    display: flex;
+    gap: 6px;
+  }
+
+  .control {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .close { background-color: #ff5f56; }
+  .minimize { background-color: #ffbd2e; }
+  .expand { background-color: #27c93f; }
+
+  .meta-info {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .title {
+    font-weight: 600;
+  }
+
+  .lang {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.8;
+  }
+
+  pre {
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+    color: var(--gray-100);
+    white-space: pre;
+  }
+</style>

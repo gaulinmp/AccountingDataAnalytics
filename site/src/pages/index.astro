@@ -1,0 +1,390 @@
+---
+// Course home: the weeks → decks outline, built from the typed graph.
+import { getCollection, getEntry } from 'astro:content';
+import { deckUrl, weekUrl } from '@lib/url';
+import Layout from '@layout/Layout.astro';
+import BrandStrip from '@layout/BrandStrip.astro';
+import Footer from '@layout/Footer.astro';
+
+const course = (await getEntry('course', 'course'))!.data;
+const allDecks = await getCollection('decks');
+
+const weeks = await Promise.all(
+  course.weekOrder.map(async (weekRef) => {
+    const week = (await getEntry(weekRef))!;
+    const decks = allDecks
+      .filter((d) => d.data.week.id === week.id)
+      .sort((a, b) => a.id.localeCompare(b.id));
+    return { week, decks };
+  })
+);
+---
+
+<Layout title={`${course.code} · ${course.title}`} description={course.title}>
+  <BrandStrip />
+
+  <main class="home">
+    <header class="intro-dashboard">
+      <div class="school-tag">{course.school}</div>
+      <h1>{course.title}</h1>
+      <div class="meta-badges">
+        <span class="badge badge-brand">{course.code}</span>
+        <span class="badge">{course.term}</span>
+        <span class="badge badge-instructor">Instructor: {course.instructors.join(' · ')}</span>
+      </div>
+    </header>
+
+    <div class="dashboard-body">
+      <div class="section-title-bar">
+        <h2>Course Syllabus & Decks</h2>
+        <div class="divider-line"></div>
+      </div>
+
+      <ol class="weeks-grid">
+        {
+          weeks.map(({ week, decks }) => (
+            <li id={week.id} class="week-card">
+              <div class="week-card-header">
+                <span class="wnum-badge">Week {week.data.number}</span>
+                <a href={weekUrl(week.id)} class="week-title-link">
+                  <h2>{week.data.title}</h2>
+                </a>
+              </div>
+
+              {week.data.summary && <p class="wsum">{week.data.summary}</p>}
+
+              <div class="decks-container">
+                {decks.length > 0 ? (
+                  <div class="decks-list">
+                    {decks.map((d) => (
+                      <a href={deckUrl(d)} class="deck-item">
+                        <div class="deck-item-left">
+                          <span class="play-icon-wrapper">
+                            <svg class="deck-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                              <rect width="18" height="14" x="3" y="3" rx="2" />
+                              <path d="M7 21h10" />
+                              <path d="M12 17v4" />
+                              <path d="m10 8 4 3-4 3V8z" />
+                            </svg>
+                          </span>
+                          <span class="deck-name">{d.data.title}</span>
+                        </div>
+                        {d.data.estMinutes && (
+                          <span class="est-badge">
+                            <svg class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <circle cx="12" cy="12" r="10"/>
+                              <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            {d.data.estMinutes} min
+                          </span>
+                        )}
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <p class="empty-state">No slide decks available yet for this week.</p>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .home {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-5) var(--space-12);
+  }
+
+  /* Intro Dashboard Styling */
+  .intro-dashboard {
+    position: relative;
+    background: radial-gradient(circle at 90% 10%, rgba(204, 0, 0, 0.03) 0%, transparent 60%), var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6) var(--space-6);
+    margin-bottom: var(--space-8);
+    box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.01);
+    overflow: hidden;
+  }
+
+  .intro-dashboard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-brand);
+  }
+
+  .school-tag {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand);
+    margin-bottom: var(--space-2);
+  }
+
+  .intro-dashboard h1 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--ink);
+    line-height: var(--lh-tight);
+    margin: 0 0 var(--space-4);
+    letter-spacing: -0.02em;
+  }
+
+  .meta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--gray-100);
+    color: var(--gray-800);
+    border: 1px solid var(--border);
+  }
+
+  .badge-brand {
+    background: var(--gradient-brand-subtle);
+    color: var(--brand);
+    border-color: rgba(204, 0, 0, 0.2);
+    font-weight: 700;
+  }
+
+  .badge-instructor {
+    background: var(--surface-muted);
+  }
+
+  /* Section Title Bar */
+  .section-title-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .section-title-bar h2 {
+    font-size: var(--fs-lg);
+    font-weight: 700;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+  .divider-line {
+    flex-grow: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Weeks Grid Card Layout */
+  .weeks-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(31rem, 1fr));
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 640px) {
+    .weeks-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .week-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.03), 0 2px 6px -2px rgba(0, 0, 0, 0.01);
+    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .week-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.02);
+    border-color: rgba(204, 0, 0, 0.3);
+  }
+
+  .week-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .wnum-badge {
+    align-self: flex-start;
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    background: var(--gradient-brand);
+    color: var(--brand-contrast);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 2px 8px rgba(204, 0, 0, 0.2);
+  }
+
+  .week-card-header h2 {
+    font-size: var(--fs-xl);
+    font-weight: 700;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .week-title-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .week-title-link h2 {
+    transition: color var(--transition-smooth);
+  }
+
+  .week-card:hover .week-title-link h2 {
+    color: var(--brand);
+  }
+
+  .wsum {
+    margin: 0 0 var(--space-5);
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-base);
+  }
+
+  .decks-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    margin-top: auto;
+    border-left: 2px solid var(--border);
+    padding-left: var(--space-4);
+    transition: border-color var(--transition-smooth);
+  }
+
+  .week-card:hover .decks-container {
+    border-left-color: rgba(204, 0, 0, 0.3);
+  }
+
+  .decks-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .deck-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--ink);
+    transition: all var(--transition-smooth);
+  }
+
+  .deck-item:hover {
+    background: var(--surface);
+    border-color: rgba(204, 0, 0, 0.4);
+    transform: translateX(4px);
+    box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.01);
+  }
+
+  .deck-item-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .play-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-sm);
+    background: rgba(204, 0, 0, 0.08);
+    color: var(--brand);
+    transition: background var(--transition-smooth), color var(--transition-smooth), transform var(--transition-spring);
+  }
+
+  .deck-item:hover .play-icon-wrapper {
+    background: var(--brand);
+    color: var(--brand-contrast);
+    transform: scale(1.08);
+  }
+
+  .deck-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .deck-name {
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    color: var(--ink);
+    transition: color var(--transition-smooth);
+  }
+
+  .deck-item:hover .deck-name {
+    color: var(--brand);
+  }
+
+  .est-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--ink-muted);
+    padding: 2px 8px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+    transition: all var(--transition-smooth);
+  }
+
+  .clock-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .deck-item:hover .est-badge {
+    background: rgba(204, 0, 0, 0.08);
+    color: var(--brand);
+  }
+
+  .empty-state {
+    margin: 0;
+    color: var(--gray-500);
+    font-style: italic;
+    font-size: var(--fs-sm);
+  }
+</style>

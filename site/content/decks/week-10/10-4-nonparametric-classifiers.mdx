@@ -1,0 +1,61 @@
+---
+week: week-10
+title: "Nonparametric Classifiers"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Parametric vs Non-parametric">
+
+- Parametric classifiers specify some structure with which to approach splitting the groups or labels
+- Non-parametric classifiers just learn unconstrained
+  - The “parameters” grow with the data
+- Non-parametric classifiers often better at handling text than parametric
+  - Mostly because the “functional form” of text is unknown
+
+</Slide>
+
+<Slide title="Nearest Neighbors">
+
+- Assign average neighbor’s label (instead of value)
+
+<ImageCaption src="/decks/week-10/10-4-nonparametric-classifiers/img1.png" alt="Nearest Neighbors" />
+
+</Slide>
+
+<Slide title="Tree-based models">
+
+<ImageCaption src="/decks/week-10/10-4-nonparametric-classifiers/img2.png" alt="Tree-based models" />
+
+</Slide>
+
+<Slide title="Neural Networks">
+
+<ImageCaption src="/decks/week-10/10-4-nonparametric-classifiers/img3.png" alt="Neural Networks" />
+
+</Slide>
+
+<Slide title="Neural Networks">
+
+- Inputs: features believed to be useful for prediction
+- Outputs: Each class has its own “neuron”
+  - Output is 1 or 0 to signal that it’s class is “True”
+- In the middle: “hidden” layers learn the complex relationship between features & classes
+  - Connections between neurons, and calculations in each neuron define the NN architecture
+
+</Slide>
+
+<Slide title="Neural Networks">
+
+<ImageCaption src="/decks/week-10/10-4-nonparametric-classifiers/img4.png" alt="Neural Networks" />
+
+</Slide>
+
+<Slide title="Cautions and Caveats">
+
+- Overfitting is still an issue, solved the same way
+- Interpretability is harder with more complex models
+- Measure of “accuracy” is even more important for classifiers
+  - Especially as it pertains to real business costs
+
+</Slide>

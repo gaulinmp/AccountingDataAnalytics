@@ -1,0 +1,152 @@
+---
+week: week-03
+title: "Descriptive Statistics"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Descriptive Statistics Overview">
+
+- Central tendency – where is the data located
+  - Mean (μ), median, mode
+- Dispersion / variability – how spread out is the data
+  - Variance, standard deviation (σ), inter-quartile range, coefficient of variation (σ/μ), mean absolute deviation
+- Shape – what are the “tails” of your data?
+  - Skewness / kurtosis, percentiles, min/max
+- Frequency – categorical data
+
+</Slide>
+
+<Slide title="Central tendency">
+
+<ImageCaption src="/decks/week-03/3-3-descriptives/img1.png" alt="Central tendency" />
+
+</Slide>
+
+<Slide title="Central tendency">
+
+- Mean (μ)
+  - Most common measure, basis of most statistics
+  - Weighs observations differently, sensitive to outliers
+- Median
+  - The “typical” value, with half above & half below
+  - Immune to outliers
+- Mode
+  - The “peak” of the distribution, most common value
+  - Can have multiple modes, but may be less informative
+
+</Slide>
+
+<Slide title="Dispersion / variability">
+
+<ImageCaption src="/decks/week-03/3-3-descriptives/img2.png" alt="Dispersion / variability" />
+
+</Slide>
+
+<Slide title="Dispersion / variability">
+
+- Standard deviation (σ)
+  - Most common dispersion measure, basis of most statistics
+  - Strongly affected by outliers (because math), normality
+- Inter-quartile range
+  - Robust to outliers, good for skewed data, interpretable
+- Coefficient of variation
+  - Dispersion as % of mean, comparable across units
+- Mean absolute deviation (or w/ medians)
+  - Like σ, but less sensitive to outliers
+
+</Slide>
+
+<Slide title="Shape – Skewness">
+
+<ImageCaption src="/decks/week-03/3-3-descriptives/img3.png" alt="Shape – Skewness" />
+
+</Slide>
+
+<Slide title="Shape">
+
+- Skewness – asymmetric “tails”
+  - Positive / right skewed: mean > median, more high values
+  - Negative / left skewed: mean &lt; median, more low values
+  - Some models assume symmetrical data (skewness = 0)
+- Kurtosis – heavy or light “tails”
+  - High  heavy tails, low  light tails
+- Percentiles – bins of data
+  - Further resolution of full distribution, less of a summary
+
+</Slide>
+
+<Slide title="Shape – Kurtosis">
+
+<ImageCaption src="/decks/week-03/3-3-descriptives/img4.png" alt="Shape – Kurtosis" />
+
+</Slide>
+
+<Slide title="Shape – Kurtosis">
+
+<ImageCaption src="/decks/week-03/3-3-descriptives/img5.png" alt="Shape – Kurtosis" />
+
+</Slide>
+
+<Slide title="Frequency – categorical data">
+
+- Count of values
+- Most common value
+- For ordinal data, 5-number summary
+  - Min, 25%, 50%, 75%, Max
+
+</Slide>
+
+<Slide title="What doN’T descriptives convey?">
+
+<DataTable
+  columns={["", "Anscombe's quartet", "", "", "", "", "", "", ""]}
+  rows={[
+    ["", "Dataset I", "", "Dataset II", "", "Dataset III", "", "Dataset IV", ""],
+    ["", "x", "y", "x", "y", "x", "y", "x", "y"],
+    ["", "10.0", "8.04", "10.0", "9.14", "10.0", "7.46", "8.0", "6.58"],
+    ["", "8.0", "6.95", "8.0", "8.14", "8.0", "6.77", "8.0", "5.76"],
+    ["", "13.0", "7.58", "13.0", "8.74", "13.0", "12.74", "8.0", "7.71"],
+    ["", "9.0", "8.81", "9.0", "8.77", "9.0", "7.11", "8.0", "8.84"],
+    ["", "11.0", "8.33", "11.0", "9.26", "11.0", "7.81", "8.0", "8.47"],
+    ["", "14.0", "9.96", "14.0", "8.1", "14.0", "8.84", "8.0", "7.04"],
+    ["", "6.0", "7.24", "6.0", "6.13", "6.0", "6.08", "8.0", "5.25"],
+    ["", "4.0", "4.26", "4.0", "3.1", "4.0", "5.39", "19.0", "12.5"],
+    ["", "12.0", "10.84", "12.0", "9.13", "12.0", "8.15", "8.0", "5.56"],
+    ["", "7.0", "4.82", "7.0", "7.26", "7.0", "6.42", "8.0", "7.91"],
+    ["", "5.0", "5.68", "5.0", "4.74", "5.0", "5.73", "8.0", "6.89"],
+    ["Mean", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5"],
+    ["Variance", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75"],
+    ["Correlation", "0.816", "", "0.816", "", "0.816", "", "0.816", ""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="What doN’T descriptives convey?">
+
+<DataTable
+  columns={["", "Anscombe's quartet", "", "", "", "", "", "", ""]}
+  rows={[
+    ["", "Dataset I", "", "Dataset II", "", "Dataset III", "", "Dataset IV", ""],
+    ["", "x", "y", "x", "y", "x", "y", "x", "y"],
+    ["", "10.0", "8.04", "10.0", "9.14", "10.0", "7.46", "8.0", "6.58"],
+    ["", "8.0", "6.95", "8.0", "8.14", "8.0", "6.77", "8.0", "5.76"],
+    ["", "13.0", "7.58", "13.0", "8.74", "13.0", "12.74", "8.0", "7.71"],
+    ["", "9.0", "8.81", "9.0", "8.77", "9.0", "7.11", "8.0", "8.84"],
+    ["", "11.0", "8.33", "11.0", "9.26", "11.0", "7.81", "8.0", "8.47"],
+    ["", "14.0", "9.96", "14.0", "8.1", "14.0", "8.84", "8.0", "7.04"],
+    ["", "6.0", "7.24", "6.0", "6.13", "6.0", "6.08", "8.0", "5.25"],
+    ["", "4.0", "4.26", "4.0", "3.1", "4.0", "5.39", "19.0", "12.5"],
+    ["", "12.0", "10.84", "12.0", "9.13", "12.0", "8.15", "8.0", "5.56"],
+    ["", "7.0", "4.82", "7.0", "7.26", "7.0", "6.42", "8.0", "7.91"],
+    ["", "5.0", "5.68", "5.0", "4.74", "5.0", "5.73", "8.0", "6.89"],
+    ["Mean", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5"],
+    ["Variance", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75"],
+    ["Correlation", "0.816", "", "0.816", "", "0.816", "", "0.816", ""],
+  ]}
+/>
+
+<ImageCaption src="/decks/week-03/3-3-descriptives/img6.png" alt="What doN’T descriptives convey?" />
+
+</Slide>

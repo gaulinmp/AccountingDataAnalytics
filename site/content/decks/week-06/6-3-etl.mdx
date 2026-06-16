@@ -1,0 +1,82 @@
+---
+week: week-06
+title: "Extract, Transform, Load"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Industrial scale Data Ingestion">
+
+- Ingesting data in practice needs to be robust and repeatable
+- ETL is overarching name for the general process
+  - Each step is customized to the data and need
+
+</Slide>
+
+<Slide title="Extract, Transform, Load">
+
+- Extract: ingest data
+- Transform: clean and format data
+- Load: save data to storage
+- Goal is to have re-runnable pipeline when input data changes/updates
+
+</Slide>
+
+<Slide title="Extract">
+
+- Determine what data is needed
+- Determine how to access data
+  - Reads from other databases (external or internal)
+  - Download files (FTP, REST/HTTPS, etc.)
+  - Files (csv, excel, pdfs, etc.)
+- Automate the access
+  - To the extent possible, considering carefully how to integrate a “human in the loop” if absolutely needed
+
+</Slide>
+
+<Slide title="Transform">
+
+- Validate data
+  - Check expectations: format, columns, observations
+  - Check integrity: missing data, values (limits/categories)
+- Clean data
+  - Remove extraneous data (extra columns, rows)
+  - Clean formatting (parse negatives, dates, categoricals)
+  - Fix known errors, clean strings, fill missings
+- Aggregate & restructure
+  - Merge datasets
+  - Create new variables
+
+</Slide>
+
+<Slide title="Load">
+
+- Save now clean and formatted data
+  - Write to database / datalake
+    - Handle errors that may occur due to any uncaught issues
+  - Save to disk (excel)
+
+</Slide>
+
+<Slide title="Best Practices">
+
+- When developing an ETL
+  - Test, test, test
+  - Think of all the unexpected differences that might occur and plan for them
+- When running an ETL
+  - Log steps for posterity and debugging
+  - Create reports for each step (less verbose than logs)
+  - Monitor outcome manually from time to time
+
+</Slide>
+
+<Slide title="Examples">
+
+- Auditors ingest huge amounts of client data from myriad data sources
+  - Continuous auditing requires such automation
+- Tax accountants ingest tax-relevant information
+  - RPA bots often extract data from source documents, e.g. K-1, Schedule E, etc.
+- Financial preparation requires ingesting and processing data from myriad sources
+- Cost systems ingest data from suppliers and inventory systems
+
+</Slide>

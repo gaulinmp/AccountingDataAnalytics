@@ -1,0 +1,113 @@
+---
+week: week-05
+title: "Data Joins"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What are joins?">
+
+- DB jargon for combining two datasets
+  - Generally, adding columns from two tables together
+- SQL joins are ubiquitous
+- Based on set logic (i.e. and / or)
+
+</Slide>
+
+<Slide title="Types of joins">
+
+- Inner: just keep rows that match
+- Outer: keep all rows
+- Left/right: keep all rows from one table
+- Cross: every row in one table for every row in the other
+- Self: joining a table with itself (could be inner, outer, or left/right)
+- Union: concatenating datasets, e.g. adding rows together, not columns together
+
+</Slide>
+
+<Slide title="Inner join">
+
+- Just keep rows that match (join keys are in both tables)
+- Most common join (JOIN keyword in SQL is inner)
+
+</Slide>
+
+<Slide title="Outer join">
+
+- Keeps all rows from both tables
+- Rows that do not match other table are filled with missing (NULL)
+- Can create large datasets
+
+<DataTable
+  columns={["NULLs", ""]}
+  rows={[
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["", "NULLs"],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Left/Right join">
+
+- Keeps all rows in one table
+- Used to add columns from another table without altering original rows
+- Left and right join are the same with swapped table orders
+  - A left join B = B right join A
+
+<DataTable
+  columns={[""]}
+  rows={[
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
+    ["NULLs"],
+    [""],
+    [""],
+    [""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Cross Join">
+
+- Creates all combinations of rows
+  - Every row in T1 will be merged with every row in T2
+- Used to expand datasets
+  - Example: going from yearly to monthly
+- Used to get all combinations of values
+  - Example: match every buyer to every seller to find best trades
+
+</Slide>
+
+<Slide title="Self Join">
+
+- Nothing special, it doesn’t matter whether tables in a join are different or the same
+
+</Slide>
+
+<Slide title="Union">
+
+- Not a join, just concatenating rows
+- Used to combine results from different queries
+  - i.e. to achieve more complex queries
+
+</Slide>
+
+<Slide title="Takeaways">
+
+- Remember the diagrams (effectively Venn diagrams)
+
+</Slide>

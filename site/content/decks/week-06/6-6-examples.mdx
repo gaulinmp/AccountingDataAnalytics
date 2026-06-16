@@ -1,0 +1,50 @@
+---
+week: week-06
+title: "Automation Case Studies"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Audit">
+
+- Audits used to random sample to draw inferences
+- Now automated analysis of “all” data
+- Auditor now focuses on understanding the models, parameters, assumptions, and outputs
+  - Design classifiers for flagging suspicious transactions
+  - Adjust RPA bot parameters to balance risk and cost
+
+</Slide>
+
+<Slide title="Invoice Processing">
+
+- Invoice received via email with multiple attachments
+- OCR processing to extract data, AI to structure text
+  - Find invoice date, numbers, amounts, due date
+  - Extract all invoice line items across all pages, check items against purchase order
+- Route data based on confidence in extracted data
+  - Reconciliation queue to auto-pay for good extraction
+  - Manual review for bad extraction
+- Generate daily report for all invoices and bot results
+
+</Slide>
+
+<Slide title="Bank Reconciliation">
+
+- Bank statements report actual cash transference
+- Needs matching against cash ledger and journal entries
+- RPA bot for each bank portal (due to their significant differences)
+- Pass off data to aggregation and reconciliation task
+- Flag mismatches and large unexpected transfers
+
+</Slide>
+
+<Slide title="Inventory Tracking">
+
+<ImageCaption src="/decks/week-06/6-6-examples/img1.jpg" alt="Inventory Tracking" />
+
+- BB/EB: RFID, weight, drone/robot tracking of inventory levels
+- TI: Pull and aggregate data on purchases, OCR shipping labels
+- TO: Monitor production (QA/QC), process order / fulfillment status
+- Estimate demand, schedule production, and other analytics
+
+</Slide>

@@ -1,0 +1,54 @@
+---
+week: week-08
+title: "Categorizing Analytical Methods"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Categorizing Analytical Methods">
+
+<ImageCaption src="/decks/week-08/8-7-categorizing-analytical-methods/img1.png" alt="Categorizing Analytical Methods" />
+
+</Slide>
+
+<Slide title="Supervised Learning">
+
+- Used when we have outcomes, or “y” variables
+- Approaches model how features map to outcomes
+- Example: predicting types, modeling risk
+
+<ImageCaption src="/decks/week-08/8-7-categorizing-analytical-methods/img2.png" alt="Supervised Learning" />
+
+</Slide>
+
+<Slide title="unsupervised Learning">
+
+- Used when we don’t have outcomes
+- Approaches capture structures and relationships
+- Example: identifying groups, computing factors
+
+<ImageCaption src="/decks/week-08/8-7-categorizing-analytical-methods/img3.png" alt="unsupervised Learning" />
+
+</Slide>
+
+<Slide title="Discrete Methods">
+
+- Supervised: classifier predicting the outcome group
+  - Ex: predicting whether transaction is fraudulent
+  - fraud(Y/N) ~ vendor features
+- Unsupervised: clustering groups “alike” observations
+  - Ex: grouping transactions into types
+  - clusters such as “discretionary”, “SG&A,” etc.
+
+</Slide>
+
+<Slide title="Continuous Methods">
+
+- Supervised: regression predicting the outcome value
+  - Ex: predicting default risk probability
+  - default(Y/N) ~ customer features
+- Unsupervised: reduces lots of features to a smaller set of continuous values
+  - Ex: deriving customers risk “factors”
+  - PCA on customer data  “financial stability” factor, “risk appetite” factor, etc.
+
+</Slide>

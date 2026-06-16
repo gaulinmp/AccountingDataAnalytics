@@ -1,0 +1,111 @@
+---
+week: week-07
+title: "Embeddings and Large Language Models"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Vectorization">
+
+- Vectorization used to be pre-specified by the analyst
+- Advances in machine learning led to statistically training vectors that have “meaning”
+
+</Slide>
+
+<Slide title="Word-Embeddings">
+
+- Trained by predicting a focal word based on the words around it (or vice-versa)
+
+- equals
+
+- Liabilities
+
+- Equity
+
+- plus
+
+- Assets
+
+- Focal
+- Word
+
+</Slide>
+
+<Slide title="Word-Embeddings">
+
+- Training this prediction creates a model that “understand” language and conceptual relationships
+
+- King – man + woman = Queen
+
+</Slide>
+
+<Slide title="Word-Embeddings">
+
+- Example trained on 10-K corpus:
+
+<DataTable
+  columns={["Input", "10-K trained model"]}
+  rows={[
+    ["EPS – target", "Earnings Loss"],
+    ["Pro + forma", "Non-recurring, unaudited"],
+    ["Android – Google + Apple", "iPhone"],
+    ["Netflix", "Hulu, YouTube, Amazon"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="“Spaces”">
+
+- Word-embedding embeds words into a space
+- The magic is that the space seems to encode meaning, relations between words
+- This extends to sentence embeddings, thought embeddings, etc.
+- NLP techniques now transform word space into idea space
+  - This is what LLMs do and it’s magical
+
+</Slide>
+
+<Slide title="Large Language Models">
+
+- LLMs operate by repeatedly predicting the next ____
+- First step is to embed the input
+- They then run a sequence of neural network layers
+  - Attention: share information across words and determine what is important
+  - Feedforward: store information (we think?!) for understanding
+- Lastly, predict a new word that “should” come next
+- Repeat with the new predicted word as the last word
+
+</Slide>
+
+<Slide title="LLM Caveats">
+
+- Very new
+- LLMs seem to be good at pattern recognition
+  - This can look like thinking, but it is not (yet)
+- Captures the average based on its training data
+
+</Slide>
+
+<Slide title="NLP in the LLM Era">
+
+- Very new
+- It all comes down to the prompt (for now)
+- Very good at:
+  - Named entity recognition, relation extraction, sentiment
+- Middling good at:
+  - Entity linking, fact retrieval
+- Unknown good at:
+  - Topic analysis, drawing conclusions
+
+</Slide>
+
+<Slide title="NLP in the LLM Era">
+
+- LLMs may be overkill
+- LLMs are far more black-box
+  - Dependent on training data, fine-tuning data, but to an unknown extent
+- Still room for older approaches
+  - When it does what it does well
+  - When a (more) deterministic outcome is necessary
+
+</Slide>

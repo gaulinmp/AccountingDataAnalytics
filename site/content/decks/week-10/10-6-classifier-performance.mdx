@@ -1,0 +1,116 @@
+---
+week: week-10
+title: "Classifier Performance"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Measuring Classifier Performance">
+
+- Accuracy has many definitions
+  - How many predicted firms are actually bankrupt?
+  - How many bankrupt firms were predicted so?
+- Different measures used for different goals
+
+</Slide>
+
+<Slide title="Confusion Matrix">
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "Went bankrupt", "Is healthy"],
+    ["Predictions", "Predict bankrupt", "Correctly predict bankruptcy", "Healthy firm called bankrupt"],
+    ["", "Predict healthy", "Bankrupt firm predicted healthy", "Correctly predict healthy"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Confusion Matrix">
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "Is Positive", "Is Negative"],
+    ["Predictions", "Predict Positive", "True Positive", "False Positive"],
+    ["", "Predict Negative", "False Negative", "True Negative"],
+  ]}
+/>
+
+- Positive and negative don’t mean anything other than the two outcomes
+  - You could reverse them, nothing would change
+
+</Slide>
+
+<Slide title="Accuracy Calculations">
+
+<DataTable
+  columns={["", "Outcomes", ""]}
+  rows={[
+    ["", "", ""],
+    ["Predictions", "TP", "FP"],
+    ["", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Precision and Recall Shortcomings">
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "➕", "➖"],
+    ["Predictions", "➕", "99", "1"],
+    ["", "➖", "0", "0"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Classifier asymmetric Costs">
+
+- TP / TN – true, so no costs
+- False Positive – expect bankruptcy, firm remains a going concern
+  - Waste of resources expended to mitigate risk
+- False Negative – expect going concern, firm liquidates
+  - Up to complete loss
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "➕", "➖"],
+    ["Predictions", "➕", "TP", "FP"],
+    ["", "➖", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Receiver Operating Curve">
+
+<ImageCaption src="/decks/week-10/10-6-classifier-performance/img1.png" alt="Receiver Operating Curve" />
+
+</Slide>
+
+<Slide title="Receiver Operating Curve">
+
+<ImageCaption src="/decks/week-10/10-6-classifier-performance/img2.png" alt="Receiver Operating Curve" />
+
+</Slide>
+
+<Slide title="Receiver Operating Curve">
+
+<ImageCaption src="/decks/week-10/10-6-classifier-performance/img3.png" alt="Receiver Operating Curve" />
+
+</Slide>
+
+<Slide title="Cost Functions and Training">
+
+- Training minimizes cost
+- Specifying different cost functions will result in different classifiers
+  - They will weight different errors (FP/FN) differently
+- Understanding the business decision is imperative to designing a good cost function and classifier
+
+</Slide>

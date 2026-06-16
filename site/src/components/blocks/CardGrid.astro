@@ -1,0 +1,33 @@
+---
+// Responsive grid of cards. Place child elements directly inside.
+interface Props {
+  min?: string;
+}
+const { min = '14rem' } = Astro.props;
+---
+
+<div class="card-grid" style={`--card-min:${min}`}>
+  <slot />
+</div>
+
+<style>
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--card-min), 1fr));
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+  .card-grid :global(> *) {
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  }
+  .card-grid :global(> *:hover) {
+    transform: translateY(-3px);
+    border-color: rgba(204, 0, 0, 0.3);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.01);
+  }
+</style>

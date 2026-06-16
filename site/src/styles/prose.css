@@ -1,0 +1,52 @@
+/* Markdown authored directly inside a <Slide> body.
+ *
+ * Component blocks (<Bullets>, <Quiz>, <JoinCompare>, …) ship their own scoped
+ * styles. These rules deliberately touch ONLY plain Markdown written straight
+ * into a slide — bullet lists that are direct children of `.slide__body` (never
+ * the <Bullets> component's `ul.bullets`) and inline `code` in prose/list items.
+ * The `> ul` direct-child + `:not(.bullets)` scoping keeps component internals
+ * (e.g. `.quiz .opts`, `.panel ul`) untouched. The look mirrors Bullets.astro so
+ * a `- ` list reads cleanly in source yet still looks designed on the slide.
+ */
+
+.slide__body > ul:not(.bullets),
+.slide__body > ul:not(.bullets) ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slide__body > ul:not(.bullets) ul {
+  margin-top: var(--space-3);
+}
+
+.slide__body > ul:not(.bullets) li {
+  position: relative;
+  padding-left: var(--space-5);
+  margin-bottom: var(--space-3);
+}
+
+.slide__body > ul:not(.bullets) li::before {
+  content: '';
+  position: absolute;
+  left: var(--space-2);
+  top: 0.65em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+/* Nested levels get the muted marker, matching <Bullets>' lvl-2…4. */
+.slide__body > ul:not(.bullets) ul li::before {
+  background: var(--gray-500);
+}
+
+/* Inline code in slide prose / list items (CodeBlock's <pre><code> is untouched). */
+.slide__body :is(p, li) code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface-muted);
+  padding: 0.05em 0.35em;
+  border-radius: var(--radius-sm);
+}

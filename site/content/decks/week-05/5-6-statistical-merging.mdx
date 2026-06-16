@@ -1,0 +1,101 @@
+---
+week: week-05
+title: "Statistical Matching In PROCESS"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Why statistical matching?">
+
+- Data often come from myriad sources and require combining
+- Data cleaning often requires defining a record
+- Unique identifiers for exactly the observation of interest are rare
+  - Some companies exist solely for providing this (e.g. CUSIP)!
+- Exact matching is very exacting
+
+</Slide>
+
+<Slide title="Merging without keys">
+
+- Keys work for perfect matches (equality)
+- What about when there is no key?
+  - Data from external source
+  - Data with noise or errors
+  - Data with non-perfect overlap (e.g. spatial data)
+- Statistical matching tries so solve these issues
+
+</Slide>
+
+<Slide title="Record Linkage">
+
+- Statistical matching links records with probability
+  - Often performed across multiple fields for improved performance
+  - Uses appropriate measures of similarity by column
+- Entity resolution – broader term for identifying, matching, or linking, or consolidating records
+
+</Slide>
+
+<Slide title="Examples">
+
+- Reconciling transactions from bank records with internal books
+  - Outside data has different formatting, may record different dates, amounts should match exactly
+- Linking permit files to vendors for audit trail
+  - Filenames may have truncated information to merge
+- Comparing purchase orders to invoices
+  - PDF extraction may produce errors in data
+
+</Slide>
+
+<Slide title="Approaches – Fuzzy Matching">
+
+- Matching strings with inexact matches
+- Edit distance – how many edits (insertion, deletion, substitution, etc.) to get from one string to the other
+  - Levenshtein, Hamming, etc.
+- Token based – comparing tokens (words) for exact match
+  - Jaccard, cosine similarity, TF-IDF
+- Other – sequence, compression, ML
+
+</Slide>
+
+<Slide title="Edit Distance Example">
+
+- University of Utah Acct.  UofU Accounting
+-  University of Utah Accounting.
+  - Deletions: “niversity ”, “ ”, “tah”, “.”
+    - Additions: “oun”, “ing”
+- Tokens: no overlap
+
+</Slide>
+
+<Slide title="Approaches – multiple columns">
+
+- Matching records based on multiple columns
+  - E.g. matching transactions on name, address, amount
+- Each column must be matched appropriately
+  - E.g. difference for numeric columns
+- Weighting matches for aggregation
+  - Can be learned analytically
+
+</Slide>
+
+<Slide title="Multiple Column Example">
+
+- Merge invoice transactions into Customer Relation Management data
+  - On: name, address
+- Name: fuzzy-matching
+  - Could combine edit distance and TF-IDF on word-level
+- Address: fuzzy-matching or distance
+  - Use address lookup API from CRM data, Google Maps API for vendor name, then fuzzy match result
+  - Convert to lat-lon and match on minimum distance
+
+</Slide>
+
+<Slide title="Caveats and Drawbacks">
+
+- Not perfect!
+  - Trading off false negatives (no equality match) for false positives (matching observations that shouldn’t)
+- Requires significant knowledge to develop
+- Requires significant testing
+- Can change over time
+
+</Slide>

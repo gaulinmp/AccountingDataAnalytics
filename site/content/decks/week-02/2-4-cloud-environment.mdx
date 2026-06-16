@@ -1,0 +1,126 @@
+---
+week: week-02
+title: "Cloud Data Analytics"
+subtitle: "Comparing local hosting to cloud servers, identifying major providers, and evaluating security and cost trade-offs."
+estMinutes: 25
+instructors: ["Maclean Gaulin"]
+aiPrompt: "Focus on helping students understand the financial impact of cloud hosting (CapEx vs. OpEx) and the shifting landscape of security threats."
+---
+
+import { Slide, Bullets, DataTable, Quiz } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 2 · Lecture 4" icon="database">
+  Cloud Data Analytics
+</Slide>
+
+<Slide title="The Cloud Migration" icon="database" key="Moving data and analytics to the cloud is a business-driven transition of infrastructure and software resources.">
+
+<Bullets items={[
+  { l: 1, h: "**Exceeding Local Limits** — Modern analytical datasets (terabytes) exceed the RAM and CPU limits of employee laptops." },
+  { l: 1, h: "**The Cloud Continuum** — Moving infrastructure is not binary; firms choose what to outsource:" },
+  { l: 2, h: "**Infrastructure outsourcing** — Letting others manage physical hard drives, backups, and network lines." },
+  { l: 2, h: "**Software outsourcing (SaaS)** — Renting cloud-based analytics dashboards and financial software." },
+  { l: 1, h: "**Talent Deficit** — There is a significant shortage of professionals who understand both cloud infrastructure and accounting rules." }
+]} />
+
+</Slide>
+
+<Slide title="Local & On-Premises Solutions" icon="database" key="Local hosting provides physical control but limits collaboration, scaling, and processing speeds.">
+
+<Bullets items={[
+  { l: 1, h: "**Local Machines** — Running calculations directly on your computer (e.g., standard Excel)." },
+  { l: 2, h: "Con: Highly limited by processor cores, RAM, and physical proximity to the raw files." },
+  { l: 1, h: "**Private On-Premises Servers** — Hosting servers within the company's own server room." },
+  { l: 2, h: "Pro: Allows team access and database sharing under the firm's physical lock and key." },
+  { l: 2, h: "Con: Employees must download local copies of massive files to run desktop analyses, creating security risks." }
+]} />
+
+</Slide>
+
+<Slide title="Shifting to the Cloud" icon="database" key="Cloud models replace fixed physical assets with rented, shared server capacity on demand.">
+
+<Bullets items={[
+  { l: 1, h: "**Third-Party Hardware** — Physical servers are maintained in massive data centers run by providers." },
+  { l: 2, h: "Firms trade upfront asset purchases for monthly utility renting fees." },
+  { l: 1, h: "**Third-Party Software** — Providers handle security patches and database updates automatically." },
+  { l: 2, h: "Con: Customization can be highly difficult, resulting in platform lock-in." },
+  { l: 1, h: "**Elastic Pricing** — Firms pay only for the storage (bits) and active computation (CPU cycles) they use." }
+]} />
+
+</Slide>
+
+<Slide title="Cloud Provider Landscape" icon="database" key="The cloud market is split between general infrastructure giants and business or accounting SaaS tools.">
+
+<Bullets items={[
+  { l: 1, h: "**Infrastructure Giants (IaaS / PaaS)**" },
+  { l: 2, h: "Amazon Web Services (AWS), Microsoft Azure, Google Cloud Platform (GCP)." },
+  { l: 1, h: "**Business & Enterprise Systems**" },
+  { l: 2, h: "Oracle Cloud, IBM Cloud (specializing in legacy database hosting)." },
+  { l: 1, h: "**Accounting & ERP Specific Software (SaaS)**" },
+  { l: 2, h: "SAP S/4HANA, NetSuite, Sage Intacct, QuickBooks Online, FreshBooks, Xero." }
+]} />
+
+</Slide>
+
+<Slide title="Cloud Data Warehouse & Lake Systems" icon="layers" key="Cloud storage platforms wrap underlying physical infrastructure in easy-to-query query layers.">
+
+<DataTable
+  columns={["Service Type", "Amazon Web Services (AWS)", "Google Cloud (GCP)", "Microsoft Azure"]}
+  rows={[
+    ["Raw Object Storage", "Amazon S3", "Google Cloud Storage", "Azure Blob Storage / Lake"],
+    ["Analytical Query Engine", "Amazon Redshift", "Google BigQuery", "Azure Synapse Analytics"],
+  ]}
+  caption="Cloud providers offer matching building blocks for storage and analytical processing."
+/>
+
+<Bullets items={[
+  { l: 1, h: "**Platform-Agnostic Layers** — Software like Snowflake and Databricks runs on top of AWS, GCP, or Azure to query across platforms." }
+]} />
+
+</Slide>
+
+<Slide title="Cloud Security & Compliance" icon="layers" key="Cloud migration shifts the primary security threat from network perimeters to identity and access management.">
+
+<Bullets items={[
+  { l: 1, h: "**Identity Theft Focus** — Since cloud databases are accessible over the internet, threat models shift from breaching server rooms to stealing credentials." },
+  { l: 1, h: "**Data Sovereignty Regulations** — Regulations like the EU's GDPR and the US CLOUD Act dictate physical server locations and government access rights." },
+  { l: 1, h: "**AICPA Professional Standards** — Auditors and tax professionals carry strict ethical and legal duties to safeguard client data in cloud environments." }
+]} />
+
+<Quiz
+  id="w2-cloud-security"
+  q="Which of the following represents the most significant shift in security risk when a firm migrates from on-premises servers to cloud hosting?"
+  opts={[
+    "Physical security of the servers becomes the firm's direct daily responsibility",
+    "The primary vulnerability shifts from physical network perimeters to Identity and Access Management (IAM) and credential theft",
+    "Data backups are no longer possible in a cloud environment"
+  ]}
+  correct={1}
+  why="Because cloud databases are hosted on public infrastructure and accessed over the web, the primary threat vector shifts from breaching physical server rooms to exploiting weak user credentials and access rights (IAM)."
+/>
+
+</Slide>
+
+<Slide title="Financial & Audit Caveats" icon="layers" key="Cloud environments resolve physical resource limits but introduce billing volatility and right-to-audit issues.">
+
+<Bullets items={[
+  { l: 1, h: "**CapEx to OpEx Shift** — Upfront server equipment purchases (Capital Expense) are replaced by monthly utility bills (Operating Expense)." },
+  { l: 2, h: "Can dramatically lower fixed assets on the balance sheet but increases monthly operating costs." },
+  { l: 1, h: "**IT Cost Paradox** — 66% of executives report that migrating to the cloud did not lower IT costs (KPMG Survey)." },
+  { l: 2, h: "Neglecting to shut down idle database instances run overnight can lead to massive cost overruns." },
+  { l: 1, h: "**Audit Trail Concerns** — Relying on external cloud hosts can create 'right-to-audit' verification hurdles." }
+]} />
+
+<Quiz
+  id="w2-cloud-capex-opex"
+  q="How does migrating IT infrastructure from local on-premises servers to a third-party cloud host typically affect a firm's financial statements?"
+  opts={[
+    "It increases fixed assets (CapEx) and decreases operating expenses (OpEx)",
+    "It decreases fixed assets on the balance sheet (shifting CapEx to rented OpEx) and increases ongoing operating expenses",
+    "It has no impact on either the balance sheet or the income statement"
+  ]}
+  correct={1}
+  why="Cloud migration swaps capital investments in physical hardware (Capital Expenditure / CapEx) for monthly subscription or consumption usage charges (Operating Expenditure / OpEx), lowering fixed assets on the balance sheet."
+/>
+
+</Slide>

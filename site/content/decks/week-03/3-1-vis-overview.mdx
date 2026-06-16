@@ -1,0 +1,112 @@
+---
+week: week-03
+title: "Visualization Overview"
+---
+
+import { Slide, DataTable, ImageCaption, Quiz } from '@components/blocks';
+
+<Slide title="Why Visualize?">
+
+<DataTable
+  columns={["Anscombe's quartet", "", "", "", "", "", "", ""]}
+  rows={[
+    ["Dataset 1", "", "Dataset 2", "", "Dataset 3", "", "Dataset 4", ""],
+    ["x", "y", "x", "y", "x", "y", "x", "y"],
+    ["10.0", "8.04", "10.0", "9.14", "10.0", "7.46", "8.0", "6.58"],
+    ["8.0", "6.95", "8.0", "8.14", "8.0", "6.77", "8.0", "5.76"],
+    ["13.0", "7.58", "13.0", "8.74", "13.0", "12.74", "8.0", "7.71"],
+    ["9.0", "8.81", "9.0", "8.77", "9.0", "7.11", "8.0", "8.84"],
+    ["11.0", "8.33", "11.0", "9.26", "11.0", "7.81", "8.0", "8.47"],
+    ["14.0", "9.96", "14.0", "8.1", "14.0", "8.84", "8.0", "7.04"],
+    ["6.0", "7.24", "6.0", "6.13", "6.0", "6.08", "8.0", "5.25"],
+    ["4.0", "4.26", "4.0", "3.1", "4.0", "5.39", "19.0", "12.5"],
+    ["12.0", "10.84", "12.0", "9.13", "12.0", "8.15", "8.0", "5.56"],
+    ["7.0", "4.82", "7.0", "7.26", "7.0", "6.42", "8.0", "7.91"],
+    ["5.0", "5.68", "5.0", "4.74", "5.0", "5.73", "8.0", "6.89"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="Why Visualize?" key="three shapes of source data">
+
+<ImageCaption src="/decks/week-03/3-1-vis-overview/img1.png" alt="Why Visualize?" />
+
+<DataTable
+  columns={["Anscombe's quartet", "", "", "", "", "", "", ""]}
+  rows={[
+    ["Dataset 1", "", "Dataset 2", "", "Dataset 3", "", "Dataset 4", ""],
+    ["x", "y", "x", "y", "x", "y", "x", "y"],
+    ["10.0", "8.04", "10.0", "9.14", "10.0", "7.46", "8.0", "6.58"],
+    ["8.0", "6.95", "8.0", "8.14", "8.0", "6.77", "8.0", "5.76"],
+    ["13.0", "7.58", "13.0", "8.74", "13.0", "12.74", "8.0", "7.71"],
+    ["9.0", "8.81", "9.0", "8.77", "9.0", "7.11", "8.0", "8.84"],
+    ["11.0", "8.33", "11.0", "9.26", "11.0", "7.81", "8.0", "8.47"],
+    ["14.0", "9.96", "14.0", "8.1", "14.0", "8.84", "8.0", "7.04"],
+    ["6.0", "7.24", "6.0", "6.13", "6.0", "6.08", "8.0", "5.25"],
+    ["4.0", "4.26", "4.0", "3.1", "4.0", "5.39", "19.0", "12.5"],
+    ["12.0", "10.84", "12.0", "9.13", "12.0", "8.15", "8.0", "5.56"],
+    ["7.0", "4.82", "7.0", "7.26", "7.0", "6.42", "8.0", "7.91"],
+    ["5.0", "5.68", "5.0", "4.74", "5.0", "5.73", "8.0", "6.89"],
+  ]}
+/>
+
+<Quiz
+  id="w3-data-shapes"
+  q="Which source is queried with SQL?"
+  opts={["A flat CSV", "A relational database", "A PDF"]}
+  correct={1}
+  why="Relational databases store related tables and are queried with SQL JOINs."
+/>
+
+</Slide>
+
+<Slide title="Why Visualize">
+
+- Human capacity for processing information is limited
+- Human brain adapted to visual pattern recognition
+- Improved understanding of complex data
+- Identification of patterns, trends, and outliers
+- Effective communication of analytical findings to various audiences
+- Inform decisions – insight, reasoning, understanding
+
+</Slide>
+
+<Slide title="Leverage Strengths, Mitigate Weaknesses">
+
+- Leveraging strengths of human cognition
+  - Visual bandwidth1, pre-attentive processing2, graphical perception3
+- Mitigate constraints of human cognition
+  - Avoid overloading limited “working memory”4, leverage external recognition,
+
+</Slide>
+
+<Slide title="Visualization as Communication">
+
+- Concisely conveying data
+- Telling stories for retention
+- Relevant XKCD
+
+<ImageCaption src="/decks/week-03/3-1-vis-overview/img2.jpg" alt="Visualization as Communication" />
+
+</Slide>
+
+<Slide title="Best Practices">
+
+- Informative
+- Focus attention, convey primary point(s)
+- Targeted to audience and format/channel
+- Concise, simple
+- Clean (avoid clutter and noise)
+- Aesthetic
+- Interesting
+
+</Slide>
+
+<Slide title="How to choose?">
+
+<ImageCaption src="/decks/week-03/3-1-vis-overview/img3.png" alt="How to choose?" />
+
+- Credit Yellowfin BI
+
+</Slide>

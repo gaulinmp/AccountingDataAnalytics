@@ -1,0 +1,95 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import { deckSlug } from '@lib/url';
+import Layout from '@layout/Layout.astro';
+import BrandStrip from '@layout/BrandStrip.astro';
+import Breadcrumb from '@layout/Breadcrumb.astro';
+import Companion from '@layout/Companion.astro';
+import Footer from '@layout/Footer.astro';
+import QuizCard from '@islands/QuizCard.astro';
+import DeckController from '@islands/DeckController.astro';
+import AiTutorMount from '@islands/AiTutorMount.astro';
+import * as Blocks from '@components/blocks';
+
+// Build-time enumeration: one static .html per deck. URL shape is owned by
+// deckSlug()/deckUrl() in @lib/url so links and routes can't drift apart.
+export const getStaticPaths = (async () => {
+  const decks = await getCollection('decks');
+  return decks.map((deck) => ({
+    params: {
+      week: deck.data.week.id,
+      deck: deckSlug(deck),
+    },
+    props: { deck },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = { deck: CollectionEntry<'decks'> };
+const { deck } = Astro.props as Props;
+const { Content } = await render(deck);
+---
+
+<Layout title={deck.data.title} description={deck.data.subtitle}>
+  {/* Normal flowing page content: header top, content middle, footer bottom. */}
+  <div class="deck-page">
+    <BrandStrip />
+    <Breadcrumb deck={deck} />
+    <Companion>
+      <Content />
+    </Companion>
+    <Footer />
+
+    {/* Force Astro and Vite to bundle CSS stylesheets for all slide-level blocks */}
+    <div style="display: none;" aria-hidden="true">
+      <Blocks.Slide title="temp" />
+      <Blocks.Bullets items={[{ l: 1, h: 'temp' }]} />
+      <Blocks.ThreeCol cols={[{ title: 'temp', body: 'temp' }]} />
+      <Blocks.SqlWalk sql="" rows={[{ clause: '', desc: '' }]} />
+      <Blocks.JoinCompare inputs={[{ title: '', items: [''] }]} result={{ title: '', items: [''] }} />
+      <Blocks.Schema tables={[{ name: '', columns: [{ name: '' }] }]} />
+      <Blocks.DataTable columns={['temp']} rows={[['temp']]} />
+      <Blocks.CodeBlock code="" />
+      <Blocks.Demo />
+      <Blocks.Cta label="temp" href="" />
+      <Blocks.Quiz id="temp" q="temp" opts={['a', 'b']} correct={0} why="temp" />
+      <Blocks.CoverMeta />
+      <Blocks.TwoColumn />
+      <Blocks.ImageCaption src="" alt="" />
+      <Blocks.ChartPane />
+      <Blocks.FullBleed />
+      <Blocks.CardGrid />
+    </div>
+  </div>
+
+  {/* Islands (Astro client scripts — enhance the static DOM, no re-render). */}
+  <QuizCard />
+  <DeckController />
+  <AiTutorMount
+    deckId={deck.id}
+    deckTitle={deck.data.title}
+    deckTopic={deck.data.topic ?? ''}
+    aiPrompt={deck.data.aiPrompt ?? ''}
+  />
+</Layout>
+
+<style>
+  .deck-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--gray-50);
+  }
+  .deck-page :global(.companion) {
+    flex: 1;
+  }
+
+  @media print {
+    .deck-page {
+      display: block;
+      height: auto;
+      background-color: transparent;
+    }
+  }
+</style>

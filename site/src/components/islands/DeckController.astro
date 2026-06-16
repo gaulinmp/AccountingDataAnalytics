@@ -1,0 +1,318 @@
+---
+// Paged deck navigation. One slide per page; left/right pages between slides
+// (native horizontal scroll-snap + keyboard + a prev/next pager), vertical scroll
+// stays within a slide. The active slide drives the reinforcement pane and the
+// AI-tutor context via `slidechange`. ?slide= deep-links. Enhances in place.
+---
+
+<script>
+  import { SLIDE_CHANGE, type SlideChangeDetail } from '../../lib/deck';
+
+  const companion = document.querySelector<HTMLElement>('[data-deck]');
+  const pane = companion?.querySelector<HTMLElement>('.slide-pane') ?? null;
+  const slides = pane ? Array.from(pane.querySelectorAll<HTMLElement>('[data-slide]')) : [];
+
+  if (companion && pane && slides.length > 0) {
+    const total = slides.length;
+    let index = -1;
+
+    // Group the DOM for each slide on load to support responsive columns
+    slides.forEach((slide) => {
+      if (slide.classList.contains('slide--title')) return;
+      const body = slide.querySelector('.slide__body');
+      if (!body) return;
+
+      const left = document.createElement('div');
+      left.className = 'slide__col-left';
+
+      const right = document.createElement('div');
+      right.className = 'slide__col-right';
+      right.classList.add('reinforcement-pane');
+      right.setAttribute('data-reinforcement', '');
+
+      // Move key concept to right column
+      const keyConcept = slide.querySelector('.slide__key-concept');
+      if (keyConcept) {
+        right.appendChild(keyConcept);
+      }
+
+      // Identify and move right column content elements
+      const rightSelectors = [
+        '[data-quiz]',
+        '.quiz',
+        'aside',
+        '.note',
+        '.tip',
+        '.key-learning',
+        '.key-learnings'
+      ];
+
+      rightSelectors.forEach((selector) => {
+        body.querySelectorAll(selector).forEach((el) => {
+          if (body.contains(el) && !right.contains(el)) {
+            right.appendChild(el);
+          }
+        });
+      });
+
+      // Move remaining children of slide__body to left column
+      while (body.firstChild) {
+        left.appendChild(body.firstChild);
+      }
+
+      body.appendChild(left);
+      body.appendChild(right);
+    });
+
+    function setIndexEmit(i: number, scroll: boolean = true) {
+      const target = Math.max(0, Math.min(total - 1, i));
+      if (target === index) return;
+      index = target;
+
+      slides.forEach((s, n) => {
+        const isActive = n === index;
+        s.classList.toggle('is-active', isActive);
+
+        // Dynamically add/remove data-reinforcement attribute on the active slide's right column
+        // so Playwright's page.locator('[data-reinforcement]') matches ONLY the active one.
+        const rightCol = s.querySelector('.slide__col-right');
+        if (rightCol) {
+          if (isActive) {
+            rightCol.setAttribute('data-reinforcement', '');
+          } else {
+            rightCol.removeAttribute('data-reinforcement');
+          }
+        }
+      });
+
+      companion!.dataset.active = String(index);
+      syncUrl();
+
+      if (scroll) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+
+      const detail: SlideChangeDetail = { index, total, slideEl: slides[index] };
+      companion!.dispatchEvent(new CustomEvent(SLIDE_CHANGE, { bubbles: true, detail }));
+    }
+
+    function syncUrl() {
+      const p = new URLSearchParams(location.search);
+      p.set('slide', String(index + 1));
+      history.replaceState(null, '', `${location.pathname}?${p.toString()}${location.hash}`);
+    }
+
+    // Keyboard: left/right page
+    const isTyping = (e: KeyboardEvent) => {
+      const path = (e.composedPath?.() ?? [e.target]) as Array<EventTarget | null>;
+      return path.some((n) => {
+        const el = n as HTMLElement | null;
+        return (
+          !!el &&
+          (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable === true)
+        );
+      });
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (isTyping(e)) return;
+      switch (e.key) {
+        case 'ArrowRight':
+          e.preventDefault();
+          setIndexEmit(index + 1);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          setIndexEmit(index - 1);
+          break;
+        case 'Home':
+          e.preventDefault();
+          setIndexEmit(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setIndexEmit(total - 1);
+          break;
+      }
+    });
+
+    // Pager: prev / numbers / next, flowing statically below the slide pane
+    function buildPager() {
+      const pager = document.createElement('nav');
+      pager.className = 'deck-pager';
+      pager.setAttribute('aria-label', 'Slide navigation');
+
+      const prev = document.createElement('button');
+      prev.type = 'button';
+      prev.className = 'deck-pager__btn deck-pager__btn--prev';
+      prev.setAttribute('aria-label', 'Previous slide');
+      prev.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      `;
+      prev.addEventListener('click', () => setIndexEmit(index - 1));
+
+      const numbersContainer = document.createElement('div');
+      numbersContainer.className = 'deck-pager__numbers';
+
+      const numberButtons: HTMLButtonElement[] = [];
+      for (let i = 0; i < total; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'deck-pager__num';
+        btn.textContent = String(i + 1);
+        btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        btn.addEventListener('click', () => setIndexEmit(i));
+        numbersContainer.appendChild(btn);
+        numberButtons.push(btn);
+      }
+
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'deck-pager__btn deck-pager__btn--next';
+      next.setAttribute('aria-label', 'Next slide');
+      next.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      `;
+      next.addEventListener('click', () => setIndexEmit(index + 1));
+
+      pager.append(prev, numbersContainer, next);
+      companion!.appendChild(pager);
+
+      companion!.addEventListener(SLIDE_CHANGE, (e) => {
+        const d = (e as CustomEvent<SlideChangeDetail>).detail;
+        prev.disabled = d.index === 0;
+        next.disabled = d.index === d.total - 1;
+
+        numberButtons.forEach((btn, idx) => {
+          const isActive = idx === d.index;
+          btn.classList.toggle('is-active', isActive);
+          if (isActive) {
+            btn.setAttribute('aria-current', 'page');
+            btn.disabled = true;
+          } else {
+            btn.removeAttribute('aria-current');
+            btn.disabled = false;
+          }
+        });
+      });
+    }
+
+    function init() {
+      companion!.classList.add('is-interactive');
+      buildPager();
+      const start = parseInt(new URLSearchParams(location.search).get('slide') || '1', 10);
+      const target = Number.isFinite(start) ? Math.max(0, Math.min(total - 1, start - 1)) : 0;
+      setIndexEmit(target, false);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
+</script>
+
+<style is:global>
+  .deck-pager {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    padding: var(--space-2) var(--space-4);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-premium);
+    max-width: fit-content;
+    margin: var(--space-8) auto 0;
+  }
+
+  .companion.is-interactive .deck-pager {
+    display: flex;
+  }
+
+  .deck-pager__numbers {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: var(--gray-50);
+    padding: var(--space-1);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .deck-pager__num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+  }
+
+  .deck-pager__num:hover:not(:disabled) {
+    background: var(--gray-200);
+    color: var(--ink);
+  }
+
+  .deck-pager__num.is-active {
+    background: var(--brand);
+    color: var(--brand-contrast);
+    font-weight: 700;
+    cursor: default;
+    box-shadow: 0 2px 6px rgba(204, 0, 0, 0.25);
+  }
+
+  .deck-pager__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+  }
+
+  .deck-pager__btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .deck-pager__btn:hover:not(:disabled) {
+    border-color: var(--brand);
+    color: var(--brand);
+    background: var(--gradient-brand-subtle);
+  }
+
+  .deck-pager__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: var(--border);
+    color: var(--gray-400);
+    background: var(--surface);
+  }
+
+  @media print {
+    .deck-pager {
+      display: none;
+    }
+  }
+</style>

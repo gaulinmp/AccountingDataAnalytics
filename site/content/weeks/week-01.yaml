@@ -1,0 +1,11 @@
+number: 1
+title: "Introduction to Accounting Data Analytics"
+summary: "Understand the core concepts of data analytics in accounting, class goals, structure, and professional skepticism."
+description: |
+  Welcome to Week 1! This week we lay the foundation for the course. We will explore how data analytics is transforming traditional accounting, tax, auditing, and managerial decisions. You will also learn about the course structure, evaluation, and the importance of maintaining a healthy, professional skepticism when working with data-driven insights.
+objectives:
+  - Explain how data analytics is transforming the accounting profession.
+  - Describe the weekly class structure, webinar schedules, labs, and grading policies.
+  - Differentiate between diagnostic and predictive modeling.
+  - Apply the concept of professional skepticism to data source verification.
+

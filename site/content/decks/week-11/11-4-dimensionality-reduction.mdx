@@ -1,0 +1,99 @@
+---
+week: week-11
+title: "Dimensionality Reduction"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is Dimensionality Reduction?">
+
+- Curse of dimensionality is when too many variables make analysis difficult, computationally infeasible, and more noise than signal
+- Dimensionality reduction collapses many variables into just a few variables that capture the pertinent information
+
+</Slide>
+
+<Slide title="Example – Kermit the Accountant">
+
+</Slide>
+
+<Slide title="Example – Images">
+
+</Slide>
+
+<Slide title="Principal Component Analysis">
+
+- The OLS of dimensionality reduction
+- For N variables, PCA calculates up to N components
+  - First component explains the most variance
+  - Second component explains the next most, etc.
+
+</Slide>
+
+<Slide title="PCA Example on 2 variables">
+
+</Slide>
+
+<Slide title="PCA Example on 4 variables">
+
+</Slide>
+
+<Slide title="PCA Example on 4 variables">
+
+</Slide>
+
+<Slide title="PCA Example on 4 variables">
+
+</Slide>
+
+<Slide title="PCA Limitations">
+
+- PCA is a linear combinations of underlying variables, interpreting that result is not always straight forward
+- Not using all N components will lose information
+  - Tradeoff # dimensions vs how much information kept
+- Assumes linearity
+
+</Slide>
+
+<Slide title="Alternatives to PCA">
+
+- t-SNE: non-linear technique for visualization to represent high-dimensional clusters in 2D
+- UMAP: non-linear technique that preserves the “geometric” structure of high-dimensional data
+- Generally, non-linear approaches try to model the relationship between data, preserving what’s informative/repeated, dropping the rest
+
+</Slide>
+
+<Slide title="Autoencoders">
+
+- Take some data, throw it into a neural network, train it to predict itself
+- If you squish the “middle” of the network enough, it has to learn how to re-generate the data without memorizing it
+- That middle bit becomes a reduced dimensional representation of your input
+
+</Slide>
+
+<Slide title="Autoencoder">
+
+<ImageCaption src="/decks/week-11/11-4-dimensionality-reduction/img1.png" alt="Content Placeholder 7" />
+
+<ImageCaption src="/decks/week-11/11-4-dimensionality-reduction/img2.png" alt="Content Placeholder 7" />
+
+<ImageCaption src="/decks/week-11/11-4-dimensionality-reduction/img3.png" alt="Content Placeholder 9" />
+
+- math
+
+- math
+
+- 890 K
+
+- 1,449 K
+
+- 1,449 K
+
+</Slide>
+
+<Slide title="Accounting is Dimensionality Reduction">
+
+- Accounting takes thousands to millions of transactions and reduces them to 10-20 numbers on a balance sheet / income statement
+- How we do this is based on a complex transformation function (called GAAP)
+- The resultant 10-20 numbers each capture different aspects of the underlying high dimensional data, without losing anything important
+
+</Slide>

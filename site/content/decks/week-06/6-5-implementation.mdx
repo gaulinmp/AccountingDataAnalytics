@@ -1,0 +1,99 @@
+---
+week: week-06
+title: "Implementing Automation"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="How automation is implemented">
+
+- What software do companies use?
+  - Programming based
+  - Low/no code solutions
+- How does an RPA solution come about?
+  - Start small, grow big
+- AI and ML shifts the paradigm
+
+</Slide>
+
+<Slide title="Programming Automation">
+
+- Just write a script
+  - How do you know if it ran? How will you handle errors?
+  - What if it relies on other data or scripts running?
+- Enter workflows
+  - Directed Acyclic Graph (DAG)
+  - Handle scheduling, triggers, monitoring, reporting, etc.
+  - E.g., Apache Airflow, Azure Data Factory, AWS Step Functions
+
+</Slide>
+
+<Slide title="Example: Apache Airflow">
+
+<ImageCaption src="/decks/week-06/6-5-implementation/img1.png" alt="Example: Apache Airflow" />
+
+</Slide>
+
+<Slide title="Example: Apache Airflow">
+
+<ImageCaption src="/decks/week-06/6-5-implementation/img2.png" alt="Example: Apache Airflow" />
+
+<ImageCaption src="/decks/week-06/6-5-implementation/img3.png" alt="Example: Apache Airflow" />
+
+</Slide>
+
+<Slide title="Low-code solutions">
+
+- Ability to program shouldn’t limit automation
+- Low-code refers to not organizing each step of the workflow with code, but rather pre-defined “steps”
+- Examples:
+  - Automation: MS Power Automate, UiPath, Blue Prism
+  - Pipelines: Alteryx, Tableau Prep, Power BI, Qlik, SAP
+
+</Slide>
+
+<Slide title="Example: Alteryx">
+
+<ImageCaption src="/decks/week-06/6-5-implementation/img4.png" alt="Example: Alteryx" />
+
+</Slide>
+
+<Slide title="Evolution of an RPA">
+
+- Have a task that feels repetitive or straightforward
+- Map out the steps you are taking
+  - There are software solutions now that watch you do a task then repeat it automatically
+- Automate each step (DIY or with low-code blocks)
+- Tie steps together with flow logic
+  - Verify state (e.g., window is open, client selected) and add logic when something is missing/wrong
+- Run it a bunch of times and fix the bugs
+
+</Slide>
+
+<Slide title="Improving RPA processes">
+
+- Look for abstractions  combine or expand
+  - RPA that reports outstanding AR, add time parameter to be able to use same RPA for 0-30 day, 30-60, etc.
+  - RPA that invoices new customers, and another for old customers (w/ history). Add parameter to collect history, and combine RPAs into one
+
+</Slide>
+
+<Slide title="Wrangling RPA processes">
+
+- Once the number of processes becomes large, or critical, or dependent, need a management solution
+- This is where, e.g., Airflow comes into play
+  - Manage your RPA processes
+  - Pass in data & flow logic, e.g. loops to run your manually started RPA process for every account
+  - Report what has run, where errors are occuring
+
+</Slide>
+
+<Slide title="AI and “Intelligent Automation”">
+
+- Most automation was well defined step driven
+  - E.g. if vendor name found in database, assign account, otherwise flag for new account review
+- AI allows “guessing” in your workflow
+  - E.g. “read PDF from customer and classify what it is: invoice, return RMA, etc. and route to correct task”
+  - Technically, a statistical rule instead of discretely defined rule
+
+</Slide>

@@ -1,0 +1,118 @@
+---
+week: week-02
+title: "AICPA Audit Data Standards"
+subtitle: "Standardizing financial datasets to reduce ETL complexity and accelerate external audits."
+estMinutes: 20
+instructors: ["Maclean Gaulin"]
+aiPrompt: "Focus on explaining the business value of standardizing schemas for audits (reducing transaction translation friction) and how subledgers connect."
+---
+
+import { Slide, Bullets, ImageCaption, Quiz } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 2 · Lecture 5" icon="layers">
+  AICPA Audit Data Standards
+</Slide>
+
+<Slide title="The Need for Standardization" icon="layers" key="Highly customized ERP schemas drive up audit costs by requiring bespoke data translation pipelines.">
+
+<Bullets items={[
+  { l: 1, h: "**Customized Systems** — Almost every firm modifies its database tables to match custom business processes." },
+  { l: 1, h: "**Auditing Friction** — External auditors waste significant hours performing custom ETL scripts for each client's unique schemas." },
+  { l: 1, h: "**The AICPA Solution** — The Audit Data Standards (ADS) define a common set of tables, column names, and relationships." },
+  { l: 2, h: "Provides standard templates for transferring operational records to third-party audit toolkits." }
+]} />
+
+<Quiz
+  id="w2-ads-purpose"
+  q="What is the primary business benefit of a company adopting the AICPA Audit Data Standards (ADS) when preparing for an external audit?"
+  opts={[
+    "It automatically calculates and files the company's annual corporate taxes",
+    "It reduces the custom data transformation (ETL) time and costs required for auditors to extract and analyze financial records",
+    "It replaces the firm's central ERP database with a secure blockchain system"
+  ]}
+  correct={1}
+  why="The AICPA ADS standardizes schemas (table layouts, column names). By adopting it, firms reduce the massive ETL translation friction and costs that occur when auditors try to map a custom ERP database to their auditing toolsets."
+/>
+
+</Slide>
+
+<Slide title="AICPA Standards Framework" icon="layers" key="The ADS framework covers a core base standard and five operational transaction subledgers.">
+
+<Bullets items={[
+  { l: 1, h: "**Base Standard** — Common master data including user tables, business units, segments, and tax tables." },
+  { l: 1, h: "**General Ledger Standard** — Chart of accounts, journal entries, and historical trial balances." },
+  { l: 1, h: "**Order to Cash (O2C) Subledger** — Customer sales, credit management, billing, and cash collections." },
+  { l: 1, h: "**Procure to Pay (P2P) Subledger** — Purchasing requests, purchase orders, vendor invoices, and cash disbursements." },
+  { l: 1, h: "**Inventory Subledger** — Inventory items, locations, physical counts, and cost updates." },
+  { l: 1, h: "**Fixed Asset Subledger** — Asset registry, acquisitions, depreciation schedules, and disposals." }
+]} />
+
+</Slide>
+
+<Slide title="AICPA Supply Chain Standards" icon="layers" key="The supply chain standard links procurement and sales subledgers to the central inventory ledger.">
+
+<ImageCaption src="/decks/week-02/2-5-audit-data-standard/img1.png" alt="AICPA Supply Chain Standards" />
+
+</Slide>
+
+<Slide title="Base & General Ledger" icon="database" key="The general ledger standard structures basic chart of accounts, journal records, and trial balances.">
+
+<ImageCaption src="/decks/week-02/2-5-audit-data-standard/img2.png" alt="Base & General Ledger" />
+
+</Slide>
+
+<Slide title="Order to Cash subledger" icon="splitSquare" key="The O2C subledger standardizes sales orders, shipping documents, billing invoices, and cash receipts.">
+
+<ImageCaption src="/decks/week-02/2-5-audit-data-standard/img3.png" alt="Order to Cash subledger" />
+
+</Slide>
+
+<Slide title="Procure to Pay subledger" icon="splitSquare" key="The P2P subledger maps purchase orders, receiving logs, vendor invoices, and cash payments.">
+
+<ImageCaption src="/decks/week-02/2-5-audit-data-standard/img4.png" alt="Procure to Pay subledger" />
+
+</Slide>
+
+<Slide title="Inventory Subledger Audit" icon="layers" key="The inventory subledger facilitates automated audits comparing physical inventory counts to transactional ledgers.">
+
+<ImageCaption src="/decks/week-02/2-5-audit-data-standard/img5.png" alt="Inventory subledger" />
+
+<Bullets items={[
+  { l: 1, h: "**Consistency Checks** — Easily compare physical count adjustments against database quantities." },
+  { l: 1, h: "**Transaction Audit Trails** — Track changes in inventory cost allocations directly against inventory transaction entries." }
+]} />
+
+<Quiz
+  id="w2-ads-inventory-consistency"
+  q="How does a standardized inventory subledger schema under the ADS facilitate automated consistency testing?"
+  opts={[
+    "By allowing automated scripts to compare physical warehouse count files directly with ledger transaction records across the same column headers",
+    "By eliminating the need for physical warehouse inventory counts entirely",
+    "By predicting customer inventory demand using artificial intelligence"
+  ]}
+  correct={0}
+  why="When table headers and column formats are standardized (ADS), automated testing scripts can run consistency checks immediately, mapping physical inventory files with ledger transaction records without manual data manipulation."
+/>
+
+</Slide>
+
+<Slide title="Fixed Asset Subledger" icon="database" key="The fixed asset subledger standardizes property, plant, and equipment (PP&E) registry records.">
+
+<Bullets items={[
+  { l: 1, h: "**Asset Registry** — Tracks location, custodian, and status of property, plant, and equipment." },
+  { l: 1, h: "**Depreciation Schedules** — Standardizes depreciation calculations (straight-line, double-declining balance)." },
+  { l: 2, h: "Includes variables for useful lives, salvage values, and accumulated depreciation." },
+  { l: 1, h: "**Impairment & Disposals** — Maps write-downs, asset sales, and disposal gains/losses." }
+]} />
+
+</Slide>
+
+<Slide title="Audit Data API" icon="layers" key="The Audit Data API standardizes secure, automated transfers of ADS data packages over the web.">
+
+<Bullets items={[
+  { l: 1, h: "**Secure Automation** — Defines web endpoints to transfer auditing datasets between client ERPs and auditor environments." },
+  { l: 1, h: "**XML & JSON Payloads** — Builds on top of ADS standards to deliver structured schema packets." },
+  { l: 1, h: "**Open Standard** — Open-source community project managed on GitHub (`github.com/AICPA-ADS/AuditData-API`)." }
+]} />
+
+</Slide>

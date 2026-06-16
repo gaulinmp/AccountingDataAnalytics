@@ -1,0 +1,26 @@
+---
+// Renders an authoring string with minimal inline formatting (**bold**, *em*,
+// `code`) as real escaped elements — no set:html. See lib/inline.ts.
+import { parseInline } from '@lib/inline';
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+const segs = parseInline(text);
+---
+
+{
+  segs.map((s) =>
+    s.t === 'strong' ? (
+      <strong>{s.v}</strong>
+    ) : s.t === 'em' ? (
+      <em>{s.v}</em>
+    ) : s.t === 'code' ? (
+      <code>{s.v}</code>
+    ) : (
+      <Fragment>{s.v}</Fragment>
+    )
+  )
+}

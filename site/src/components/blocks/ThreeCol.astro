@@ -1,0 +1,49 @@
+---
+import Inline from './Inline.astro';
+
+interface Props {
+  cols: { title?: string; body: string }[];
+}
+
+const { cols } = Astro.props;
+---
+
+<div class="threecol">
+  {
+    cols.map((c) => (
+      <div class="col">
+        {c.title && <h3>{c.title}</h3>}
+        <p>
+          <Inline text={c.body} />
+        </p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .threecol {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-4);
+    margin: var(--space-4) 0;
+  }
+
+  .col {
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+
+  .col h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-lg);
+    color: var(--brand);
+  }
+
+  .col p {
+    margin: 0;
+    font-size: var(--fs-base);
+  }
+</style>

@@ -1,0 +1,64 @@
+---
+week: week-07
+title: "Sentiment Analysis and Topic Modeling"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Topics and Sentiment">
+
+- Two common NLP tasks
+  - What is the text about?
+  - Is it good or bad news?
+- Both often compliment quantitative information
+- Both are “dimensionality reduction” approaches
+
+</Slide>
+
+<Slide title="Sentiment Analysis">
+
+- Classifies text into positive, negative, neutral
+- Old method: rule or dictionary based
+  - Look for negative or positive words
+- New method: statistically based
+  - Requires examples for training
+  - Off the shelf generic LLM solution
+
+</Slide>
+
+<Slide title="Sentiment in Accounting">
+
+- Analyzing competitors disclosures
+- Reviewing investor sentiment on conference calls
+- Demand estimation from customer responses/posts
+- Identifying early risk indicators from social media
+
+</Slide>
+
+<Slide title="Topic Modeling">
+
+- Categorize content of text into topics
+- Customized to content and desired topics
+- Models:
+  - LDA: define number of topics, requires lots of data to work well
+  - NMF: better for shorter texts and less data
+  - BERTopic: more advanced, single topic per text
+
+</Slide>
+
+<Slide title="Topic Modeling Example – Risk Factors">
+
+</Slide>
+
+<Slide title="Topic Modeling Example – Risk Factors">
+
+- We rely on highly skilled personnel and, if we are unable to retain or motivate key personnel, hire qualified personnel, or maintain and continue to adapt our corporate culture, we may not be able to grow or operate effectively.
+- Our performance and future success depends in large part upon the continued service of key technical leads as well as members of our senior management team. For instance, Sundar Pichai is critical to the overall management of Alphabet and its subsidiaries and plays an important role in the development of our technology, maintaining our culture, and setting our strategic direction. Our ability to compete effectively and our future success depend on our continuing to identify, hire, develop, motivate, and retain highly skilled personnel for all areas of our organization.
+
+</Slide>
+
+<Slide title="Topic Modeling Example – Risk Factors">
+
+- This Annual Report on Form 10-K contains forward-looking statements within the meaning of the Private Securities Litigation Reform Act of 1995. These include, among other things, statements regarding […] as well as other statements regarding our future operations, financial condition and prospects, and business strategies. Forward-looking statements may appear throughout this report and other documents we file with the Securities and Exchange Commission (SEC). These forward-looking statements are based on current expectations and assumptions that are subject to risks and uncertainties, which could cause our actual results to differ materially from those reflected in the forward-looking statements.
+
+</Slide>

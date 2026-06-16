@@ -1,0 +1,128 @@
+---
+week: week-09
+title: "Causal Analysis"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is Causality">
+
+- Some outcome is the direct result of another action
+- A directly causes Z
+- A indirectly causes Z
+
+</Slide>
+
+<Slide title="Ice Cream Example">
+
+- Fact: Ice cream sales are positively associated with drowning rates
+
+</Slide>
+
+<Slide title="Ice Cream Example">
+
+<ImageCaption src="/decks/week-09/9-7-causal-analyses/img1.png" alt="Ice Cream Example" />
+
+- Fact: Ice cream sales are positively associated with drowning rates
+- Causal: Ice cream causes drowning
+
+</Slide>
+
+<Slide title="Ice Cream Example">
+
+<ImageCaption src="/decks/week-09/9-7-causal-analyses/img2.png" alt="Ice Cream Example" />
+
+- Fact: Ice cream sales are positively associated with drowning rates
+- Causal: Ice cream causes drowning
+- Indirect causal: Ice cream causes drowsiness which leads to drowning
+
+</Slide>
+
+<Slide title="Ice Cream Example">
+
+<ImageCaption src="/decks/week-09/9-7-causal-analyses/img3.png" alt="Ice Cream Example" />
+
+- Fact: Ice cream sales are positively associated with drowning rates
+- Causal: Ice cream causes drowning
+- Indirect causal: Ice cream causes drowsiness which leads to drowning
+- Reverse causal: drowning causes ice cream sales
+
+</Slide>
+
+<Slide title="Ice Cream Example">
+
+<ImageCaption src="/decks/week-09/9-7-causal-analyses/img4.png" alt="Ice Cream Example" />
+
+- Fact: Ice cream sales are positively associated with drowning rates
+- Causal: Ice cream causes drowning
+- Indirect causal: Ice cream causes drowsiness which leads to drowning
+- Reverse causal: drowning causes ice cream sales
+- Confounder (reality): Ice cream and swimming (thus drowning) both peak in the summer
+
+</Slide>
+
+<Slide title="Violations of Causality">
+
+- Spurious correlation: no relation, just chance
+
+<ImageCaption src="/decks/week-09/9-7-causal-analyses/img5.png" alt="Violations of Causality" />
+
+</Slide>
+
+<Slide title="Violations of Causality">
+
+- Spurious correlation: no relation, just chance
+- Reverse Causality: Z causes A, thus the correlation
+  - High CEO pay   firm performance?
+- Confounder: Something else causes both A and Z
+  - Better firm governance leads to less bankruptcy
+  - Firm size is likely the underlying cause of both
+
+</Slide>
+
+<Slide title="Solutions?">
+
+- Compare Z when A occurs vs Z when A does not
+- Z when A does not occur is called “counterfactual”
+- But how do we measure Z when A does not occur?
+- Jargon:
+  - Firm with A is “treated”, firm without A is “control”
+  - Z is the “outcome”
+  - “Treatment Effect” is effect on outcome: Ztreated – Zcontrol
+
+</Slide>
+
+<Slide title="Common Counterfactuals">
+
+- Other firms that did not have A occur
+  - Randomized control trials (gold standard)
+  - Pseudo-experiments, A occurring is effectively random
+- Same firm before A occurred
+- Difference in difference: both of the above
+  - Observe how treated firm changed after A occurred
+  - Compare that to how treatment
+- All these are estimated as averages across firms
+
+</Slide>
+
+<Slide title="Difference in Difference">
+
+- Looking at firm’s change due to A isn’t enough if other firms also changed that didn’t get A
+- Example:
+  - Firms that got PPP loans saw huge declines in sales
+  - So PPP loans caused loss in sales?
+  - Firms that did not get PPP loans saw larger losses
+  - Compared to counterfactual, firms with PPP loans had relatively higher sales (but still lower then w/o Covid)
+
+</Slide>
+
+<Slide title="Caveats and Concerns">
+
+- It all comes down to how good your counterfactual is
+- Anything that is different between treatment and control could potentially cause the estimated effect
+  - Called omitted variables or measurement error
+- Solutions to identify causality limit generalizability
+- If you can’t define how A causes Z (the mechanism), be very skeptical
+  - If you can, then that’s potentially testable
+
+</Slide>

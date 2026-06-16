@@ -1,0 +1,61 @@
+---
+week: week-11
+title: "Reducing Dimensions in Accounting"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Examples of Dimensionality Reduction">
+
+- Precursor to classifiers or clustering
+- Visualization of high dimensional data
+- Textual Analysis – topic analysis, embeddings
+
+</Slide>
+
+<Slide title="Precursor to further analytics">
+
+- Some models based on distance (e.g. KNN) perform more poorly as number of features increases
+- Applying dimensionality reduction first limits the dimensions to the most informative combinations
+- Makes calculations possible
+- Lessens risk of over-fitting
+
+</Slide>
+
+<Slide title="Visualization of myriad variables">
+
+- The interactions between variables is easy to observe “pair wise” in a pair plot, but not 3D+
+- PCA, t-SNE, UMAP, etc. preserve “structure” in the dataset, allowing for visual observation of clusters and other relationships in 2D that represent 3D+
+
+</Slide>
+
+<Slide title="FSA Ratio Example">
+
+- Performed UMAP on all accounting variables and FSA ratios from Project 1
+
+<ImageCaption src="/decks/week-11/11-5-dr-use-cases/img1.png" alt="FSA Ratio Example" />
+
+<ImageCaption src="/decks/week-11/11-5-dr-use-cases/img2.png" alt="FSA Ratio Example" />
+
+<ImageCaption src="/decks/week-11/11-5-dr-use-cases/img3.png" alt="FSA Ratio Example" />
+
+</Slide>
+
+<Slide title="FSA Ratio Example – dropping big n">
+
+<ImageCaption src="/decks/week-11/11-5-dr-use-cases/img4.png" alt="FSA Ratio Example – dropping big n" />
+
+<ImageCaption src="/decks/week-11/11-5-dr-use-cases/img5.png" alt="FSA Ratio Example – dropping big n" />
+
+<ImageCaption src="/decks/week-11/11-5-dr-use-cases/img6.png" alt="FSA Ratio Example – dropping big n" />
+
+</Slide>
+
+<Slide title="Topic Analysis">
+
+- Topic analysis is a dimensionality reduction of words
+- LLM summarization as dimensionality reduction
+- In both cases, these DR approaches are a precursor to some subsequent use of the reduced dimensions
+  - E.g. supervised learning or clustering
+
+</Slide>

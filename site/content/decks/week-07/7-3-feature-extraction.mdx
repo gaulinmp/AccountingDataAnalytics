@@ -1,0 +1,63 @@
+---
+week: week-07
+title: "Feature Extraction from Unstructured Data"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is feature extraction?">
+
+- You can’t run a regression on unstructured data
+- Must add “structure” to make data useful
+  - Could be conversion to tabular form
+  - Could be analysis
+- Feature extraction is term for creating variables (features) from data
+  - Covers gamut from word count to LLM parsing
+
+</Slide>
+
+<Slide title="What are features?">
+
+- Usable signals
+  - E.g. variables
+- Chosen to proxy for measurement of interest
+  - E.g. measuring inventory level estimates from images
+
+</Slide>
+
+<Slide title="Selecting Features">
+
+- Choose features from amongst numerous options
+- Choose features which are most informative
+  - E.g. maximize value
+- Choose fewest features to achieve objective
+  - E.g. minimize cost
+- Feature selection algorithms and information gain
+  - TL;DR: there are mathy approaches
+
+</Slide>
+
+<Slide title="OCR – Optical Character Recognition">
+
+- Extracting text/numbers from images
+  - E.g. extracting expenses from receipts
+- Getting better, but still results in errors
+  - Recognition errors (e.g. bad handwriting)
+  - Formatting errors (e.g. interpreting column of numbers and a total)
+  - Can be customized for increased accuracy
+- Can extend to recognizing logos, signatures, etc.
+
+</Slide>
+
+<Slide title="Common text features">
+
+- Simple: text length, word counts
+  - Sometimes simple is good enough
+- Intermediate: tone, sentiment, topics
+  - Broad generalizations / aggregation from the text
+- Advanced: specific information
+  - Targeted to extract specific facts
+  - Information retrieval subfield
+  - LLMs are now quite good at this
+
+</Slide>

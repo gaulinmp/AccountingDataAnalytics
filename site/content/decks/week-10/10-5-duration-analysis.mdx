@@ -1,0 +1,79 @@
+---
+week: week-10
+title: "Duration Analysis"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Duration Analysis">
+
+- Many classifiers are “one shot”
+- What about factors that build to a tipping point?
+  - E.g., bankruptcy, M&A completion
+- Duration analysis, survival analysis, hazard models
+- Two components:
+  - Discrete: did it happen
+  - Continuous: when did it happen
+
+</Slide>
+
+<Slide title="Example: Loan Default">
+
+- Syndicated loan is instantiated
+- Borrower must adhere to covenants, tested regularly
+- Default on violated covenant or missed payments
+- Over life of loan, outcome either default or term ends
+- Prediction: will borrower default and when?
+
+</Slide>
+
+<Slide title="Censoring">
+
+- Right censoring is when the outcome is not observed
+  - E.g., loan term ends before default
+- Left censoring is when outcome has already occurred
+  - E.g., firm already in default when observation starts
+- Interval censoring is when outcome occurs in some range, or window
+  - E.g., default only measured quarterly
+
+</Slide>
+
+<Slide title="Hazard Function">
+
+- How likely outcome is to occur at time t
+
+<ImageCaption src="/decks/week-10/10-5-duration-analysis/img1.png" alt="Hazard Function" />
+
+- Credit: https://www.linkedin.com/pulse/using-survival-model-credit-risk-scoring-loan-pricing-tirabassi-66i5c/
+
+</Slide>
+
+<Slide title="Survival Function">
+
+- Probability that outcome hasn’t happened at time t
+
+<ImageCaption src="/decks/week-10/10-5-duration-analysis/img2.png" alt="Survival Function" />
+
+- Credit: https://www.linkedin.com/pulse/using-survival-model-credit-risk-scoring-loan-pricing-tirabassi-66i5c/
+
+</Slide>
+
+<Slide title="Purpose of Duration Analysis">
+
+- Identify what correlates with “survival”
+  - Whether a variable relates to the outcome occurring
+  - How much that variable effects outcome probability
+- Measure effect on probability (more likely ever)
+- Measure effect on time to failure (more likely sooner)
+
+</Slide>
+
+<Slide title="Cautions and Caveats">
+
+- Model fit depends on amount of time-series data
+- Model assumptions can be strong
+  - Non-parametric models are flexible but need more data
+  - Parametric models are less flexible but more potential for deep insight
+  - In the middle: Cox proportional model
+
+</Slide>

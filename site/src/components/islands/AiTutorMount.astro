@@ -1,0 +1,95 @@
+---
+// Host integration for <ai-tutor>. Renders the element and (client-side) wires
+// the context contract from the active slide. This is the ONLY place the site
+// touches the tutor — the package itself imports nothing from the site (§5.3).
+interface Props {
+  deckId: string;
+  deckTitle: string;
+  /** Deck-level topic (deck frontmatter `topic`); a per-slide <Slide topic> overrides it. */
+  deckTopic?: string;
+  aiPrompt?: string;
+}
+const { deckId, deckTitle, deckTopic = '', aiPrompt = '' } = Astro.props;
+---
+
+<ai-tutor
+  data-deck-id={deckId}
+  data-deck-title={deckTitle}
+  data-deck-topic={deckTopic}
+  data-ai-prompt={aiPrompt}></ai-tutor>
+
+<script>
+  import '../../../packages/ai-tutor/index';
+  import type { AiTutor } from '../../../packages/ai-tutor/ai-tutor';
+  import type { TutorContext } from '../../../packages/ai-tutor/types';
+  import { SLIDE_CHANGE } from '../../lib/deck';
+
+  const el = document.querySelector('ai-tutor') as AiTutor | null;
+  const companion = document.querySelector<HTMLElement>('[data-deck]');
+
+  if (el && companion) {
+    const deckId = el.dataset.deckId ?? '';
+    const deckTitle = el.dataset.deckTitle ?? '';
+    const deckTopic = el.dataset.deckTopic ?? '';
+    const aiPrompt = el.dataset.aiPrompt ?? '';
+    const slides = Array.from(companion.querySelectorAll<HTMLElement>('[data-slide]'));
+
+    const activeIndex = () => {
+      const a = companion.querySelector<HTMLElement>('[data-slide].is-active');
+      const i = a ? slides.indexOf(a) : 0;
+      return i < 0 ? 0 : i;
+    };
+
+    function readSelfCheck(slideEl: HTMLElement) {
+      const q = slideEl.querySelector<HTMLElement>('[data-quiz]');
+      if (!q) return {};
+      const opts = Array.from(q.querySelectorAll<HTMLElement>('.opts label span')).map(
+        (s) => s.textContent?.trim() ?? ''
+      );
+      const correct = Number(q.dataset.correct);
+      const why =
+        q.querySelector<HTMLTemplateElement>('template[data-quiz-why]')?.content.textContent?.trim() ??
+        '';
+      const question = q.querySelector('legend')?.textContent?.trim() ?? '';
+      return {
+        selfCheckQuestion: question || undefined,
+        selfCheckOptions: opts.length ? opts : undefined,
+        canonicalSelfCheckAnswer: Number.isFinite(correct) ? opts[correct] : undefined,
+        selfCheckExplanation: why || undefined,
+      } satisfies Partial<TutorContext>;
+    }
+
+    function seedsFor(hasQuiz: boolean): string[] {
+      const base = ['Explain this slide simply', 'Why does this matter in accounting?'];
+      if (hasQuiz) base.push('Hint for the self-check (no answer)');
+      return base;
+    }
+
+    el.provideContext = (): TutorContext => {
+      const i = activeIndex();
+      const slideEl = slides[i];
+      const title =
+        slideEl?.querySelector('.slide__title')?.textContent?.trim() ||
+        slideEl?.querySelector('.slide__kicker')?.textContent?.trim() ||
+        '';
+      const body = slideEl?.querySelector('.slide__body')?.textContent?.trim().slice(0, 1500) || '';
+      // Per-slide topic (data-slide-topic) overrides the deck-level topic.
+      const slideTopic = slideEl?.dataset.slideTopic || deckTopic || undefined;
+      const selfCheck = readSelfCheck(slideEl);
+      return {
+        scopeKey: `deck:${deckId}:slide:${i + 1}`,
+        deck: deckTitle,
+        slideNumber: i + 1,
+        totalSlides: slides.length,
+        slideTitle: title || undefined,
+        slideTopic,
+        slideBody: body || undefined,
+        ...selfCheck,
+        seedQuestions: seedsFor(Boolean(selfCheck.selfCheckQuestion)),
+        aiPrompt: aiPrompt || undefined,
+      };
+    };
+
+    companion.addEventListener(SLIDE_CHANGE, () => el.contextChanged());
+  }
+</script>

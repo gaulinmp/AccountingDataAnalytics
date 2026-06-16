@@ -1,0 +1,58 @@
+---
+week: week-05
+title: "Combining Data"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="Module Overview">
+
+- Merging datasets
+- Relational databases
+- Examples
+- Complexity
+
+</Slide>
+
+<Slide title="Why combine data?">
+
+- Myriad data sources
+  - External data (marketing data, economic data, etc.)
+  - Various internal systems (invoices, production, etc.)
+- Aggregation
+  - Aggregation can require combining data with itself
+- Analysis, cleaning, and verification
+  - Comparing observations, interpolating, etc.
+
+</Slide>
+
+<Slide title="Considerations – data sources">
+
+- External data out of your control has unknown quality, can change over time
+- Internal data in your control has design decisions that make tradeoffs
+- Storage format
+- Update frequency
+- Access (permissions)
+
+</Slide>
+
+<Slide title="Considerations – Combining data">
+
+- Combining “clean” data on fixed identifiers (unique key) is simple but requires maintaining keys
+  - Not always possible with external data
+- Many datasets do not have exact matches
+  - Vendor names may have abbr., etc.
+  - Non-exact matching trades off ability to match with false matches
+
+</Slide>
+
+<Slide title="Other Considerations">
+
+- Repeatability
+  - Is the process “one off” or can it be repeated?
+- Reliability
+  - How robust is the process?
+- Automation
+  - Can the process be reliably repeated automatically?
+
+</Slide>

@@ -1,0 +1,93 @@
+---
+week: week-04
+title: "Dimensions of Information"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="dimensionality">
+
+- Dimensionality is the number of attributes, features, or variables recorded for each observation or data point
+  - Length – 1 dimension
+  - Area: length & width – 2 dimensions
+  - Volume: length & width & height – 3 dimensions
+
+</Slide>
+
+<Slide title="Multidimensional data">
+
+- Multiple measurements for single observation
+  - Journal entry – date, account info, names, amount, etc.
+  - Consumer – demographics, location, interactions
+  - Financials
+- Multidimensional due to computer representation
+  - Location stored as latitude and longitude (& height?)
+- Text? Images?
+
+</Slide>
+
+<Slide title="When Dimensions explode">
+
+- Text stored as a numbers in computers
+- Images are two dimensional (more with color, depth, etc.), but each pixel is a dimension in practice
+- Vectors: list of numbers (x,y,z) that have some relation
+  - In physics, vectors represent position, time, movement
+  - In LLMs, all inputs are “vectorized” into embeddings
+- Embeddings: encode information into dimensions and the relationship between them
+  - Dimensions are abstract, not necessarily interpretable
+
+</Slide>
+
+<Slide title="Why do we care about dimensions?">
+
+- Important to understand relationships between variables
+  - Relationships between dimensions should be treated differently than relationships between observations
+  - Be careful treating dimensions differently (e.g., standardizing width and not height)
+- When dimensions get large (think text or images) we need some way to analyze them
+  - Graphs can only represent up to three dimensions
+
+</Slide>
+
+<Slide title="Seeing beyond 2D">
+
+- Visualization of three or more dimensions is difficult
+  - 3D graphs can be hard to interpret without interactivity
+  - Other features can be introduced (bubble size, color, etc.) but are less self-explanatory and more complex
+- Interactive visualizations can help by giving audience control over what they viewing
+  - Can swap between dimensions being observed
+  - Can incorporate time / motion
+
+</Slide>
+
+<Slide title="3D Example – 2D + categories">
+
+<ImageCaption src="/decks/week-04/4-2-dimensions-of-info/img1.png" alt="3D Example – 2D + categories" />
+
+</Slide>
+
+<Slide title="4D Example – 2D + Time + Size">
+
+<ImageCaption src="/decks/week-04/4-2-dimensions-of-info/img2.png" alt="4D Example – 2D + Time + Size" />
+
+</Slide>
+
+<Slide title="Visualizing high dimensions">
+
+- Faceting: Break the data into multiple small plots in a grid based on categories or other dimensions
+  - Plot expenses over time by category in grid of states or country
+- Dimensionality Reduction: Use algorithm (PCA, t-SNE, UMAP) to project high-dimensional data into fewer dimensions
+  - Preserve structure or relationships (e.g., similar points in high-D stay close in 2D)
+  - Always results in loss of information, and the new dimensions often lack direct interpretation
+
+</Slide>
+
+<Slide title="Conclusion">
+
+- Understand data and its dimensions to properly treat observations
+- Match visualization techniques to the dimensionality of your data
+  - Visual features, grouping visualizations, dimension reduction
+- There is no perfect solution
+  - Visualizing high-D data always involves trade-offs (detail vs. overview, information loss vs. clarity)
+  - The goal is insight, not perfect representation
+
+</Slide>

@@ -1,0 +1,78 @@
+---
+week: week-08
+title: "Fitting Models"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is Fitting">
+
+- An analytical model is usually defined as a relationship with unknown quantities
+  - E.g. Y = m*x + b
+- Fitting is estimating the unknown quantities
+  - E.g. the m and b
+
+</Slide>
+
+<Slide title="What is a good fit?">
+
+- How well does the model describe the data you have
+  - Called in sample fit, based on training data
+- How well does the model predict new data
+  - Called out of sample fit, based on test data
+
+</Slide>
+
+<Slide title="What is a good fit?">
+
+- With regressions, we often measure how “wrong” the predictions are
+- RMSE: measure of average error
+- R2: how much of the outcome variable’s value the model explains
+
+<ImageCaption src="/decks/week-08/8-5-fitting-models/img1.png" alt="What is a good fit?" />
+
+</Slide>
+
+<Slide title="Fit Examples">
+
+<ImageCaption src="/decks/week-08/8-5-fitting-models/img2.png" alt="Fit Examples" />
+
+</Slide>
+
+<Slide title="Overfitting: too much of a good thing">
+
+- Some models can just memorize the training data
+- Does not mean they have learnt the “truth”
+
+<ImageCaption src="/decks/week-08/8-5-fitting-models/img3.png" alt="Overfitting: too much of a good thing" />
+
+</Slide>
+
+<Slide title="Identifying and solving Overfitting">
+
+- Split data into training data and testing data
+  - Training: set model parameters to minimize “error” in the training data
+  - Test: higher error in test data implies overfitting
+- More data to train model
+- Reduce model complexity (fewer terms, layers)
+
+</Slide>
+
+<Slide title="Solutions to Overfitting">
+
+- More training data
+  - Add synthetic data
+  - Depends on how flexible the model is, the more flexible, the less this will help
+- Limit the model
+  - Reduce model complexity (fewer terms, layers)
+
+</Slide>
+
+<Slide title="Model Fit Takeaways">
+
+- Models are “fit” to some data
+- Important to understand how well a model performs
+- Important to understand whether a model captures the underlying reality, or is just memorizing data
+  - This is key to knowing whether the model is usable for predictions on new data
+
+</Slide>

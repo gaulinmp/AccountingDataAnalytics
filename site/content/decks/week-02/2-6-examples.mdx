@@ -1,0 +1,106 @@
+---
+week: week-02
+title: "Using Data in Practice"
+subtitle: "Evaluating different workflows for interacting with business data, from static dashboards to custom DIY queries."
+estMinutes: 20
+instructors: ["Maclean Gaulin"]
+aiPrompt: "Focus on comparing hands-off static reporting against hands-on direct querying, and explaining the concept of the Data Generating Process (DGP)."
+---
+
+import { Slide, Bullets, ImageCaption, Quiz } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 2 · Lecture 6" icon="layers">
+  Using Data in Practice
+</Slide>
+
+<Slide title="Hands-Off Data Workflows" icon="database" key="Hands-off data consumption relies on pre-built reports and dashboards, offering high control but low flexibility.">
+
+<Bullets items={[
+  { l: 1, h: "**Requesting Reports** — Requesting a specific analytical product (e.g., a monthly sales PDF) from the IT or data science team." },
+  { l: 1, h: "**Mockup Iteration** — Reviewing preliminary designs or wireframes (often takes several back-and-forth loops)." },
+  { l: 1, h: "**Consuming Output** — The user interacts with a finished dashboard or receives periodic static reports." },
+  { l: 2, h: "Pro: High consistency and data security." },
+  { l: 2, h: "Con: Highly rigid; any new question requires requesting a new report modification." }
+]} />
+
+</Slide>
+
+<Slide title="Standard Hands-On Workflows" icon="database" key="Typical business users extract raw tabular data to run manual manipulations in Excel.">
+
+<Bullets items={[
+  { l: 1, h: "**Requesting raw data** — Asking IT for a transactional database dump (CSV/Excel) covering a specific period." },
+  { l: 1, h: "**Waiting Friction** — Waiting hours or days for the extract (if data is corrupted or filters are incorrect, the request must be run again)." },
+  { l: 1, h: "**Local Processing** — Importing the raw records into Excel, cleaning columns manually, and writing pivot tables." },
+  { l: 1, h: "**Reporting** — Delivering the completed static spreadsheet to the executive team." }
+]} />
+
+</Slide>
+
+<Slide title="Data Marts & Controls" icon="layers" key="Data marts simplify querying by pre-aggregating raw records and restricting database access.">
+
+<Bullets items={[
+  { l: 1, h: "**Data Marts** — Customized, pre-filtered views of databases where complex joins and cleaning are already computed." },
+  { l: 1, h: "**Internal Controls & Security** — Restricts access to sensitive raw transactions (critical for ICFR - Internal Control over Financial Reporting)." }
+]} />
+
+<ImageCaption src="/decks/week-02/2-6-examples/img1.png" alt="Business Data Mart Flow Diagram" />
+
+</Slide>
+
+<Slide title="A Semi-DIY Data Workflow" icon="splitSquare" key="Semi-DIY users write queries inside extraction tools to pull clean data directly from Data Marts.">
+
+<Bullets items={[
+  { l: 1, h: "**Direct Query Access** — Requesting permission to connect directly to the company's curated Data Mart." },
+  { l: 1, h: "**Writing Extraction Queries** — Writing simple SQL statements or using visual query builders:" },
+  { l: 2, h: "Tableau Custom SQL to load visualizations live from the server." },
+  { l: 2, h: "Power Query in Excel to build repeatable step-by-step extraction scripts." },
+  { l: 1, h: "**Analysis & Output** — Pivoting, graphing, and sharing dynamic dashboards rather than static sheets." }
+]} />
+
+<Quiz
+  id="w2-diy-data-control"
+  q="What is a key advantage of utilizing Power Query in Excel to extract data from a corporate Data Mart, rather than requesting static CSV file dumps?"
+  opts={[
+    "It bypasses corporate security and internal control requirements",
+    "It makes the extraction process repeatable and refreshable with a single click as new transactions occur",
+    "It translates unstructured contract text into structured columns automatically"
+  ]}
+  correct={1}
+  why="Tools like Power Query connect directly to databases and record query steps. This makes the extraction repeatable; when new data is added, you refresh the query instead of requesting a new CSV file dump."
+/>
+
+</Slide>
+
+<Slide title="A Fully DIY Data Workflow" icon="layers" key="Advanced analysts determine their own data needs, request database access, and build the analytical pipeline.">
+
+<Bullets items={[
+  { l: 1, h: "**Objective Scoping** — Receiving a complex analytical objective (e.g., 'audit payroll anomalies')." },
+  { l: 1, h: "**Data Discovery** — Identifying relevant systems, requesting database logins, and exploring available tables." },
+  { l: 1, h: "**Iterative Cleaning** — Filtering out noise, joining multiple files, resolving mismatched keys, and calculating ratios." },
+  { l: 1, h: "**Delivery** — Creating an interactive dashboard or reproducible script showing the final findings." }
+]} />
+
+</Slide>
+
+<Slide title="Key Takeaways" icon="layers" key="Analytics projects fail without a deep understanding of the business process that generated the data.">
+
+<Bullets items={[
+  { l: 1, h: "**Data is Messy** — Underestimating the time needed for cleaning and merging is the primary cause of project delays." },
+  { l: 1, h: "**Data Generating Process (DGP)** — You must understand the actual business activities that create the records:" },
+  { l: 2, h: "How are timestamps recorded? What triggers a record deletion? Who has authority to override values?" },
+  { l: 1, h: "**Garbage In, Garbage Out** — High-end statistical models and LLMs are useless if the underlying data lacks integrity." }
+]} />
+
+<Quiz
+  id="w2-data-generating-process"
+  q="Why must an accountant understand the 'Data Generating Process' (DGP) before running analytical models on a dataset?"
+  opts={[
+    "To write faster Python code",
+    "To understand the business rules, human actions, and system triggers that created the data, preventing incorrect interpretations of anomalies",
+    "To ensure all data is formatted into a wide structure"
+  ]}
+  correct={1}
+  why="The DGP is the sequence of human operations and ERP triggers that generate records. Without knowing the DGP, you might flag a normal automated system adjustment as a fraudulent transaction or audit exception."
+/>
+
+</Slide>

@@ -1,0 +1,133 @@
+---
+week: week-05
+title: "Relational Databases"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What is a database?">
+
+- A database is just organized data
+  - Relational – like an excel file (database) with multiple sheets (tables)
+  - Key-value – like a folder (database) with multiple files (filename=key, file content = store)
+  - Organization based – hierarchical, graph, network
+
+</Slide>
+
+<Slide title="relational database">
+
+- Stores data in tabular form
+- Often has multiple tables: different “sets” of data
+  - e.g. transactions table, accounts table
+- Each table has one or more variables, features, or dimensions as columns
+  - Columns are all the same “thing” and have a data type
+- Each observation is a row
+- Tables within a database are often related somehow
+
+</Slide>
+
+<Slide title="Relational database">
+
+- Related tables “share” information
+  - Employee table has demographic information
+  - Salary table has pay history for those employees
+- Relations often through “keys” that link tables
+  - Primary key is used to define an observation (row) in a table
+  - Foreign key is included in a table to link to the primary key of another table (link the rows)
+  - E.g. Employee ID might be the primary key in Employee, and the foreign key in Salary
+
+</Slide>
+
+<Slide title="Entity relationship diagrams">
+
+- Entities represent the core objects (tables)
+- Attributes the specific properties that describe an entity (columns)
+- Relationships define how two or more entities are connected to each other (keys)
+- Cardinality: specifies how many instances of one entity can be related to how many instances of another entity (m:n)
+
+</Slide>
+
+<Slide title="Entity relationship diagrams">
+
+<ImageCaption src="/decks/week-05/5-2-rdb/img1.png" alt="Graphic 8" />
+
+</Slide>
+
+<Slide title="Relationship Types">
+
+- Relationships can be singular or multiple
+  - 1:1 – one row in table 1 matches one row in table 2
+  - 1:m – one row in T1 matches multiple rows in T2
+    - E.g. 1 employee matches with multiple salary payments
+  - m:1 – multiple rows in T1 match with one row in T2
+    - E.g. multiple employees will match with 1 manager
+  - m:m – multiple rows in T1 match multiple rows in T2
+    - E.g. employees could be in multiple committees, and the committees have multiple employees in them
+
+</Slide>
+
+<Slide title="Many to Many relationships">
+
+<ImageCaption src="/decks/week-05/5-2-rdb/img2.png" alt="Graphic 8" />
+
+- Associative Table
+- (join/cross-join/junction/bridge)
+
+</Slide>
+
+<Slide title="Many to Many relationships">
+
+<DataTable
+  columns={["employee_id", "name"]}
+  rows={[
+    ["0", "Alice"],
+    ["1", "Bob"],
+    ["2", "Candice"],
+  ]}
+/>
+
+<DataTable
+  columns={["employee_id", "committee_id"]}
+  rows={[
+    ["0", "0"],
+    ["0", "1"],
+    ["1", "0"],
+    ["1", "2"],
+    ["2", "1"],
+    ["2", "2"],
+  ]}
+/>
+
+<DataTable
+  columns={["committee_id", "name"]}
+  rows={[
+    ["0", "Xcelerate Growth Strategy"],
+    ["1", "Year-End Financial Review"],
+    ["2", "Zero-Based Budgeting"],
+  ]}
+/>
+
+<DataTable
+  columns={["Employee", "Committee"]}
+  rows={[
+    ["Alice", "Xcelerate Growth Strategy"],
+    ["Alice", "Year-End Financial Review"],
+    ["Bob", "Xcelerate Growth Strategy"],
+    ["Bob", "Zero-Based Budgeting"],
+    ["Candice", "Year-End Financial Review"],
+    ["Candice", "Zero-Based Budgeting"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title="SQL: Structured Query Language">
+
+- SQL is the language used to interact with RDBs
+- Use LLMs to write it
+  - My hot take: don’t waste time learning it until you use it frequently enough to warrant the investment
+  - You should understand conceptually the moving parts
+  - You should understand what it can and can’t do
+    - Which you can ask LLMs
+
+</Slide>

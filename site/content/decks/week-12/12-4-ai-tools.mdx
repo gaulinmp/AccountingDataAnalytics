@@ -1,0 +1,138 @@
+---
+week: week-12
+title: "AI Tools in Practice"
+---
+
+import { Slide, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide title="What do LLMs do?">
+
+- LLMs generate words on a server
+- As sources of information, immensely valuable
+  - Especially with up-to-date or specific information
+- As a source of productive output, less so
+  - Can’t make files
+  - Can’t run code
+  - Can’t do ______
+
+</Slide>
+
+<Slide title="Updating LLM Knowledge">
+
+- LLMs have static knowledge
+  - Anything new has to be provided in context
+- Two main solutions:
+  - Preloaded context (Assistants / Gems)
+  - Retrieval Augmented Generation (RAG)
+- Both add customized, up to date information into the context window so the LLM can update for the subsequent user prompt or query
+
+</Slide>
+
+<Slide title="Assistants and Gems">
+
+- Customized LLM instance that has pre-specified information loaded into context
+- Example: a GAAP bot might have:
+  - GAAP standards automatically loaded into context
+  - Custom system prompt outlining how to apply GAAP, to always cite the applicable ASC, etc.
+
+</Slide>
+
+<Slide title="Retrieval Augmented Generation">
+
+- Additional work that happens before your prompt is sent to the LLM:
+  - Save information you want to have available to the LLM in a vectorized format (embeddings)
+  - Retrieval: your question is used as a query of the saved information based on similar embedding vector
+  - Augmented: adds the matching information to context
+  - Generation: sends information + prompt to the LLM
+
+</Slide>
+
+<Slide title="RAG visually">
+
+</Slide>
+
+<Slide title="Making LLMs useful AI">
+
+- Take generated output, make computers do something based on that output
+  - E.g. LLM generates Python code, computer executes it
+- LLM provides the logic, traditional programs provide the functionality
+  - Similar to AI in automation
+
+</Slide>
+
+<Slide title="How AI talks to computers">
+
+- Some API is loaded into context, LLM writes code to call that API, code executed by tool, LLM gets result
+  - Pros: can integrate into any API
+  - Cons: LLM needs to understand a lot about the API
+
+- API
+
+<ImageCaption src="/decks/week-12/12-4-ai-tools/img1.png" alt="Graphic 22" />
+
+</Slide>
+
+<Slide title="MCP to the rescue">
+
+- Anthropic developed Model Context Protocol to solve the problem of LLMs learning APIs and programming
+- MCP is the USB for AI talking to computers
+  - LLM gets English descriptions of available MCP tools, and how to recognize when to rely on the tool
+  - MCP servers gets LLM question, does something (search database, read file, etc.), returns answer
+
+</Slide>
+
+<Slide title="MCP Example: Financial Query Tool">
+
+- Load into LLM context:
+  - Tool Name: get_financial_info
+  - Description: Use this tool to get financial accounting information about a given ticker for a given fiscal year
+  - Parameters: ticker (string), year (integer)
+- User: “What was AAPL’s total assets in 2020?
+- LLM: sees question is about financial info
+  - Decides it needs to call MCP tool
+
+</Slide>
+
+<Slide title="MCP Example: Financial Query Tool">
+
+- LLM Generates:
+  - &lt;tool_code>get_financial_info(ticker=“AAPL”, year=2020)&lt;/tool_code>
+- MCP client on LLM server watching for &lt;tool_code>
+  - Intercepts the LLM output so user doesn’t see code
+  - Sends request to MCP server
+  - Receives information, sends back to LLM:
+  - &lt;tool_output>&#123;“assets”: 323888, “ni”:57411, […]}&lt;/tool_output>
+- LLM outputs: “AAPL’s total assets were $324 Billion”
+
+</Slide>
+
+<Slide title="AI Orchestration">
+
+- Increasingly, a one-off LLM call is not sufficient
+- Complex task like parsing an invoice might look like:
+  - “Extraction” LLM extracts data from PDF
+  - “Judge” LLM gets output, estimates accuracy
+  - “Prompt engineer” LLM re-calls “Extraction,” highlighting the errors it made so they can be fixed
+  - Steps 1 – 3 passed into “Conductor” LLM that decides when the process is complete or needs human help
+
+</Slide>
+
+<Slide title="Agentic AI">
+
+- Tool using AI: an employee told to do a specific task
+- Agentic AI: a manager that decides what tasks to do
+  - Example: tax agent to analyze tax positions, evaluate adherence to existing regulations and estimate risk
+- Incorporates feedback/looping, executing until it observes and decides its objective is met
+  - Can be hierarchical, high-level agents orchestrating a series of specialized sub-agents
+
+</Slide>
+
+<Slide title="AI in 2026">
+
+- Constantly evolving, no one knows what’s next
+- Many AI experts believe that LLMs won’t achieve general intelligence
+  - Likely based on how they are trained
+- Increasing interest in reinforcement learning, embodied AI, other attempts to learn a world model
+- My take: people who think LLMs will replace people haven’t used LLMs for real productive output
+
+</Slide>

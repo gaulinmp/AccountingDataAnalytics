@@ -3,7 +3,7 @@
 import { getCollection, getEntry } from 'astro:content';
 import { deckUrl, weekUrl } from '@lib/url';
 import Layout from '@layout/Layout.astro';
-import BrandStrip from '@layout/BrandStrip.astro';
+import SiteHeader from '@layout/SiteHeader.astro';
 import Footer from '@layout/Footer.astro';
 
 const course = (await getEntry('course', 'course'))!.data;
@@ -21,7 +21,7 @@ const weeks = await Promise.all(
 ---
 
 <Layout title={`${course.code} · ${course.title}`} description={course.title}>
-  <BrandStrip />
+  <SiteHeader />
 
   <main class="home">
     <header class="intro-dashboard">

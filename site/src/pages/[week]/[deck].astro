@@ -4,8 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import { deckSlug } from '@lib/url';
 import Layout from '@layout/Layout.astro';
-import BrandStrip from '@layout/BrandStrip.astro';
-import Breadcrumb from '@layout/Breadcrumb.astro';
+import SiteHeader from '@layout/SiteHeader.astro';
 import Companion from '@layout/Companion.astro';
 import Footer from '@layout/Footer.astro';
 import QuizCard from '@islands/QuizCard.astro';
@@ -34,8 +33,7 @@ const { Content } = await render(deck);
 <Layout title={deck.data.title} description={deck.data.subtitle}>
   {/* Normal flowing page content: header top, content middle, footer bottom. */}
   <div class="deck-page">
-    <BrandStrip />
-    <Breadcrumb deck={deck} />
+    <SiteHeader activeWeekId={deck.data.week.id} activeDeckId={deck.id} />
     <Companion>
       <Content />
     </Companion>

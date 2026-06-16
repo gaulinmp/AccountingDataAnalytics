@@ -16,53 +16,7 @@
     const total = slides.length;
     let index = -1;
 
-    // Group the DOM for each slide on load to support responsive columns
-    slides.forEach((slide) => {
-      if (slide.classList.contains('slide--title')) return;
-      const body = slide.querySelector('.slide__body');
-      if (!body) return;
 
-      const left = document.createElement('div');
-      left.className = 'slide__col-left';
-
-      const right = document.createElement('div');
-      right.className = 'slide__col-right';
-      right.classList.add('reinforcement-pane');
-      right.setAttribute('data-reinforcement', '');
-
-      // Move key concept to right column
-      const keyConcept = slide.querySelector('.slide__key-concept');
-      if (keyConcept) {
-        right.appendChild(keyConcept);
-      }
-
-      // Identify and move right column content elements
-      const rightSelectors = [
-        '[data-quiz]',
-        '.quiz',
-        'aside',
-        '.note',
-        '.tip',
-        '.key-learning',
-        '.key-learnings'
-      ];
-
-      rightSelectors.forEach((selector) => {
-        body.querySelectorAll(selector).forEach((el) => {
-          if (body.contains(el) && !right.contains(el)) {
-            right.appendChild(el);
-          }
-        });
-      });
-
-      // Move remaining children of slide__body to left column
-      while (body.firstChild) {
-        left.appendChild(body.firstChild);
-      }
-
-      body.appendChild(left);
-      body.appendChild(right);
-    });
 
     function setIndexEmit(i: number, scroll: boolean = true) {
       const target = Math.max(0, Math.min(total - 1, i));
@@ -73,14 +27,14 @@
         const isActive = n === index;
         s.classList.toggle('is-active', isActive);
 
-        // Dynamically add/remove data-reinforcement attribute on the active slide's right column
+        // Dynamically add/remove data-reinforcement attribute on the active slide's key concept
         // so Playwright's page.locator('[data-reinforcement]') matches ONLY the active one.
-        const rightCol = s.querySelector('.slide__col-right');
-        if (rightCol) {
+        const keyConcept = s.querySelector('.slide__key-concept');
+        if (keyConcept) {
           if (isActive) {
-            rightCol.setAttribute('data-reinforcement', '');
+            keyConcept.setAttribute('data-reinforcement', '');
           } else {
-            rightCol.removeAttribute('data-reinforcement');
+            keyConcept.removeAttribute('data-reinforcement');
           }
         }
       });

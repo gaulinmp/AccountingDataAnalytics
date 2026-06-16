@@ -160,18 +160,20 @@ const isTitle = variant === 'title';
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-  }
-
-  .slide__col-right:has(*) {
     margin-top: var(--space-6);
   }
 
-  /* Callouts & side pane blocks */
+  /* Callouts & side pane blocks: support both legacy split columns (for safety) and new inline blocks */
   .slide__col-right > .note,
   .slide__col-right > .tip,
   .slide__col-right > .key-learning,
   .slide__col-right > .key-learnings,
-  .slide__col-right > aside {
+  .slide__col-right > aside,
+  .slide__body > .note,
+  .slide__body > .tip,
+  .slide__body > .key-learning,
+  .slide__body > .key-learnings,
+  .slide__body > aside {
     position: relative;
     padding: var(--space-4);
     padding-top: calc(var(--space-4) + 1.75rem);
@@ -182,13 +184,20 @@ const isTitle = variant === 'title';
     background: var(--surface);
     box-shadow: var(--shadow-1);
     overflow: hidden;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-6);
   }
 
   .slide__col-right > .note :first-child,
   .slide__col-right > .tip :first-child,
   .slide__col-right > .key-learning :first-child,
   .slide__col-right > .key-learnings :first-child,
-  .slide__col-right > aside :first-child {
+  .slide__col-right > aside :first-child,
+  .slide__body > .note :first-child,
+  .slide__body > .tip :first-child,
+  .slide__body > .key-learning :first-child,
+  .slide__body > .key-learnings :first-child,
+  .slide__body > aside :first-child {
     margin-top: 0;
   }
 
@@ -196,12 +205,19 @@ const isTitle = variant === 'title';
   .slide__col-right > .tip :last-child,
   .slide__col-right > .key-learning :last-child,
   .slide__col-right > .key-learnings :last-child,
-  .slide__col-right > aside :last-child {
+  .slide__col-right > aside :last-child,
+  .slide__body > .note :last-child,
+  .slide__body > .tip :last-child,
+  .slide__body > .key-learning :last-child,
+  .slide__body > .key-learnings :last-child,
+  .slide__body > aside :last-child {
     margin-bottom: 0;
   }
 
   .slide__col-right > .note::before,
-  .slide__col-right > aside.note::before {
+  .slide__col-right > aside.note::before,
+  .slide__body > .note::before,
+  .slide__body > aside.note::before {
     content: "NOTE";
     position: absolute;
     top: 0;
@@ -222,7 +238,9 @@ const isTitle = variant === 'title';
   }
 
   .slide__col-right > .tip::before,
-  .slide__col-right > aside.tip::before {
+  .slide__col-right > aside.tip::before,
+  .slide__body > .tip::before,
+  .slide__body > aside.tip::before {
     content: "TIP";
     position: absolute;
     top: 0;
@@ -244,7 +262,10 @@ const isTitle = variant === 'title';
 
   .slide__col-right > .key-learning::before,
   .slide__col-right > .key-learnings::before,
-  .slide__col-right > aside.key-learning::before {
+  .slide__col-right > aside.key-learning::before,
+  .slide__body > .key-learning::before,
+  .slide__body > .key-learnings::before,
+  .slide__body > aside.key-learning::before {
     content: "KEY LEARNING";
     position: absolute;
     top: 0;
@@ -264,7 +285,8 @@ const isTitle = variant === 'title';
     border-top: 3px solid #7c3aed;
   }
 
-  .slide__col-right > aside:not(.note):not(.tip):not(.key-learning):not(.key-learnings)::before {
+  .slide__col-right > aside:not(.note):not(.tip):not(.key-learning):not(.key-learnings)::before,
+  .slide__body > aside:not(.note):not(.tip):not(.key-learning):not(.key-learnings)::before {
     content: "INFO";
     position: absolute;
     top: 0;
@@ -282,42 +304,6 @@ const isTitle = variant === 'title';
     background: rgba(204, 0, 0, 0.05);
     border-bottom: 1px solid rgba(204, 0, 0, 0.1);
     border-top: 3px solid var(--brand);
-  }
-
-  /* Responsive column layouts (JS dynamic structure) */
-  @media (min-width: 901px) {
-    .slide:not(.slide--title) .slide__body:has(.slide__col-right > *) {
-      display: grid;
-      grid-template-columns: 2.2fr 1fr;
-      gap: 0;
-      align-items: stretch;
-      padding: 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .slide:not(.slide--title) .slide__body:has(.slide__col-right > *) .slide__col-left {
-      padding: var(--space-6) var(--space-6) var(--space-8);
-      border-right: 1px solid var(--border);
-    }
-
-    .slide:not(.slide--title) .slide__body:has(.slide__col-right > *) .slide__col-right {
-      background: var(--surface-muted);
-      padding: var(--space-6) var(--space-5);
-      border-left: 0;
-    }
-
-    .slide__col-right {
-      position: sticky;
-      top: var(--space-4);
-    }
-
-    .slide__col-right:has(*) {
-      margin-top: 0;
-    }
-
-    .slide__key-concept {
-      margin-top: 0;
-    }
   }
 
   /* Title / cover variant */

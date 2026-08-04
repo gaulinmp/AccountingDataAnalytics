@@ -1,15 +1,17 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
-import { href, weekUrl, deckUrl } from '@lib/url';
+import { weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
 import Icon from '@components/Icon.astro';
 import type { IconName } from '@lib/icons';
 
+type HeaderTab = 'overview' | WeekTab;
+
 interface Props {
   activeWeekId?: string;
-  activeDeckId?: string;
+  activeTab?: HeaderTab;
 }
 
-const { activeWeekId, activeDeckId } = Astro.props;
+const { activeWeekId, activeTab = 'overview' } = Astro.props;
 
 // Fetch course configuration
 const courseEntry = await getEntry('course', 'course');
@@ -21,41 +23,27 @@ const weeks = course.weekOrder
   .map((ref) => allWeeks.find((w) => w.id === ref.id))
   .filter((w): w is NonNullable<typeof w> => !!w);
 
-// Fetch the active week and its decks
 const activeWeek = activeWeekId ? weeks.find((w) => w.id === activeWeekId) : null;
-const allDecks = await getCollection('decks');
-const activeWeekDecks = activeWeek
-  ? allDecks
-      .filter((d) => d.data.week.id === activeWeek.id)
-      .sort((a, b) => a.id.localeCompare(b.id))
-  : [];
 
-// Week icon/label helper mapping
-function getWeekMeta(number: number): { label: string; icon: IconName } {
-  const meta: Record<number, { label: string; icon: IconName }> = {
-    1: { label: 'Intro', icon: 'playCircle' },
-    2: { label: 'Data', icon: 'grid' },
-    3: { label: 'DBs', icon: 'database' },
-    4: { label: 'Viz', icon: 'chart' },
-    5: { label: 'EDA', icon: 'tools' },
-    6: { label: 'Pipeline', icon: 'terminal' },
-    7: { label: 'Text', icon: 'document' },
-    8: { label: 'Analytics', icon: 'clipboard' },
-    9: { label: 'Regression', icon: 'trend' },
-    10: { label: 'Classification', icon: 'gitMerge' },
-    11: { label: 'Clustering', icon: 'bubble' },
-    12: { label: 'AI', icon: 'sparkles' },
-    13: { label: 'Project', icon: 'award' },
-  };
-  return meta[number] || { label: `Week ${number}`, icon: 'book' };
-}
+// The fixed week sub-page tabs (row 2). Overview is the bare week URL; the rest
+// are the /<week>/<tab>/ routes owned by weekTabUrl().
+const tabs: { id: HeaderTab; label: string; icon: IconName }[] = [
+  { id: 'overview', label: 'Overview', icon: 'info' },
+  { id: 'slides', label: 'Slides', icon: 'slides' },
+  { id: 'activity', label: 'Activity', icon: 'puzzle' },
+  { id: 'lab', label: 'Lab', icon: 'flask' },
+  { id: 'homework', label: 'Homework', icon: 'pencil' },
+  { id: 'quiz', label: 'Quiz', icon: 'helpCircle' },
+];
+
+const tabHref = (weekId: string, tab: HeaderTab) =>
+  tab === 'overview' ? weekUrl(weekId) : weekTabUrl(weekId, tab);
 ---
 
 <header class="site-header">
-  {/* First Row: Logo, Week Scroll Nav, Actions */}
+  {/* First Row: Week Scroll Nav */}
   <div class="row-top">
     <div class="row-top__content">
-      {/* Week Selector Navbar */}
       <div class="week-nav-wrapper">
         <button class="nav-arrow nav-arrow--left" aria-label="Scroll left">
           <Icon name="chevronLeft" size={16} />
@@ -63,16 +51,24 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
 
         <nav class="week-nav-scroll" aria-label="Week navigation">
           {weeks.map((week) => {
-            const { label, icon } = getWeekMeta(week.data.number);
+            const label = week.data.navLabel ?? `Week ${week.data.number}`;
+            const icon = (week.data.icon ?? 'book') as IconName;
             const isActive = activeWeekId === week.id;
             return (
               <a
                 href={weekUrl(week.id)}
                 class:list={['week-nav-item', { 'is-active': isActive }]}
                 title={`Week ${week.data.number}: ${week.data.title}`}
+                aria-current={isActive ? 'page' : undefined}
+                data-unlock-on={week.data.unlockOn?.toISOString()}
               >
                 <span class="week-nav-item__icon">
                   <Icon name={icon} size={20} />
+                  {week.data.unlockOn && (
+                    <span class="week-nav-item__lock">
+                      <Icon name="lock" size={20} />
+                    </span>
+                  )}
                 </span>
                 <span class="week-nav-item__label">{label}</span>
               </a>
@@ -87,40 +83,27 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
     </div>
   </div>
 
-  {/* Second Row: Content Tabs (only rendered when viewing a week/deck) */}
+  {/* Second Row: the week's fixed sub-page tabs */}
   {activeWeek && (
     <div class="row-bottom">
       <div class="row-bottom__content">
         <div class="active-week-info">
-          <span class="active-week-info__title">
-            WEEK {activeWeek.data.number}: {activeWeek.data.title.toUpperCase()}
+          <span class="active-week-info__title" title={activeWeek.data.title}>
+            Week {activeWeek.data.number}
           </span>
         </div>
 
-        <nav class="content-tabs" aria-label="Content navigation">
-          {/* Overview Tab */}
-          <a
-            href={weekUrl(activeWeek.id)}
-            class:list={['tab-item', { 'is-active': !activeDeckId }]}
-          >
-            <Icon name="info" size={18} />
-            <span class="tab-item__label">Overview</span>
-          </a>
-
-          {/* Slide Deck Tabs */}
-          {activeWeekDecks.map((deck) => {
-            const isActive = activeDeckId === deck.id;
-            return (
-              <a
-                href={deckUrl(deck)}
-                class:list={['tab-item', { 'is-active': isActive }]}
-                title={deck.data.title}
-              >
-                <Icon name="slides" size={18} />
-                <span class="tab-item__label">{deck.data.title}</span>
-              </a>
-            );
-          })}
+        <nav class="content-tabs" aria-label="Week content navigation">
+          {tabs.map((tab) => (
+            <a
+              href={tabHref(activeWeek.id, tab.id)}
+              class:list={['tab-item', { 'is-active': activeTab === tab.id }]}
+              aria-current={activeTab === tab.id ? 'page' : undefined}
+            >
+              <Icon name={tab.icon} size={18} />
+              <span class="tab-item__label">{tab.label}</span>
+            </a>
+          ))}
         </nav>
       </div>
     </div>
@@ -129,8 +112,10 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
 
 <style>
   :root {
-    --header-accent-blue: #1e40af;
-    --header-border-color: #e2e8f0;
+    /* Active/selected state in the header uses the brand crimson — the header
+     * is the one place chrome and identity meet. */
+    --header-accent: var(--brand);
+    --header-border-color: var(--hairline);
   }
 
   .site-header {
@@ -156,50 +141,6 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
     max-width: 100%;
     width: 100%;
     margin: 0 auto;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    text-decoration: none;
-    color: var(--ink);
-    flex-shrink: 0;
-  }
-
-  .brand__mark {
-    display: grid;
-    place-items: center;
-    width: 1.85rem;
-    height: 1.85rem;
-    border-radius: var(--radius-sm);
-    background: var(--brand);
-    color: var(--brand-contrast);
-    font-weight: 800;
-    font-size: var(--fs-base);
-    line-height: 1;
-  }
-
-  .brand__text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .brand__text strong {
-    font-size: var(--fs-sm);
-    font-weight: 700;
-  }
-
-  .brand__school {
-    font-size: var(--fs-xs);
-    color: var(--ink-muted);
-  }
-
-  @media (max-width: 640px) {
-    .brand__school {
-      display: none;
-    }
   }
 
   /* Week scroll selector navigation */
@@ -256,18 +197,25 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
     color: var(--ink-muted);
     padding: var(--space-1) var(--space-3);
     min-width: 5.5rem;
-    border-bottom: 2px solid transparent;
+    border-radius: var(--radius-md);
     transition: all var(--transition);
   }
 
   .week-nav-item:hover {
     color: var(--ink);
+    background: var(--surface-muted);
   }
 
+  /* Current module: a rounded crimson box that inverts the icon/label colours. */
   .week-nav-item.is-active {
-    color: var(--header-accent-blue);
-    border-bottom-color: var(--header-accent-blue);
+    background: var(--header-accent);
+    color: var(--brand-contrast);
     font-weight: 600;
+  }
+
+  .week-nav-item.is-active:hover {
+    background: var(--brand-hover);
+    color: var(--brand-contrast);
   }
 
   .week-nav-item__icon {
@@ -277,6 +225,25 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
     height: 1.5rem;
   }
 
+  /* Date-gated weeks: dimmed, week icon swapped for a lock (applyLocks()
+   * toggles .is-locked client-side). Still clickable — the page itself shows
+   * the "Unlocks …" placeholder. */
+  .week-nav-item__lock {
+    display: none;
+  }
+
+  .week-nav-item.is-locked {
+    opacity: 0.45;
+  }
+
+  .week-nav-item.is-locked .week-nav-item__icon > :global(svg) {
+    display: none;
+  }
+
+  .week-nav-item.is-locked .week-nav-item__lock {
+    display: flex;
+  }
+
   .week-nav-item__label {
     font-size: 0.75rem;
     font-weight: 500;
@@ -284,60 +251,16 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
     white-space: nowrap;
   }
 
-  /* Header actions on right */
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    flex-shrink: 0;
-  }
-
-  .action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border: 0;
-    background: transparent;
-    color: var(--ink-muted);
-    cursor: pointer;
-    border-radius: 50%;
-    transition: background var(--transition), color var(--transition);
-  }
-
-  .action-btn:hover {
-    background: var(--surface-muted);
-    color: var(--ink);
-  }
-
-  .user-avatar {
-    display: grid;
-    place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background: var(--gray-100);
-    border: 1px solid var(--border);
-    color: var(--gray-600);
-    cursor: pointer;
-    transition: border-color var(--transition);
-  }
-
-  .user-avatar:hover {
-    border-color: var(--header-accent-blue);
-  }
-
   /* Second Row Styling */
   .row-bottom {
-    background: #f8fafc;
+    background: var(--surface-muted);
     padding: 0 var(--space-4);
   }
 
   .row-bottom__content {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--space-6);
     max-width: 90rem;
     width: 100%;
@@ -352,10 +275,11 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
   }
 
   .active-week-info {
-    font-size: var(--fs-base);
-    font-weight: 800;
-    color: var(--ink);
-    letter-spacing: -0.01em;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     padding: var(--space-3) 0;
     flex-shrink: 0;
     display: flex;
@@ -363,7 +287,7 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
   }
 
   .active-week-info__title {
-    color: var(--header-accent-blue);
+    color: var(--ink-muted);
   }
 
   .content-tabs {
@@ -391,8 +315,8 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
   }
 
   .tab-item.is-active {
-    color: var(--header-accent-blue);
-    border-bottom-color: var(--header-accent-blue);
+    color: var(--header-accent);
+    border-bottom-color: var(--header-accent);
     font-weight: 600;
   }
 
@@ -403,13 +327,13 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
 
   .tab-item.is-active :global(svg) {
     opacity: 1;
-    color: var(--header-accent-blue);
+    color: var(--header-accent);
   }
 
   @media (max-width: 768px) {
     .row-bottom__content {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       gap: 0;
       padding: var(--space-2) 0;
     }
@@ -419,17 +343,29 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
     }
 
     .content-tabs {
-      width: 100%;
+      max-width: 100%;
       overflow-x: auto;
       scrollbar-width: none;
+      justify-content: center;
     }
     .content-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-item__label {
       display: none;
     }
   }
 </style>
 
 <script>
+  import { applyLocks } from '../../lib/unlock';
+
+  // Date-gate every [data-unlock-on] element on the page (nav items here,
+  // week rows on the index, WeekLock wrappers on week pages). The header is
+  // on every page, so this is the one place the check runs.
+  applyLocks();
+
   // Dynamic horizontal scrolling behavior for week navigation
   const scrollNav = () => {
     const nav = document.querySelector('.week-nav-scroll');
@@ -456,7 +392,7 @@ function getWeekMeta(number: number): { label: string; icon: IconName } {
 
       nav.addEventListener('scroll', toggleArrows);
       window.addEventListener('resize', toggleArrows);
-      
+
       // Run once on load
       toggleArrows();
 

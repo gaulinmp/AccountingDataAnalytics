@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 
 import mdx from '@astrojs/mdx';
 
+import remarkScrubPymd from './src/lib/remark-scrub-pymd.mjs';
+
 // Hosting URL is env-driven (Stage 8). The CI workflow defaults these to the
 // GitHub *project site* (https://<owner>.github.io/<repo>) derived from the
 // GitHub context, and they can be overridden (repo variables) to point at a
@@ -18,4 +20,5 @@ export default defineConfig({
   site: SITE,
   base: BASE,
   integrations: [mdx()],
+  markdown: { remarkPlugins: [remarkScrubPymd] },
 });

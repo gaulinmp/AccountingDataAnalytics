@@ -1,0 +1,47 @@
+---
+// Weekly self-check quiz: /week-NN/quiz/. Renders the standalone quizzes from
+// content/quizzes whose id follows the `wN-slug` convention for this week.
+// (Inline deck quizzes stay in the slides; these are the week-level checks.)
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import WeekShell from '@layout/WeekShell.astro';
+import ComingSoon from '@layout/ComingSoon.astro';
+import QuizCard from '@islands/QuizCard.astro';
+import { Quiz } from '@components/blocks';
+
+export const getStaticPaths = (async () => {
+  const weeks = await getCollection('weeks');
+  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
+}) satisfies GetStaticPaths;
+
+const { week } = Astro.props;
+
+const allQuizzes = await getCollection('quizzes');
+const quizzes = allQuizzes
+  .filter((q) => q.id.startsWith(`w${week.data.number}-`))
+  .sort((a, b) => a.id.localeCompare(b.id));
+---
+
+<WeekShell week={week} tab="quiz" title="Quiz" lede="Check your understanding of this week's material.">
+  {
+    quizzes.length > 0 ? (
+      <div class="quiz-list">
+        {quizzes.map((q) => (
+          <Quiz {...q.data} />
+        ))}
+      </div>
+    ) : (
+      <ComingSoon icon="helpCircle" label="Quiz coming soon." note="This week's self-check quiz hasn't been posted yet." />
+    )
+  }
+</WeekShell>
+
+<QuizCard />
+
+<style>
+  .quiz-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+</style>

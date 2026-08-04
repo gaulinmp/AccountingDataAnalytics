@@ -1,0 +1,91 @@
+---
+// Shared shell for the week sub-pages (activity/lab/homework/quiz): light page,
+// standard measure, kicker + title head. The slides page has its own dark
+// "stage" layout and does not use this shell.
+import type { CollectionEntry } from 'astro:content';
+import type { WeekTab } from '@lib/url';
+import Layout from '@layout/Layout.astro';
+import SiteHeader from '@layout/SiteHeader.astro';
+import WeekLock from '@layout/WeekLock.astro';
+import Footer from '@layout/Footer.astro';
+
+interface Props {
+  week: CollectionEntry<'weeks'>;
+  tab: WeekTab;
+  title: string;
+  lede?: string;
+  /** Widen the content column (labs read better wide). */
+  wide?: boolean;
+}
+
+const { week, tab, title, lede, wide = false } = Astro.props;
+---
+
+<Layout title={`Week ${week.data.number} ${title} · ${week.data.title}`} description={lede}>
+  <div class="week-page">
+    <SiteHeader activeWeekId={week.id} activeTab={tab} />
+
+    <main class:list={['week-main', { 'week-main--wide': wide }]}>
+      <header class="page-head">
+        <p class="kicker">Week {week.data.number} · {week.data.title}</p>
+        <h1>{title}</h1>
+        {lede && <p class="lede">{lede}</p>}
+      </header>
+
+      <WeekLock week={week}>
+        <slot />
+      </WeekLock>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .week-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--surface);
+  }
+
+  .week-main {
+    flex: 1;
+    max-width: 46rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-5) var(--space-12);
+  }
+
+  .week-main--wide {
+    max-width: 56rem;
+  }
+
+  .page-head {
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: var(--space-6);
+  }
+
+  .kicker {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--brand);
+  }
+
+  .page-head h1 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--fs-3xl);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+  }
+
+  .lede {
+    margin: 0;
+    font-size: var(--fs-lg);
+    color: var(--ink-muted);
+  }
+</style>

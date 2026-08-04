@@ -1,6 +1,7 @@
 import { defineCollection, reference, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { quizSchema } from '@lib/quiz';
+import { icons } from '@lib/icons';
 
 // All content lives in `site/content/` (a sibling of `src/`), so loader
 // `base`/path values are relative to the project root. See docs/repo-structure.md.
@@ -25,9 +26,22 @@ const weeks = defineCollection({
   schema: z.object({
     number: z.number().int(),
     title: z.string(),
+    /** Short label under the week icon in the header nav (e.g. "Viz"). */
+    navLabel: z.string().optional(),
+    /** Header-nav icon; must be a name from src/lib/icons.ts. */
+    icon: z
+      .string()
+      .refine((n) => n in icons, { message: 'unknown icon name — see src/lib/icons.ts' })
+      .optional(),
     summary: z.string().optional(),
     description: z.string().optional(),
     objectives: z.array(z.string()).optional(),
+    /** Date-gate: before this instant the week is greyed in nav and its pages
+     *  show an "Unlocks …" placeholder. Checked client-side against the
+     *  student's clock — deliberately unsecured (spares students info
+     *  overload; trivially bypassable by design). A bare `YYYY-MM-DD` parses
+     *  as midnight UTC, i.e. the evening before in Mountain Time. */
+    unlockOn: z.coerce.date().optional(),
   }),
 });
 
@@ -48,9 +62,22 @@ const decks = defineCollection({
   }),
 });
 
+// Lab & homework instruction sheets live outside the site, in the repo-level
+// `labs_hw/` tree (one folder per week, e.g. `week5_RDB/Lab-5_Instructions.md`).
+// They are authored for the python-markdown pipeline; remark-scrub-pymd strips
+// the extension artifacts at render time. `generateId` keeps the raw path (the
+// default would slugify it) so pages can parse week/type/variant from the id.
+const labs = defineCollection({
+  loader: glob({
+    pattern: 'week*/{Lab,Homework}-*_Instructions.md',
+    base: '../labs_hw',
+    generateId: ({ entry }) => entry.replace(/\.md$/, ''),
+  }),
+});
+
 const quizzes = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: 'content/quizzes' }),
   schema: quizSchema,
 });
 
-export const collections = { course, weeks, decks, quizzes };
+export const collections = { course, weeks, decks, labs, quizzes };

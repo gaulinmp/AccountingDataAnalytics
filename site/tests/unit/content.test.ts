@@ -35,7 +35,7 @@ describe('content graph', () => {
   });
 
   it('the deck resolves its week', () => {
-    const fm = deckFrontmatter('decks/week-03/3-1-vis-overview.mdx');
+    const fm = deckFrontmatter('decks/week-03/slides.mdx');
     expect(weekIds).toContain(fm.week);
   });
 

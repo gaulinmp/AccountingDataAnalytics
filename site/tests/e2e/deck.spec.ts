@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-const DECK = '/week-03/3-1-vis-overview/';
+const DECK = '/week-03/slides/';
+const QUIZ_SLIDE = 9; // "Central tendency" — holds quiz w3-median-vs-mean
 
-// Wide viewport so the reinforcement pane (min-width: 901px) is active.
+// Wide viewport so the reinforcement aside (min-width: 1100px) is active.
 test.use({ viewport: { width: 1280, height: 800 } });
 
 test('keyboard nav + ?slide deep-link track the active slide', async ({ page }) => {
@@ -22,28 +23,50 @@ test('keyboard nav + ?slide deep-link track the active slide', async ({ page }) 
   await expect(deck).toHaveAttribute('data-active', '1');
 });
 
-test('reinforcement pane shows the active slide Key Concept', async ({ page }) => {
+test('reinforcement aside shows the active slide Key Concept', async ({ page }) => {
   await page.goto(`${DECK}?slide=2`);
   const pane = page.locator('[data-reinforcement]');
   await expect(pane.locator('.rp-label')).toHaveText(/key concept/i);
-  await expect(pane.locator('.rp-body')).toContainText('three shapes of source data');
+  await expect(pane.locator('.rp-body')).toContainText('location, spread, and shape');
+  // On a wide screen the key concept lives in the aside, not the slide.
+  await expect(page.locator('[data-deck-aside] .slide__key-concept')).toBeVisible();
+  await expect(page.locator('[data-slide].is-active .slide__key-concept')).toHaveCount(0);
+});
+
+test('quiz relocates to the aside, collapses, and remembers the preference', async ({ page }) => {
+  await page.goto(`${DECK}?slide=${QUIZ_SLIDE}`);
+  const details = page.locator('[data-aside-quiz]');
+  const quiz = page.locator('[data-deck-aside] [data-quiz][data-quiz-id="w3-median-vs-mean"]');
+  await expect(quiz).toBeVisible(); // expanded by default
+
+  await details.locator('summary').click();
+  await expect(quiz).toBeHidden();
+
+  await page.reload(); // collapse preference persists (localStorage)
+  await expect(page.locator('[data-aside-quiz][open]')).toHaveCount(0);
+
+  // Paging away and back: the quiz follows the active slide.
+  await page.keyboard.press('ArrowLeft');
+  await expect(quiz).toHaveCount(0);
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('[data-deck-aside] [data-quiz]')).toHaveCount(1);
 });
 
 test('quiz: check reveals why, persists across reload, hidden before answering', async ({ page }) => {
-  await page.goto(`${DECK}?slide=2`); // the quiz lives on slide 2
-  const quiz = page.locator('[data-quiz][data-quiz-id="w3-data-shapes"]');
+  await page.goto(`${DECK}?slide=${QUIZ_SLIDE}`);
+  const quiz = page.locator('[data-quiz][data-quiz-id="w3-median-vs-mean"]');
   const feedback = quiz.locator('.quiz__feedback');
 
   await expect(feedback).toBeHidden(); // why not shown before answering
-  await quiz.getByRole('radio', { name: 'A relational database' }).check();
+  await quiz.getByRole('radio', { name: 'The median (middle value)' }).check();
   await quiz.getByRole('button', { name: 'Check answer' }).click();
   await expect(feedback).toBeVisible();
-  await expect(feedback).toHaveText(/Correct\..*SQL JOINs/);
+  await expect(feedback).toHaveText(/Correct\..*50th percentile/);
 
   // persistence
   await page.reload();
-  const quiz2 = page.locator('[data-quiz][data-quiz-id="w3-data-shapes"]');
-  await expect(quiz2.getByRole('radio', { name: 'A relational database' })).toBeChecked();
+  const quiz2 = page.locator('[data-quiz][data-quiz-id="w3-median-vs-mean"]');
+  await expect(quiz2.getByRole('radio', { name: 'The median (middle value)' })).toBeChecked();
   await expect(quiz2.locator('.quiz__feedback')).toBeVisible();
 });
 
@@ -75,17 +98,29 @@ test('no inline onclick handlers anywhere (CSP-friendly)', async ({ page }) => {
   expect(count).toBe(0);
 });
 
+test.describe('narrow viewport (no aside)', () => {
+  test.use({ viewport: { width: 800, height: 900 } });
+
+  test('key concept and quiz stay inline in the slide', async ({ page }) => {
+    await page.goto(`${DECK}?slide=${QUIZ_SLIDE}`);
+    await expect(page.locator('[data-slide].is-active [data-quiz]')).toHaveCount(1);
+    await expect(page.locator('[data-slide].is-active .slide__key-concept')).toBeVisible();
+    await expect(page.locator('[data-deck-aside]')).toBeHidden();
+  });
+});
+
 test.describe('no-JS baseline (Stage 4 parity)', () => {
   test.use({ javaScriptEnabled: false });
 
   test('deck reads with JavaScript disabled and enhancements do not run', async ({ page }) => {
     await page.goto(DECK);
     // Static slide content is present and readable.
-    await expect(page.getByText('Which source is queried with SQL?')).toBeVisible();
-    await expect(page.getByText('A relational database')).toBeVisible();
+    await expect(page.getByText('which metric best represents')).toBeVisible();
+    await expect(page.getByText('The median (middle value)')).toBeVisible();
     // The controller never runs, so no slide is marked active.
     await expect(page.locator('[data-deck][data-active]')).toHaveCount(0);
-    // The quiz stays inline in its slide (never relocated to the pane).
-    await expect(page.locator('[data-slide] [data-quiz]')).toHaveCount(1);
+    // Quizzes stay inline in their slides (never relocated to the aside).
+    await expect(page.locator('[data-slide] [data-quiz]')).toHaveCount(6);
+    await expect(page.locator('[data-deck-aside] [data-quiz]')).toHaveCount(0);
   });
 });

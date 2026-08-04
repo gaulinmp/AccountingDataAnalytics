@@ -68,6 +68,9 @@
     check.addEventListener('click', () => {
       const selected = radios.findIndex((r) => r.checked);
       if (selected < 0) return;
+      // Attempt counter for the AI tutor (data-attempts, alongside
+      // data-answered set in reveal). Restored answers don't count.
+      form.dataset.attempts = String((Number(form.dataset.attempts) || 0) + 1);
       reveal(selected, true);
     });
 

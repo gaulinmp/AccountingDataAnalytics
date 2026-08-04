@@ -1,96 +1,102 @@
 ---
+// Week overview: /week-NN/. Places the week in the course arc (description),
+// lists the learning objectives, and links the five sub-pages.
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
-import { deckUrl } from '@lib/url';
+import { weekTabUrl, type WeekTab } from '@lib/url';
 import Layout from '@layout/Layout.astro';
 import SiteHeader from '@layout/SiteHeader.astro';
+import WeekLock from '@layout/WeekLock.astro';
 import Footer from '@layout/Footer.astro';
+import Icon from '@components/Icon.astro';
+import type { IconName } from '@lib/icons';
+import { docsForWeek } from '@lib/labs';
 
 export const getStaticPaths = (async () => {
   const weeks = await getCollection('weeks');
-  return weeks.map((week) => ({
-    params: {
-      week: week.id,
-    },
-    props: { week },
-  }));
+  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
 }) satisfies GetStaticPaths;
 
 const { week } = Astro.props;
 
-// Fetch decks for this week
-const allDecks = await getCollection('decks');
-const decks = allDecks
-  .filter((d) => d.data.week.id === week.id)
-  .sort((a, b) => a.id.localeCompare(b.id));
+// Availability of each sub-page's content (drives the card hints).
+const deck = (await getCollection('decks')).find((d) => d.data.week.id === week.id) ?? null;
+const allLabs = await getCollection('labs');
+const lab = docsForWeek(allLabs, week.data.number, 'Lab');
+const homework = docsForWeek(allLabs, week.data.number, 'Homework');
+const hasQuiz = (await getCollection('quizzes')).some((q) => q.id.startsWith(`w${week.data.number}-`));
+
+const cards: { tab: WeekTab; label: string; icon: IconName; desc: string; ready: boolean; hint?: string }[] = [
+  {
+    tab: 'slides',
+    label: 'Slides',
+    icon: 'slides',
+    desc: "The week's lecture deck, with inline self-checks.",
+    ready: !!deck,
+    hint: deck?.data.estMinutes ? `~${deck.data.estMinutes} min` : undefined,
+  },
+  { tab: 'activity', label: 'Activity', icon: 'puzzle', desc: 'An interactive, in-class exercise.', ready: false },
+  { tab: 'lab', label: 'Lab', icon: 'flask', desc: 'Hands-on lab instructions and rubric.', ready: !!(lab.ug || lab.macc) },
+  { tab: 'homework', label: 'Homework', icon: 'pencil', desc: 'Assignment instructions and rubric.', ready: !!(homework.ug || homework.macc) },
+  { tab: 'quiz', label: 'Quiz', icon: 'helpCircle', desc: 'A self-check quiz on the material.', ready: hasQuiz },
+];
 ---
 
 <Layout title={`Week ${week.data.number}: ${week.data.title}`} description={week.data.summary}>
   <div class="week-page">
-    <SiteHeader activeWeekId={week.id} />
+    <SiteHeader activeWeekId={week.id} activeTab="overview" />
 
     <main class="week-main">
-      <div class="week-layout">
-        <header class="week-header">
-          <span class="wnum-badge">Week {week.data.number}</span>
-          <h1>{week.data.title}</h1>
-          {week.data.summary && <p class="week-summary">{week.data.summary}</p>}
-        </header>
+      <header class="week-header">
+        <p class="week-kicker">Week {week.data.number}</p>
+        <h1>{week.data.title}</h1>
+        {week.data.summary && <p class="week-summary">{week.data.summary}</p>}
+      </header>
 
-        <div class="week-body">
-          {week.data.objectives && week.data.objectives.length > 0 && (
-            <section class="objectives-section">
-              <h2>Learning Objectives</h2>
-              <ul class="objectives-list">
-                {week.data.objectives.map((obj) => (
-                  <li>{obj}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          {week.data.description && (
-            <section class="week-description">
-              <h2>Overview</h2>
-              <p>{week.data.description}</p>
-            </section>
-          )}
-
-          <section class="decks-section">
-            <h2>Slide Decks</h2>
-            {decks.length > 0 ? (
-              <div class="decks-list">
-                {decks.map((d) => (
-                  <a href={deckUrl(d)} class="deck-item">
-                    <div class="deck-item-left">
-                      <span class="play-icon-wrapper">
-                        <svg class="deck-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                          <rect width="18" height="14" x="3" y="3" rx="2" />
-                          <path d="M7 21h10" />
-                          <path d="M12 17v4" />
-                          <path d="m10 8 4 3-4 3V8z" />
-                        </svg>
-                      </span>
-                      <span class="deck-name">{d.data.title}</span>
-                    </div>
-                    {d.data.estMinutes && (
-                      <span class="est-badge">
-                        <svg class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="12" cy="12" r="10"/>
-                          <polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                        {d.data.estMinutes} min
-                      </span>
-                    )}
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <p class="empty-state">No slide decks available yet for this week.</p>
-            )}
+      <WeekLock week={week}>
+      <div class="week-body">
+        {week.data.description && (
+          <section class="week-section">
+            <h2>This week</h2>
+            <p class="week-description">{week.data.description}</p>
           </section>
-        </div>
+        )}
+
+        {week.data.objectives && week.data.objectives.length > 0 && (
+          <section class="week-section">
+            <h2>Learning objectives</h2>
+            <ul class="objectives-list">
+              {week.data.objectives.map((obj) => (
+                <li>{obj}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section class="week-section">
+          <h2>Materials</h2>
+          <ul class="cards">
+            {cards.map((c) => (
+              <li>
+                <a href={weekTabUrl(week.id, c.tab)} class:list={['card', { 'is-pending': !c.ready }]}>
+                  <span class="card__icon">
+                    <Icon name={c.icon} size={22} />
+                  </span>
+                  <span class="card__text">
+                    <span class="card__label">
+                      {c.label}
+                      {c.hint && <span class="card__hint">{c.hint}</span>}
+                      {!c.ready && <span class="card__hint">coming soon</span>}
+                    </span>
+                    <span class="card__desc">{c.desc}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
+      </WeekLock>
     </main>
 
     <Footer />
@@ -102,63 +108,43 @@ const decks = allDecks
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--gray-50);
+    background: var(--surface);
   }
 
   .week-main {
     flex: 1;
-    max-width: 68rem;
+    max-width: 46rem;
     width: 100%;
     margin: 0 auto;
-    padding: var(--space-6) var(--space-5) var(--space-12);
-  }
-
-  .week-layout {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-8);
-  }
-
-  /* Left Column (Content) */
-  .week-content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
+    padding: var(--space-8) var(--space-5) var(--space-12);
   }
 
   .week-header {
-    border-bottom: 1px solid var(--border);
     padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: var(--space-6);
   }
 
-  .wnum-badge {
-    display: inline-block;
+  .week-kicker {
+    margin: 0 0 var(--space-2);
     font-size: var(--fs-xs);
-    font-weight: 800;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 4px 10px;
-    background: var(--gradient-brand);
-    color: var(--brand-contrast);
-    border-radius: var(--radius-pill);
-    box-shadow: 0 2px 8px rgba(204, 0, 0, 0.2);
-    margin-bottom: var(--space-3);
+    letter-spacing: 0.14em;
+    color: var(--brand);
   }
 
   .week-header h1 {
-    font-size: var(--fs-3xl);
-    font-weight: 800;
     margin: 0 0 var(--space-3);
-    color: var(--ink);
-    letter-spacing: -0.02em;
+    font-size: var(--fs-3xl);
     line-height: var(--lh-tight);
+    color: var(--ink);
   }
 
   .week-summary {
+    margin: 0;
     font-size: var(--fs-lg);
     color: var(--ink-muted);
-    line-height: var(--lh-base);
-    margin: 0;
   }
 
   .week-body {
@@ -167,130 +153,16 @@ const decks = allDecks
     gap: var(--space-8);
   }
 
-  .week-description h2,
-  .decks-section h2,
-  .objectives-section h2 {
-    font-size: var(--fs-xl);
-    font-weight: 700;
-    color: var(--ink);
+  .week-section h2 {
     margin: 0 0 var(--space-4);
-    letter-spacing: -0.01em;
-  }
-
-  .week-description p {
-    font-size: var(--fs-base);
-    line-height: var(--lh-base);
-    color: var(--ink-muted);
-    margin: 0;
-  }
-
-  /* Decks List Layout (matching Homepage deck-items) */
-  .decks-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .deck-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-4) var(--space-5);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    text-decoration: none;
+    font-size: var(--fs-xl);
     color: var(--ink);
-    transition: transform var(--transition-smooth), box-shadow var(--transition-smooth), border-color var(--transition-smooth), background-color var(--transition-smooth);
-    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.01);
   }
 
-  .deck-item:hover {
-    background: var(--surface);
-    border-color: rgba(204, 0, 0, 0.4);
-    transform: translateX(6px);
-    box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
-  }
-
-  .deck-item-left {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
-  }
-
-  .play-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-md);
-    background: rgba(204, 0, 0, 0.08);
-    color: var(--brand);
-    transition: background var(--transition-smooth), color var(--transition-smooth), transform var(--transition-spring);
-  }
-
-  .deck-item:hover .play-icon-wrapper {
-    background: var(--brand);
-    color: var(--brand-contrast);
-    transform: scale(1.08);
-  }
-
-  .deck-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .deck-name {
-    font-weight: 700;
-    font-size: var(--fs-base);
-    color: var(--ink);
-    transition: color var(--transition-smooth);
-  }
-
-  .deck-item:hover .deck-name {
-    color: var(--brand);
-  }
-
-  .est-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: var(--fs-xs);
-    font-weight: 600;
-    color: var(--ink-muted);
-    padding: 4px 10px;
-    background: rgba(0, 0, 0, 0.04);
-    border-radius: var(--radius-pill);
-    white-space: nowrap;
-    transition: all var(--transition-smooth);
-  }
-
-  .clock-icon {
-    width: 0.85rem;
-    height: 0.85rem;
-  }
-
-  .deck-item:hover .est-badge {
-    background: rgba(204, 0, 0, 0.08);
-    color: var(--brand);
-  }
-
-  .empty-state {
+  .week-description {
     margin: 0;
-    color: var(--gray-500);
-    font-style: italic;
-    font-size: var(--fs-base);
-  }
-
-  /* Objectives Card */
-  .objectives-section {
-    padding: var(--space-5);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.04);
+    color: var(--ink-muted);
+    white-space: pre-line;
   }
 
   .objectives-list {
@@ -298,24 +170,88 @@ const decks = allDecks
     padding-inline-start: var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    font-size: var(--fs-base);
+    gap: var(--space-2);
     color: var(--ink-muted);
-    line-height: var(--lh-base);
   }
 
   .objectives-list li {
-    position: relative;
     list-style-type: none;
   }
 
   .objectives-list li::before {
-    content: "→";
+    content: '→';
     color: var(--brand);
-    font-weight: bold;
     display: inline-block;
-    width: 1em;
-    margin-inline-start: -1em;
+    width: 1.25em;
+    margin-inline-start: -1.25em;
+  }
+
+  /* Sub-page cards */
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--ink);
+    height: 100%;
+    transition: border-color var(--transition), background var(--transition);
+  }
+
+  .card:hover {
+    border-color: var(--brand);
+    background: var(--brand-tint);
+  }
+
+  .card__icon {
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    flex: none;
+    border-radius: var(--radius-md);
+    background: var(--brand-tint);
+    color: var(--brand);
+  }
+
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .card__label {
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .card__hint {
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--gray-500);
+  }
+
+  .card__desc {
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  .card.is-pending .card__icon {
+    background: var(--surface-muted);
+    color: var(--gray-500);
   }
 </style>
-

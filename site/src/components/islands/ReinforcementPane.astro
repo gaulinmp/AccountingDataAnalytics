@@ -1,3 +1,63 @@
 ---
-// Excised in favor of CSS Grid columns on wide screens
+// Relocates the active slide's Key Concept and inline <Quiz> forms into the
+// companion aside (Companion.astro, [data-deck-aside]) on wide screens. Nodes
+// are *moved*, not cloned, so QuizCard enhancement and answer state survive.
+// They return home on slide change, narrow viewports, and printing — so the
+// no-JS / mobile / print experience is the untouched inline layout.
 ---
+
+<script>
+  import { NS, SLIDE_CHANGE } from '../../lib/deck';
+
+  const companion = document.querySelector<HTMLElement>('[data-deck]');
+  const aside = companion?.querySelector<HTMLElement>('[data-deck-aside]') ?? null;
+
+  if (companion && aside && !aside.dataset.enhanced) {
+    aside.dataset.enhanced = 'true';
+    const keySlot = aside.querySelector<HTMLElement>('[data-aside-key]')!;
+    const quizDetails = aside.querySelector<HTMLDetailsElement>('[data-aside-quiz]')!;
+    const quizSlot = aside.querySelector<HTMLElement>('[data-aside-quiz-body]')!;
+    const wide = window.matchMedia('(min-width: 1100px)');
+
+    // Collapse preference persists across slides and sessions.
+    const OPEN_KEY = `${NS}:aside-quiz-open`;
+    quizDetails.open = localStorage.getItem(OPEN_KEY) !== '0';
+    quizDetails.addEventListener('toggle', () =>
+      localStorage.setItem(OPEN_KEY, quizDetails.open ? '1' : '0')
+    );
+
+    type Moved = { el: HTMLElement; home: HTMLElement; next: Node | null };
+    let moved: Moved[] = [];
+
+    // Reinsert in reverse so recorded next-siblings are already back home.
+    const restore = () => {
+      for (const m of moved.reverse()) m.home.insertBefore(m.el, m.next);
+      moved = [];
+      aside.hidden = true;
+    };
+
+    const take = (el: HTMLElement, slot: HTMLElement) => {
+      moved.push({ el, home: el.parentElement!, next: el.nextSibling });
+      slot.appendChild(el);
+    };
+
+    const apply = () => {
+      restore();
+      if (!wide.matches) return;
+      const slide = companion.querySelector<HTMLElement>('[data-slide].is-active');
+      if (!slide) return;
+      const key = slide.querySelector<HTMLElement>('.slide__key-concept');
+      const quizzes = Array.from(slide.querySelectorAll<HTMLElement>('[data-quiz]'));
+      if (key) take(key, keySlot);
+      for (const quiz of quizzes) take(quiz, quizSlot);
+      quizDetails.hidden = quizzes.length === 0;
+      aside.hidden = !key && quizzes.length === 0;
+    };
+
+    companion.addEventListener(SLIDE_CHANGE, apply);
+    wide.addEventListener('change', apply);
+    window.addEventListener('beforeprint', restore);
+    window.addEventListener('afterprint', apply);
+    if (companion.dataset.active) apply(); // controller initialized before us
+  }
+</script>

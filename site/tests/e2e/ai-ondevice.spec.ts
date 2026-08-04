@@ -53,6 +53,8 @@ test('on-device wiring: system prompt + context sent, output sanitized', async (
   );
   expect(calls.create[0].initialPrompts[0].content).toContain('Socratic tutor');
   expect(calls.create[0].initialPrompts[0].content).toMatch(/never reveal the canonical answer/i);
-  expect(calls.prompts[0]).toContain('Slide 2 of 7');
+  // Static context is sent once, in the system prompt — not repeated per turn.
+  expect(calls.create[0].initialPrompts[0].content).toContain('Slide 2 of 7');
+  expect(calls.prompts[0]).not.toContain('<<CONTEXT>>');
   expect(calls.prompts[0]).toContain('Student: How do I begin?');
 });

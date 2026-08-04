@@ -51,16 +51,63 @@ const { deckId, deckTitle, deckTopic = '', aiPrompt = '' } = Astro.props;
         q.querySelector<HTMLTemplateElement>('template[data-quiz-why]')?.content.textContent?.trim() ??
         '';
       const question = q.querySelector('legend')?.textContent?.trim() ?? '';
+      // Live attempt state written by QuizCard (data-answered / data-attempts):
+      // lets the tutor enforce "no help before an attempt" and address the
+      // student's specific wrong answer instead of hedging generically.
+      const answered = q.dataset.answered;
+      const selected = answered !== undefined ? Number(answered) : NaN;
+      const attempted = Number.isFinite(selected);
       return {
         selfCheckQuestion: question || undefined,
         selfCheckOptions: opts.length ? opts : undefined,
         canonicalSelfCheckAnswer: Number.isFinite(correct) ? opts[correct] : undefined,
         selfCheckExplanation: why || undefined,
+        attempted,
+        selectedOption: attempted ? opts[selected] : undefined,
+        wasCorrect: attempted ? selected === correct : undefined,
+        attemptCount: attempted ? Number(q.dataset.attempts) || 1 : undefined,
       } satisfies Partial<TutorContext>;
     }
 
-    function seedsFor(hasQuiz: boolean): string[] {
-      const base = ['Explain this slide simply', 'Why does this matter in accounting?'];
+    // Serialize the slide body with structure intact: quiz markup is excluded
+    // (it's passed separately as selfCheck* fields), table rows become
+    // "a | b | c", list items get "-" markers, and truncation lands on a word
+    // boundary with an explicit marker.
+    const LEAF_BLOCKS = 'p, li, tr, h3, h4, pre, blockquote, figcaption, dt, dd';
+    function extractBody(slideEl?: HTMLElement): string {
+      const bodyEl = slideEl?.querySelector('.slide__body');
+      if (!bodyEl) return '';
+      const clone = bodyEl.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll('[data-quiz]').forEach((n) => n.remove());
+      const parts: string[] = [];
+      clone.querySelectorAll<HTMLElement>(LEAF_BLOCKS).forEach((el) => {
+        if (el.querySelector(LEAF_BLOCKS)) return; // only leaf blocks — no double-counting
+        const text =
+          el.tagName === 'TR'
+            ? Array.from(el.children)
+                .map((c) => c.textContent?.replace(/\s+/g, ' ').trim())
+                .filter(Boolean)
+                .join(' | ')
+            : (el.textContent?.replace(/\s+/g, ' ').trim() ?? '');
+        if (text) parts.push(el.tagName === 'LI' ? `- ${text}` : text);
+      });
+      const text = parts.length
+        ? parts.join('\n')
+        : (clone.textContent?.replace(/\s+/g, ' ').trim() ?? '');
+      return clipAtWord(text, 1500);
+    }
+
+    function clipAtWord(s: string, max: number): string {
+      if (s.length <= max) return s;
+      const cut = s.lastIndexOf(' ', max);
+      return `${s.slice(0, cut > 0 ? cut : max)} […truncated]`;
+    }
+
+    function seedsFor(hasQuiz: boolean, topic?: string): string[] {
+      const base = [
+        topic ? `Explain ${topic} simply` : 'Explain this slide simply',
+        'Why does this matter in accounting?',
+      ];
       if (hasQuiz) base.push('Hint for the self-check (no answer)');
       return base;
     }
@@ -72,7 +119,7 @@ const { deckId, deckTitle, deckTopic = '', aiPrompt = '' } = Astro.props;
         slideEl?.querySelector('.slide__title')?.textContent?.trim() ||
         slideEl?.querySelector('.slide__kicker')?.textContent?.trim() ||
         '';
-      const body = slideEl?.querySelector('.slide__body')?.textContent?.trim().slice(0, 1500) || '';
+      const body = extractBody(slideEl);
       // Per-slide topic (data-slide-topic) overrides the deck-level topic.
       const slideTopic = slideEl?.dataset.slideTopic || deckTopic || undefined;
       const selfCheck = readSelfCheck(slideEl);
@@ -84,8 +131,9 @@ const { deckId, deckTitle, deckTopic = '', aiPrompt = '' } = Astro.props;
         slideTitle: title || undefined,
         slideTopic,
         slideBody: body || undefined,
+        aiNotes: slideEl?.dataset.aiNotes || undefined,
         ...selfCheck,
-        seedQuestions: seedsFor(Boolean(selfCheck.selfCheckQuestion)),
+        seedQuestions: seedsFor(Boolean(selfCheck.selfCheckQuestion), slideTopic),
         aiPrompt: aiPrompt || undefined,
       };
     };

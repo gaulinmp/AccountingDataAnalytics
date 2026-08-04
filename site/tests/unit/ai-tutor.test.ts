@@ -4,6 +4,9 @@ import {
   UNIVERSAL_PROMPT,
   getSystemPrompt,
   serializeContext,
+  serializeQuizState,
+  composeUserPrompt,
+  buildInitialPrompts,
   buildCopyPastePrompt,
 } from '../../packages/ai-tutor/prompt';
 import type { TutorContext } from '../../packages/ai-tutor/types';
@@ -85,16 +88,72 @@ describe('system prompt (the seven rules)', () => {
   });
 });
 
-describe('context serialization (Rule 1: canonical is hint-only)', () => {
-  it('labels the canonical answer HINT-ONLY, never as the answer', () => {
-    const block = serializeContext(ctx);
-    expect(block).toContain('HINT-ONLY');
-    // the canonical value appears only on the HINT-ONLY line
-    const line = block.split('\n').find((l) => l.includes('A relational database') && l.includes('Canonical'));
-    expect(line).toMatch(/HINT-ONLY/);
+describe('context serialization (Rule 1: canonical never serialized)', () => {
+  it('never marks any option as the canonical answer, in any tier', () => {
+    // The answer text may appear in the options list, but no line may label it.
+    expect(serializeContext(ctx, 'on-device')).not.toMatch(/canonical/i);
+    expect(serializeContext(ctx, 'copy-paste')).not.toMatch(/canonical/i);
   });
-  it('includes the slide locus', () => {
+  it('on-device gets the explanation as HINT-ONLY; copy-paste gets neither', () => {
+    const onDevice = serializeContext(ctx, 'on-device');
+    expect(onDevice).toContain('Relational databases are queried with SQL JOINs.');
+    expect(onDevice).toMatch(/HINT-ONLY/);
+    expect(serializeContext(ctx, 'copy-paste')).not.toContain('SQL JOINs');
+  });
+  it('includes the slide locus and instructor notes', () => {
     expect(serializeContext(ctx)).toContain('Slide 2 of 3: Three places data lives');
+    expect(serializeContext({ ...ctx, aiNotes: 'Students confuse CSVs with tables.' })).toContain(
+      'Students confuse CSVs with tables.'
+    );
+  });
+});
+
+describe('quiz status (Rules 2–3: attempt-aware)', () => {
+  it('flags an unattempted self-check so Rule 2 can bite', () => {
+    expect(serializeQuizState(ctx)).toMatch(/NOT yet attempted/);
+  });
+  it('reports the specific attempt when one exists', () => {
+    const status = serializeQuizState({
+      ...ctx,
+      attempted: true,
+      selectedOption: 'A flat CSV',
+      wasCorrect: false,
+      attemptCount: 2,
+    });
+    expect(status).toContain('"A flat CSV" (incorrect)');
+    expect(status).toContain('attempts so far: 2');
+  });
+  it('is empty when the slide has no self-check', () => {
+    expect(serializeQuizState({ ...ctx, selfCheckQuestion: undefined })).toBe('');
+  });
+});
+
+describe('per-turn prompt (context lives in initialPrompts, not each turn)', () => {
+  it('sends only status + student text, not the slide context', () => {
+    const turn = composeUserPrompt('How do I begin?', ctx);
+    expect(turn).toContain('Student: How do I begin?');
+    expect(turn).toContain('<<STATUS>>');
+    expect(turn).not.toContain('<<CONTEXT>>');
+  });
+});
+
+describe('initial prompts', () => {
+  it('leads with system rules + static context, then the few-shot exchange', () => {
+    const prompts = buildInitialPrompts(ctx);
+    expect(prompts[0].role).toBe('system');
+    expect(prompts[0].content).toContain('Socratic tutor');
+    expect(prompts[0].content).toContain('<<CONTEXT>>');
+    expect(prompts[1].role).toBe('user');
+    expect(prompts[2].role).toBe('assistant');
+  });
+  it('replays at most the last 6 prior messages', () => {
+    const history = Array.from({ length: 10 }, (_, i) => ({
+      role: (i % 2 ? 'assistant' : 'user') as 'user' | 'assistant',
+      content: `msg ${i}`,
+    }));
+    const prompts = buildInitialPrompts(ctx, history);
+    expect(prompts).toHaveLength(1 + 2 + 6);
+    expect(prompts.at(-1)?.content).toBe('msg 9');
   });
 });
 
@@ -110,5 +169,11 @@ describe('copy-paste prompt', () => {
     expect(prompt).toContain('Student: earlier q'); // conversation
     expect(prompt).toContain('Tutor: earlier a');
     expect(prompt.trimEnd().endsWith('Student: How do I start?')).toBe(true);
+  });
+  it('never shows the student the answer or explanation (they read this prompt)', () => {
+    const prompt = buildCopyPastePrompt([], 'help', ctx);
+    // "canonical" appears only in the rules; no context line may label an answer.
+    expect(prompt).not.toMatch(/Canonical self-check answer/);
+    expect(prompt).not.toContain('SQL JOINs');
   });
 });

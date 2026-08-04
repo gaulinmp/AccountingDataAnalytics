@@ -136,10 +136,25 @@
       pager.append(prev, numbersContainer, next);
       companion!.appendChild(pager);
 
+      // Slim progress bar under the slide: position in deck at a glance.
+      const progress = document.createElement('div');
+      progress.className = 'deck-progress';
+      progress.setAttribute('role', 'progressbar');
+      progress.setAttribute('aria-label', 'Deck progress');
+      const progressFill = document.createElement('span');
+      progressFill.className = 'deck-progress__fill';
+      progress.appendChild(progressFill);
+      companion!.insertBefore(progress, pager);
+
       companion!.addEventListener(SLIDE_CHANGE, (e) => {
         const d = (e as CustomEvent<SlideChangeDetail>).detail;
         prev.disabled = d.index === 0;
         next.disabled = d.index === d.total - 1;
+
+        progressFill.style.width = `${((d.index + 1) / d.total) * 100}%`;
+        progress.setAttribute('aria-valuenow', String(d.index + 1));
+        progress.setAttribute('aria-valuemin', '1');
+        progress.setAttribute('aria-valuemax', String(d.total));
 
         numberButtons.forEach((btn, idx) => {
           const isActive = idx === d.index;
@@ -151,6 +166,13 @@
             btn.removeAttribute('aria-current');
             btn.disabled = false;
           }
+        });
+
+        // Keep the active number centered in the scrolling strip.
+        const active = numberButtons[d.index];
+        numbersContainer.scrollTo({
+          left: active.offsetLeft - numbersContainer.clientWidth / 2 + active.clientWidth / 2,
+          behavior: 'smooth',
         });
       });
     }
@@ -172,100 +194,129 @@
 </script>
 
 <style is:global>
+  /* Pager + progress live on the dark stage: quiet, light-on-dark, no chrome. */
+  .deck-progress {
+    display: none;
+    height: 2px;
+    margin: var(--space-5) auto 0;
+    max-width: 24rem;
+    background: var(--stage-border);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  .companion.is-interactive .deck-progress {
+    display: block;
+  }
+
+  .deck-progress__fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--brand);
+    transition: width var(--transition-smooth);
+  }
+
   .deck-pager {
     display: none;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
-    padding: var(--space-2) var(--space-4);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-premium);
+    gap: var(--space-3);
+    padding: var(--space-2) 0 0;
     max-width: fit-content;
-    margin: var(--space-8) auto 0;
+    margin: 0 auto;
   }
 
   .companion.is-interactive .deck-pager {
     display: flex;
   }
 
+  /* A single scrolling strip — long decks scroll the numbers instead of
+   * wrapping into rows. The active number is kept centered by the controller. */
   .deck-pager__numbers {
     display: flex;
     align-items: center;
     gap: var(--space-1);
-    background: var(--gray-50);
-    padding: var(--space-1);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: min(60vw, 24rem);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* Fade the clipped edges so the strip reads as scrollable. */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 1.25rem, black calc(100% - 1.25rem), transparent);
+    mask-image: linear-gradient(to right, transparent, black 1.25rem, black calc(100% - 1.25rem), transparent);
+  }
+
+  .deck-pager__numbers::-webkit-scrollbar {
+    display: none;
+  }
+
+  .deck-pager__num {
+    flex: none;
   }
 
   .deck-pager__num {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 2.25rem;
-    height: 2.25rem;
+    min-width: 2rem;
+    height: 2rem;
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
-    color: var(--ink-muted);
+    color: var(--stage-ink-muted);
     font-size: var(--fs-sm);
     font-weight: 500;
+    font-variant-numeric: tabular-nums;
     cursor: pointer;
-    transition: all var(--transition-smooth);
+    transition: color var(--transition), background var(--transition);
   }
 
   .deck-pager__num:hover:not(:disabled) {
-    background: var(--gray-200);
-    color: var(--ink);
+    color: var(--stage-ink);
+    background: rgba(255, 255, 255, 0.06);
   }
 
   .deck-pager__num.is-active {
-    background: var(--brand);
-    color: var(--brand-contrast);
+    color: var(--stage-ink);
     font-weight: 700;
     cursor: default;
-    box-shadow: 0 2px 6px rgba(204, 0, 0, 0.25);
+    box-shadow: inset 0 -2px 0 var(--brand);
+    border-radius: 0;
   }
 
   .deck-pager__btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 1px solid var(--border);
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--stage-border);
     border-radius: var(--radius-md);
-    background: var(--surface);
-    color: var(--ink-muted);
+    background: transparent;
+    color: var(--stage-ink-muted);
     cursor: pointer;
-    transition: all var(--transition-smooth);
+    transition: color var(--transition), border-color var(--transition);
   }
 
   .deck-pager__btn svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.15rem;
+    height: 1.15rem;
   }
 
   .deck-pager__btn:hover:not(:disabled) {
-    border-color: var(--brand);
-    color: var(--brand);
-    background: var(--gradient-brand-subtle);
+    border-color: var(--stage-ink-muted);
+    color: var(--stage-ink);
   }
 
   .deck-pager__btn:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
-    border-color: var(--border);
-    color: var(--gray-400);
-    background: var(--surface);
   }
 
   @media print {
-    .deck-pager {
+    .deck-pager,
+    .deck-progress {
       display: none;
     }
   }

@@ -1,10 +1,20 @@
 # Folders
+build/
 code/da_scenes/
 data/
 labs_hw/cases/
 labs_hw/week12_AI/demo1/
 literature/
 syllabus/
+
+# Class hides
+*solutions*.html
+
+# Slide sources: the .pptx decks and the figures that feed them. Nothing here
+# has ever been tracked, and the site doesn't build from it — pptx2md.py reads
+# the pptx and writes site/public/decks/, which IS committed. Dropbox versions
+# this tree. (labs_hw HTML is the opposite case: it IS tracked, next to its .md.)
+slides/
 
 # File types
 *.pdf
@@ -13,6 +23,7 @@ syllabus/
 *.xlsx
 *.csv
 *.tsv
+*.7z
 
 # Python
 __pycache__/

@@ -1,0 +1,36 @@
+# Normalize line endings: store LF in the repo, check out native.
+# Without this, the labs_hw markdown/HTML pair keeps re-dirtying on Windows.
+* text=auto
+
+# Text formats we author or generate, declared explicitly so auto-detection
+# never guesses wrong on a file with an odd byte in it.
+*.md      text
+*.mdx     text
+*.qmd     text
+*.yaml    text
+*.yml     text
+*.py      text
+*.js      text
+*.mjs     text
+*.ts      text
+*.astro   text
+*.css     text
+*.html    text
+*.json    text
+*.ipynb   text
+*.txt     text
+
+# Binary: never normalize, never diff as text.
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.webp    binary
+*.svg     binary
+*.ico     binary
+*.zip     binary
+*.7z      binary
+*.twb     binary
+*.twbx    binary
+*.sqlite  binary
+*.db      binary

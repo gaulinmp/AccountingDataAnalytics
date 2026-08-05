@@ -1,9 +1,12 @@
 import { expect, test } from '@playwright/test';
-
-const DECK = '/week-03/3-1-vis-overview/';
+import { DECK, DECK_SLIDES, QUIZ_SLIDE, unlockWeeks } from './support';
 
 // Wide viewport so the reinforcement pane (and relocated quiz) exist.
 test.use({ viewport: { width: 1280, height: 800 } });
+
+test.beforeEach(async ({ page }) => {
+  await unlockWeeks(page);
+});
 
 // Playwright CSS locators pierce open shadow roots, so we can target the
 // <ai-tutor> internals directly.
@@ -20,7 +23,7 @@ test('copy-paste tier builds one prompt with system + context + question', async
   await expect(out).toBeVisible();
   const value = await out.inputValue();
   expect(value).toContain('Socratic tutor'); // system prompt
-  expect(value).toContain('Slide 2 of 7'); // current-slide context
+  expect(value).toContain(`Slide 2 of ${DECK_SLIDES}`); // current-slide context
   expect(value.trimEnd().endsWith('Student: How do I start?')).toBe(true);
 });
 
@@ -40,8 +43,8 @@ test('seed chips + context track the active slide', async ({ page }) => {
   expect(chips).not.toMatch(/self-check/i);
 
   // Slide with a self-check → the self-check chip appears (chips re-render per slide).
-  await page.goto(`${DECK}?ai-mode=copy-paste&slide=2`);
-  await expect(page.locator('[data-deck]')).toHaveAttribute('data-active', '1');
+  await page.goto(`${DECK}?ai-mode=copy-paste&slide=${QUIZ_SLIDE}`);
+  await expect(page.locator('[data-deck]')).toHaveAttribute('data-active', String(QUIZ_SLIDE - 1));
   await page.locator('.launcher').click();
   chips = (await page.locator('.chip').allTextContents()).join(' | ');
   expect(chips).toMatch(/self-check/i);

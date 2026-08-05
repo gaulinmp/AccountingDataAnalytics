@@ -41,7 +41,13 @@ const { deckId, deckTitle, deckTopic = '', aiPrompt = '' } = Astro.props;
     };
 
     function readSelfCheck(slideEl: HTMLElement) {
-      const q = slideEl.querySelector<HTMLElement>('[data-quiz]');
+      // On wide screens ReinforcementPane *moves* the active slide's quiz into
+      // the companion aside, and its SLIDE_CHANGE listener runs before ours
+      // (it mounts first). So look in the slide, then in the aside — which by
+      // contract only ever holds the active slide's quiz.
+      const q =
+        slideEl.querySelector<HTMLElement>('[data-quiz]') ??
+        companion!.querySelector<HTMLElement>('[data-deck-aside] [data-quiz]');
       if (!q) return {};
       const opts = Array.from(q.querySelectorAll<HTMLElement>('.opts label span')).map(
         (s) => s.textContent?.trim() ?? ''

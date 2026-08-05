@@ -1,0 +1,532 @@
+---
+week: week-09
+title: "Regressions"
+---
+
+import { Slide, CoverMeta, Bullets, TwoColumn, ImageCaption } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 9" icon="trend">
+
+Regressions
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"Regressions"}>
+
+<Bullets items={[
+  { l: 1, h: "A model predicting something we already know" },
+  { l: 2, h: "Diagnostic: understand *why* something happened" },
+  { l: 2, h: "Predictive: what we know helps forecast the future" },
+  { l: 1, h: "Requires us to have data on the outcome that we wish to predict (supervised learning)" },
+  { l: 2, h: "This is called “labeled” data; the outcome is the “label”" },
+  { l: 1, h: "Label = f(Features)" },
+]} />
+
+</Slide>
+
+<Slide title={"Regressions just fit a line"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img1.png"} alt={"Regressions just fit a line"} />
+
+</Slide>
+
+<Slide title={"The dotted lines are the “error”"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img1.png"} alt={"The dotted lines are the “error”"} />
+
+</Slide>
+
+<Slide title={"The dotted lines are the “error”"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img2.png"} alt={"The dotted lines are the “error”"} />
+
+</Slide>
+
+<Slide title={"Could be any line"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img3.png"} alt={"Could be any line"} />
+
+</Slide>
+
+<Slide title={"Fit the line by minimizing error"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img4.gif"} alt={"Fit the line by minimizing error"} />
+
+</Slide>
+
+<Slide title={"Fancier Regressions fit better"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img5.png"} alt={"Fancier Regressions fit better"} />
+
+</Slide>
+
+<Slide title={"And better"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img6.png"} alt={"And better"} />
+
+</Slide>
+
+<Slide title={"And better-ER"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img7.png"} alt={"And better-ER"} />
+
+</Slide>
+
+<Slide title={"And Best-est"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img8.png"} alt={"And Best-est"} />
+
+</Slide>
+
+<Slide title={"what’s the difference?"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img9.png"} alt={"what’s the difference?"} />
+
+</Slide>
+
+<Slide title={"what’s the difference?"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img10.png"} alt={"what’s the difference?"} />
+
+</Slide>
+
+<Slide title={"Why do we care?"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img11.png"} alt={"Why do we care?"} />
+
+</Slide>
+
+<Slide title={"“Out of Sample” predictions"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img12.png"} alt={"“Out of Sample” predictions"} />
+
+</Slide>
+
+<Slide title={"Regression Models"}>
+
+<TwoColumn ratio="1-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Many different regression models" },
+    { l: 2, h: "Differ in assumptions" },
+    { l: 2, h: "Differ in data treatment" },
+    { l: 2, h: "Differ in treatment of model “error”" },
+    { l: 2, h: "Differ in what the analyst must specify" },
+  ]} />
+  </div>
+  <div slot="right">
+  <ImageCaption src={"/decks/week-09/9-ug-regressions/img13.png"} alt={"Regression Models"} />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Most basic: OLS"}>
+
+<Bullets items={[
+  { l: 1, h: "y = *mx + *b*" },
+  { l: 1, h: "Ordinary Least Squares – linear regression" },
+  { l: 2, h: "“Linear” in terms of inputs" },
+  { l: 2, h: "Very interpretable" },
+  { l: 2, h: "Requires feature engineering" },
+  { l: 2, h: "Vulnerable to outliers" },
+]} />
+
+</Slide>
+
+<Slide title={"Most basic: OLS"}>
+
+<Bullets items={[
+  { l: 1, h: "y = *mx + *b*" },
+  { l: 1, h: "Coefficients: when x changes by 1, y changes by *m*" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img14.png"} alt={"Most basic: OLS"} />
+
+</Slide>
+
+<Slide title={"Most basic: OLS"}>
+
+<Bullets items={[
+  { l: 1, h: "y = *mx + *b*" },
+  { l: 1, h: "OLS computes “conditional mean,” or *what would y be if* *x* *is ____.*" },
+  { l: 1, h: "The variables are treated as independent" },
+  { l: 2, h: "Meaning if you put both height in inches and height in cm into the model, it wouldn’t know they are the same" },
+]} />
+
+</Slide>
+
+<Slide title={"Improving on OLS – extra-ordinary"}>
+
+<Bullets items={[
+  { l: 1, h: "Add non-linearity for the x variables (polynomial)" },
+  { l: 2, h: "y = *m1x + *m2x2 + *m3x3 + *b*" },
+  { l: 1, h: "Add more or better x variables (multinomial)" },
+  { l: 2, h: "y = *m1x + *m2x + *b*" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img15.png"} alt={"Improving on OLS – extra-ordinary"} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img16.gif"} alt={"Improving on OLS – extra-ordinary"} />
+
+</Slide>
+
+<Slide title={"Fixed Effects"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img17.png"} alt={"Fixed Effects"} />
+
+</Slide>
+
+<Slide title={"Fixed Effects"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img18.png"} alt={"Fixed Effects"} />
+
+</Slide>
+
+<Slide title={"Fixed Effects"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img19.png"} alt={"Fixed Effects"} />
+
+</Slide>
+
+<Slide title={"Fixed Effects"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img20.png"} alt={"Fixed Effects"} />
+
+</Slide>
+
+<Slide title={"What to do with many x variables?"}>
+
+<Bullets items={[
+  { l: 1, h: "We have to worry about “multicollinearity” which is jargon for x variables measuring the same thing" },
+  { l: 1, h: "Lasso/ridge regressions “penalize” the variables" },
+  { l: 2, h: "They have to be *really* important to not be eliminated" },
+  { l: 2, h: "We can use this to learn which variables matter most" },
+  { l: 1, h: "Dimensionality reduction (e.g., PCA)" },
+]} />
+
+</Slide>
+
+<Slide title={"Time-series data"} aiNotes={"Graph of walmart and apple revenue over time, from 2011 to 2024. Walmart's (.4T to .7T) is above Apple's (.1T to .4T)"}>
+
+<Bullets items={[
+  { l: 1, h: "Each observation is related to the next" },
+  { l: 1, h: "Order matters" },
+  { l: 1, h: "Example: Revenue data over time" },
+]} />
+
+</Slide>
+
+<Slide title={"What do we use time-series for?"}>
+
+<Bullets items={[
+  { l: 1, h: "Forecasting revenue, expenses" },
+  { l: 1, h: "Analyzing transaction trends over time" },
+  { l: 1, h: "Modeling crash risk, survival analysis" },
+  { l: 1, h: "Predicting demand for inventory management" },
+]} />
+
+</Slide>
+
+<Slide title={"Components of time-series"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img21.gif"} alt={"Components of time-series"} />
+
+<Bullets items={[
+  { l: 1, h: "Trend" },
+  { l: 1, h: "Seasonal" },
+  { l: 1, h: "Cyclical" },
+  { l: 1, h: "Noise" },
+]} />
+
+</Slide>
+
+<Slide title={"Cautions"}>
+
+<Bullets items={[
+  { l: 1, h: "Training data could contain random economic events that aren’t indicative of the future (overfitting)" },
+  { l: 1, h: "New economic events that aren’t modeled can occur (underfitting)" },
+  { l: 1, h: "Uncertainty increases when forecasting further out" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img22.png"} alt={"Cautions"} />
+
+</Slide>
+
+<Slide title={"Parametric vs Non-parametric"}>
+
+<Bullets items={[
+  { l: 1, h: "Parametric models specify the relationships between variables and the outcome" },
+  { l: 2, h: "y = *mx + *b*" },
+  { l: 1, h: "Non-parametric doesn’t, just learns the best relationship it can" },
+  { l: 2, h: "y = *f(*x) + *random error*" },
+  { l: 2, h: "*f* is “learned” by predicting y as best as possible" },
+]} />
+
+</Slide>
+
+<Slide title={"Why add complexity?"}>
+
+<Bullets items={[
+  { l: 1, h: "Complex patterns are hard to model" },
+  { l: 1, h: "When using multiple variables, they are often related" },
+  { l: 2, h: "Parametric methods require you to explicitly model these relations" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img23.png"} alt={"Why add complexity?"} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img24.png"} alt={"Why add complexity?"} />
+
+</Slide>
+
+<Slide title={"Local methods"}>
+
+<Bullets items={[
+  { l: 1, h: "Examples: K-nearest neighbors, kernel regression" },
+  { l: 1, h: "Fit the line based on just the close points, not all" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img25.gif"} alt={"Local methods"} />
+
+</Slide>
+
+<Slide title={"Local Methods"}>
+
+<Bullets items={[
+  { l: 1, h: "Input from analyst is not the model, but “how” the algorithm should learn the line" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img26.gif"} alt={"Local Methods"} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img27.gif"} alt={"Local Methods"} />
+
+</Slide>
+
+<Slide title={"Tree-based models"}>
+
+<Bullets items={[
+  { l: 1, h: "Decision tree regression is just a bunch of *if-then*s" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img28.png"} alt={"Tree-based models"} />
+
+</Slide>
+
+<Slide title={"Tree-based models"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img29.gif"} alt={"Tree-based models"} />
+
+</Slide>
+
+<Slide title={"When one tree isn’t enough"}>
+
+<Bullets items={[
+  { l: 1, h: "Decision trees can overfit easily (more depth)" },
+  { l: 1, h: "Solution: combine multiple models into “ensembles”" },
+  { l: 2, h: "Take the average model output, or weight models based on accuracy" },
+  { l: 1, h: "*Bagging*: train on random data subsets (Random Forest)" },
+  { l: 1, h: "*Boosting*: train subsequent trees to fix errors (XGBoost)" },
+  { l: 1, h: "*Stacking*: trees on trees on trees (Neural Network)" },
+]} />
+
+</Slide>
+
+<Slide title={"In practice"}>
+
+<Bullets items={[
+  { l: 1, h: "Start with XGBoost, if good enough, done" },
+  { l: 1, h: "Try other models if not" },
+]} />
+
+</Slide>
+
+<Slide title={"When to avoid more complex models"}>
+
+<Bullets items={[
+  { l: 1, h: "If you know the real relationship, model it with a simple model!" },
+  { l: 2, h: "This will perform better out of sample, won’t overfit" },
+  { l: 1, h: "If you *think* the relationship is simple" },
+  { l: 1, h: "If you don’t have much data" },
+  { l: 1, h: "You need to interpretability" },
+]} />
+
+</Slide>
+
+<Slide title={"What is Causality"} aiNotes={"https://matheusfacure.github.io/python-causality-handbook/landing-page.html"}>
+
+<Bullets items={[
+  { l: 1, h: "Some outcome is the direct result of another action" },
+  { l: 1, h: "A *directly causes* Z" },
+  { l: 1, h: "A *indirectly* causes Z" },
+]} />
+
+</Slide>
+
+<Slide title={"Ice Cream Example"}>
+
+<Bullets items={[
+  { l: 1, h: "Fact: Ice cream sales are positively associated with drowning rates" },
+]} />
+
+</Slide>
+
+<Slide title={"Ice Cream Example"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img30.jpg"} alt={"Ice Cream Example"} />
+
+<Bullets items={[
+  { l: 1, h: "Fact: Ice cream sales are positively associated with drowning rates" },
+  { l: 1, h: "Causal: Ice cream causes drowning" },
+]} />
+
+</Slide>
+
+<Slide title={"Ice Cream Example"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img31.jpg"} alt={"Ice Cream Example"} />
+
+<Bullets items={[
+  { l: 1, h: "Fact: Ice cream sales are positively associated with drowning rates" },
+  { l: 1, h: "Causal: Ice cream causes drowning" },
+  { l: 1, h: "Indirect causal: Ice cream causes drowsiness which leads to drowning" },
+]} />
+
+</Slide>
+
+<Slide title={"Ice Cream Example"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img32.jpg"} alt={"Ice Cream Example"} />
+
+<Bullets items={[
+  { l: 1, h: "Fact: Ice cream sales are positively associated with drowning rates" },
+  { l: 1, h: "Causal: Ice cream causes drowning" },
+  { l: 1, h: "Indirect causal: Ice cream causes drowsiness which leads to drowning" },
+  { l: 1, h: "Reverse causal: drowning causes ice cream sales" },
+]} />
+
+</Slide>
+
+<Slide title={"Ice Cream Example"}>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img33.jpg"} alt={"Ice Cream Example"} />
+
+<Bullets items={[
+  { l: 1, h: "Fact: Ice cream sales are positively associated with drowning rates" },
+  { l: 1, h: "Causal: Ice cream causes drowning" },
+  { l: 1, h: "Indirect causal: Ice cream causes drowsiness which leads to drowning" },
+  { l: 1, h: "Reverse causal: drowning causes ice cream sales" },
+  { l: 1, h: "Confounder (reality): Ice cream and swimming (thus drowning) both peak in the summer" },
+]} />
+
+</Slide>
+
+<Slide title={"Solution? Counterfactual!"}>
+
+<Bullets items={[
+  { l: 1, h: "Jargon:" },
+  { l: 2, h: "Treatment: thing you’re studying the effect of (tax cut)" },
+  { l: 2, h: "Treated firms: firms that get the treatment (got tax cut)" },
+  { l: 2, h: "Control firms: firms that didn’t get treated (no tax cut)" },
+  { l: 2, h: "“Treatment Effect” is estimated effect of treatment" },
+  { l: 3, h: "= Outcometreated – Outcomecontrol" },
+]} />
+
+</Slide>
+
+<Slide title={"Solution? Counterfactual!"}>
+
+<Bullets items={[
+  { l: 1, h: "Compare firm’s outcome when treatment occurs to that same firm’s outcome when treatment does not" },
+  { l: 1, h: "Outcome when treatment does not occur is called the “counterfactual”" },
+  { l: 2, h: "If firm is treated, how do we measure outcome when treatment does not occur (or vice versa)?" },
+]} />
+
+</Slide>
+
+<Slide title={"Common Counterfactuals"}>
+
+<Bullets items={[
+  { l: 1, h: "Other firms that did not have treatment" },
+  { l: 2, h: "Randomized control trials (gold standard): randomly assign treatment to firms, so only difference is treatment" },
+  { l: 2, h: "Pseudo-experiments: find setting in which treatment occurring is *effectively* random (e.g. tax cut for firms > 1B)" },
+  { l: 1, h: "Same firm before treatment occurred" },
+  { l: 1, h: "Difference in difference: both of the above" },
+  { l: 1, h: "*Note*: all these are estimated as averages across firms" },
+]} />
+
+</Slide>
+
+<Slide title={"Difference in Difference"}>
+
+<Bullets items={[
+  { l: 1, h: "Looking at firm’s change due to treatment isn’t enough if untreated firms *also* changed" },
+  { l: 1, h: "Example:" },
+  { l: 2, h: "Firms that got PPP loans saw huge declines in sales" },
+  { l: 2, h: "So PPP loans caused loss in sales?" },
+  { l: 2, h: "Firms that did not get PPP loans saw larger losses" },
+  { l: 2, h: "Compared to counterfactual, firms with PPP loans had *relatively* higher sales (but still lower then w/o Covid)" },
+]} />
+
+</Slide>
+
+<Slide title={"Caveats and Concerns"}>
+
+<Bullets items={[
+  { l: 1, h: "It all comes down to how good your counterfactual is" },
+  { l: 1, h: "Anything that is different between treatment and control could potentially cause the estimated effect" },
+  { l: 2, h: "Called omitted variables or measurement error" },
+  { l: 1, h: "Solutions to identify causality limit generalizability" },
+  { l: 1, h: "If you can’t define how treatment results in outcome (the mechanism), be very skeptical" },
+  { l: 2, h: "If you can, then that’s potentially testable" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img34.png"} alt={"Regressions"} />
+
+</Slide>
+
+<Slide title={"Stationarity"}>
+
+<Bullets items={[
+  { l: 1, h: "A stationary process stays in the “same place”" },
+  { l: 2, h: "Statistics about the data behave nicely" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img35.png"} alt={"Stationarity"} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img36.png"} alt={"Stationarity"} />
+
+</Slide>
+
+<Slide title={"Stationarity"}>
+
+<Bullets items={[
+  { l: 1, h: "A non-stationary process “moves” too much" },
+  { l: 2, h: "Statistics about the data behave poorly (meaningless?)" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img37.png"} alt={"Stationarity"} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img38.png"} alt={"Stationarity"} />
+
+</Slide>
+
+<Slide title={"Stationarity – So what?"}>
+
+<Bullets items={[
+  { l: 1, h: "Analytics on a non-stationary will often be wrong" },
+  { l: 2, h: "A non-stationary process needs different math" },
+  { l: 1, h: "A non-stationary process could be “made” stationary" },
+  { l: 2, h: "This is why we often study returns, not market cap" },
+]} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img39.png"} alt={"Stationarity – So what?"} />
+
+<ImageCaption src={"/decks/week-09/9-ug-regressions/img40.png"} alt={"Stationarity – So what?"} />
+
+</Slide>

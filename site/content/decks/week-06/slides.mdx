@@ -1,0 +1,342 @@
+---
+week: week-06
+title: "Automation"
+---
+
+import { Slide, CoverMeta, Bullets, ImageCaption } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 6" icon="terminal">
+
+Automation
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"Automation in Businesses"}>
+
+<Bullets items={[
+  { l: 1, h: "Accelerating massively" },
+  { l: 2, h: "Automating data acquisition" },
+  { l: 2, h: "Automating data usage" },
+  { l: 2, h: "Automating tasks" },
+  { l: 1, h: "One area in which LLMs are particularly useful" },
+]} />
+
+</Slide>
+
+<Slide title={"Automating Data Acquisition"}>
+
+<Bullets items={[
+  { l: 1, h: "Companies acquire (ingest) a huge volume of data" },
+  { l: 2, h: "More than possible to manually acquire and store" },
+  { l: 1, h: "ETL is the process of automating data acquisition, cleaning, and storage" },
+  { l: 2, h: "Extract, Transform, Load" },
+  { l: 1, h: "RPA is the process of automating these, and other, processes generally" },
+  { l: 2, h: "Robotic Process Automation" },
+]} />
+
+</Slide>
+
+<Slide title={"Extract, Transform, Load"} aiNotes={"https://commons.wikimedia.org/wiki/File:Extract,_Transform,_Load_Data_Flow_Diagram.svg"}>
+
+<Bullets items={[
+  { l: 1, h: "Acquiring data needs to be robust and repeatable" },
+  { l: 1, h: "Extract" },
+  { l: 2, h: "Ingest data" },
+  { l: 1, h: "Transform" },
+  { l: 2, h: "Clean and format data" },
+  { l: 1, h: "Load" },
+  { l: 2, h: "Save data to storage" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<Bullets items={[
+  { l: 1, h: "Determine what data is needed" },
+  { l: 1, h: "Determine how to access data" },
+  { l: 2, h: "Reads from other databases (external or internal)" },
+  { l: 2, h: "Download files (FTP, REST/HTTPS, etc.)" },
+  { l: 2, h: "Files (csv, excel, pdfs, etc.)" },
+  { l: 1, h: "Automate the access" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<Bullets items={[
+  { l: 1, h: "Validate data" },
+  { l: 2, h: "Check expectations: format, columns, observations" },
+  { l: 2, h: "Check integrity: missing data, values (limits/categories)" },
+  { l: 1, h: "Clean data" },
+  { l: 2, h: "Remove extraneous data (extra columns, rows)" },
+  { l: 2, h: "Clean formatting (parse negatives, dates, categoricals)" },
+  { l: 2, h: "Fix known errors, clean strings, fill missings" },
+  { l: 1, h: "Aggregate & restructure" },
+  { l: 2, h: "Merge datasets" },
+  { l: 2, h: "Create new variables" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<Bullets items={[
+  { l: 1, h: "Save now clean and formatted data" },
+  { l: 2, h: "Write to database / data warehouse" },
+  { l: 3, h: "Handle errors that may occur due to any uncaught issues" },
+  { l: 2, h: "Save to disk (excel)" },
+  { l: 2, h: "Generate reports" },
+]} />
+
+</Slide>
+
+<Slide title={"Example ETL"}>
+
+<Bullets items={[
+  { l: 1, h: "Ask your favorite LLM to:" },
+  { l: 2, h: "Describe the ETL steps for downloading Compustat from WRDS and loading into a Postgres database" },
+  { l: 1, h: "Were there manual steps? What did it suggest?" },
+  { l: 1, h: "How many programs or scripts did it outline?" },
+  { l: 1, h: "What error handling did it have?" },
+  { l: 1, h: "What logging was suggested?" },
+]} />
+
+</Slide>
+
+<Slide title={"ETL  ELT"}>
+
+<Bullets items={[
+  { l: 1, h: "ELT is just ETL for future you" },
+  { l: 1, h: "Doesn’t change logic, just pushes ETL back one step" },
+]} />
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img1.png"} alt={"ETL  ELT"} />
+
+</Slide>
+
+<Slide title={"Automating Data Use"}>
+
+<Bullets items={[
+  { l: 1, h: "Robotic Process Automation (RPA) to achieve specific tasks" },
+  { l: 1, h: "Dashboards, KPIs for decision makers" },
+  { l: 1, h: "Continual process analysis, internal audit" },
+  { l: 1, h: "Small one-off tasks (filing PDFs, scraping data, etc.)" },
+]} />
+
+</Slide>
+
+<Slide title={"When & What to Automate"}>
+
+<Bullets items={[
+  { l: 1, h: "Value = # tasks * time * labor – costs to automate" },
+  { l: 1, h: "*Repetitive*: the task is done many times, or frequently" },
+  { l: 1, h: "*Describable*: the task’s steps and your decisions are based on clear, consistent rules you can write down" },
+  { l: 1, h: "*Mundane*: it’s a boring or routine task that takes time but not brainpower" },
+]} />
+
+</Slide>
+
+<Slide title={"What is Robotic Process Automation?"} aiNotes={"https://research.aimultiple.com/rpa-stats/#easy-footnote-bottom-4-15791 https://www.deloitte.com/us/en/insights/topics/talent/intelligent-automation-2022-survey-results.html"}>
+
+<Bullets items={[
+  { l: 1, h: "Approaches automating manual processes" },
+  { l: 1, h: "Accounting and Finance lag adoption in other areas" },
+  { l: 2, h: "Manufacturing @ 35% adoption, Finance @ 8%" },
+  { l: 1, h: "Larce perceived ROI: (Deloitte 2022)" },
+  { l: 2, h: "30% cost reduction and 25% revenue increase" },
+  { l: 2, h: "17 month payback period" },
+]} />
+
+</Slide>
+
+<Slide title={"Example: Apache Airflow"}>
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img2.png"} alt={"Example: Apache Airflow"} />
+
+</Slide>
+
+<Slide title={"Example: Apache Airflow"}>
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img3.png"} alt={"Example: Apache Airflow"} />
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img2.png"} alt={"Example: Apache Airflow"} />
+
+</Slide>
+
+<Slide title={"To code or not to code"}>
+
+<Bullets items={[
+  { l: 1, h: "Historically, automation was programming intensive" },
+  { l: 2, h: "Programmers were required to develop RPA bots" },
+  { l: 2, h: "Good for critical, industrial scale processes" },
+  { l: 2, h: "AI is great at coding, not so much at using GUI" },
+  { l: 3, h: "Agents may change this, but to what end?" },
+  { l: 1, h: "Low-code: flow-chart based development, little/no code knowledge required, just logic & critical thinking" },
+  { l: 2, h: "*No-code* is less flexible, mostly pre-specified structures" },
+]} />
+
+</Slide>
+
+<Slide title={"Low-code solutions"}>
+
+<Bullets items={[
+  { l: 1, h: "Ability to program shouldn’t limit automation" },
+  { l: 1, h: "Low-code refers to not organizing each step of the workflow with code, but rather pre-defined “steps”" },
+  { l: 1, h: "Examples:" },
+  { l: 2, h: "Automation: MS Power Automate, UiPath, Blue Prism" },
+  { l: 2, h: "Pipelines: Alteryx, Tableau Prep, Power BI, Qlik, SAP" },
+]} />
+
+</Slide>
+
+<Slide title={"Example: Alteryx"}>
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img4.png"} alt={"Example: Alteryx"} />
+
+</Slide>
+
+<Slide>
+
+<Bullets items={[
+  { l: 1, h: "@or(contains(toLower(triggerOutputs()?['body/subject']), 'homework'), contains(toLower(triggerOutputs()?['body/subject']), 'lab'), contains(toLower(triggerOutputs()?['body/subject']), 'project'), contains(toLower(triggerOutputs()?['body/subject']), '5150'))" },
+  { l: 1, h: "write an officescript script for Excel that takes all the entries in the sheet \"GL\", and makes 12 new sheets, one for each month, then copies in the rows from that table in GL to each sheet, based on the \"Period\" column (1 - 12 for jan - dec)" },
+]} />
+
+</Slide>
+
+<Slide title={"Human in the Loop"}>
+
+<Bullets items={[
+  { l: 1, h: "RPA can’t handle un-known circumstances" },
+  { l: 2, h: "Well it will, but you probably won’t like it" },
+  { l: 1, h: "Human in the loop is when your process calls a human for help" },
+  { l: 2, h: "Important decision oversight" },
+  { l: 2, h: "When something goes wrong" },
+]} />
+
+</Slide>
+
+<Slide title={"Human in the Loop"}>
+
+<Bullets items={[
+  { l: 1, h: "RPA can’t handle un-known circumstances" },
+  { l: 2, h: "Well it will, but you probably won’t like it" },
+  { l: 1, h: "Human in the loop is when your process calls a human for help" },
+  { l: 2, h: "Important decision oversight" },
+  { l: 2, h: "When something goes wrong" },
+]} />
+
+</Slide>
+
+<Slide title={"Evolution of RPA"}>
+
+<Bullets items={[
+  { l: 1, h: "Basic RPA" },
+  { l: 1, h: "Advanced RPA" },
+  { l: 1, h: "Adds complex data processing (OCR) and analytics" },
+  { l: 1, h: "Intelligent Automation" },
+  { l: 1, h: "Uses AI/ML to add flexibility and make “judgements”," },
+  { l: 1, h: "data driven" },
+  { l: 1, h: "Follows explicit, preprogrammed rules," },
+  { l: 1, h: "process driven" },
+  { l: 1, h: "❌Complex tasks, varied errors" },
+  { l: 1, h: "✅" },
+  { l: 1, h: "Structured tasks, unstructured data" },
+  { l: 1, h: "Unstructured, complex tasks, flexibility, new scenarios (out of sample)" },
+  { l: 1, h: "❌Certainty" },
+  { l: 1, h: "Structured tasks, repeatable outcomes, low error (in sample)" },
+]} />
+
+</Slide>
+
+<Slide title={"Common RPA Uses"}>
+
+<Bullets items={[
+  { l: 1, h: "Accounts Payable (procure-to-pay): automate invoice processing (OCR) and vendor payments" },
+  { l: 1, h: "Accounts Receivable (order-to-cash): automate invoicing, billing, and collections" },
+  { l: 1, h: "Data Acquisition: automate downloading data, client files, etc." },
+  { l: 1, h: "Account Reconciliations: automatically reconcile financial accounts and ledgers, 100% testing, flagging errors for review" },
+  { l: 1, h: "Report Generation: automate pulling, processing, and formatting of data into regular reports" },
+  { l: 1, h: "Payroll & HR expenses: validate timesheets, initiate direct deposits, employee expense reimbursements" },
+]} />
+
+</Slide>
+
+<Slide title={"RPA’s effect on Accountants"}>
+
+<Bullets items={[
+  { l: 1, h: "Accountants used to be the data processors" },
+  { l: 2, h: "Manual data entry, reconciliations, account categorization, report generation" },
+  { l: 1, h: "Accountants are becoming process designers" },
+  { l: 2, h: "Understand historical accounting tasks, and can design processes to reliably conduct them" },
+  { l: 2, h: "More focus on problem solving, generalized thinking" },
+]} />
+
+</Slide>
+
+<Slide title={"Example: Inventory"} aiNotes={"Photo by Judd Bagley, https://www.utahbusiness.com/industry/2025/05/14/high-tech-robots-harmons-grocery-firefly-automatix/ https://ggsitc.com/blog/inventory-management-in-retail-with-rpa-use-cases-and-benefits"}>
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img5.jpg"} alt={"Example: Inventory"} />
+
+<Bullets items={[
+  { l: 1, h: "*BB/EB*: RFID, weight, drone/robot tracking of inventory levels" },
+  { l: 1, h: "*TI*: Pull and aggregate data on purchases, OCR shipping labels" },
+  { l: 1, h: "*TO*: Monitor production (QA/QC), process order / fulfillment status" },
+  { l: 1, h: "Estimate demand, schedule production, and other analytics" },
+]} />
+
+</Slide>
+
+<Slide title={"Example: Invoice Processing"} aiNotes={"https://www.uipath.com/resources/automation-case-studies/major-retailer-rpa"}>
+
+<Bullets items={[
+  { l: 1, h: "Invoice received via email with multiple attachments" },
+  { l: 1, h: "OCR processing to extract data, AI to structure text" },
+  { l: 2, h: "Find invoice date, numbers, amounts, due date" },
+  { l: 2, h: "Extract all invoice line items across all pages, check items against purchase order" },
+  { l: 1, h: "Route data based on confidence in extracted data" },
+  { l: 2, h: "Reconciliation queue to auto-pay for good extraction" },
+  { l: 2, h: "Manual review for bad extraction" },
+  { l: 1, h: "Generate daily report for all invoices and bot results" },
+]} />
+
+</Slide>
+
+<Slide title={"Automation in Practice"}>
+
+<Bullets items={[
+  { l: 1, h: "Unknown unknowns will always occur" },
+  { l: 2, h: "Make sure to handle them – error checking and reporting" },
+  { l: 1, h: "Automation development is an iterative process" },
+  { l: 2, h: "Try, break, fix, repeat" },
+  { l: 1, h: "People writing code may not be accountants" },
+  { l: 2, h: "Domain expertise is imperative to understanding what assumptions to make, check their work!" },
+]} />
+
+</Slide>
+
+<Slide title={"Automation You can do today"}>
+
+<Bullets items={[
+  { l: 1, h: "*Microsoft Power Automate*" },
+  { l: 2, h: "Parse canvas emails to add due dates to your calendar" },
+  { l: 1, h: "*AutoHotkey* *(Windows), AppleScript (Mac)*" },
+  { l: 2, h: "Create hotkeys to do typical tasks, like resize windows" },
+  { l: 1, h: "*Python scripts*" },
+  { l: 2, h: "Read Journal of Accountancy RSS feed, send top 3 links to discord" },
+  { l: 1, h: "*Bookmarklets, chrome extensions*" },
+  { l: 2, h: "One-click open all your class assignment pages" },
+  { l: 1, h: "*VSCode* *Copilot:* write it all for you" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-06/6-ug-etl/img6.png"} alt={"Automation"} />
+
+</Slide>

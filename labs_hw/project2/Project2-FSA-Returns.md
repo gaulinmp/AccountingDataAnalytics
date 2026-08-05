@@ -16,9 +16,9 @@ You are given access to the same Compustat fundamental data from Project 1 (now 
 
 Your task: **Explore the relationship between your Project 1 FSA ratio findings and stock returns**. This involves:
 
-1. Connect to the provided PostgreSQL database containing Compustat and CRSP data
+1. Upload the provided CSV datasets to the SQL Web Tool (or load them into Python/Excel directly).
 2. Recreate your FSA ratio(s) and groupings from Project 1, (you can also look at more or fewer ratios, or entirely different ratios / cross sections if you wish)
-3. Merge the compustat data with stock return data (merge keys being `ticker`, `shrcls`, and date variables like `earn_annc_date` or `fiscal_year_end`), ensuring proper timing alignment
+3. Merge the compustat data with stock return data (merge keys being `permno` and date variables like `earn_annc_date` or `fiscal_year_end`), ensuring proper timing alignment
 4. Analyze whether firms with different ratio characteristics show different return patterns
 5. Present your findings as preliminary evidence for potential investment strategies.
 
@@ -29,7 +29,7 @@ This project directly builds on your Project 1 FSA ratio analysis, extending it 
 
 By completing this project, you will:
 
-* **Practice Data Merging**: Merge financial statement data with market return data in Power Query, Tableau, or Python
+* **Practice Data Merging**: Merge financial statement data with market return data using SQL (via the Web Tool), Power Query, or Python
 * **Practice Visualization**: Create visualizations to illustrate return patterns across FSA ratio groupings
 * **Explore Return Patterns**: Analyze firm stock return patterns based on FSA ratio groupings
 * **Test Practical Relevance**: Determine if your Project 1 findings have observable relationships with market performance
@@ -110,37 +110,36 @@ Note: The focus is on demonstrating data merging skills, exploring return patter
 
 ### 3.1. Data Access Options
 
-All students will access the same PostgreSQL database but can choose their preferred tool for data extraction and merging:
+Students will use the web-based SQL tool to access and merge the data (similar to Lab 5):
 
-**Database Details:**
-* Connection details in Canvas
-* *Database*: `ADA_SQL`
-    * *Excel:* Can connect via Power Query
-    * *Tableau:* Built-in database connectivity
-    * *Python:* See Lab 5 starter notebook for connecting
-    * *Tables*: 
-        * `compustat_annual`: S&P 500 fundamental data (2015-2025, same structure as Project 1)
-        * `crsp_daily`: Daily stock return data for S&P 500 firms
+* **Tool URL**: [mgaulin.com/ada/sql](https://mgaulin.com/ada/sql)
+* **Input Files**: Download from Canvas
+    * `project2_compustat.csv`: S&P 500 fundamental data (2015-2025)
+    * `project2_crsp.csv`: Daily stock return data for S&P 500 firms
+* **Instructions**:
+    1. Drag `project2_compustat.csv` to the **Left** box (Table name: `compustat`)
+    2. Drag `project2_crsp.csv` to the **Right** box (Table name: `crsp`)
 
 
 ### 3.4. Data Dictionary
 
 **CRSP Variables**:
 
+* `permno`: Permanent Security Identification Number, used to uniquely identify stocks in CRSP. Note, two different classes of stock for the same firm will have different `permno`s.
 * `ticker`: Ticker Symbol
-* `shrcls`: Share Class (e.g., 'A', 'B', 'C', etc.)
 * `date`: Return date (skips weekends and holidays)
 * `ret`: Total return (including dividends)
 * `prc`: Price per share
 * `shrout`: Shares outstanding (thousands)
 * `vol`: Trading volume (number of shares traded)
-* `bid`: End of day bid price
-* `ask`: End of day ask price
 
 
 **Compustat Variables**:
 
-* `firm_id`: ID to identify individual firms, preserving continuity through M&A activities
+* `gvkey`: Global Company Key to identify individual firms, preserving continuity through M&A activities
+* `name`: Firm Name
+* `permno`: Permanent Security Identification Number
+* `ticker`: Ticker Symbol
 * `fyear`: Fiscal Year (based on majority of year, so 2000 connotes fiscal year ends between 7/1/1999 and 6/30/2000)
 * `fiscal_year_end`: Fiscal Year End
 * `fiscal_year_end_prev`: Fiscal Year End of the previous year
@@ -148,9 +147,6 @@ All students will access the same PostgreSQL database but can choose their prefe
 * `earn_annc_date`: Earnings announcement date
 * `earn_annc_date_prev`: Earnings announcement date of the previous year
 * `earn_annc_date_next`: Earnings announcement date of the next year
-* `name`: Firm Name
-* `ticker`: Ticker Symbol
-* `shrcls`: Share Class (e.g., 'A', 'B', 'C', etc.)
 * `age_days`: Age (post IPO) of firm, in days (calculated as the number of days since the first filed 10-K)
 * `act`: Current Assets
 * `ap`: Accounts Payable - Trade
@@ -169,11 +165,14 @@ All students will access the same PostgreSQL database but can choose their prefe
 * `emp`: Employees (in thousands)
 * `epspi`: Earnings Per Share (Basic) - Including Extraordinary Items (amount in $ / share)
 * `epspx`: Earnings Per Share (Basic) - Excluding Extraordinary Items (amount in $ / share)
-* `gics_sector_name`: GICS Sector code name (string)
 * `gics_sector`: GICS Sector code (numeric)
+* `gics_sector_name`: GICS Sector code name (string)
 * `gics_group`: GICS Group code (numeric)
+* `gics_group_name`: GICS Group code name (string)
 * `gics_industry`: GICS Industry code (numeric)
+* `gics_industry_name`: GICS Industry code name (string)
 * `gics_subindustry`: GICS Subindustry code (numeric)
+* `gics_subindustry_name`: GICS Subindustry code name (string)
 * `ib`: Income Before Extraordinary Items
 * `invt`: Inventory  
 * `lct`: Current Liabilities  
@@ -201,12 +200,12 @@ All students will access the same PostgreSQL database but can choose their prefe
 ---
 ## 4. Suggested Workflow
 
-1. **Database Setup & Exploration**
-    * Establish PostgreSQL connection in your modality
+1. **Data Setup & Exploration**
+    * Navigate to the web tool ([mgaulin.com/ada/sql](https://mgaulin.com/ada/sql)) and upload your two CSV files.
     * Explore data schema, understand table relationships and date timing
 
 2. **Data Integration**
-    * Merge Compustat fundamentals with CRSP returns via `ticker`, `shrcls`, and some date
+    * Merge Compustat fundamentals with CRSP returns via `permno` and some date
     * Decide on timing (e.g. align returns with fiscal year-end or earnings announcement)
     * Address missing data and ensure timing decisions are well documented
 
@@ -237,17 +236,14 @@ All students will access the same PostgreSQL database but can choose their prefe
 
 ### 5.1. Bin Calculations
 
+**Excel Bin Calculations**
 
-**Tableau Bin Calculations**
+To create quintiles by year in Excel:
 
-```tableau
-IF [ROA] <= {FIXED [Fyear] : PERCENTILE([ROA], 0.2)} THEN "1 - Low"
-    ELSEIF [ROA] <= {FIXED [Fyear] : PERCENTILE([ROA], 0.4)} THEN "2 - Mid-low"
-    ELSEIF [ROA] <= {FIXED [Fyear] : PERCENTILE([ROA], 0.6)} THEN "3 - Middle"
-    ELSEIF [ROA] <= {FIXED [Fyear] : PERCENTILE([ROA], 0.8)} THEN "4 - Mid-high"
-    ELSE "5 - High"
-END
-```
+1. *Calculate Rank*: Use `COUNTIFS` to determine the percentile rank of each firm relative to others in the same year.
+     * Formula: `=COUNTIFS([fyear], [@fyear], [roa], "<"&[@roa]) / COUNTIFS([fyear], [@fyear])`
+2. *Assign Bins*: Use nested `IF` statements on the resulting rank.
+     * Formula: `=IF([@Rank]<=0.2, "1 - Low", IF([@Rank]<=0.4, "2 - Mid-low", IF([@Rank]<=0.6, "3 - Middle", IF([@Rank]<=0.8, "4 - Mid-high", "5 - High"))))`
 
 
 **Python Bin Calculations**
@@ -283,7 +279,7 @@ Writing out the algebra will show you why, because the 1 + ret = P[@t] / P[@t-1]
 
 Often the software used will have functionality for summing a column of values, but not necessarily taking the product.
 For this reason, we sometimes calculate cumulative returns using a log trick, because multiplication and division become addition and subtraction with logs.
-For example, in Tableau, you can calculate cumulative returns with the equation: `(EXP(SUM(LN(1 + [Ret]))) - 1)` (a similar trick can be used in SQL).
+For example, in SQL, you can calculate cumulative returns with the equation: `(EXP(SUM(LN(1 + ret))) - 1)`.
 In Excel, I have found it helpful to create a new column that is just `[@ret] + 1`, and then use the formula `=PRODUCT([@ret_plus1]) - 1`.
 A simiple python solution would be `df['return_yearly'] = df.groupby(['ticker', 'fyear'])['ret'].agg(lambda x: (1+x).prod()-1)`
 
@@ -292,18 +288,17 @@ A simiple python solution would be `df['return_yearly'] = df.groupby(['ticker', 
 
 You may find it convenient to do the merge in SQL, and only deal with one, cleanly combined dataset.
 You could also just get the raw datasets from the database, save those as, e.g. CSV files, then use your software to to the merges yourself.
-Or you could download and merge in Python, create a clean dataset, and do the analysis in Tableau.
+Or you could download and merge in Python, create a clean dataset, and do the analysis in Excel.
 In general, because each modality we use has its strengths and weaknesses, I suggest trying to use the "right tool for the job" in each separate step of the project.
 
 *Data merging example for 1 day of returns*:
 ```sql
 -- Merge fundamentals with returns on earnings announcement date
 SELECT *
-FROM compustat_annual AS acct
-LEFT JOIN crsp_daily AS ret
-   ON acct.ticker = ret.ticker
-   AND COALESCE(acct.shrcls, 'A') = COALESCE(ret.shrcls, 'A')
-   AND acct.earn_annc_date = ret.date
+FROM compustat
+LEFT JOIN crsp
+   ON compustat.permno = crsp.permno
+   AND compustat.earn_annc_date = crsp.date
 ;
 ```
 
@@ -311,11 +306,11 @@ LEFT JOIN crsp_daily AS ret
 ```sql
 -- Merge fundamentals with returns on earnings announcement date
 SELECT *
-FROM compustat_annual AS acct
-LEFT JOIN crsp_daily AS ret
-   ON acct.ticker = ret.ticker
-   AND COALESCE(acct.shrcls, 'A') = COALESCE(ret.shrcls, 'A')
-   AND ret.date BETWEEN acct.earn_annc_date AND acct.earn_annc_date_next - INTERVAL 1 DAY
+FROM compustat
+LEFT JOIN crsp
+   ON compustat.permno = crsp.permno
+   AND crsp.date >= compustat.earn_annc_date 
+   AND crsp.date < compustat.earn_annc_date_next -- (Or use date(compustat.earn_annc_date_next, '-1 day') )
 ;
 ```
 
@@ -326,30 +321,28 @@ The solution to this is usually to just number the trading days sequentially, so
 To demonstrate how you could use LLMs to write SQL code for you, I prompted Gemini with the following prompt, and got the SQL code below as an output:
 
 <blockquote style="background-color: #f9f9f9; border-left: 10px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px;">
-please suggest an sql merge of annual data (table name 'compustat_annual AS f') onto stock returns (table name 'crsp_daily AS r', date variable 'date'), keeping the first three days of returns starting on 'f.earn_annc_date'. The merge needs to handle the fact that stock is only traded on the weekdays, so it can't just be 3 calendar days after f.earn_annc_date. The pertinent variables are f.ticker, f.fyear, f.earn_annc_date, and r.ticker, r.date, r.ret.
+please suggest a *SQLite* sql merge of annual data (table name `compustat`) onto stock returns (table name `crsp`, date variable `date`), keeping the first three days of returns starting on `compustat.earn_annc_date`. The merge needs to handle the fact that stock is only traded on the weekdays, so it can't just be 3 calendar days after `compustat.earn_annc_date`. The pertinent variables are `compustat.permno`, `compustat.fyear`, `compustat.earn_annc_date`, and `crsp.permno`, `crsp.date`, `crsp.ret`.
 </blockquote>
 
 ```SQL
 WITH RankedReturns AS (
     -- Step 1: Join returns to financials and rank the trading days
     SELECT
-        f.ticker,
-        f.fyear,
-        f.earn_annc_date,
-        r.date AS trading_date,
-        r.ret,
-        ROW_NUMBER() OVER(PARTITION BY f.ticker, f.earn_annc_date ORDER BY r.date ASC) as trading_day_rank
-    FROM
-        compustat_annual AS f -- your annual data table
-    JOIN
-        crsp_daily AS r -- your stock returns table
-            ON f.ticker = r.ticker
-            AND r.date >= f.earn_annc_date -- Join returns on or after the report date
-            AND r.date <= DATE_ADD(f.earn_annc_date, INTERVAL '10 DAY') -- Limit to a reasonable window to avoid excessive data
+        compustat.permno,
+        fyear,
+        earn_annc_date,
+        date AS trading_date,
+        ret,
+        ROW_NUMBER() OVER(PARTITION BY compustat.permno, earn_annc_date ORDER BY date ASC) as trading_day_rank
+    FROM compustat
+    JOIN crsp
+        ON compustat.permno = crsp.permno
+        AND date >= earn_annc_date -- Join returns on or after the report date
+        AND date <= date(earn_annc_date, '+10 day') -- Limit to a reasonable window to avoid excessive data
 )
 -- Step 2: Select only the first three ranked trading days
 SELECT
-    ticker,
+    permno,
     fyear,
     earn_annc_date,
     trading_date,
@@ -360,7 +353,7 @@ FROM
 WHERE
     trading_day_rank <= 3
 ORDER BY
-    ticker,
+    permno,
     fyear,
     trading_day_rank
 ;

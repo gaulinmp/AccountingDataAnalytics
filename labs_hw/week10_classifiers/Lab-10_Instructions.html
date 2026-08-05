@@ -346,6 +346,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -354,6 +360,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {
@@ -550,7 +579,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </li>
 </ul>
 </li>
-<li><a href="#4-technical-guidance">4. Technical Guidance</a><ul>
+<li><a href="#4-software-specific-instructions">4. Software-specific Instructions</a><ul>
 <li><a href="#41-excel-implementation">4.1. Excel Implementation</a></li>
 <li><a href="#42-python-implementation">4.2. Python Implementation</a></li>
 <li><a href="#43-common-issues-and-troubleshooting">4.3. Common Issues and Troubleshooting</a></li>
@@ -580,12 +609,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Understand the business implications of classification thresholds and optimize threshold selection based on cost-benefit analysis</li>
 </ul>
 <h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
-<p>As always, you can use whatever modality you are comfortable with, but it should again be noted that Tableau doesn't have logistic regression capabilities, so Python or Excel are recommended. Further, not even Excel has native logistic regression support (it's possible using the Solver add-in with manual log-likelihood setup, but not practical for this lab). So if you are planning on using Excel, we will use OLS as our regression, and pretend the output is a probability like a logistic regression (which is fine when we're wanting to use the prediction as a classifier, meaning we're just taking a cutoff at a threshold). This also hopefully serves as a nice reminder that a) OLS is awesome, and b) OLS and logistic regression often give similar results (and in this dataset, almost exactly the same results!).</p>
+<p>Excel does not have native logistic regression support (it's possible using the Solver add-in with manual log-likelihood setup, but not practical for this lab). So if you are planning on using Excel, we will use OLS as our regression, and treat the output as a probability like a logistic regression (which is fine when we're using the prediction as a classifier, meaning we're just taking a cutoff at a threshold). This also hopefully serves as a nice reminder that a) OLS is awesome, and b) OLS and logistic regression often give similar results (and in this dataset, almost exactly the same results!).</p>
 <ul>
 <li><strong>Excel</strong>: Use OLS regression via Data Analysis Toolpak. Predicted values will be interpreted as probabilities, as with a logistic regression, and from there everything will be calculated as if it were a logistic regression, including classification metrics.</li>
 <li><strong>Python</strong>: <code class="fixed-width">statsmodels</code> library provides <code class="fixed-width">logit()</code> function for logistic regression with well-formatted output. <code class="fixed-width">sklearn.metrics</code> provides all classification metrics. Gotta love Python!</li>
 </ul>
-<hr />
 <h2 class="ada-h2" id="2-data">2. Data</h2>
 <p>The dataset for this lab contains customer accounts receivable (AR) payment data from an anonymous company. The data includes 29,881 customer records with information about their payment behavior, credit limits, and demographic characteristics. This allows you to build predictive models for identifying customers at risk of non-payment, and to evaluate the trade-offs between different types of classification errors.</p>
 <p>The dataset <code class="fixed-width">ar_default_data.csv</code> contains the following variables:</p>
@@ -696,7 +724,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ul>
 <p><strong>Classification Thresholds</strong>: By default, classifiers use 0.5 probability as the cutoff. However, business context often requires different thresholds to optimize for specific costs and benefits. Also, if we are using OLS, we likely have to adjust our threshold anyway.</p>
 <p class="note"><em>Note</em>: With imbalanced classes (78% non-default, 22% default), simply predicting "everyone pays" achieves 78% accuracy but is useless for risk management. This is why precision, recall, and AUC are more informative metrics than accuracy alone.</p>
-<hr />
 <h2 class="ada-h2" id="3-step-by-step-instructions">3. Step-by-Step Instructions</h2>
 <p>This lab walks you through building and evaluating classification models for credit risk prediction.</p>
 <p>Generally, when reporting the output of a logistic regression model, you should include:</p>
@@ -916,8 +943,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>How would your optimal threshold change if FN cost doubled? Test this scenario and explain the intuition (also your precision / recall vs threshold graph will help with this explanation).</li>
 <li>Why is this cost-benefit approach more useful for business decision-making than simply maximizing an accuracy score?</li>
 </ol>
-<hr />
-<h2 class="ada-h2" id="4-technical-guidance">4. Technical Guidance</h2>
+<h2 class="ada-h2" id="4-software-specific-instructions">4. Software-specific Instructions</h2>
 <p>This section provides step-by-step instructions for implementing the lab exercises.</p>
 <h3 class="ada-h3" id="41-excel-implementation">4.1. Excel Implementation</h3>
 <p>Excel does not have native support for logistic regression. While it's theoretically possible to estimate logistic regression using the Solver add-in by manually setting up the log-likelihood function, this is impractical for a lab setting and error-prone. As a workaround, we will use OLS regression to generate predicted values, and treat these as probabilities for classification purposes. This is a simplification, but for the purposes of this lab, it will suffice.</p>
@@ -1222,6 +1248,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ul>
 </li>
 </ul>
-<p class="tip"><em>Excel tip</em>: Don't use Excel for analytics :)</p>
+<p class="tip"><em>Excel tip</em>: Don't use Excel for advanced analytics :)</p>
 </body>
 </html>

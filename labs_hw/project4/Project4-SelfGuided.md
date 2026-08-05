@@ -2,7 +2,7 @@
 
 [TOC]
 
-## 1. Scenario
+## 1. Scenario 
 
 Throughout this course, you've developed skills in data manipulation, exploratory data analysis, visualization, and predictive modeling. You've applied these skills to structured scenarios with predefined research questions and datasets. Now, it's your turn to drive the analysis.
 

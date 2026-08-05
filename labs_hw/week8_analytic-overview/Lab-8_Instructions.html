@@ -38,24 +38,6 @@ details.inline-image {
      /* padding: 2px 4px; */
  }
 
- /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
- /* Make horizontal lines connect through column boundaries */
- /* table {
-     border-collapse: collapse;
- } */
- /* General styling of all cells */
- table > :is(thead, tbody) > tr > :is(th, td) {
-     padding: 3px;
-     text-align: left;
- }
- table > thead > tr > :is(th, td) {
-     border-top: 2px solid; /* Top thick line */
-     border-bottom: 1px solid; /* Below head thin line */
- }
- table > tbody > tr:last-child > :is(th, td) {
-     border-bottom: 2px solid; /* Bottom thick line */
- }
-
 /* Claud's generated CSS */
 /* Base Styles */
 body {
@@ -212,11 +194,27 @@ pre[class*="language-"]::before {
 
 /* Tables */
 table {
-    /* width: 100%; */
     border-collapse: collapse;
     margin: 1.5rem 0;
-    /* background-color: white; */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
 }
 
 tr:nth-child(even) {
@@ -244,9 +242,10 @@ blockquote p:last-child {
 /* Special callout boxes */
 .note, .warning, .tip {
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem;
     border-radius: 6px;
     border-left: 5px solid;
+    border-right: 5px solid;
 }
 
 .note {
@@ -273,6 +272,11 @@ em {
 strong {
     font-weight: 600;
     color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
 }
 
 /* Links */
@@ -342,6 +346,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -350,6 +360,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {
@@ -541,7 +574,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><a href="#42-expected-r2-patterns">4.2. Expected R2 Patterns</a></li>
 <li><a href="#43-excel-steps">4.3. Excel Steps</a></li>
 <li><a href="#44-python-steps">4.4. Python Steps</a></li>
-<li><a href="#45-tableau-steps">4.5. Tableau Steps</a></li>
 </ul>
 </li>
 <li><a href="#5-reflection-questions">5. Reflection Questions</a></li>
@@ -552,14 +584,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ul>
 </div>
 <h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
-<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading visualizations in image form (<a href="https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b#id0edd=windows_10" target="_blank">win10/11</a>, <a href="https://support.apple.com/en-in/guide/mac-help/mh26782/mac" target="_blank">macOS</a>):</p>
+<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading visualizations in image form:</p>
 <ol>
 <li><strong>Descriptive Analytics</strong>: scatter plots with trend line showing R<sup>2</sup></li>
 <li><strong>Diagnostic Analytics</strong>: explanations of the <em>why</em> behind relationships</li>
 <li><strong>Predictive Analytics</strong>: exploring future, predictive relationships</li>
 <li><strong>Prescriptive Analytics</strong>: tying analyses to decision-making</li>
 </ol>
-<p><em>Note</em>: Consider the aesthetics of your visualizations. Clear, well-organized visuals with readable axis labels and titles will help convey your findings more effectively.</p>
+<p><em>Note</em>: Consider the aesthetics of your visualizations, including the extent of visualization shown (e.g. don't screenshot all of excel, just the graph). Clear, well-organized visuals with readable axis labels and titles will help convey your findings more effectively.</p>
 <h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
 <p>By the end of this lab, you will be able to:</p>
 <ul>
@@ -571,8 +603,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Consider how analytical insights can inform business decisions through the lens of understanding economic and market mechanisms</li>
 </ul>
 <h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
-<p>As always, you can use Excel, Python, or Tableau for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.</p>
-<p><em>However</em>, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available <a href="https://utah.instructure.com/courses/1171903/pages/regression-eda" target="_blank">on canvas</a>, and you can download it there to run it locally on your computer.</p>
+<p>As always, you can use Excel or Python for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.</p>
+<p><em>However</em>, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available <a href="https://utah.instructure.com/courses/1243774/pages/regression-eda" target="_blank">on canvas</a>, and you can download it there to run it locally on your computer.</p>
 <p>I used an initial one-line prompt (collapsed, below) in ChatGPT to generate a first draft, then used Claude Code to add more features, then asked Claude to re-generate a prompt that would cover all the features I had added (also collapsed, below). You can copy/paste that prompt into your own LLM to generate your own version of the app, and modify it to add more features if you like. I use this as a further demonstration of how, with a good prompt, LLMs can help you quickly generate useful code to generate very valuable tools.</p>
 <details>
 <summary>Initial prompt</summary>
@@ -618,7 +650,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>Full data dictionary is provided at the end of this document. Key variables include:</p>
 <ul>
 <li><strong>Firm Identifiers</strong><ul>
-<li><code class="fixed-width">firm_id</code>: Unique firm identifier (different from previous datasets, i.e. can't be merged with prior data)</li>
+<li><code class="fixed-width">firm_id</code>: Unique firm identifier</li>
 <li><code class="fixed-width">ticker</code>: Stock ticker symbol</li>
 <li><code class="fixed-width">firm_name</code>: Company name</li>
 <li><code class="fixed-width">fyear</code>: Fiscal year</li>
@@ -854,18 +886,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r_value</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">_tmpdf</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">_tmpdf</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;R&lt;sup&gt;2&lt;/sup&gt; = </span><span class="si">{</span><span class="n">r_value</span><span class="o">**</span><span class="mi">2</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
 </code></pre></div>
-<h3 class="ada-h3" id="45-tableau-steps">4.5. Tableau Steps</h3>
-<p><a href="https://10ay.online.tableau.com/#/site/accounting-data-analytics/home" target="_blank">Tableau Cloud Link</a></p>
-<ul>
-<li>Drag the X-variable (e.g., <code class="fixed-width">act</code>) to Columns</li>
-<li>Drag the Y-variable (e.g., <code class="fixed-width">lct</code>) to Rows</li>
-<li>Go to the "Analysis" menu and ensure "Aggregate Measures" is unchecked</li>
-<li>Right-click on the plot &gt; Trend Lines &gt; Show Trend Lines<ul>
-<li>I have found no way of displaying R<sup>2</sup> directly on the plot in Tableau, but if you hover over the trend line at the far right of the graph, it will show R<sup>2</sup> in the tooltip and that will show up in your screenshot.</li>
-</ul>
-</li>
-<li>Add descriptive titles and axis labels (note, accounting values are in millions)</li>
-</ul>
 <h2 class="ada-h2" id="5-reflection-questions">5. Reflection Questions</h2>
 <p>After completing the lab, consider:</p>
 <ol>
@@ -1060,6 +1080,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">gvkey</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span>
 </code></pre></div>
 </details>
-<p>This query takes approximately 7 seconds to run in <code class="fixed-width">python</code> with <code class="fixed-width">duckdb</code> on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data on the PostgreSQL server). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.</p>
+<p>This query takes approximately 7 seconds to run in <code class="fixed-width">python</code> with <code class="fixed-width">duckdb</code> on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data from the SQL lab). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.</p>
 </body>
 </html>

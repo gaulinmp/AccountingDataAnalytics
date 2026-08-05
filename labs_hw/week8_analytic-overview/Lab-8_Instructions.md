@@ -7,18 +7,19 @@ Lab 8 introduces you to the 4 stages of analytics:
 * Predictive: What *will* happen?
 * Prescriptive: What *should* we make happen?
 
+
 [TOC]
 
 ## 1. Assignment
 
-**Submission:** To complete this lab, complete the Canvas quiz, including uploading visualizations in image form ([win10/11](https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b#id0edd=windows_10), [macOS](https://support.apple.com/en-in/guide/mac-help/mh26782/mac)):
+**Submission:** To complete this lab, complete the Canvas quiz, including uploading visualizations in image form:
 
 1. **Descriptive Analytics**: scatter plots with trend line showing R<sup>2</sup>
 2. **Diagnostic Analytics**: explanations of the *why* behind relationships
 3. **Predictive Analytics**: exploring future, predictive relationships
 4. **Prescriptive Analytics**: tying analyses to decision-making
 
-*Note*: Consider the aesthetics of your visualizations. Clear, well-organized visuals with readable axis labels and titles will help convey your findings more effectively.
+*Note*: Consider the aesthetics of your visualizations, including the extent of visualization shown (e.g. don't screenshot all of excel, just the graph). Clear, well-organized visuals with readable axis labels and titles will help convey your findings more effectively.
 
 
 ### 1.1. Learning Objectives
@@ -34,9 +35,9 @@ By the end of this lab, you will be able to:
 
 ### 1.2. Tools
 
-As always, you can use Excel, Python, or Tableau for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.
+As always, you can use Excel or Python for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.
 
-*However*, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available [on canvas](https://utah.instructure.com/courses/1171903/pages/regression-eda), and you can download it there to run it locally on your computer.
+*However*, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available [on canvas](https://utah.instructure.com/courses/1243774/pages/regression-eda), and you can download it there to run it locally on your computer.
 
 I used an initial one-line prompt (collapsed, below) in ChatGPT to generate a first draft, then used Claude Code to add more features, then asked Claude to re-generate a prompt that would cover all the features I had added (also collapsed, below). You can copy/paste that prompt into your own LLM to generate your own version of the app, and modify it to add more features if you like. I use this as a further demonstration of how, with a good prompt, LLMs can help you quickly generate useful code to generate very valuable tools.
 
@@ -81,7 +82,7 @@ The data is provided as a CSV file containing financial fundamentals and market 
 Full data dictionary is provided at the end of this document. Key variables include:
 
 * **Firm Identifiers**
-    * `firm_id`: Unique firm identifier (different from previous datasets, i.e. can't be merged with prior data)
+    * `firm_id`: Unique firm identifier
     * `ticker`: Stock ticker symbol
     * `firm_name`: Company name
     * `fyear`: Fiscal year
@@ -288,18 +289,6 @@ slope, intercept, r_value, p_value, std_err = stats.linregress(_tmpdf[y], _tmpdf
 ax.text(0.05, 0.95, f'R<sup>2</sup> = {r_value**2:.3f}', transform=ax.transAxes)
 ```
 
-### 4.5. Tableau Steps
-
-[Tableau Cloud Link](https://10ay.online.tableau.com/#/site/accounting-data-analytics/home)
-
-* Drag the X-variable (e.g., `act`) to Columns
-* Drag the Y-variable (e.g., `lct`) to Rows
-* Go to the "Analysis" menu and ensure "Aggregate Measures" is unchecked
-* Right-click on the plot > Trend Lines > Show Trend Lines
-    * I have found no way of displaying R<sup>2</sup> directly on the plot in Tableau, but if you hover over the trend line at the far right of the graph, it will show R<sup>2</sup> in the tooltip and that will show up in your screenshot.
-* Add descriptive titles and axis labels (note, accounting values are in millions)
-   
-
 ## 5. Reflection Questions
 
 After completing the lab, consider:
@@ -482,4 +471,4 @@ Below (expandable) is the SQL code used to generate the dataset, for those inter
     ORDER BY c.gvkey, c.permno, c.fyear
     ```
 
-This query takes approximately 7 seconds to run in `python` with `duckdb` on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data on the PostgreSQL server). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.
+This query takes approximately 7 seconds to run in `python` with `duckdb` on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data from the SQL lab). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.

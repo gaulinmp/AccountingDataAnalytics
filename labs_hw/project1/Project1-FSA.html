@@ -38,24 +38,6 @@ details.inline-image {
      /* padding: 2px 4px; */
  }
 
- /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
- /* Make horizontal lines connect through column boundaries */
- /* table {
-     border-collapse: collapse;
- } */
- /* General styling of all cells */
- table > :is(thead, tbody) > tr > :is(th, td) {
-     padding: 3px;
-     text-align: left;
- }
- table > thead > tr > :is(th, td) {
-     border-top: 2px solid; /* Top thick line */
-     border-bottom: 1px solid; /* Below head thin line */
- }
- table > tbody > tr:last-child > :is(th, td) {
-     border-bottom: 2px solid; /* Bottom thick line */
- }
-
 /* Claud's generated CSS */
 /* Base Styles */
 body {
@@ -212,11 +194,27 @@ pre[class*="language-"]::before {
 
 /* Tables */
 table {
-    /* width: 100%; */
     border-collapse: collapse;
     margin: 1.5rem 0;
-    /* background-color: white; */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
 }
 
 tr:nth-child(even) {
@@ -244,9 +242,10 @@ blockquote p:last-child {
 /* Special callout boxes */
 .note, .warning, .tip {
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem;
     border-radius: 6px;
     border-left: 5px solid;
+    border-right: 5px solid;
 }
 
 .note {
@@ -273,6 +272,11 @@ em {
 strong {
     font-weight: 600;
     color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
 }
 
 /* Links */
@@ -555,12 +559,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Learn to handle real-world data quality issues and outliers</li>
 </ul>
 <h3 class="ada-h3" id="12-deliverable">1.2. Deliverable</h3>
-<p>Slide-deck (<code class="fixed-width">.pptx</code> or <code class="fixed-width">.pdf</code>) containing, at most:</p>
+<p>Slide-deck (<code class="fixed-width">.pdf</code>, which you can export from either PowerPoint or Google Slides) containing, at most:</p>
 <ol>
 <li>Title Slide, group names</li>
 <li>Question statement</li>
 <li>Data description and summary</li>
-<li>Preliminary findings and analysis</li>
+<li>Preliminary findings and analysis (one or more slides)</li>
 <li>Conclusions and recommendations</li>
 <li>Thank you / questions slide</li>
 <li>Appendix (if needed, should be after the "last" slide)</li>
@@ -577,7 +581,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <tbody>
 <tr>
 <td><strong>1</strong></td>
-<td><strong>Choose your group</strong> &ndash; Assemble your fearless crew of 1-5.<br><strong>Download &amp; Load Data</strong> &ndash; Pull data, keep 2010-2024 fiscal years.<br><strong>Get to Know Data</strong> &ndash; Describe data, inspect missings, compute summary stats, look for outliers and consider how to address them.</td>
+<td><strong>Choose your group</strong> &ndash; Assemble your fearless crew of 2+.<br><strong>Download &amp; Load Data</strong> &ndash; Pull data, keep 2010-2024 fiscal years.<br><strong>Get to Know Data</strong> &ndash; Describe data, inspect missings, compute summary stats, look for outliers and consider how to address them.</td>
 </tr>
 <tr>
 <td><strong>2</strong></td>
@@ -589,7 +593,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </tr>
 </tbody>
 </table>
-<hr />
 <h2 class="ada-h2" id="2-grading">2. Grading</h2>
 <p>Your project will be graded based on the following criteria:</p>
 <ol>
@@ -601,55 +604,48 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>Note, while you need to include a slide for "Conclusions and Recommendations", note that below the rubric is merely verifying its presence, not its content. This is because I do not want you to stress about the specific recommendations at this stage, nor whether your evidence "supports" some imaginary trading strategy. I want you to focus on the data, visualization, and presentation, with some consideration of an economic story behind FSA ratios thrown in for good luck.</p>
 <h3 class="ada-h3" id="21-grading-rubric">2.1 Grading Rubric</h3>
 <ol>
-<li><strong>Clarity of Hypothesis</strong>: How well presented, clear, and logical the hypothesis is<ul>
-<li><strong>Excellent</strong>: Theory-grounded with specific, quantified predictions; acknowledges limitations; connects to business context</li>
-<li><strong>Good</strong>: Clear hypothesis with solid economic reasoning</li>
-<li><strong>Needs Work</strong>: Basic hypothesis but weak theoretical foundation</li>
-<li><strong>Poor</strong>: Vague predictions without economic foundation</li>
+<li><strong>Clarity of Hypothesis</strong>: How well presented, clear, and logical the hypothesis is, leveraging your Accounting and Economic reasoning<ul>
+<li><em>Excellent</em>: Theory-grounded with specific, quantified predictions; acknowledges limitations; connects to business context</li>
+<li><em>Good</em>: Basic hypothesis but weak theoretical foundation</li>
+<li><em>Needs Work</em>: Vague predictions without economic foundation</li>
 </ul>
 </li>
 <li><strong>Data Preparation &amp; Documentation</strong>: How well explained, justified, and reasonable the data preparation is<ul>
-<li><strong>Excellent</strong>: Systematic approach to outliers with clear rationale, documented cleaning decisions, fully reproducible workflow, handles edge cases thoughtfully</li>
-<li><strong>Good</strong>: Basic cleaning with some documentation, addresses most data quality issues</li>
-<li><strong>Needs Work</strong>: Ad-hoc cleaning, undocumented decisions, missing steps</li>
-<li><strong>Poor</strong>: Minimal data preparation, no documentation</li>
+<li><em>Excellent</em>: Systematic approach to outliers with clear rationale, documented cleaning decisions, fully reproducible workflow, handles edge cases thoughtfully</li>
+<li><em>Good</em>: Reasonable data preparation with some documentation</li>
+<li><em>Needs Work</em>: Ad-hoc cleaning, undocumented decisions, missing steps</li>
 </ul>
 </li>
 <li><strong>Visuals</strong>: How compelling, informative, clear, and comprehensive the visual evidence is<ul>
-<li><strong>Excellent</strong>: Compelling, well-designed charts with clear annotations, multiple perspectives (cross-sectional + time-series), insights clearly highlighted</li>
-<li><strong>Good</strong>: Good visualizations with some annotations and insights</li>
-<li><strong>Needs Work</strong>: Basic charts with limited insight generation</li>
-<li><strong>Poor</strong>: Poor chart design, no clear insights</li>
+<li><em>Excellent</em>: Compelling, well-designed charts with clear annotations, multiple perspectives (cross-sectional + time-series), insights clearly highlighted</li>
+<li><em>Good</em>: Clear visualizations with basic insights</li>
+<li><em>Needs Work</em>: Basic charts with limited insight generation</li>
 </ul>
 </li>
 <li><strong>Evidence &amp; "Testing"</strong>: How well the evidence supports the hypothesis<ul>
-<li><strong>Excellent</strong>: Multiple forms of evidence clearly tied to hypothesis, quantified differences, sensitivity analysis (e.g. time-series persistence, outlier impact, etc.)</li>
-<li><strong>Good</strong>: Some evidence with basic comparisons, tied to hypothesis</li>
-<li><strong>Needs Work</strong>: Limited evidence provided, no clear link to hypothesis</li>
-<li><strong>Poor</strong>: Weak or missing evidence</li>
+<li><em>Excellent</em>: Multiple forms of evidence clearly tied to hypothesis, quantified differences, sensitivity analysis (e.g. time-series persistence, outlier impact, etc.)</li>
+<li><em>Good</em>: Some evidence with limited comparisons, not clearly tied to hypothesis</li>
+<li><em>Needs Work</em>: Weak or missing evidence</li>
 </ul>
 </li>
 <li><strong>Conclusions &amp; Recommendations</strong>: Whether there is a conclusion presented. The focus of this project is on the data cleaning and visualization, thus the conclusion slide is merely being graded on its existence<ul>
-<li><strong>Excellent</strong>: The conclusion is presented clearly, regardless of its economic feasibility</li>
-<li><strong>Poor</strong>: No conclusion is presented</li>
+<li><em>Excellent</em>: The conclusion is presented clearly, regardless of its economic feasibility</li>
+<li><em>Needs Work</em>: No conclusion is presented</li>
 </ul>
 </li>
 <li><strong>Storytelling &amp; Slide Flow</strong>: How cohesive the slides are, whether they incorporate good storytelling elements visually and logically<ul>
-<li><strong>Excellent</strong>: Clear narrative arc, effective text, strong takeaway headlines, executive-ready presentation</li>
-<li><strong>Good</strong>: Good flow with reasonable cohesion</li>
-<li><strong>Needs Work</strong>: Basic presentation, limited connection between slides</li>
-<li><strong>Poor</strong>: Poor organization and design</li>
+<li><em>Excellent</em>: Clear narrative arc, effective text, strong takeaway headlines, executive-ready presentation</li>
+<li><em>Good</em>: Reasonable flow with unclear connections between slides</li>
+<li><em>Needs Work</em>: Unclear organization, limited connection between slides</li>
 </ul>
 </li>
 <li><strong>Professionalism &amp; Formatting</strong>: How aesthetic and professional the slides appear<ul>
-<li><strong>Excellent</strong>: Aesthetic, professional slides, consistent formatting</li>
-<li><strong>Good</strong>: Minor formatting issues, otherwise professional and aesthetic</li>
-<li><strong>Needs Work</strong>: Several formatting/grammar issues, or inconsistent design elements</li>
-<li><strong>Poor</strong>: Unprofessional appearance, significant formatting problems</li>
+<li><em>Excellent</em>: Aesthetic, professional slides, consistent formatting</li>
+<li><em>Good</em>: Reasonable appearance with minor formatting inconsistencies</li>
+<li><em>Needs Work</em>: Formatting/grammar issues, or inconsistent design elements</li>
 </ul>
 </li>
 </ol>
-<hr />
 <h2 class="ada-h2" id="3-data">3. Data</h2>
 <ul>
 <li><strong>Source:</strong> Compustat North America Fundamentals Annual file <code class="fixed-width">CompustatAnnual.csv</code>.</li>
@@ -783,7 +779,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><strong>Firm Age</strong>: The age of the firm (post-IPO) in days.</li>
 <li><strong>Firm Size</strong>: Measured by total assets or market capitalization.</li>
 </ul>
-<p>It is up to you which cross-sectional variable you may wish to use, or you may choose to create your own (e.g. use one FSA variable to split the firms, and analyze the difference in another FSA variable? We'd call that an interaction effect, and boy would it be neat!).</p>
+<p>It is up to you which cross-sectional variable you may wish to use, or you may choose to create your own (e.g. use one FSA variable to split the firms, and analyze the difference in another FSA variable? We'd call that an interaction effect, and gee would it be neat!).</p>
 <p>While Industry, being a categorical variable already, is relatively straightforward to use, Firm Age and Firm Size (continuous variables) will likely require "binning," which is the process of creating "bins" or categories to group firms. For example, you could take firms from 0-5 years as one bin, 6-10 years as another, and so on. How you choose to bin these variables is an important analytical choice, and in the real world would depend on the specific research question you are interested in. Here, I suggest trying different bin sizes and looking at the distribution of ratios within each bin to help you choose a good binning strategy.</p>
 <h3 class="ada-h3" id="33-data-dictionary">3.3. Data Dictionary</h3>
 <p>The following variables are provided in <code class="fixed-width">CompustatAnnual.csv</code>. Unless otherwise specified, financial numbers are all in millions of USD.</p>
@@ -838,7 +834,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><code class="fixed-width">bign</code>: Big N Auditor (calculated from <code class="fixed-width">au</code>)</li>
 <li><code class="fixed-width">emp</code>: Employees (in thousands)</li>
 </ul>
-<hr />
 <h2 class="ada-h2" id="4-suggested-workflow">4. Suggested Workflow</h2>
 <ol>
 <li>Download and filter <code class="fixed-width">CompustatAnnual.csv</code>, keeping years 2010&ndash;2024 and dropping missing values for the variables of interest.</li>
@@ -861,6 +856,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><strong>Missing Data</strong>: Document your approach to missing values (exclude, interpolate, or flag)</li>
 </ul>
 <h3 class="ada-h3" id="42-example-gross-margin-by-gics-sector">4.2. Example: Gross Margin by GICS Sector</h3>
+<p>This is just one example workflow; you should choose your own ratios and grouping variables based on your interests. Here, I illustrate the steps using Gross Margin by GICS Sector.</p>
 <ol>
 <li>
 <p><strong>Data Preparation</strong></p>
@@ -956,8 +952,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p><strong>Slide 2 (Business Context &amp; Question)</strong></p>
 <ul>
 <li>Clear research question with measurable outcomes: "Does [ratio] vary materially by [industry]?"</li>
-<li>Economic rationale: "We expect this difference because [brief explanation]"</li>
-<li>Frame as investment decision: "Should we control for [industry] when building our portfolio on [ratio]?"</li>
+<li>Economic rationale (important!): "We expect this difference because [brief explanation]" <em>Note:</em> This slide needs to have an economic/accounting answer to the "why" you expect to see differences. Otherwise, it's just data mining!</li>
 <li>Optionally include specific decision framework: "What action would different findings trigger?"</li>
 </ul>
 </li>
@@ -965,6 +960,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p><strong>Slide 3 (Data &amp; Cleaning Choices)</strong></p>
 <ul>
 <li>Description of data (what, from where, when, etc.)</li>
+<li>Key cleaning steps taken (outlier treatment, missing data handling, etc.)</li>
 <li>Sample size (after cleaning)</li>
 <li>Time period and industry coverage</li>
 <li>Optional (keeping slides clear and concise): Summary statistics, basic summary visualization</li>
@@ -991,8 +987,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p><strong>Slide 6 (Conclusion &amp; Implications)</strong></p>
 <ul>
 <li>Connect evidence back to original business question</li>
-<li>Specific recommendations for executive team (e.g. adjust portfolio construction based on industry)</li>
-<li>Optional: Acknowledge limitations and suggest further analysis</li>
+<li>Acknowledge limitations and suggest further analysis</li>
+<li>Optional: specific recommendations for executive team (e.g. adjust portfolio construction based on industry)</li>
 </ul>
 </li>
 <li>
@@ -1001,7 +997,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><em>Note: the idea of an appendix slide is resources you would show if an audience member wants to dig deeper into the analysis. As such, it does not have to be as clear and concise as the main slides, but should still be professional.</em></li>
 <li>Data cleaning choices and their effects (dropping firms, bias from winsorization, etc.)</li>
 <li>Ratio formulas and calculation methods</li>
-<li>More complex vizualiations</li>
+<li>More complex visualizations or statistical tests </li>
 </ul>
 </li>
 </ul>

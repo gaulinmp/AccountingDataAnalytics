@@ -1,3 +1,6 @@
 number: 11
+unlockOn: 2026-11-02
 title: "Unsupervised"
+navLabel: "Clusters"
+icon: bubble
 summary: "Slides imported from Unsupervised."

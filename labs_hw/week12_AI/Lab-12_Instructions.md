@@ -1,6 +1,6 @@
 # Lab 12: AI-Assisted Web Scraping
 
-Lab 12 introduces you to using AI tools (specifically [GitHub Copilot](https://github.com/features/copilot)) to assist with development environment setup, coding, and web scraping tasks. You will install and configure [VS Code](https://code.visualstudio.com/), use Copilot Chat to install [Python](https://www.python.org/) and web scraping tools, and then build a local event scraper using [Playwright](https://playwright.dev/) to collect event data from websites and export to Excel and calendar formats. This lab emphasizes learning to work effectively with AI coding assistants, understanding when to trust AI suggestions, and developing the skills to verify and debug AI-generated code.
+Lab 12 introduces you to using AI tools ([GitHub Copilot](https://github.com/features/copilot) or [Antigravity](https://antigravity.google/)) to assist with development environment setup, coding, and web scraping tasks. You will install and configure [VS Code](https://code.visualstudio.com/), use Copilot Chat to install [Python](https://www.python.org/) and web scraping tools, and then build a scraper using [Playwright](https://playwright.dev/) to collect data from a provided URL (using an event site as my example) and export it. This foundational scraper will then be enhanced in the homework using Large Language Models (LLMs) to automatically adapt to any site layout. This lab emphasizes learning to work effectively with AI coding assistants, understanding when to trust AI suggestions, and developing the skills to verify and debug AI-generated code.
 
 *Note*: This lab is meant to demonstrate the power of AI-assisted development. For those of you who haven't been using Python for these labs and homework, I want to clarify that using Copilot to install, write, run, and test python code is far easier than doing it more manually, e.g. in Colab. This lab isn't intended to force you to learn to program, but instead demonstrate how AI tools can make development easier for beginners and experts alike. Focus on learning to use Copilot effectively rather than struggling with low-level Python details. {: .note}
 
@@ -13,13 +13,13 @@ Lab 12 introduces you to using AI tools (specifically [GitHub Copilot](https://g
 To complete this lab, complete the Canvas quiz by uploading your final working python script, and your excel output. The general steps will be:
 
 1. *VS Code Setup*: Install Visual Studio Code and GitHub Copilot extension
-2. *Python Environment*: Use Copilot Chat to guide installation of Python and virtual environment setup
+2. *Python Environment*: Use Copilot Chat to guide installation of Python and virtual environment setup using Minoconda
 3. *Playwright Installation*: Install Playwright web scraping framework with Copilot's assistance
-4. *Event Scraper Implementation*: Build a command-line event scraper that finds and collects local events
-5. *Data Export*: Export scraped events to Excel and iCalendar formats for analysis
+4. *Scraper Implementation*: Build a command-line scraper that extracts data from a provided URL (using an event site as an example)
+5. *Data Export*: Export scraped data to Excel formats for analysis
 
 
-This lab demonstrates how AI tools can accelerate development workflows while teaching you to critically evaluate AI-generated solutions. You'll learn when to accept Copilot's suggestions, when to ask for clarification, and how to troubleshoot when things don't work as expected. This lab is not meant to be a slog through programming and environment setup details, if you're stuck on anything before you get to the Copilot Agent step (or after as well, of course), don't hesitate and reach out to me for help. I don't want you discouraged by computer shenanigans, but rather amazed by AI doing everything for you.
+This lab demonstrates how AI tools can accelerate development workflows while teaching you to critically evaluate AI-generated solutions. You'll how to use LLMs to conduct tasks (here, vibe coding, but you can use copilot to write papers, create excel files, or anything else your heart desires), to ask for clarification when you don't understand what it's asking for permission about, and how to troubleshoot when things don't work as expected. This lab is not meant to be a slog through programming and environment setup details, if you're stuck on anything before you get to the AI Agent step (or after as well, of course), don't hesitate and flag me down for help. I don't want you discouraged by computer shenanigans, but rather amazed by AI doing everything for you.
 
 
 ### 1.1. Learning objectives
@@ -28,9 +28,9 @@ By the end of this lab, you will be able to:
 
 * Install and configure Visual Studio Code as a development environment
 * Use GitHub Copilot Chat effectively to solve development problems
-* Vibe-code a command-line application with multiple functional modes
-* Scrape data from websites
-* Export data to multiple formats (Excel, iCalendar)
+* Vibe-code an application
+* Scrape data from websites starting from a URL
+* Export data to usable formats (e.g., Excel)
 * Debug issues with AI assistance
 
 
@@ -43,25 +43,24 @@ This lab focuses on learning to use professional development tools with AI assis
 * **[Python](https://www.python.org/)**: Programming language for scripting and data manipulation
 * **[Playwright](https://playwright.dev/)**: Modern web automation and scraping framework
 * **[pandas](https://pandas.pydata.org/)**: Data manipulation library for Python
-* **[icalendar](https://icalendar.readthedocs.io/)**: Library for creating calendar files
 
 
----
 ## 2. Background: AI-assisted development (vibe coding)
 
-Modern software development increasingly involves AI coding assistants like [GitHub Copilot](https://github.com/features/copilot), [Claude](https://www.anthropic.com/claude), [ChatGPT](https://chat.openai.com/), and others. These tools can dramatically accelerate development by:
+Modern software development increasingly involves AI coding assistants like [GitHub Copilot](https://github.com/features/copilot), [Claude](https://www.anthropic.com/claude), [Antigravity](https://antigravity.google/), and others. These tools can dramatically accelerate development by:
 
 * Suggesting code completions as you type
 * Answering technical questions about libraries, syntax, and best practices
-* Generating boilerplate code for common patterns
-* Explaining unfamiliar code in natural language
+* Generating code for common patterns
+* Generating specific code given more refined requests
+* Explaining code in plain language
 * Debugging errors by analyzing error messages
 
 However, AI assistants have important limitations:
 
-* *They can be confidently wrong*: suggestions may look correct but contain subtle bugs
+* *They can be confidently wrong*: suggestions may look correct but contain bugs
 * *They don't understand your full context*: you need to provide clear, specific prompts
-* *They may suggest outdated approaches*: libraries and best practices evolve (e.g. yours will probably use `argparse` instead of, e.g., `click`)
+* *They may suggest outdated approaches*: libraries and best practices evolve (e.g. yours will probably use the old `google-generativeai` library instead of the newer `google-genai`)
 * *They can't replace understanding*: you still need to verify and understand the code if you want to use it in a robust, professional environment
 
 This lab gives you practice with AI assisted development, including:
@@ -72,30 +71,31 @@ This lab gives you practice with AI assisted development, including:
 4. Debugging with natural language when code doesn't work
 
 
-### 2.1. About local event scraping
+### 2.1. About web scraping (with an event scraper example)
 
-For this lab, you'll build a tool that scrapes local events from city event websites and event aggregators. Your scraper will:
+For this lab, you'll build a tool that scrapes data from a given URL. You can prompt your AI agent to scrape any website you wish (e.g., great time to get data for Project 4), all the Lab & Homework submissions will require is your python code, and output Excel file. To provide an example, below I've given instructions for scraping a Salt Lake City events page. The general steps will be:
 
-* *Find event websites*: Use Google search to discover event sites for Salt Lake City
-* *Extract event data*: Collect event names, dates, locations, and URLs
-* *Categorize events*: Automatically classify events (Music, Arts, Sports, Food, etc.)
-* *Export multiple formats*: Save to Excel for analysis and iCalendar for importing to calendar apps
+* Start with a URL for the site (or sites) you wish to scrape
+* Extract data from the site (e.g., event names, dates, locations, and URLs for an event site)
+* Optionally add relevent data (e.g., adding categories to the events based on their text)
+* Export the extracted records to Excel for further use (in my code, I asked it to also export to an ical file so I could import the events into a calendar)
 
 This is a practical, real-world application because:
 
-* *Useful output*: You can actually use the calendar files to track events
-* *Flexible design*: Uses automated discovery rather than hardcoded websites
-* *Professional patterns*: Command-line interface, configuration files, error handling
-* *Multiple data formats*: Excel for analysis, iCalendar for productivity
-* *Educational value*: Demonstrates full software development lifecycle
+* *Useful output*: You could actually use the resulting spreadsheet to track data or events
+* *Flexible design*: By starting with a different event URL, you could target different locations, event types, etc. The homework will further increase this flexibility by using LLMs to parse the site data regardless of its exact HTML structure
+* *Professional patterns*: Command-line interface, argument parsing, error handling.
+* *Educational value*: Demonstrates software development with AI assistance and sets up a foundation for AI-assisted parsing in the homework
 
-Example sites you might scrape include:
+Example sites you might target to scrape include:
 
-* City tourism websites (e.g., Visit Salt Lake, NYC Tourism)
-* Eventbrite listings for specific cities
-* Local venue calendars and event listings
+* SEC [EDGAR](m for firm filings
+* Sports stats sites (note that this might be hard if the site tries to block bots / scrapers)
+* Bitcoin price history from [Yahoo Finance](https://finance.yahoo.com/quote/BTC-USD/history/?p=BTC-USD)
+* Desktop wallpapers (e.g., [Unsplash](https://unsplash.com/t/wallpapers))
 
-*Note*: Always check a website's `robots.txt` file and terms of service before scraping ([explanation](https://en.wikipedia.org/wiki/Robots.txt)). Be respectful - don't make too many requests too quickly. {: .note}
+
+*Note*: Always check a website's `robots.txt` file and terms of service before scraping ([explanation](https://en.wikipedia.org/wiki/Robots.txt)). Be respectful and don't make too many requests too quickly. {: .note}
 
 
 ### 2.2. What is web scraping?
@@ -112,14 +112,16 @@ Common use cases include:
 * News aggregation to monitor news sources for relevant stories
 * Project 4 maybe?
 
+
 **Ethical and Legal Considerations:**
 
-* *Respect robots.txt* which tells scrapers which parts of a site can be accessed
-* *Check terms of service*, as some sites explicitly prohibit scraping
-* *Rate limiting* avoids overwhelming servers with too many requests
-* *Personal data* is sensitive, be careful with personally identifiable information (GDPR, etc.)
-* *Copyright* may apply to scraped content, which makes it legally protected
-* *Authentication* should be legitimate, don't scrape behind login walls without permission/paying
+* Respect robots.txt which tells scrapers which parts of a site can be accessed
+* Check terms of service, as some sites explicitly prohibit scraping
+* Rate limiting avoids overwhelming servers with too many requests
+* Personal data is sensitive, be careful with personally identifiable information (GDPR, etc.)
+* Copyright may apply to scraped content, which makes it legally protected
+* Authentication should be legitimate, don't scrape behind login walls without permission/paying
+
 
 **Why Playwright?**
 
@@ -127,7 +129,7 @@ We're using **Playwright** instead of simpler tools like `requests` + `Beautiful
 
 If you don't want to use Playwright, you could try using `requests` + `BeautifulSoup`, but you'll likely run into issues with modern websites that heavily rely on JavaScript for content rendering.
 
----
+
 ## 3. Step-by-step instructions
 
 This lab walks you through setting up a complete development environment using AI assistance, then building a web scraper.
@@ -136,7 +138,8 @@ This lab walks you through setting up a complete development environment using A
 
 ### 3.1. Install VS Code and GitHub Copilot
 
-VS Code is a free, powerful code editor from Microsoft that has quickly become one of the most widely used IDEs (code editor). GitHub Copilot is an AI pair programmer that provides code suggestions and answers questions directly in the editor, and can directly write, edit, and debug code for you, as well as run scripts (like python), meaning you could conceivably never touch the command line yourself, and just interact with copilot in plain English.
+VS Code is a free & wonderful code editor from Microsoft that has quickly become one of the most widely used code editors. GitHub Copilot is an AI pair programmer that provides code suggestions and answers questions directly in the editor, and can directly write, edit, and debug code for you, as well as run scripts (like python), meaning you could conceivably never touch the command line yourself, and just interact with copilot in plain English.
+
 
 1. **Download and install VS Code**
     * Go to [code.visualstudio.com](https://code.visualstudio.com/Download)
@@ -171,76 +174,70 @@ VS Code is a free, powerful code editor from Microsoft that has quickly become o
 6. **Check Python installation**
     * Python may already be installed on your system
     * Ask Copilot: "check for an existing python installation"
-    * If Python is not installed, you have two options:
-        * **Option A (Recommended - Agent Mode):** Ask Copilot Agent: "install python using the microsoft python extension"
-        * **Option B (Manual):** Install the [Microsoft Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) from the VS Code marketplace, then Copilot can help you configure it, or you can follow the extension's built-in setup wizard
-    * Verify that python is installed, by asking Copilot: "what's my python version?" or running `python --version` or `python3 --version` in a terminal (open a terminal in VS Code ``Ctrl+` ``, which is control key and the backtick key, on both Windows and Mac (a rare instance of `ctrl` not `cmd` on Mac))
+    * If Python is not installed, or you want to set up a clean, platform-agnostic environment, you should use Miniconda:
+        * *Option A (Recommended - Agent Mode):* Ask Copilot Agent: "Help me install python by first installing Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install/overview)."
+        * *Option B (Manual):* Follow instructions online to install [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install/overview).
+    * Verify that python is installed, by asking Copilot: "what's my python version?" or running `python --version` in a terminal (open a terminal in VS Code ``Ctrl+` ``, which is control key and the backtick key, on both Windows and Mac (a rare instance of `ctrl` not `cmd` on Mac))
 
-*Note*: You could also use other AI coding assistants like [Gemini CLI](https://geminicli.com/) or [Claude Code](https://claude.com/product/claude-code), if you prefer those and have accounts, feel free to use them instead (but I'll leave translating these instructions to those approaches up to you). {: .note}
+*Note*: You could also use other AI coding assistants like [Antigravity](https://antigravity.google/) which is Google's version of VSCode, or if you're fancy, [Gemini CLI](https://geminicli.com/) or [Claude Code](https://claude.com/product/claude-code). {: .note}
 
 
 
-### 3.2. Build a local event scraper with Copilot Agent
+### 3.2. Build a web scraper with Copilot Agent
 
-This is where you'll use Copilot Agent to build a complete command-line tool. You'll provide the high-level requirements and let Copilot create, run, and debug the code for you. You might be thinking "but I haven't done anything yet, how can code run?" Great question! The point of vibe coding with Copilot Agent is that we will ask it to, as part of the scraping script we write, add some code to automatically install the required software we need to do the scraping. What a world!
+This is where you'll use Copilot Agent to build a complete scraping script. You'll provide the high-level requirements and let Copilot create, run, and debug the code for you. You might be thinking "but I haven't done anything yet, how can code run?" Great question! The point of vibe coding with Copilot Agent is that we will ask it to, as part of the scraping script we write, add some code to automatically install the required software we need to do the scraping. What a world!
 
-This whole lab basically boils down to the prompt that you will now give to Copilot Agent. Everything else is just scaffolding to get you to this point. Below is an example prompt, but feel free to modify it as you see fit. The key is to be as clear and specific as possible about what you want the scraper to do.
+This whole lab basically boils down to the prompt that you will give to Copilot Agent. Everything else is just scaffolding to get you to this point. Below is an example prompt, but feel free to modify it as you see fit. The key is to be as clear and specific as possible about what you want the scraper to do.
+
 
 1. Ask Copilot to make a new folder and open it as a workspace in VS Code
-    * "create a new folder called event_scraper_lab and open it as a workspace in VS Code"
-2. **Create the event scraper**:
-    * Ask Copilot Agent: 
+    * "create a new folder called scraper_lab and open it as a workspace in VS Code"
+2. **Create the web scraper**:
+    * Ask Copilot Agent (change the part in square brackets [] to match your interests): 
     
     ```
-    Build a Python command-line tool that scrapes local events from websites and exports them to Excel and calendar formats. The tool should have three commands:
+    Build a Python one-file script that scrapes [event data from the event site: https://www.visitsaltlake.com/events/] and exports it. The script should have a good software architecture, and should be easy to maintain and update (e.g. passing the content of the website into an LLM api call, down the line, to have it extract the data flexibly).
 
-    1. `install` automatically installs all dependencies including playwright, pandas, openpyxl, icalendar, and pytz, then installs Playwright's chromium browser
-    2. `init` uses Playwright to search Google for event websites in Salt Lake City, extracts relevant URLs from search results, and saves them to a JSON configuration file (event_sites_config.json) that stores the city name, last update timestamp, and a list of sites with their URLs and CSS selectors (this function should account for the initial load of google search might bring up a bot check, so wait for the user to conduct said check, then let the script continue). There should be an optional `--max-sites` argument to limit the number of sites saved (default 5).
-    3. `scrape` reads the configuration file, visits each configured website using Playwright, extracts event information (name, date, location, URL) using CSS selectors, automatically categorizes events into types like Music, Arts, Sports, Food, Festival, Education, Community, Family, Outdoor, Nightlife, or Other based on keywords in the event name, then exports the results to both an Excel spreadsheet (sorted by date with columns: Date, Name, Category, Location, URL) and an iCalendar .ics file that can be imported into any calendar app. There should be some optional arguments, including `--output` to speficy an output filename prefix, and `--start-date` / `--end-date` to only include events between certain dates (default to today / 1 month from now).
+    First, install all dependencies including playwright, pandas, and openpyxl, then install Playwright's chromium browser.
 
-    The scraper should use good, easy to maintain python software architecture. The init script should find event websites for Salt Lake City. The scraper should extract events of all types, categorize them where possible, parse dates to YYYY-MM-DD format, and export to Excel and iCalendar. The tool should handle errors gracefully with try/except blocks, network timeouts, and failed element extraction, use `headless=False` so users can see the browser, add waits for JavaScript to load, and include proper imports wrapped in try/except blocks so the script can run for help/install commands even without dependencies installed. There should also be a --debug flag to enable more verbose logging.
+    Then, write the single-file python script that has a CLI interface using `click`, to:
+    
+    * take the hard-coded `url` (e.g., `[https://www.visitsaltlake.com/events/]`). There should be an optional --url flag to specify a different url.
+    * open the page using Playwright
+    * extract relevant information ([such as event name, date, location, event type/category, event URL])
+    * export the results to an Excel spreadsheet
+    * there should be an optional `--output` flag to specify an output filename prefix
+
+    The scraper should use good, easy to maintain python software architecture. The scraper should handle errors gracefully with try/except blocks, network timeouts, and failed element extraction, use `headless=False` so users can see the browser, add waits for JavaScript to load. There should also be a --debug flag to enable more verbose logging, with the intent being that feeding the debug logging output to an LLM would allow it to fix the scraper. The scrape script should also have human in the loop functionality (disabled by default) to allow for users to click potential "are you human" popups, or to change the URL if desired (take control back from the human with, e.g., `input()` calls).
 
     Please make sure the code is clear and well commented, so new programmers can understand how it works.
-
     ```
 
 3. **Babysit Copilot Agent as it writes the code**
-    * As Copilot chugs away, it may ask you questions, or for permission to create files and run commands. Be responsive and guide it as needed, but if it wants to run some commands that you do not recognize, copy the command into a ChatGPT or other LLM chat and ask it to explain what the command does before allowing Copilot to run it.
+    * As Copilot chugs away, it may ask you questions, or for permission to create files and run commands. Be responsive and guide it as needed, but if it wants to run some commands that you do not recognize, copy the command into a web-based LLM chat (e.g. ChatGPT, Claude, Gemini) and ask it to explain what the command does before allowing Copilot to run it.
     * If any part seems confusing or overly complex, ask: "can you simplify the [specific section] of the code?"
 
-4. **Test the install command**
-    * Ask Copilot Agent: "run the install command"
-    * This should install all dependencies and Playwright browsers
-    * If it fails, simply tell Copilot: "got an error, please fix it" (and include the error message if it's not already visible)
-    * Another possible fix for installation issues is to ask Copilot to "use uv to create and manage a virtual environment for this project"
-
-5. **Test the init command**
-    * Ask Copilot Agent: "run the init command"
-    * Watch the browser open and search Google
-        * you may have to verify that you're not a bot, which will require interacting with the browser window. If the window disappears while you're doing this, it's most likely because the code isn't waiting for you to complete the task. This is a great time to debug by telling Copilot that you have to do a manual check, so it should wait for you to do so, and then continue with the automated portion of the script. This is an example of that "Human in the Loop" issue that we discussed in our week on Automation, and a good reminder about how it's not always possible to fully automate everything.
-    * Ask Copilot Agent: "show me the contents of the config file"
-    * Verify it contains at least some event site (if not, time for debugging! Consider asking Copilot to "improve the selectors used to extract event site URLs from Google search results" or "here are some sites to include: [list of event sites you found manually]")
-
-6. **Test the scrape command**
-    * Ask Copilot Agent: "run the scrape command"
-    * Watch the browser visit each configured site
+4. **Test the script**
+    * Now, find a URL for an event site (e.g., from Visit Salt Lake, a local university, or a venue) to test with.
+    * Ask Copilot Agent: "run the script targeting [INSERT URL HERE]"
+    * If you get an error about missing dependencies or browsers, ask Copilot to install them (e.g., "run the playwright install command").
+    * Watch the browser visit the configured site
     * Wait for scraping to complete
     * Ask Copilot Agent: "show me the first 10 rows of the excel output"
-    * At this point, you may see event data, but you may not. If not, continue on to the next step for debugging. If you do, then verify that the data looks correct (dates parsed correctly, categories assigned, etc.) and celebrate your success!
+    * At this point, you may see data, but you may not (since different sites have different HTML structures requiring different selectors). If not, continue on to the next step for debugging. If you do, then verify that the data looks correct and celebrate your success!
 
-7. **Debug and refine**
-    * If scraping fails or finds no events, you could try:
+5. **Debug and refine**
+    * If scraping fails or finds no events, you could try telling Copilot:
         * "the scraper isn't finding any events, please debug and fix" (this likely won't work, because it's too vague, but it's worth demonstrating that fact)
-        * "inspect the CSS selectors for the event websites and update the code if needed" (this is less vague, but still unlikely to work because Copilot can't actually see the website structure unless you give it that information
+        * "inspect the CSS selectors for the event website [INSERT URL HERE] and update the code if needed" (this is less vague, but still unlikely to work because Copilot can't actually see the website structure unless you give it that information)
         * "use playwright to save the HTML of one of the event pages to a file, so we can inspect it, and then use that HTML page to refine the CSS selectors" (this is a great way to get the HTML structure so you can then provide it to Copilot for further debugging)
     * If dates aren't parsing correctly:
         * "the date parsing isn't working correctly, improve the function to handle more formats"
-        * "use the python library dateutil to help parse dates more robustly"
+        * "use the python library `dateutil` to help parse dates more robustly"
     * Let Copilot Agent make the fixes and re-run tests
-    * Keep iterating until your scraper works reliably
+    * Keep iterating until your scraper gives you data
 
 
----
 ## 4. Technical guidance
 
 This section provides additional context and troubleshooting tips for working with Copilot Agent.
@@ -276,7 +273,7 @@ When things go wrong, Copilot Agent can help fix issues directly:
     * Tell Agent: "install the missing dependencies"
     * Agent should automatically run pip install commands
     * If there's a conflict: "resolve the dependency conflict"
-    * Also consider asking Agent to "use uv to create and manage a virtual environment for this project"
+    * Also consider asking Agent to "use conda to create and manage a virtual environment for this project"
         * The nice thing about vibe coding is you don't necessarily have to care about the details of virtual environments, Agent can handle that for you. It's not bad to ask what it's doing though, if you're curious and want to learn.
 
 * Date parsing not working
@@ -284,10 +281,9 @@ When things go wrong, Copilot Agent can help fix issues directly:
     * Agent will modify the appropriate function
     * Ask Agent to: "test the date parser with some example dates"
 
-* Google blocks the bot during initial event page search
-    * The script should already pause for manual verification
-    * If it doesn't: "add a pause with `input()` when Google might ask for verification"
-    * Complete the verification manually, then press Enter (in the terminal that VS Code opened)
+* Google blocks the bot
+    * If your script triggers a bot check on a website, tell Agent: "add human in the loop functionality so I can complete verification"
+    * Complete the verification manually in the browser, then press Enter in the terminal that VS Code opened
 
 * General debugging approach with Agent
     1. Describe the problem: "the scraper isn't working"
@@ -299,24 +295,21 @@ When things go wrong, Copilot Agent can help fix issues directly:
     7. Ask me for help if you're stuck!
 
 
-*Tip*: Agent mode can access files, run commands, and see output automatically. You shouldn't need to copy/paste error messages - just describe what's wrong and Agent will investigate. If it can't see the error output, ask it to add logging to file so that it can. {: .tip}
+*Tip*: Agent mode can access files, run commands, and see output automatically. You shouldn't need to copy/paste error messages, just describe what's wrong and Agent will investigate. If it can't see the error output, ask it to add logging to file so that it can. {: .tip}
 
 
 
 ### 4.3. Understanding what Agent creates
 
-When Copilot Agent generates the event scraper, the key concepts remain the same as traditional coding:
+When Copilot Agent generates the script (in my example, an event scraper), the key concepts remain the same as traditional coding:
 
 * Command-line interface (CLI)
     * Copilot (or you, as you get more advanced) needs to run the Python script somehow. A command-line interface is a common way to do this. It's kind of like when you run an app on your computer, but instead of clicking an icon, you type commands in a terminal window.
-    * The three commands (`install`, `init`, `scrape`) are like different modes of the same app - each does a different job
+    * Taking arguments (like `--url` or `--output`) makes the script flexible, acting like different settings for the same app.
 
-* Configuration management
-    * Think of configuration files like a settings file that remembers information between runs
-    * The script saves a JSON file (just a text file with structured data) that stores:
-        * Which websites to scrape for events in Salt Lake City
-        * How to find the event information on each website (the "selectors")
-    * This way, you only need to find the event websites once, and can reuse them for future scrapes
+* Starting URL
+    * Instead of hardcoding which website to scrape, taking the URL as an argument allows the same scraping code to be pointed at different locations
+    * As you'll see in the homework, this flexibility really shines when coupled with an LLM that can understand the structure of *any* URL you provide
 
 * Playwright basics
     * Playwright is a tool that controls a web browser automatically
@@ -338,13 +331,11 @@ When Copilot Agent generates the event scraper, the key concepts remain the same
         * "Find all elements labeled 'date'" (to get all event dates)
         * "Find the link inside the event box" (to get ticket URLs)
     * When websites change their design, the selectors might need to be updated because the labels changed
-    * *Note*: pre-specified selectors are notoriously brittle. For production use, we would use want more robust modern methods like an LLM-based extraction when selectors fail.
+    * By using CSS selectors, your script is hardcoded for a specific webpage layout. If you run it on a completely different website, you might collect nothing (since standard selectors won't match). The homework project will look at using LLMs to bypass this limitation.
 
 * Data export
-    * Once the script collects event data, it needs to save it in useful formats
+    * Once the script collects data, it needs to save it in useful formats
     * Excel format (`.xlsx`) because we're Accountants, and it's just the best for viewing data in rows and columns, sorting, filtering
-    * Calendar format (`.ics`) so that we can import it into Outlook, Apple/Google Calendar, etc.
-    * The script creates one file of each type so you can use the data however you prefer
 
 
 
@@ -353,8 +344,8 @@ When Copilot Agent generates the event scraper, the key concepts remain the same
 If you want to explore more, try asking Copilot Agent to add more features, here are some example prompts:
 
 1. **Add command-line options**: 
-    * `add a --max-sites option to the init command to limit how many event sites to save`
-    * `add --start-date and --end-date filters to the scrape command`
+    * `add a --limit option to only scrape up to N items`
+    * `add --start-date and --end-date filters to the script`
 
 2. **Improve event categorization**: 
     * `use fuzzy string matching for better categorization`
@@ -374,7 +365,7 @@ If you want to explore more, try asking Copilot Agent to add more features, here
     * `create a README.md with installation and usage instructions`
 
 6. **Add LLM integration** (spoiler alert: this is the homework!):
-    * `add Gemini LLM integration to intelligently extract events, and fall back to using selectors if it fails or no API key is provided`
+    * `add Gemini LLM integration (https://github.com/googleapis/python-genai) to intelligently extract events, and fall back to using selectors if it fails or no API key is provided`
     * Also consider `add instructions to automate as much of the generation of the API key as possible, to make it user friendly to non-technical users`
     * This uses Google's free Gemini API to parse pages and extract event information more robustly than brittle CSS selectors.
 

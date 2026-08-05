@@ -1,5 +1,8 @@
 number: 1
+unlockOn: 2026-08-24
 title: "Introduction to Accounting Data Analytics"
+navLabel: "Intro"
+icon: playCircle
 summary: "Understand the core concepts of data analytics in accounting, class goals, structure, and professional skepticism."
 description: |
   Welcome to Week 1! This week we lay the foundation for the course. We will explore how data analytics is transforming traditional accounting, tax, auditing, and managerial decisions. You will also learn about the course structure, evaluation, and the importance of maintaining a healthy, professional skepticism when working with data-driven insights.

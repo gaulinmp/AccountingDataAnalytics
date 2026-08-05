@@ -1,3 +1,14 @@
 number: 3
-title: "Where accounting data lives"
-summary: "Files, databases, and APIs — and the JOIN that stitches them together."
+unlockOn: 2026-09-07
+title: "Data Visualization"
+navLabel: "Viz"
+icon: chart
+summary: "Explore descriptive statistics, choose the right chart types, tell stories with financial data, and apply design best practices."
+description: |
+  Welcome to Week 3! This week we dive into data visualization and descriptive statistics. We will examine the core dimensions of central tendency, dispersion, and shape (skewness & kurtosis). We will learn when and how to choose different chart types (line, bar, scatter, box, and violin plots) for different analytical questions and data structures. Finally, we'll discuss the principles of storytelling, clutter reduction (data-to-ink ratio), and tailoring visualizations for specific business and accounting audiences.
+objectives:
+  - Differentiate between descriptive statistics (mean, median, mode, standard deviation, skewness, and kurtosis) and explain their sensitivity to outliers.
+  - Explain why visualization is necessary to reveal patterns that descriptive statistics hide (e.g., Anscombe's Quartet).
+  - Match visualization choices (bar, line, scatter, box, and violin plots) to specific financial data types and business questions.
+  - Structure a budget variance presentation using storytelling principles (hook, main idea, storyboard).
+  - Apply visualization best practices (focusing attention, maximizing data-to-ink ratio, and defining audited vs. non-audited context).

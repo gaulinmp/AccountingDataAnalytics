@@ -1,0 +1,611 @@
+---
+week: week-07
+title: "Unstructured Data"
+---
+
+import { Slide, CoverMeta, Bullets, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 7" icon="document">
+
+Unstructured Data
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"What is unstructured data?"}>
+
+<Bullets items={[
+  { l: 1, h: "Non-tabular data" },
+  { l: 2, h: "Text" },
+  { l: 2, h: "Images" },
+  { l: 2, h: "Video / audio" },
+  { l: 1, h: "Generally any data without pre-defined structure" },
+  { l: 2, h: "Most data are unstructured" },
+  { l: 2, h: "Files from client often unstructured" },
+]} />
+
+</Slide>
+
+<Slide title={"Why do we care?"}>
+
+<Bullets items={[
+  { l: 1, h: "Majority of data are unstructured (80-90% estimates)" },
+  { l: 2, h: "Communication" },
+  { l: 2, h: "Records & evidence (e.g. receipts, invoices)" },
+  { l: 2, h: "Regulations & guidance" },
+  { l: 1, h: "Wealth of information, but only if translated to something computers and algorithms can use" },
+  { l: 1, h: "ML methods increasingly capable of conversion" },
+]} />
+
+</Slide>
+
+<Slide title={"What to do with Unstructured Data?"}>
+
+<Bullets items={[
+  { l: 1, h: "You can’t run a regression on unstructured data" },
+  { l: 1, h: "Must add “structure” to make data useful" },
+  { l: 2, h: "Could be conversion to tabular form" },
+  { l: 2, h: "Could be analysis" },
+  { l: 1, h: "Feature extraction is term for creating variables (features) from data" },
+  { l: 2, h: "Covers gamut from word count to LLM parsing" },
+]} />
+
+</Slide>
+
+<Slide title={"OCR"}>
+
+<Bullets items={[
+  { l: 1, h: "This is a receipt from my recent shopping trip. Please transcribe it into a table." },
+]} />
+
+<DataTable
+  columns={["Purchased Items", ""]}
+  rows={[
+    ["LP HOTPOT SAUCE", "$4.39 FTO"],
+    ["Disc. $2.00", ""],
+    ["LKK FRIED TOFU BALL", "$2.99 FTO"],
+    ["ASN SOY BEAN PASTE", "$3.59 FTO"],
+    ["1 @ 3.39/lb $3.39/lb", ""],
+    ["LOTUS ROOT", "$3.90 FY1"],
+    ["MEME", ""],
+    ["XFY SPICY SEASONING BASE", "$4.99 FTO"],
+    ["XFY MUSHROOM SOUP BASE", "$4.99 FTO"],
+    ["XFY SPICY SEASONING BASE", "$4.99 FTO"],
+    ["LP HOTPOT BASE", "$4.99 FTO"],
+    ["Disc. $2.00", ""],
+    ["LP HOTPOT SAUCE", "$4.99 FTO"],
+    ["Disc. $2.00", ""],
+    ["LP HOTPOT BASE", "$4.99 FTO"],
+    ["Disc. $2.00", ""],
+    ["SJX HOT POT BASE", "$13.99 FTO"],
+    ["Summary", ""],
+    ["Item Count:", "11"],
+    ["Subtotal:", "$59.40"],
+    ["Tax:", "$1.79"],
+    ["Total:", "$61.19"],
+    ["Payment:", "$61.19"],
+    ["Cash Change:", "$0.00"],
+    ["You Saved:", "$8.00"],
+    ["Payment Method", ""],
+    ["Type:", "CREDIT SALE"],
+    ["Card:", "VISA ***1190"],
+    ["Entry Method:", "CONTACTLESS"],
+    ["Auth. Code:", "64211"],
+    ["Amount:", "$61.19"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Gemini prompt: This is a receipt from my recent shopping trip. Please transcribe it into a table." },
+  { l: 1, h: "Output (including table to right):" },
+  { l: 1, h: "Store Information:" },
+  { l: 1, h: "CHINATOWN SUPERMARKET" },
+  { l: 1, h: "3390 South State Street" },
+  { l: 1, h: "Salt Lake City, UT 84115" },
+  { l: 1, h: "(801) 906-8788" },
+  { l: 1, h: "Transaction Details:" },
+  { l: 1, h: "Station 04 2041752958" },
+  { l: 1, h: "05/19/2025 12:06:19" },
+  { l: 1, h: "Cashier #: 275" },
+  { l: 1, h: "AUTH CODE: 069611" },
+  { l: 1, h: "ENTRY METHOD: CONTACTLESS" },
+  { l: 1, h: "ACCT: VISA 1130" },
+]} />
+
+</Slide>
+
+<Slide title={"Image Analysis Caveats"}>
+
+<Bullets items={[
+  { l: 1, h: "Only as good as the algorithm" },
+  { l: 1, h: "Off the shelf solution may have noise or bias (based on the assumptions is makes or features it has)" },
+  { l: 1, h: "Customization is costly, should be balanced against errors (type and amount)" },
+]} />
+
+</Slide>
+
+<Slide title={"What are features?"}>
+
+<Bullets items={[
+  { l: 1, h: "Usable information, measures, signals" },
+  { l: 2, h: "Summarization / aggregation" },
+  { l: 2, h: "Extraction / filtering" },
+  { l: 1, h: "We want to choose features that capture desired info" },
+  { l: 2, h: "Tone of investor call" },
+  { l: 2, h: "Measuring inventory level estimates from images" },
+  { l: 2, h: "Extracting text from image" },
+]} />
+
+</Slide>
+
+<Slide title={"Common text features"}>
+
+<Bullets items={[
+  { l: 1, h: "*Simple*: text length, word counts" },
+  { l: 2, h: "Sometimes simple is good enough" },
+  { l: 1, h: "*Intermediate*: tone, sentiment, topics" },
+  { l: 2, h: "Broad generalizations / aggregation from the text" },
+  { l: 1, h: "*Advanced*: specific information" },
+  { l: 2, h: "Targeted to extract specific facts" },
+  { l: 2, h: "Information retrieval subfield" },
+  { l: 2, h: "LLMs are now quite good at this" },
+]} />
+
+</Slide>
+
+<Slide title={"Natural Language Processing"}>
+
+<Bullets items={[
+  { l: 1, h: "NLP addresses understanding language to process and analyze texts" },
+  { l: 2, h: "E.g., topic analysis, information retrieval" },
+  { l: 1, h: "*Old approach*: developed rules (grammars) for parsing text" },
+  { l: 2, h: "E.g., regular expressions" },
+  { l: 1, h: "*New approach*: lots of math (machine learning)" },
+]} />
+
+</Slide>
+
+<Slide title={"NLP Pipeline"} aiNotes={"Credit: https://textbook.coleridgeinitiative.org/chap-text.html#how-to-analyze-text"}>
+
+<Bullets items={[
+  { l: 1, h: "Preprocessing" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "clean text" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "tokenize" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "stemming" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "remove/replace words" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Feature Engineering" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Part of speech tags" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Entity parsing (NER)" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Quantize" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "N-gram generation" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Vectorization" },
+  { l: 1, h: "(e.g. BOW)" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Weighting" },
+  { l: 1, h: "(e.g. TF-IDF)" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Analysis" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Topic Analysis (clustering)" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Sentiment Analysis" },
+  { l: 1, h: "(classification)" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Summarization" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Information Retrieval" },
+]} />
+
+</Slide>
+
+<Slide title={"Preprocessing"}>
+
+<Bullets items={[
+  { l: 1, h: "Tokenization: breaking text into tokens (letters, words, sentences, or whatever is needed)" },
+  { l: 2, h: "“University of Utah”  [“University”, “of”, “Utah]" },
+  { l: 1, h: "Cleaning: lowercase, remove punctuation, add placeholders (e.g. numbers, dates)" },
+  { l: 2, h: "“FYEnd, 12/31/2025”  [“fyend”, “DATE”]" },
+  { l: 1, h: "Stemming: replacing words with their “root” by removing conjugations and plurality" },
+  { l: 2, h: "“She abhors assumptions”  [“she”, “abhor”, “assum”]" },
+]} />
+
+</Slide>
+
+<Slide title={"Preprocessing Caveats"}>
+
+<Bullets items={[
+  { l: 1, h: "Preprocessing removes information" },
+  { l: 2, h: "Uppercase letters can be informative (May vs may)" },
+  { l: 2, h: "Punctuation is often important" },
+  { l: 2, h: "Conjugation is almost always important" },
+  { l: 1, h: "When using for analytics, preprocessing is critical for the signal-to-noise tradeoff" },
+  { l: 2, h: "Removing noise if case, punctuation, conjugation etc. aren’t important" },
+  { l: 2, h: "Removing information if they are" },
+]} />
+
+</Slide>
+
+<Slide title={"Vectorization"}>
+
+<Bullets items={[
+  { l: 1, h: "Turning text into numbers" },
+  { l: 2, h: "“See spot Run. Run Spot run”" },
+  { l: 2, h: "[see, 2 * spot, 3 * run]" },
+  { l: 2, h: "<1, 2, 3, 0, …, 0>" },
+  { l: 1, h: "What if we want to keep word the sense of words being together (i.e. word order): bi-*grams*" },
+  { l: 2, h: "[“see spot”, “spot run”, “run spot”, “spot run”] (“run run”?)" },
+  { l: 2, h: "<1, 2, 1, 0, …, 0>" },
+]} />
+
+</Slide>
+
+<Slide title={"N-Grams"} aiNotes={"0.004% of possible 2grams (25K)"}>
+
+<Bullets items={[
+  { l: 1, h: "Vector of words that are N-tokens long" },
+  { l: 1, h: "*Many* more bi-grams than unigrams" },
+  { l: 2, h: "From my paper on Executive Compensation:" },
+  { l: 3, h: "# of 1-grams: 238,001" },
+  { l: 3, h: "# of 2-grams: 2,230,332 (9.4x)" },
+  { l: 3, h: "# of 3-grams: 3,459,221 (1.55x)" },
+  { l: 3, h: "# of 4-grams: 5,386,503 (1.56x)" },
+]} />
+
+</Slide>
+
+<Slide title={"NLP in Accounting"}>
+
+<Bullets items={[
+  { l: 1, h: "Information retrieval: extracting specific information or facts from documents" },
+  { l: 1, h: "Entity linking: identifying people/places/things and linking them to known entities" },
+  { l: 1, h: "Relationship extraction: extracting relationships between things or ideas" },
+  { l: 2, h: "Ex: company  product, event  date" },
+  { l: 1, h: "Topic analysis & sentiment analysis" },
+]} />
+
+</Slide>
+
+<Slide title={"Sentiment Analysis"}>
+
+<Bullets items={[
+  { l: 1, h: "Classifies text into positive, negative, neutral" },
+  { l: 1, h: "Old method: rule or dictionary based" },
+  { l: 2, h: "Look for negative or positive words" },
+  { l: 1, h: "New method: statistically based" },
+  { l: 2, h: "Requires examples for training" },
+  { l: 2, h: "Off the shelf generic LLM solution" },
+]} />
+
+</Slide>
+
+<Slide title={"Sentiment in Accounting"}>
+
+<Bullets items={[
+  { l: 1, h: "Analyzing competitors' disclosures" },
+  { l: 1, h: "Reviewing investor sentiment on conference calls" },
+  { l: 1, h: "Demand estimation from customer responses/posts" },
+  { l: 1, h: "Identifying early risk indicators from social media" },
+]} />
+
+</Slide>
+
+<Slide title={"Topic Modeling"} aiNotes={"https://pubmed.ncbi.nlm.nih.gov/35602001/"}>
+
+<Bullets items={[
+  { l: 1, h: "Categorize content of text into topics" },
+  { l: 1, h: "Customized to content and desired topics" },
+  { l: 1, h: "Models:" },
+  { l: 2, h: "LDA: define # of topics, needs lots of texts" },
+  { l: 2, h: "NMF: better for shorter texts and less data" },
+  { l: 2, h: "BERTopic: more advanced, single topic per text" },
+]} />
+
+</Slide>
+
+<Slide title={"Topic Modeling Example – Risk Factors"}>
+
+</Slide>
+
+<Slide title={"LLMs for NLP"}>
+
+<Bullets items={[
+  { l: 1, h: "It all comes down to the prompt (for now)" },
+  { l: 1, h: "Very good at:" },
+  { l: 2, h: "Named entity recognition, relation extraction, sentiment" },
+  { l: 1, h: "Pretty good at:" },
+  { l: 2, h: "Entity linking, fact retrieval" },
+  { l: 1, h: "Unknown good at:" },
+  { l: 2, h: "Topic analysis, drawing conclusions" },
+]} />
+
+</Slide>
+
+<Slide title={"NLP in the LLM Era"}>
+
+<Bullets items={[
+  { l: 1, h: "LLMs may be overkill" },
+  { l: 1, h: "LLMs are far more black-box" },
+  { l: 2, h: "Dependent on training data, fine-tuning data, but to an unknown extent" },
+  { l: 1, h: "Still room for older approaches" },
+  { l: 2, h: "When it does what it does well" },
+  { l: 2, h: "When a (more) deterministic outcome is necessary" },
+]} />
+
+</Slide>
+
+<Slide title={"What about images?"}>
+
+<Bullets items={[
+  { l: 1, h: "Increasingly used in accounting" },
+  { l: 2, h: "Images of receipts for reimbursement" },
+  { l: 3, h: "Optical character recognition (OCR)" },
+  { l: 2, h: "Inventory tracking and verification" },
+  { l: 2, h: "Evidence for asset write-offs" },
+  { l: 1, h: "Important to understand caveats and limitations of image processing and use" },
+]} />
+
+</Slide>
+
+<Slide title={"Image processing basics"}>
+
+<Bullets items={[
+  { l: 1, h: "Image processing used to look like historical NLP, lots of steps, transforms, and heuristics" },
+  { l: 2, h: "Line detection, distance/area calculations, thresholding, segmentation" },
+  { l: 1, h: "Image analysis tasks were very customized and expensive to design, develop, and deploy" },
+]} />
+
+</Slide>
+
+<Slide title={"Example – counting Sheep"} aiNotes={"https://eyus.sharepoint.com/:i:/r/sites/EYARC/EYARC/Innovation%20mindset/Drones%20and%20automated%20counting%20software/Bryan%E2%80%99s%20Amazing%20Animals%20case/Innovation_mindset_case_studies_Bryans_Amazing_Animals.jpg?csf=1&web=1&e=aehvhx"}>
+
+<Bullets items={[
+  { l: 1, h: "Load image" },
+]} />
+
+</Slide>
+
+<Slide title={"Example – counting Sheep"} aiNotes={"https://eyus.sharepoint.com/:i:/r/sites/EYARC/EYARC/Innovation%20mindset/Drones%20and%20automated%20counting%20software/Bryan%E2%80%99s%20Amazing%20Animals%20case/Innovation_mindset_case_studies_Bryans_Amazing_Animals.jpg?csf=1&web=1&e=aehvhx"}>
+
+<Bullets items={[
+  { l: 1, h: "Load image" },
+  { l: 1, h: "Make greyscale" },
+]} />
+
+</Slide>
+
+<Slide title={"Example – counting Sheep"} aiNotes={"https://eyus.sharepoint.com/:i:/r/sites/EYARC/EYARC/Innovation%20mindset/Drones%20and%20automated%20counting%20software/Bryan%E2%80%99s%20Amazing%20Animals%20case/Innovation_mindset_case_studies_Bryans_Amazing_Animals.jpg?csf=1&web=1&e=aehvhx"}>
+
+<Bullets items={[
+  { l: 1, h: "Load image" },
+  { l: 1, h: "Make greyscale" },
+  { l: 1, h: "Threshold to BW" },
+]} />
+
+</Slide>
+
+<Slide title={"Example – counting Sheep"} aiNotes={"https://eyus.sharepoint.com/:i:/r/sites/EYARC/EYARC/Innovation%20mindset/Drones%20and%20automated%20counting%20software/Bryan%E2%80%99s%20Amazing%20Animals%20case/Innovation_mindset_case_studies_Bryans_Amazing_Animals.jpg?csf=1&web=1&e=aehvhx"}>
+
+<Bullets items={[
+  { l: 1, h: "Load image" },
+  { l: 1, h: "Make greyscale" },
+  { l: 1, h: "Threshold to BW" },
+  { l: 1, h: "Remove small objects" },
+]} />
+
+</Slide>
+
+<Slide title={"Example – counting Sheep"} aiNotes={"https://eyus.sharepoint.com/:i:/r/sites/EYARC/EYARC/Innovation%20mindset/Drones%20and%20automated%20counting%20software/Bryan%E2%80%99s%20Amazing%20Animals%20case/Innovation_mindset_case_studies_Bryans_Amazing_Animals.jpg?csf=1&web=1&e=aehvhx"}>
+
+<Bullets items={[
+  { l: 1, h: "Load image" },
+  { l: 1, h: "Make greyscale" },
+  { l: 1, h: "Threshold to BW" },
+  { l: 1, h: "Remove small objects" },
+  { l: 1, h: "Shrink objects" },
+]} />
+
+</Slide>
+
+<Slide title={"Example – counting Sheep"} aiNotes={"https://eyus.sharepoint.com/:i:/r/sites/EYARC/EYARC/Innovation%20mindset/Drones%20and%20automated%20counting%20software/Bryan%E2%80%99s%20Amazing%20Animals%20case/Innovation_mindset_case_studies_Bryans_Amazing_Animals.jpg?csf=1&web=1&e=aehvhx"}>
+
+<Bullets items={[
+  { l: 1, h: "Load image" },
+  { l: 1, h: "Make greyscale" },
+  { l: 1, h: "Threshold to BW" },
+  { l: 1, h: "Remove small objects" },
+  { l: 1, h: "Shrink objects" },
+  { l: 1, h: "Count remaining" },
+  { l: 1, h: "= 3,076 (actually 3,067)" },
+]} />
+
+</Slide>
+
+<Slide title={"Gemini – Count the Sheep"}>
+
+<Bullets items={[
+  { l: 1, h: "Prompt: This is an image of sheep taken from a drone. Please count the sheep in this image." },
+  { l: 1, h: "Answer: I am unable to provide an exact count of the sheep in the image. Due to the high number of sheep, their close proximity, and the aerial perspective, it is very difficult to distinguish and count each individual animal accurately." },
+  { l: 1, h: "Attempting a manual count would be prone to significant error. Automated counting through image analysis would require specialized software and would still likely face challenges with overlap and resolution." },
+  { l: 1, h: "Therefore, I cannot fulfill your request for an exact count of the sheep in this image." },
+]} />
+
+</Slide>
+
+<Slide title={"ChatGPT – Count the Sheep"}>
+
+<Bullets items={[
+  { l: 1, h: "Prompt: This is an image of sheep taken from a drone. Please count the sheep in this image." },
+  { l: 1, h: "Answer: Counting the exact number of sheep in this image is challenging due to their dense and overlapping formation. However, I can use image processing techniques to estimate the number. Let me process the image to give you a sheep count estimate." },
+  { l: 1, h: "[code]" },
+  { l: 1, h: "There are approximately 2,347 sheep in the image based on contour detection from the drone photo. Here is the visual overlay showing the detected sheep outlined in green." },
+  { l: 1, h: "actually 3,067" },
+]} />
+
+</Slide>
+
+<Slide title={"Image processing Now"}>
+
+<Bullets items={[
+  { l: 1, h: "Machine learning introduced statistical methods to segment and identify objects in images" },
+  { l: 2, h: "Object detection, classification, etc." },
+  { l: 1, h: "Off the shelf solutions for many tasks" },
+  { l: 2, h: "The EY sheep case used countthings.com" },
+  { l: 1, h: "Customizing and fine-tuning often necessary" },
+]} />
+
+</Slide>
+
+<Slide title={"Regular Expressions"}>
+
+<Bullets items={[
+  { l: 1, h: "Regular expression (regex) is a search pattern" },
+  { l: 2, h: "Like a “find” but with flexibility" },
+  { l: 1, h: "Common uses:" },
+  { l: 2, h: "Search, optionally replace (e.g. find all acronyms)" },
+  { l: 2, h: "Verify data (e.g. phone number is correctly entered)" },
+  { l: 2, h: "Extract data (e.g. extract year from a long date)" },
+]} />
+
+</Slide>
+
+<Slide title={"Using Regex"}>
+
+<Bullets items={[
+  { l: 1, h: "Write a “regex”, which is the string to “search”" },
+  { l: 2, h: "Literal: `invoice`, `2024`" },
+  { l: 2, h: "Special characters: `[JFMASOND]\\w+ 202\\d`" },
+  { l: 1, h: "Use that regex to search through data" },
+  { l: 2, h: "Requires software to “apply” the regex, e.g. Python" },
+]} />
+
+</Slide>
+
+<Slide title={"Regex Basics"}>
+
+<Bullets items={[
+  { l: 1, h: "Literals:" },
+  { l: 2, h: "Letters: `A-Z`" },
+  { l: 2, h: "Numbers: `0-9`" },
+  { l: 2, h: "Special characters (many need escaping): `<>(-,.!)`" },
+  { l: 1, h: "Character Classes" },
+  { l: 2, h: "`\\d` = any digit (0-9)" },
+  { l: 2, h: "`\\w` = word character (A-Z, a-z, 0-9, _)" },
+  { l: 2, h: "`\\s` = whitespace (space, tab)" },
+  { l: 2, h: "`[]` = any of the characters in brackets (`\\d` = `[0-9]`)" },
+]} />
+
+</Slide>
+
+<Slide title={"Examples"}>
+
+<Bullets items={[
+  { l: 1, h: "Pattern: `[A-Z]\\d\\d\\d`" },
+  { l: 2, h: "Matches: `A123`, `B456`, `Z999`, `ABC123`" },
+  { l: 2, h: "Doesn't Match: `1234`, `AB12`, `a123`" },
+  { l: 1, h: "Pattern: `[JFMASOND]\\w\\w 202\\d`" },
+  { l: 2, h: "Matches: `Jan 2020`, `MAY 2029`, `All 2025`" },
+  { l: 2, h: "Doesn't Match: `jan` `2020`, `Oct. 2025`" },
+]} />
+
+</Slide>
+
+<Slide title={"Special Characters – Repeats"}>
+
+<DataTable
+  columns={["Symbol", "Definition", "Example"]}
+  rows={[
+    ["*", "Zero or more", "\\d* matches “”, “1”, “123”"],
+    ["+", "One or more", "\\d+ matches “1”, “123”, not “”"],
+    ["?", "Zero or one (optional)", "colou?r matches color, colour"],
+    ["{n}", "Exactly n times", "\\d{4} matches “1234”, “2024”"],
+    ["{n,m}", "Between n and m times", "\\d{2,4} matches “24”, “2024”"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Data Extraction – Capture Groups"}>
+
+<Bullets items={[
+  { l: 1, h: "Parentheses `()` define “groups”" },
+  { l: 2, h: "Useful for using `|`, the “or” character" },
+  { l: 3, h: "`(January|February|…|December)`  matches 1 month" },
+  { l: 1, h: "Groups can also “capture” data, usually for extracting" },
+  { l: 2, h: "`INV-(\\d{7})`  7 digit number only, no INV-" },
+  { l: 2, h: "Doesn’t change the search, tells regex what to return" },
+]} />
+
+</Slide>
+
+<Slide title={"Lab 7"}>
+
+<Bullets items={[
+  { l: 1, h: "Regular Expressions" },
+  { l: 2, h: "Clean dataset, add new usable columns" },
+  { l: 2, h: "Submit your regex expressions" },
+  { l: 2, h: "Submit your cleaned dataset" },
+]} />
+
+</Slide>
+
+<Slide title={"Project 2"}>
+
+<Bullets items={[
+  { l: 1, h: "Due Sunday, February 22" },
+  { l: 1, h: "Project 1: FSA ratio(s) in cross section & over time" },
+  { l: 1, h: "Project 2: Returns in cross section (FSA ratio, P1 cross section) and over time" },
+  { l: 2, h: "You can choose one, multiple, interactions, etc." },
+  { l: 2, h: "I will be looking for continuity between your RQ and economic story and your tests" },
+  { l: 3, h: "I.e., how you calculate returns should match the economics" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-07/7-ug-unstructured-onlyregex/img1.png"} alt={"Unstructured Data"} />
+
+</Slide>

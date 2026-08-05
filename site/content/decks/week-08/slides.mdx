@@ -1,0 +1,333 @@
+---
+week: week-08
+title: "Analytical Modeling Overview"
+---
+
+import { Slide, CoverMeta, Bullets, TwoColumn, ImageCaption } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 8" icon="clipboard">
+
+Analytical Modeling Overview
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"What to do with our data?"}>
+
+<Bullets items={[
+  { l: 1, h: "Once we have data, what then?" },
+  { l: 1, h: "Use it!" },
+  { l: 1, h: "Model the world" },
+  { l: 2, h: "Descriptive: *What* happened?" },
+  { l: 2, h: "Diagnostic: *Why* did it happen?" },
+  { l: 2, h: "Predictive: What *will* happen?" },
+  { l: 2, h: "Prescriptive: What *should* we make happen?" },
+]} />
+
+</Slide>
+
+<Slide title={"What is a model?"}>
+
+<Bullets items={[
+  { l: 1, h: "A model is a description of how the world works" },
+  { l: 2, h: "E.g. market equity is discounted cash flows" },
+  { l: 1, h: "Could be flow-charts to formalize decision-making" },
+  { l: 2, h: "Example: Lease accounting determination" },
+  { l: 1, h: "Could be mathematical models" },
+  { l: 2, h: "Example: Y = m*X + b" },
+]} />
+
+</Slide>
+
+<Slide title={"Modeling has Pros and Cons"}>
+
+<Bullets items={[
+  { l: 1, h: "Data analytics has profound benefits in Accounting" },
+  { l: 2, h: "Business insight, cost and revenue forecasting, efficient audit and internal controls, fraud detection, …" },
+  { l: 1, h: "But models are imperfect" },
+  { l: 2, h: "Built on assumptions" },
+  { l: 2, h: "Limited by data" },
+  { l: 1, h: "Cautious optimism and professional skepticism" },
+]} />
+
+</Slide>
+
+<Slide title={"General Model Intents"}>
+
+<Bullets items={[
+  { l: 1, h: "Descriptive: What happened?" },
+  { l: 1, h: "Diagnostic: Why did it happen?" },
+  { l: 1, h: "Predictive: What will happen?" },
+  { l: 1, h: "Prescriptive: What *should* we make happen?" },
+  { l: 1, h: "Significant overlap (not a clean *classification*)" },
+  { l: 2, h: "Because it’s all just modeling" },
+]} />
+
+</Slide>
+
+<Slide title={"Model Intent Timeline"}>
+
+<Bullets items={[
+  { l: 1, h: "Identify a situation and what occurred (*descriptive*)" },
+  { l: 1, h: "Determine why it occurred the way it did (*diagnostic*)" },
+  { l: 1, h: "Leverage that knowledge to predict outcomes outside the specific situation (*predictive*)" },
+  { l: 1, h: "Consider different outcomes and choose one for some (good) reason (*prescriptive*)" },
+]} />
+
+</Slide>
+
+<Slide title={"Descriptive Models"}>
+
+<Bullets items={[
+  { l: 1, h: "Intent is to describe, or capture something" },
+  { l: 1, h: "Lots of learning about the data and setting" },
+  { l: 2, h: "Your accounting domain knowledge is critical here!" },
+  { l: 1, h: "Typically where we do exploratory data analysis" },
+  { l: 1, h: "Often utilizing summary statistics, simple regressions" },
+  { l: 2, h: "Example: Assets & Liabilities have R2 of 99%" },
+  { l: 2, h: "*Note!* Running a regression at this stage doesn’t imply causality. It just shows us average relationships." },
+]} />
+
+</Slide>
+
+<Slide title={"Diagnostic Models"}>
+
+<Bullets items={[
+  { l: 1, h: "Intent is to take the next step and learn *why* what you observed happened" },
+  { l: 1, h: "The validity of the results relies *entirely* on the model" },
+  { l: 1, h: "This is where most economists live" },
+  { l: 2, h: "They are notoriously averse to predicting the future!" },
+  { l: 1, h: "Often done with regressions/classifications" },
+  { l: 2, h: "Outlier analysis for audit / forensic accounting" },
+  { l: 2, h: "Causal models to identify true relationships" },
+]} />
+
+</Slide>
+
+<Slide title={"Predictive Models"}>
+
+<Bullets items={[
+  { l: 1, h: "Intent is to use your knowledge to model new outcomes (i.e. predicting the future)" },
+  { l: 1, h: "Also used to understand what *would have* happened if different decisions had been made" },
+  { l: 1, h: "Very dependent on model and assumptions" },
+  { l: 2, h: "Was data used “normal” or representative?" },
+  { l: 2, h: "Will assumptions change going forward (e.g. interest)?" },
+  { l: 1, h: "Often conflated with diagnostic models" },
+]} />
+
+</Slide>
+
+<Slide title={"Prescriptive Models"}>
+
+<Bullets items={[
+  { l: 1, h: "Intent is to decide what actions to take" },
+  { l: 2, h: "Flow-charts to guide decisions" },
+  { l: 2, h: "Models with turnable dials to perform *what-if* analyses" },
+  { l: 1, h: "Can result in a firm conclusion, or a data-backed input for decision-makers" },
+  { l: 1, h: "Should factor in harder-to-model inputs, like risk" },
+  { l: 1, h: "Careful about relying on predictive models of causality (the point of choosing is to change things!)" },
+]} />
+
+</Slide>
+
+<Slide title={"Modeling Caveats"}>
+
+<Bullets items={[
+  { l: 1, h: "Most modeling boils down to using historical data to make inferences about the future" },
+  { l: 2, h: "Correlational approaches (most machine learning) often cannot predict what it has not “seen”" },
+  { l: 2, h: "Modeling the structure (most economics) often will not pick up real world complexity, and parameters are determined by correlational approaches" },
+  { l: 1, h: "It all depends on the assumptions (data and model)" },
+]} />
+
+</Slide>
+
+<Slide title={"From theory to practice"}>
+
+<Bullets items={[
+  { l: 1, h: "An analytical model is usually defined as a relationship with unknown quantities" },
+  { l: 2, h: "E.g. Y = m*x + b" },
+  { l: 1, h: "Fitting is estimating the unknown quantities" },
+  { l: 2, h: "E.g. the *m* and *b*" },
+  { l: 1, h: "*Example:* Altman’s Z Score – bankruptcy prediction" },
+  { l: 1, h: "Z = 1.2 WCap + 1.4 RE + 3.3 EBIT + 1 Rev + 0.6 MVE" },
+  { l: 2, h: "Z < 1.1 “Bankrupt zone”, Z < 2.6 “Grey Zone”" },
+]} />
+
+</Slide>
+
+<Slide title={"What is a good fit?"}>
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img1.png"} alt={"What is a good fit?"} />
+
+<Bullets items={[
+  { l: 1, h: "How well does the model describe the data you have" },
+  { l: 2, h: "Called in sample fit, based on training data" },
+  { l: 1, h: "How well does the model predict new data" },
+  { l: 2, h: "Called out of sample fit, based on test data" },
+]} />
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img2.png"} alt={"What is a good fit?"} />
+
+</Slide>
+
+<Slide title={"What is a good fit?"}>
+
+<TwoColumn ratio="1-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "With regressions, we often measure how “wrong” the predictions are" },
+    { l: 1, h: "R2: how much of the outcome variable’s value the model explains" },
+    { l: 1, h: "RMSE/MAE: measures of average error" },
+  ]} />
+  </div>
+  <div slot="right">
+  <ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img3.png"} alt={"What is a good fit?"} />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Fit Examples"}>
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img4.png"} alt={"Fit Examples"} />
+
+</Slide>
+
+<Slide title={"What can data tell us?"}>
+
+<Bullets items={[
+  { l: 1, h: "Anything we measure is definitionally historical" },
+  { l: 2, h: "Accounting information especially so!" },
+  { l: 1, h: "The past and the future are often similar, so historical data is often very useful for future decisions" },
+  { l: 2, h: "But not always" },
+  { l: 2, h: "In fact, changing the future is often a core pursuit" },
+]} />
+
+</Slide>
+
+<Slide title={"Overfitting: too much of a good thing"}>
+
+<Bullets items={[
+  { l: 1, h: "Some models can just memorize the training data" },
+  { l: 1, h: "Does not mean they have learnt the “truth”" },
+]} />
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img5.png"} alt={"Overfitting: too much of a good thing"} />
+
+</Slide>
+
+<Slide title={"Identifying and solving Overfitting"}>
+
+<Bullets items={[
+  { l: 1, h: "Split data into training data and testing data" },
+  { l: 2, h: "Training: fit best model, with potential overfitting" },
+  { l: 2, h: "Test: model hasn’t seen test data, so higher test error than training suggests overfitting" },
+  { l: 1, h: "Solutions:" },
+  { l: 2, h: "More data (synthetic data?)" },
+  { l: 2, h: "Change training" },
+  { l: 2, h: "Adjust model (with cross validation)" },
+]} />
+
+</Slide>
+
+<Slide title={"Identifying and solving Overfitting"}>
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img5.png"} alt={"Identifying and solving Overfitting"} />
+
+</Slide>
+
+<Slide title={"Garbage in, Garbage out"}>
+
+<Bullets items={[
+  { l: 1, h: "Random errors (called noise) results in worse measures and outcomes, but randomly" },
+  { l: 2, h: "E.g. predicting default risk inaccurately" },
+  { l: 1, h: "Errors all in the same direction (called bias) can result in consistently wrong results" },
+  { l: 2, h: "E.g. always underestimating default risk" },
+  { l: 1, h: "Minimize noise, beware bias" },
+]} />
+
+</Slide>
+
+<Slide title={"Correlation is not Causation"}>
+
+<Bullets items={[
+  { l: 1, h: "Important to differentiate when making decisions" },
+  { l: 1, h: "Causal inference is designed to identify causation" },
+  { l: 2, h: "Has its own caveats, but better than nothing" },
+]} />
+
+</Slide>
+
+<Slide title={"Model interpretability"}>
+
+<Bullets items={[
+  { l: 1, h: "Machine learning is great at capturing correlation" },
+  { l: 1, h: "ML models are often impossible to understand" },
+  { l: 1, h: "Understanding a model is important to understanding when it will work and when it won’t" },
+  { l: 2, h: "E.g. ChatGPT seems to be able to “think” until you come across non-existent citations" },
+  { l: 1, h: "Accountants have to justify their work" },
+  { l: 2, h: "To auditors, investors, regulators, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"Effect Sizes"}>
+
+<Bullets items={[
+  { l: 1, h: "Statistical significance: high certainty in the model" },
+  { l: 1, h: "Economic significance: how many dollar signs?" },
+  { l: 1, h: "Remember that models don’t have business sense" },
+  { l: 1, h: "Important to translate model conclusions into economic impact on costs or revenues" },
+]} />
+
+</Slide>
+
+<Slide title={"Categorizing Analytical Methods"}>
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img6.png"} alt={"Categorizing Analytical Methods"} />
+
+</Slide>
+
+<Slide title={"Supervised Learning"}>
+
+<Bullets items={[
+  { l: 1, h: "Used when we have outcomes, or “y” variables" },
+  { l: 1, h: "Approaches model how features map to outcomes" },
+  { l: 1, h: "Example: predicting types, modeling risk" },
+]} />
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img7.png"} alt={"Supervised Learning"} />
+
+</Slide>
+
+<Slide title={"unsupervised Learning"}>
+
+<Bullets items={[
+  { l: 1, h: "Used when we don’t have outcomes" },
+  { l: 1, h: "Approaches capture structures and relationships" },
+  { l: 1, h: "Example: identifying groups, computing factors" },
+]} />
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img8.png"} alt={"unsupervised Learning"} />
+
+</Slide>
+
+<Slide title={"Healthy Skepticism"}>
+
+<Bullets items={[
+  { l: 1, h: "Analytical models can be very powerful" },
+  { l: 1, h: "But that doesn’t obviate your professional skepticism" },
+  { l: 2, h: "Apply your domain knowledge" },
+  { l: 2, h: "Question the assumptions" },
+  { l: 2, h: "Question the model" },
+  { l: 2, h: "Question the data" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-08/8-ug-analytical-modeling/img9.png"} alt={"Analytical Modeling Overview"} />
+
+</Slide>

@@ -1,5 +1,8 @@
 number: 2
+unlockOn: 2026-08-31
 title: "Data in Business"
+navLabel: "Data"
+icon: grid
 summary: "Understand data dimensions, sources (internal vs. external), structure, storage solutions, cloud environments, and audit standards."
 description: |
   Welcome to Week 2! This week we dive into business data. We will examine the characteristics of big data (the 5 Vs), compare internal operational systems with third-party external data, and learn the differences between structured, semi-structured, and unstructured data. We will also introduce data storage architecture (databases, data warehouses, and data lakes), the cloud environment, and the AICPA Audit Data Standards.

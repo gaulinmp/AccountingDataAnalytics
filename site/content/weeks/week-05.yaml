@@ -1,3 +1,6 @@
 number: 5
+unlockOn: 2026-09-21
 title: "Merging-RDB"
+navLabel: "RDB"
+icon: database
 summary: "Slides imported from Merging-RDB."

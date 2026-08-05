@@ -13,9 +13,24 @@ export interface TutorContext {
   slideBody?: string;
   selfCheckQuestion?: string;
   selfCheckOptions?: string[];
-  /** HINT-ONLY — the model may reason with it but must never quote it. */
+  /**
+   * HINT-ONLY — kept in the contract for hosts that track it, but NEVER
+   * serialized into any prompt (small models leak it; the copy-paste prompt is
+   * visible to the student). prompt.ts ignores it by design.
+   */
   canonicalSelfCheckAnswer?: string;
+  /** HINT-ONLY — sent to the on-device tier only, never to copy-paste. */
   selfCheckExplanation?: string;
+  /** Whether the student has checked an answer on this slide's self-check. */
+  attempted?: boolean;
+  /** The option text of the student's latest checked answer. */
+  selectedOption?: string;
+  /** Whether the latest checked answer was correct. */
+  wasCorrect?: boolean;
+  /** How many times the student has hit "Check answer" this visit. */
+  attemptCount?: number;
+  /** Per-slide instructor notes for the tutor (Slide `aiNotes`), never shown on the slide. */
+  aiNotes?: string;
   seedQuestions?: string[];
   /** Per-deck system-prompt addendum (deck frontmatter `aiPrompt`). */
   aiPrompt?: string;

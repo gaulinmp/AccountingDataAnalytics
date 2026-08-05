@@ -1,8 +1,8 @@
 import type { Tier } from './types';
 
-// Minimum Chrome that can run the Prompt API origin trial. Below this, upgrading
-// actually helps (CHROME_OUTDATED); at/above but without the API, the student
-// still lands in the copy-paste tier. (~stable Chrome 145–150 per spec §5.1.)
+// Minimum Chrome that can expose the built-in Prompt API (Chrome 138+ baseline,
+// spec §5.1). Below this, upgrading actually helps (CHROME_OUTDATED); at/above
+// but without the API, the student still lands in the copy-paste tier.
 export const MIN_CHROME = 138;
 
 export type Availability = 'unavailable' | 'downloadable' | 'downloading' | 'available';

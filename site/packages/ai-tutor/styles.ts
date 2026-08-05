@@ -16,13 +16,14 @@ export const STYLES = /* css */ `
     --ai-shadow-premium: 0 10px 30px rgba(0, 0, 0, 0.08);
     --ai-shadow-message: 0 2px 8px rgba(0, 0, 0, 0.04);
     
-    font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
     color: var(--ai-ink);
   }
 
   * { box-sizing: border-box; }
 
-  /* Launcher Button */
+  /* Launcher Button — flat crimson, quiet. The host page reserves bottom
+   * padding on the deck stage so it never sits on top of slide content. */
   .launcher {
     position: fixed;
     right: 1.5rem;
@@ -33,21 +34,18 @@ export const STYLES = /* css */ `
     gap: 0.5rem;
     border: 0;
     border-radius: 999px;
-    padding: 0.75rem 1.25rem;
-    background: linear-gradient(135deg, #cc0000 0%, #ff4d4d 100%);
+    padding: 0.6rem 1.1rem;
+    background: var(--ai-brand);
     color: var(--ai-brand-contrast);
     font: inherit;
-    font-weight: 700;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(204, 0, 0, 0.25);
-    transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, background 200ms ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: background 160ms ease;
   }
   .launcher:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 12px 30px rgba(204, 0, 0, 0.35);
-  }
-  .launcher:active {
-    transform: translateY(-1px) scale(0.98);
+    background: var(--ai-brand-hover);
   }
 
   /* Chat Panel Container */

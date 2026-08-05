@@ -1,6 +1,6 @@
 import { STYLES } from './styles';
 import { detectTier, readEnv, type Availability } from './tiers';
-import { buildCopyPastePrompt, composeUserPrompt, getSystemPrompt } from './prompt';
+import { buildCopyPastePrompt, buildInitialPrompts, composeUserPrompt } from './prompt';
 import { renderMarkdown } from './markdown';
 import type { Message, Tier, TutorContext } from './types';
 
@@ -17,6 +17,9 @@ const getLM = (): LanguageModelStatic | undefined =>
   (self as unknown as { LanguageModel?: LanguageModelStatic }).LanguageModel;
 
 const CONSENT_KEY = 'acctg5150:ai:consent';
+
+const isQuotaError = (err: unknown): boolean =>
+  err instanceof Error && err.name === 'QuotaExceededError';
 
 /**
  * <ai-tutor> — a framework-agnostic Socratic tutor. The host sets
@@ -166,7 +169,7 @@ export class AiTutor extends HTMLElement {
     this.bodyEl().innerHTML = `
       <p class="note">This tutor runs a small AI model <strong>entirely on your
       device</strong> — your questions never leave your browser. The first use
-      downloads the model (a few hundred MB, one time).</p>`;
+      downloads the model (roughly 1–2&nbsp;GB, one time).</p>`;
     this.footerEl().innerHTML = '';
     const accept = document.createElement('button');
     accept.className = 'send';
@@ -179,7 +182,8 @@ export class AiTutor extends HTMLElement {
         /* ignore */
       }
       this.renderChat();
-      void this.ensureSession(this.ctx().scopeKey); // preload in the background
+      const ctx = this.ctx();
+      void this.ensureSession(ctx.scopeKey, this.history(ctx.scopeKey)); // preload in the background
     });
     const decline = document.createElement('button');
     decline.className = 'link-btn';
@@ -223,7 +227,16 @@ export class AiTutor extends HTMLElement {
     this.renderChips();
   }
 
-  private async ensureSession(scope: string): Promise<LMSession | null> {
+  private async ensureSession(scope: string, priorHistory: Message[] = []): Promise<LMSession | null> {
+    // At most one live session: each holds KV-cache state, and a 40-slide deck
+    // would otherwise accumulate 40 of them. Transcripts survive in
+    // `this.transcripts`; a revisited slide replays them via initialPrompts.
+    for (const [key, s] of this.sessions) {
+      if (key !== scope) {
+        s.destroy?.();
+        this.sessions.delete(key);
+      }
+    }
     const existing = this.sessions.get(scope);
     if (existing) return existing;
     const lm = getLM();
@@ -232,7 +245,9 @@ export class AiTutor extends HTMLElement {
     const progress = this.showProgress();
     try {
       const session = await lm.create({
-        initialPrompts: [{ role: 'system', content: getSystemPrompt(ctx) }],
+        initialPrompts: buildInitialPrompts(ctx, priorHistory),
+        expectedInputs: [{ type: 'text', languages: ['en'] }],
+        expectedOutputs: [{ type: 'text', languages: ['en'] }],
         monitor: (m: EventTarget) => {
           m.addEventListener('downloadprogress', (e: Event) => {
             const loaded = (e as Event & { loaded?: number }).loaded ?? 0;
@@ -268,7 +283,10 @@ export class AiTutor extends HTMLElement {
     hist.push({ role: 'user', content: text });
     this.renderTranscript();
 
-    const session = await this.ensureSession(ctx.scopeKey);
+    // Everything already said, excluding the message we're about to send —
+    // replayed into initialPrompts if the session must be (re)created.
+    const prior = hist.slice(0, -1);
+    const session = await this.ensureSession(ctx.scopeKey, prior);
     const bubble = this.addBubble('assistant');
     if (!session) {
       bubble.textContent = 'The on-device model is unavailable right now. Try the copy-paste option.';
@@ -277,19 +295,41 @@ export class AiTutor extends HTMLElement {
     this.streaming = true;
     let acc = '';
     try {
-      const stream = session.promptStreaming(composeUserPrompt(text, ctx));
-      // The API yields incremental deltas; accumulate and re-render Markdown.
-      for await (const chunk of stream) {
-        acc += chunk;
-        bubble.innerHTML = renderMarkdown(acc);
-        this.scrollDown();
+      acc = await this.streamReply(session, text, ctx, bubble);
+    } catch (err) {
+      // A long chat can exhaust the session's input quota. Recreate the
+      // session (replaying recent turns) and retry once.
+      if (!acc && isQuotaError(err)) {
+        this.sessions.get(ctx.scopeKey)?.destroy?.();
+        this.sessions.delete(ctx.scopeKey);
+        const fresh = await this.ensureSession(ctx.scopeKey, prior);
+        try {
+          if (fresh) acc = await this.streamReply(fresh, text, ctx, bubble);
+        } catch {
+          /* fall through to the generic message below */
+        }
       }
-    } catch {
       if (!acc) bubble.textContent = 'Something went wrong generating a reply.';
     } finally {
       this.streaming = false;
       hist.push({ role: 'assistant', content: acc });
     }
+  }
+
+  /** Stream one reply into `bubble`, re-rendering Markdown per delta. */
+  private async streamReply(
+    session: LMSession,
+    text: string,
+    ctx: TutorContext,
+    bubble: HTMLElement
+  ): Promise<string> {
+    let acc = '';
+    for await (const chunk of session.promptStreaming(composeUserPrompt(text, ctx))) {
+      acc += chunk;
+      bubble.innerHTML = renderMarkdown(acc);
+      this.scrollDown();
+    }
+    return acc;
   }
 
   // --- copy-paste tier ----------------------------------------------------

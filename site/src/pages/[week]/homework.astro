@@ -1,13 +1,13 @@
 ---
-// Weekly homework: /week-NN/homework/. Renders the instruction sheet(s) from the
-// repo-level labs_hw/ tree (UG + optional MAcc variant) plus the grading
-// rubric slot. See src/lib/labs.ts for the id contract.
+// Weekly homework: /week-NN/homework/. Renders the instruction sheet from the
+// repo-level labs_hw/ tree plus the grading rubric slot.
+// See src/lib/labs.ts for the id contract.
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
 import WeekShell from '@layout/WeekShell.astro';
 import ComingSoon from '@layout/ComingSoon.astro';
 import InstructionDocs from '@layout/InstructionDocs.astro';
-import { docsForWeek } from '@lib/labs';
+import { docForWeek } from '@lib/labs';
 
 export const getStaticPaths = (async () => {
   const weeks = await getCollection('weeks');
@@ -15,15 +15,14 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { week } = Astro.props;
-const docs = docsForWeek(await getCollection('labs'), week.data.number, 'Homework');
-const ug = docs.ug ? await render(docs.ug) : null;
-const macc = docs.macc ? await render(docs.macc) : null;
+const doc = docForWeek(await getCollection('labs'), week.data.number, 'Homework');
+const rendered = doc ? await render(doc) : null;
 ---
 
 <WeekShell week={week} tab="homework" title="Homework" lede="This week's homework assignment." wide>
   {
-    ug || macc ? (
-      <InstructionDocs Ug={ug?.Content} Macc={macc?.Content} />
+    rendered ? (
+      <InstructionDocs Doc={rendered.Content} />
     ) : (
       <ComingSoon icon="pencil" label="Homework instructions coming soon." note="This week's homework hasn't been posted yet." />
     )
@@ -37,7 +36,7 @@ const macc = docs.macc ? await render(docs.macc) : null;
 
 <style>
   .rubric {
-    margin-top: var(--space-10);
+    margin-top: var(--space-8);
     padding-top: var(--space-6);
     border-top: 1px solid var(--hairline);
   }

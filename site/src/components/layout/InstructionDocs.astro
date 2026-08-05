@@ -1,73 +1,21 @@
 ---
-// Renders one or two (UG / MAcc) rendered-markdown instruction sheets with a
-// variant toggle when both exist, and the document typography for content that
-// comes out of remark (labs_hw markdown → plain HTML, no component blocks).
+// Renders a rendered-markdown instruction sheet with the document typography
+// for content that comes out of remark (labs_hw markdown → plain HTML, no
+// component blocks).
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 
 interface Props {
-  Ug?: AstroComponentFactory;
-  Macc?: AstroComponentFactory;
+  Doc: AstroComponentFactory;
 }
 
-const { Ug, Macc } = Astro.props;
-const both = Boolean(Ug && Macc);
+const { Doc } = Astro.props;
 ---
 
-{both && (
-  <div class="variant-toggle" role="tablist" aria-label="Course variant">
-    <button type="button" class="vt-btn is-active" data-variant-btn="ug">ACCTG 5150</button>
-    <button type="button" class="vt-btn" data-variant-btn="macc">MAcc 6155</button>
-  </div>
-)}
-
-{Ug && (
-  <article class="doc" data-doc-variant="ug">
-    <Ug />
-  </article>
-)}
-{Macc && (
-  <article class="doc" data-doc-variant="macc" hidden={both}>
-    <Macc />
-  </article>
-)}
-
-<script>
-  const btns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-variant-btn]'));
-  const docs = Array.from(document.querySelectorAll<HTMLElement>('[data-doc-variant]'));
-  btns.forEach((btn) =>
-    btn.addEventListener('click', () => {
-      btns.forEach((b) => b.classList.toggle('is-active', b === btn));
-      docs.forEach((d) => (d.hidden = d.dataset.docVariant !== btn.dataset.variantBtn));
-    })
-  );
-</script>
+<article class="doc">
+  <Doc />
+</article>
 
 <style>
-  .variant-toggle {
-    display: inline-flex;
-    gap: 0;
-    margin-bottom: var(--space-6);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-pill);
-    overflow: hidden;
-  }
-
-  .vt-btn {
-    border: 0;
-    background: transparent;
-    color: var(--ink-muted);
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    padding: var(--space-2) var(--space-4);
-    cursor: pointer;
-    transition: background var(--transition), color var(--transition);
-  }
-
-  .vt-btn.is-active {
-    background: var(--brand);
-    color: var(--brand-contrast);
-  }
-
   /* Document typography for the rendered markdown. */
   .doc {
     color: var(--ink);

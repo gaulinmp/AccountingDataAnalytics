@@ -62,10 +62,11 @@ deck-author cheatsheet's icon note.
 2. Add routes under `src/pages/` mirroring `[week].astro` / `[week]/` and link
    from the week page. All hrefs through `href()`.
 3. For labs specifically: the `labs` collection already exists — a `glob` loader
-   based at `../labs_hw` whose pattern (`week*/{Lab,Homework}-*_Instructions.md`)
-   is the curation: it admits instruction sheets only. **Never widen it** toward
-   solutions/notebooks/data. Ids keep the raw path (custom `generateId`);
-   `src/lib/labs.ts` parses week/type/UG-vs-MAcc from them. Python-markdown
+   based at `../labs_hw` whose pattern (`week*/{Lab,Homework}-*_Instructions.md`
+   minus `*_MAcc_*`) is the curation: it admits the ACCTG 5150 instruction
+   sheets only. **Never widen it** toward solutions/notebooks/data, or back
+   toward the MAcc variants — the site is undergrad-only. Ids keep the raw path
+   (custom `generateId`); `src/lib/labs.ts` parses week/type from them. Python-markdown
    artifacts (`[TOC]`, `{: .class}`, missing figures) are scrubbed at render
    time by `src/lib/remark-scrub-pymd.mjs` (registered in `astro.config.mjs`).
 4. New content type ⇒ new authoring rules: extend `deck-author` or `lab-author`
@@ -78,7 +79,7 @@ tabs `slides | activity | lab | homework | quiz` (`[week]/<tab>.astro`, URLs own
 by `weekTabUrl()` in `src/lib/url.ts`). The slides page renders the week's single
 monolithic deck (`content/decks/week-NN/slides.mdx`) on the dark stage; the other
 four share the light `WeekShell.astro` layout, with `ComingSoon.astro` as the
-empty state and `InstructionDocs.astro` (UG/MAcc toggle + doc typography) for
+empty state and `InstructionDocs.astro` (doc typography) for
 lab/homework sheets. The header (`SiteHeader.astro`) reads each week's nav icon
 and short label from `navLabel`/`icon` in `content/weeks/week-NN.yaml` — never
 hardcode week→icon maps in components.
@@ -95,5 +96,15 @@ npm run test:e2e     # playwright (tests/e2e) — run when touching islands/page
 
 Visual changes additionally need `npm run dev` and an eyeball pass on: index
 page, a week overview, a content-heavy week deck (e.g. `/week-03/slides/`), a
-lab page with both UG/MAcc variants (e.g. `/week-05/lab/`), and print preview
-(decks are print-styled).
+lab page (e.g. `/week-05/lab/`), and print preview (decks are print-styled).
+
+Weeks are date-gated (`unlockOn`), so most of that content renders as a "Not
+yet!" card until the term reaches it. Add `?preview=all` to any URL to see it
+(or `?preview=YYYY-MM-DD` for a specific day, `?preview=off` to stop) — the
+choice persists in `localStorage` and raises a corner badge. See
+`src/lib/unlock.ts`.
+
+The spacing scale is **1,2,3,4,5,6,8,12** — there is no `--space-7/9/10/11`, and
+one undefined token silently voids the *entire* declaration it appears in (this
+is what left the lock card jammed into the top-left corner for a while). When a
+box mysteriously loses its margin or padding, check the token exists.

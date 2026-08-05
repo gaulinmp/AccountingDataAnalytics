@@ -359,12 +359,15 @@ const tabHref = (weekId: string, tab: HeaderTab) =>
 </style>
 
 <script>
-  import { applyLocks } from '../../lib/unlock';
+  import { applyLocks, mountPreviewBadge, syncPreviewFromUrl } from '../../lib/unlock';
 
   // Date-gate every [data-unlock-on] element on the page (nav items here,
   // week rows on the index, WeekLock wrappers on week pages). The header is
-  // on every page, so this is the one place the check runs.
-  applyLocks();
+  // on every page, so this is the one place the check runs — and the one place
+  // that picks up a `?preview=…` clock override (see src/lib/unlock.ts).
+  const preview = syncPreviewFromUrl();
+  applyLocks(document, preview);
+  mountPreviewBadge(preview);
 
   // Dynamic horizontal scrolling behavior for week navigation
   const scrollNav = () => {

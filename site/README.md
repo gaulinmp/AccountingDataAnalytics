@@ -117,3 +117,20 @@ Everything is escaped, so the text is safe by construction. Example:
 cd site && npm run dev      # then open the deck's URL
 npm run build               # this is what CI runs; if it passes, your content is valid
 ```
+
+### Seeing a week that hasn't unlocked yet
+
+Weeks carry an `unlockOn` date and show a "Not yet!" card until it passes, so
+most of the site looks empty while you are working ahead. Append `?preview=` to
+any URL to move the clock:
+
+| URL | What you see |
+|-----|--------------|
+| `?preview=all` | every week unlocked, whatever the date |
+| `?preview=2026-09-21` | the site exactly as it looks that day |
+| `?preview=off` | back to the real clock |
+
+The setting sticks as you click around (it lives in `localStorage`), and a black
+pill in the bottom-left corner shows it is on — click the pill to turn it off.
+It works in `npm run dev` and on the deployed site alike; the date gate is a
+courtesy curtain, not security, so there is nothing to protect here.

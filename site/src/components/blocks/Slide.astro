@@ -64,21 +64,25 @@ const isTitle = variant === 'title';
 </section>
 
 <style>
+  /* Flat content, not a card: the slide *is* the page's left column, so it has
+   * no surface, frame, or elevation of its own. Structure comes from the
+   * hairline under the head and from the reinforcement rail beside it. */
   .slide {
     display: flex;
     flex-direction: column;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-1);
+    background: transparent;
+    border: 0;
+    /* Column gap doubles as the minimum spacing above the bottom-anchored key
+     * concept (and, on narrow screens, the quizzes moved in beside it). */
+    gap: var(--space-5);
     margin-bottom: var(--space-6);
-    overflow: hidden;
     padding: 0;
   }
 
   .slide__head {
-    padding: var(--space-6) var(--space-6) var(--space-4);
+    padding: 0 0 var(--space-4);
     margin-bottom: 0;
+    border-bottom: 1px solid var(--hairline);
   }
 
   .slide__kicker {
@@ -106,18 +110,18 @@ const isTitle = variant === 'title';
   }
 
   .slide__body {
-    padding: 0 var(--space-6) var(--space-6);
+    padding: 0;
     font-size: var(--fs-lg);
     line-height: var(--lh-base);
     flex: 1;
   }
 
-  /* Anchors to the slide's bottom edge when the stage stretches the frame
-   * (flex column + margin-top:auto), so short slides stay composed. */
+  /* Inline (narrow / no-JS) placement only — on wide screens the
+   * ReinforcementPane moves this into the companion rail. `margin-top: auto`
+   * anchors it to the bottom edge when the frame stretches a short slide. */
   .slide__key-concept {
     display: block;
-    margin: auto var(--space-6) var(--space-6);
-    padding-top: var(--space-4);
+    margin: auto 0 0;
   }
 
   /* Shared key concept styling */
@@ -321,8 +325,12 @@ const isTitle = variant === 'title';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: var(--surface);
-    padding: var(--space-8) var(--space-6);
+    background: transparent;
+    padding: var(--space-8) 0;
+  }
+
+  .slide--title .slide__head {
+    border-bottom: 0;
   }
 
   .slide--title .slide__icon-only {

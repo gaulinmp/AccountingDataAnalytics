@@ -77,7 +77,11 @@ deck-author cheatsheet's icon note.
 Each week serves six pages: `/week-NN/` (overview, `[week].astro`) plus the five
 tabs `slides | activity | lab | homework | quiz` (`[week]/<tab>.astro`, URLs owned
 by `weekTabUrl()` in `src/lib/url.ts`). The slides page renders the week's single
-monolithic deck (`content/decks/week-NN/slides.mdx`) on the dark stage; the other
+monolithic deck (`content/decks/week-NN/slides.mdx`) as flat, full-width page
+content — the slide is *not* a card: no surface, frame, or elevation of its own,
+and when the active slide has a Key Concept or quiz the `Companion.astro`
+reinforcement rail claims the right ~30% (`:has()` on a non-hidden aside, so an
+empty rail collapses to one column). The other
 four share the light `WeekShell.astro` layout, with `ComingSoon.astro` as the
 empty state and `InstructionDocs.astro` (doc typography) for
 lab/homework sheets. The header (`SiteHeader.astro`) reads each week's nav icon

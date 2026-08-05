@@ -2,8 +2,12 @@
 // Relocates the active slide's Key Concept and inline <Quiz> forms into the
 // companion aside (Companion.astro, [data-deck-aside]) on wide screens. Nodes
 // are *moved*, not cloned, so QuizCard enhancement and answer state survive.
-// They return home on slide change, narrow viewports, and printing — so the
-// no-JS / mobile / print experience is the untouched inline layout.
+// They return home on slide change and printing — so the no-JS / print
+// experience is the untouched inline layout.
+//
+// Narrow viewports have no aside, but they still get the rail's *order*: the
+// quizzes move to the end of the slide, below the Key Concept, so reading down
+// the page matches reading down the sidebar (concept, then self-check).
 ---
 
 <script>
@@ -43,11 +47,19 @@
 
     const apply = () => {
       restore();
-      if (!wide.matches) return;
       const slide = companion.querySelector<HTMLElement>('[data-slide].is-active');
       if (!slide) return;
       const key = slide.querySelector<HTMLElement>('.slide__key-concept');
       const quizzes = Array.from(slide.querySelectorAll<HTMLElement>('[data-quiz]'));
+
+      if (!wide.matches) {
+        // No aside to fill — just reorder in place so the Key Concept (last
+        // child of the slide) still precedes the quizzes, which start out
+        // nested in the slide body above it.
+        if (key) for (const quiz of quizzes) take(quiz, slide);
+        return;
+      }
+
       if (key) take(key, keySlot);
       for (const quiz of quizzes) take(quiz, quizSlot);
       quizDetails.hidden = quizzes.length === 0;

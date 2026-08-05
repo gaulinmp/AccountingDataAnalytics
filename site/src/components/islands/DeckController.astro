@@ -146,6 +146,48 @@
       progress.appendChild(progressFill);
       companion!.insertBefore(progress, pager);
 
+      // The strip only scrolls when it actually overflows, and each edge only
+      // fades when there is something clipped behind it — otherwise the first
+      // and last numbers sit *under* the fade and the current slide reads as
+      // missing at either end of the deck.
+      const maxScroll = () => numbersContainer.scrollWidth - numbersContainer.clientWidth;
+
+      function updateFades() {
+        const max = maxScroll();
+        const left = numbersContainer.scrollLeft;
+        numbersContainer.classList.toggle('is-clipped-start', left > 1);
+        numbersContainer.classList.toggle('is-clipped-end', max > 1 && left < max - 1);
+      }
+
+      // Scroll the current number into the middle of the strip, clamped to the
+      // ends so slide 1 and the last slide sit flush instead of half-scrolled.
+      // Two things this has to avoid: offsetLeft, which is measured from the
+      // nearest *positioned* ancestor rather than the strip, and smooth
+      // scrolling, which some engines drop entirely on an overflow container —
+      // either one leaves the strip parked at 0 with the active number offscreen.
+      function centerActive() {
+        const active = numberButtons[index];
+        const max = maxScroll();
+        if (!active || max <= 0) {
+          numbersContainer.scrollLeft = 0;
+          updateFades();
+          return;
+        }
+        const delta =
+          active.getBoundingClientRect().left - numbersContainer.getBoundingClientRect().left;
+        const target =
+          numbersContainer.scrollLeft +
+          delta -
+          (numbersContainer.clientWidth - active.offsetWidth) / 2;
+        numbersContainer.scrollLeft = Math.max(0, Math.min(target, max));
+        updateFades();
+      }
+
+      numbersContainer.addEventListener('scroll', updateFades, { passive: true });
+      window.addEventListener('resize', centerActive);
+      // Widths shift once the display face swaps in; re-center when it lands.
+      document.fonts?.ready.then(centerActive);
+
       companion!.addEventListener(SLIDE_CHANGE, (e) => {
         const d = (e as CustomEvent<SlideChangeDetail>).detail;
         prev.disabled = d.index === 0;
@@ -169,11 +211,7 @@
         });
 
         // Keep the active number centered in the scrolling strip.
-        const active = numberButtons[d.index];
-        numbersContainer.scrollTo({
-          left: active.offsetLeft - numbersContainer.clientWidth / 2 + active.clientWidth / 2,
-          behavior: 'smooth',
-        });
+        centerActive();
       });
     }
 
@@ -194,13 +232,14 @@
 </script>
 
 <style is:global>
-  /* Pager + progress live on the dark stage: quiet, light-on-dark, no chrome. */
+  /* Pager + progress sit under the slide column on the page surface: quiet
+   * hairline chrome, crimson only for the current position. */
   .deck-progress {
     display: none;
     height: 2px;
     margin: var(--space-5) auto 0;
     max-width: 24rem;
-    background: var(--stage-border);
+    background: var(--hairline);
     border-radius: var(--radius-pill);
     overflow: hidden;
   }
@@ -222,7 +261,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-3);
-    padding: var(--space-2) 0 0;
+    padding: var(--space-3) 0 0;
     max-width: fit-content;
     margin: 0 auto;
   }
@@ -232,8 +271,13 @@
   }
 
   /* A single scrolling strip — long decks scroll the numbers instead of
-   * wrapping into rows. The active number is kept centered by the controller. */
+   * wrapping into rows. The active number is kept centered by the controller,
+   * which also toggles the is-clipped-* classes: each edge fades only while
+   * something is actually hidden behind it, so slide 1 and the last slide stay
+   * fully legible when the strip is parked at either end. */
   .deck-pager__numbers {
+    --fade-start: 0px;
+    --fade-end: 0px;
     display: flex;
     align-items: center;
     gap: var(--space-1);
@@ -242,9 +286,16 @@
     max-width: min(60vw, 24rem);
     scrollbar-width: none;
     -ms-overflow-style: none;
-    /* Fade the clipped edges so the strip reads as scrollable. */
-    -webkit-mask-image: linear-gradient(to right, transparent, black 1.25rem, black calc(100% - 1.25rem), transparent);
-    mask-image: linear-gradient(to right, transparent, black 1.25rem, black calc(100% - 1.25rem), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent);
+    mask-image: linear-gradient(to right, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent);
+  }
+
+  .deck-pager__numbers.is-clipped-start {
+    --fade-start: 1.25rem;
+  }
+
+  .deck-pager__numbers.is-clipped-end {
+    --fade-end: 1.25rem;
   }
 
   .deck-pager__numbers::-webkit-scrollbar {
@@ -264,7 +315,7 @@
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
-    color: var(--stage-ink-muted);
+    color: var(--ink-muted);
     font-size: var(--fs-sm);
     font-weight: 500;
     font-variant-numeric: tabular-nums;
@@ -273,16 +324,19 @@
   }
 
   .deck-pager__num:hover:not(:disabled) {
-    color: var(--stage-ink);
-    background: rgba(255, 255, 255, 0.06);
+    color: var(--ink);
+    background: var(--surface-muted);
   }
 
-  .deck-pager__num.is-active {
-    color: var(--stage-ink);
+  /* Filled, not underlined: the current slide has to stay obvious even when
+   * it's the first or last chip in the strip. */
+  .deck-pager__num.is-active,
+  .deck-pager__num.is-active:disabled {
+    color: var(--brand-contrast);
+    background: var(--brand);
     font-weight: 700;
     cursor: default;
-    box-shadow: inset 0 -2px 0 var(--brand);
-    border-radius: 0;
+    opacity: 1;
   }
 
   .deck-pager__btn {
@@ -291,10 +345,10 @@
     justify-content: center;
     width: 2.25rem;
     height: 2.25rem;
-    border: 1px solid var(--stage-border);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: transparent;
-    color: var(--stage-ink-muted);
+    color: var(--ink-muted);
     cursor: pointer;
     transition: color var(--transition), border-color var(--transition);
   }
@@ -305,8 +359,8 @@
   }
 
   .deck-pager__btn:hover:not(:disabled) {
-    border-color: var(--stage-ink-muted);
-    color: var(--stage-ink);
+    border-color: var(--ink-muted);
+    color: var(--ink);
   }
 
   .deck-pager__btn:disabled {

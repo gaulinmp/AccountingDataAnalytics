@@ -33,7 +33,7 @@ const Content = rendered?.Content;
 {
   deck && Content ? (
     <Layout title={deck.data.title} description={deck.data.subtitle}>
-      {/* The deck sits on a dark stage — header top, slides middle, footer bottom. */}
+      {/* Header top, slides middle, footer bottom — the deck is flat page content. */}
       <div class="deck-page">
         <SiteHeader activeWeekId={week.id} activeTab="slides" />
         <WeekLock week={week}>
@@ -88,7 +88,7 @@ const Content = rendered?.Content;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--stage-bg);
+    background-color: var(--surface);
   }
   .deck-page :global(.companion),
   .deck-page > :global(.week-lock) {

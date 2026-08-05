@@ -63,7 +63,7 @@ uv run python labs_hw/convert_md.py
 ### Key Files
 
 - **`pyproject.toml`**: Environment configuration with dependencies including:
-  - Data science: pandas, duckdb, scikit-learn, scikit-image, seaborn, statsmodels, umap-learn, plotly
+  - Data science: pandas, duckdb, scikit-learn, scikit-image, seaborn, statsmodels, matplotlib, plotly
   - Databases: sqlalchemy, psycopg, pyodbc
   - Notebooks: jupyter notebook, nbconvert
   - AI/LLM: google-genai

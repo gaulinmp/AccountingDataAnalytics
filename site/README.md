@@ -116,21 +116,45 @@ Everything is escaped, so the text is safe by construction. Example:
 ```bash
 cd site && npm run dev      # then open the deck's URL
 npm run build               # this is what CI runs; if it passes, your content is valid
+make gate                   # everything CI checks: types, build, unit tests, e2e
 ```
+
+`make gate` (or `npm run gate`) runs the four checks in order and prints one
+line each — it only gets chatty when something fails, and then it shows you the
+whole failure. Run a subset with `npm run gate -- check build`. It also works
+from the repo root, as do `make screenshot` and `make site-help`.
+
+### Screenshotting a page
+
+```bash
+make screenshot PAGES="/ /week-04/" PREVIEW=2026-09-08
+npm run screenshot -- /week-03/slides/ --full
+npm run screenshot -- / --selector=".site-header"
+```
+
+PNGs land in `site/.screenshots/` (gitignored). If a dev or preview server is
+already running on :4321 it uses that; otherwise it builds, starts one, and
+shuts it down afterwards. `PREVIEW=` sets the preview clock (below) for the
+shot, which is how you photograph a week that has not unlocked yet.
 
 ### Seeing a week that hasn't unlocked yet
 
-Weeks carry an `unlockOn` date and show a "Not yet!" card until it passes, so
-most of the site looks empty while you are working ahead. Append `?preview=` to
-any URL to move the clock:
+Weeks carry an `unlockOn` date; before it passes, the week still appears in the
+header nav and the home-page syllabus, but greyed out and un-clickable, with a
+lock icon and an "Unlocks *Monday, September 21*" note — students can see the
+shape of the term without wandering into it. **Individual week pages still
+render at their URLs** — type `/week-05/slides/` and it works. The gate is a
+courtesy (keep attention on this week), not security.
+
+To open the gated entries while you are working ahead, append `?preview=` to
+any URL:
 
 | URL | What you see |
 |-----|--------------|
-| `?preview=all` | every week unlocked, whatever the date |
+| `?preview=all` | every week live and clickable, whatever the date |
 | `?preview=2026-09-21` | the site exactly as it looks that day |
 | `?preview=off` | back to the real clock |
 
 The setting sticks as you click around (it lives in `localStorage`), and a black
 pill in the bottom-left corner shows it is on — click the pill to turn it off.
-It works in `npm run dev` and on the deployed site alike; the date gate is a
-courtesy curtain, not security, so there is nothing to protect here.
+It works in `npm run dev` and on the deployed site alike.

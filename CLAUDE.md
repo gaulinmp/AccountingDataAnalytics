@@ -10,7 +10,7 @@ One repo, three content systems, all markdown-first and agent-editable:
 |------|-------|-------|---------------|
 | Lecture decks (website slides) | `site/content/decks/`, `site/content/weeks/` | `deck-author` | `cd site && npm run build` |
 | Labs, homework, projects | `labs_hw/` | `lab-author` | `uv run python code/utils/convert_md.py` (regenerates HTML) |
-| Site code: components, widgets, layout, styling | `site/src/` | `site-dev` | `cd site && npm run check && npm run build && npm test` |
+| Site code: components, widgets, layout, styling | `site/src/` | `site-dev` | `cd site && npm run --silent gate` |
 
 Source PPTX decks live in `slides/` and convert to site decks via `pptx-to-deck`
 (wraps `code/utils/pptx2md.py`).

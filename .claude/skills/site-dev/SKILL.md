@@ -91,22 +91,42 @@ hardcode week→icon maps in components.
 ## Validation (required before claiming done)
 
 ```bash
-cd site
-npm run check        # astro check — types, props, icon names
-npm run build        # schema-valid content + working static build
-npm test             # vitest unit tests (tests/unit)
-npm run test:e2e     # playwright (tests/e2e) — run when touching islands/pages
+cd site && npm run --silent gate
 ```
 
-Visual changes additionally need `npm run dev` and an eyeball pass on: index
-page, a week overview, a content-heavy week deck (e.g. `/week-03/slides/`), a
-lab page (e.g. `/week-05/lab/`), and print preview (decks are print-styled).
+One command, four steps — `check` (types, props, icon names) → `build`
+(content schema + static build) → `unit` (vitest) → `e2e` (playwright). It
+prints one line per step on success and the failing step's **full** output on
+failure, then exits non-zero. Do not run the four npm scripts by hand: between
+them they emit ~320 lines, nearly all `'z' is deprecated` noise from
+`astro:content`, and re-reading that every run is the single most wasteful
+thing in this workflow. Narrow it while iterating with `npm run gate -- check`
+(any subset, e.g. `-- build e2e`); `-- --verbose` prints everything.
+`scripts/gate.mjs` owns the step list; `make gate` works from site/ or the repo
+root.
 
-Weeks are date-gated (`unlockOn`), so most of that content renders as a "Not
-yet!" card until the term reaches it. Add `?preview=all` to any URL to see it
-(or `?preview=YYYY-MM-DD` for a specific day, `?preview=off` to stop) — the
-choice persists in `localStorage` and raises a corner badge. See
-`src/lib/unlock.ts`.
+Visual changes additionally need an eyeball pass. Don't hand-roll a Playwright
+spec for this — `npm run screenshot` exists:
+
+```bash
+npm run --silent screenshot -- / /week-03/slides/ --preview=2026-09-08
+npm run --silent screenshot -- / --selector=".site-header"   # one element
+npm run --silent screenshot -- /week-05/lab/ --full          # whole page
+```
+
+It reuses a dev/preview server if one is on :4321 and otherwise starts (and
+stops) its own, writing PNGs to `site/.screenshots/` (gitignored). Read the
+files back to check the work. Cover: index page, a week overview, a
+content-heavy deck (e.g. `/week-03/slides/`), a lab page (e.g. `/week-05/lab/`),
+and print preview (decks are print-styled — that one still needs a browser).
+
+Weeks are date-gated (`unlockOn`): a week whose date has not arrived stays
+listed in the header nav and home syllabus but is greyed out, lock-badged and
+un-clickable (`.is-locked`, applied client-side by `applyLocks()`; clicks eaten
+by `guardLockedLinks()`). Week *pages* themselves are not gated — a direct URL
+renders normally. Add `?preview=all` to any URL to open every week (or
+`?preview=YYYY-MM-DD` for a specific day, `?preview=off` to stop) — the choice
+persists in `localStorage` and raises a corner badge. See `src/lib/unlock.ts`.
 
 The spacing scale is **1,2,3,4,5,6,8,12** — there is no `--space-7/9/10/11`, and
 one undefined token silently voids the *entire* declaration it appears in (this

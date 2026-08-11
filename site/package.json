@@ -12,6 +12,8 @@
     "check": "astro check",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "gate": "node scripts/gate.mjs",
+    "screenshot": "node scripts/screenshot.mjs",
     "astro": "astro"
   },
   "dependencies": {

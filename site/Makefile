@@ -1,11 +1,15 @@
-# ACCTG 5150 course platform — task runner.
-# The Astro app lives in site/; these targets wrap its npm scripts so you can
-# drive everything from the repo root. Run `make` (or `make help`) for the list.
+# ACCTG 5150 course platform — task runner for the Astro app.
+# Run from site/ (`make gate`), or from the repo root via the passthrough
+# targets in ../Makefile. Run `make` (or `make help`) for the list.
 
 SITE := .
 
+# Pages for `make screenshot`, space-separated; PREVIEW simulates a date.
+PAGES ?= /
+PREVIEW ?=
+
 .DEFAULT_GOAL := help
-.PHONY: help install serve dev build preview check test test-e2e test-all clean
+.PHONY: help install serve dev build preview check test test-e2e gate test-all screenshot clean
 
 help: ## Show this help
 	@echo "ACCTG 5150 — make targets:"
@@ -39,7 +43,13 @@ test: $(SITE)/node_modules ## Run unit tests (vitest)
 test-e2e: $(SITE)/node_modules ## Run end-to-end tests (playwright)
 	cd $(SITE) && npm run test:e2e
 
-test-all: check test test-e2e ## Run type-check + unit + e2e (the CI gate)
+gate: $(SITE)/node_modules ## Check + build + unit + e2e; quiet unless something fails
+	cd $(SITE) && npm run --silent gate
 
-clean: ## Remove build output (site/dist, .astro)
-	rm -rf $(SITE)/dist $(SITE)/.astro
+test-all: gate ## Alias for `gate` (the CI gate)
+
+screenshot: $(SITE)/node_modules ## Screenshot pages: make screenshot PAGES="/ /week-04/" PREVIEW=2026-09-08
+	cd $(SITE) && npm run --silent screenshot -- $(PAGES) $(if $(PREVIEW),--preview=$(PREVIEW),) $(if $(FULL),--full,)
+
+clean: ## Remove build output (site/dist, .astro, .screenshots)
+	rm -rf $(SITE)/dist $(SITE)/.astro $(SITE)/.screenshots

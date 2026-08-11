@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import { weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
+import { unlockLabel } from '@lib/unlock';
 import Icon from '@components/Icon.astro';
 import type { IconName } from '@lib/icons';
 
@@ -61,14 +62,14 @@ const tabHref = (weekId: string, tab: HeaderTab) =>
                 title={`Week ${week.data.number}: ${week.data.title}`}
                 aria-current={isActive ? 'page' : undefined}
                 data-unlock-on={week.data.unlockOn?.toISOString()}
+                data-unlock-label={week.data.unlockOn && unlockLabel(week.data.unlockOn)}
               >
                 <span class="week-nav-item__icon">
                   <Icon name={icon} size={20} />
-                  {week.data.unlockOn && (
-                    <span class="week-nav-item__lock">
-                      <Icon name="lock" size={20} />
-                    </span>
-                  )}
+                  {/* Shown only while .is-locked — see the gate styles below. */}
+                  <span class="week-nav-item__lock" aria-hidden="true">
+                    <Icon name="lock" size={11} />
+                  </span>
                 </span>
                 <span class="week-nav-item__label">{label}</span>
               </a>
@@ -219,29 +220,40 @@ const tabHref = (weekId: string, tab: HeaderTab) =>
   }
 
   .week-nav-item__icon {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 1.5rem;
   }
 
-  /* Date-gated weeks: dimmed, week icon swapped for a lock (applyLocks()
-   * toggles .is-locked client-side). Still clickable — the page itself shows
-   * the "Unlocks …" placeholder. */
-  .week-nav-item__lock {
-    display: none;
-  }
-
-  .week-nav-item.is-locked {
-    opacity: 0.45;
+  /* Date-gated weeks: still listed, but greyed out and inert until the unlock
+   * date (applyLocks() toggles .is-locked client-side, and also disables the
+   * link for keyboard/AT). The week stays in the nav so students can see the
+   * shape of the term; the page itself still renders at its URL.
+   * Pointer events stay live so the "Unlocks <date>" tooltip and the
+   * not-allowed cursor still land — guardLockedLinks() eats the click. */
+  .week-nav-item.is-locked,
+  .week-nav-item.is-locked:hover {
+    color: var(--gray-500);
+    background: transparent;
+    cursor: not-allowed;
   }
 
   .week-nav-item.is-locked .week-nav-item__icon > :global(svg) {
+    opacity: 0.5;
+  }
+
+  .week-nav-item__lock {
     display: none;
+    position: absolute;
+    inset-block-end: -2px;
+    inset-inline-end: -6px;
+    color: var(--ink-muted);
   }
 
   .week-nav-item.is-locked .week-nav-item__lock {
-    display: flex;
+    display: block;
   }
 
   .week-nav-item__label {
@@ -359,14 +371,16 @@ const tabHref = (weekId: string, tab: HeaderTab) =>
 </style>
 
 <script>
-  import { applyLocks, mountPreviewBadge, syncPreviewFromUrl } from '../../lib/unlock';
+  import { applyLocks, guardLockedLinks, mountPreviewBadge, syncPreviewFromUrl } from '../../lib/unlock';
 
-  // Date-gate every [data-unlock-on] element on the page (nav items here,
-  // week rows on the index, WeekLock wrappers on week pages). The header is
-  // on every page, so this is the one place the check runs — and the one place
-  // that picks up a `?preview=…` clock override (see src/lib/unlock.ts).
+  // Date-gate every [data-unlock-on] element on the page (nav items here and
+  // week rows on the home page): grey them out and make them un-clickable
+  // until their unlock date. The header ships on every page, so this is the
+  // one place the check runs — and the one place that picks up a `?preview=…`
+  // clock override (see src/lib/unlock.ts).
   const preview = syncPreviewFromUrl();
   applyLocks(document, preview);
+  guardLockedLinks(document);
   mountPreviewBadge(preview);
 
   // Dynamic horizontal scrolling behavior for week navigation

@@ -94,7 +94,7 @@ Source of truth: [site/src/content.config.ts](../../../site/src/content.config.t
 | `summary`     | string   | One-line summary (shown in nav). |
 | `description` | string   | Paragraph intro (YAML block scalar `|`). |
 | `objectives`  | string[] | Learning objectives — **decks teach to these.** |
-| `unlockOn`    | date     | Optional date-gate (`2026-09-14`). Before it, the week is greyed/locked in nav and its pages show "Unlocks …". Client-side clock check only — intentionally not secure. A bare date unlocks at midnight UTC (the evening before, Mountain Time). |
+| `unlockOn`    | date     | Optional date-gate (`2026-09-14`). Before it, the week is greyed out and un-clickable in the nav and home syllabus, with an "Unlocks …" note; the week's own pages still render at their URLs. Client-side clock check only — intentionally not secure. A bare date unlocks at midnight UTC (the evening before, Mountain Time). |
 
 ## Component cheatsheet
 

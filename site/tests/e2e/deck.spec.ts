@@ -1,14 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { DECK, QUIZ_SLIDE, unlockWeeks } from './support';
+import { DECK, QUIZ_SLIDE } from './support';
 
 // Wide viewport so the reinforcement aside (min-width: 1100px) is active.
 test.use({ viewport: { width: 1280, height: 800 } });
-
-// Week 3 is date-gated until 2026-09-07; without this the deck renders inside a
-// display:none WeekLock and every visibility assertion below fails. See support.ts.
-test.beforeEach(async ({ page }) => {
-  await unlockWeeks(page);
-});
 
 test('keyboard nav + ?slide deep-link track the active slide', async ({ page }) => {
   await page.goto(DECK);

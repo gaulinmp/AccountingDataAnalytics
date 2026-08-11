@@ -1,11 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { DECK, DECK_SLIDES, unlockWeeks } from './support';
+import { DECK, DECK_SLIDES } from './support';
 
 test.use({ viewport: { width: 1280, height: 800 } });
-
-test.beforeEach(async ({ page }) => {
-  await unlockWeeks(page);
-});
 
 // We can't run real Gemini Nano in CI, so mock window.LanguageModel and assert the
 // WIRING: the system prompt is sent on create, the CONTEXT block is streamed on

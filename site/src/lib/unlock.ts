@@ -1,12 +1,14 @@
 // Week date-gating. Any element carrying data-unlock-on="<ISO date>" gets an
-// `is-locked` class while the student's clock is before that instant; each
-// component styles its own locked state. This is a courtesy curtain, not
-// security: the content ships in the static build, and the check is trivially
-// bypassed with a clock change or devtools — by design (spec: spare students
-// info overload, don't build a fortress).
+// `is-locked` class while the student's clock is before that instant; the
+// header nav and the home-page syllabus use that class to grey the entry out
+// and stop its links from being followed. A locked week stays *visible* — the
+// upcoming term is part of the syllabus — it just reads as not-yet-open, with
+// an "Unlocks <date>" note. Individual week pages are not gated: a student who
+// knows (or guesses) a URL gets the normal page. The gate is a listing
+// courtesy, to keep attention on this week; there is nothing to secure here.
 //
-// Because it is a curtain and not a lock, the site also ships an explicit way
-// to pull it aside — the *preview clock* below. Append `?preview=…` to any URL:
+// The *preview clock* below flips the gate off so the instructor can see the
+// gated entries as students will get them. Append `?preview=…` to any URL:
 //
 //   ?preview=all           every week reads as unlocked
 //   ?preview=2026-09-21    pretend "now" is that date (bare dates = noon UTC)
@@ -81,11 +83,71 @@ export function clearPreview() {
   location.reload();
 }
 
-/** Client-side: toggle `is-locked` on every date-gated element. */
+/** Tooltip for a gated entry: the element's own title plus, while locked, when
+ *  it opens. Pure so the wording is unit-testable. */
+export function lockTitle(base: string, label: string | undefined, locked: boolean): string {
+  if (!locked || !label) return base;
+  return base ? `${base} · Unlocks ${label}` : `Unlocks ${label}`;
+}
+
+/** Disable/re-enable a link inside a gated entry. CSS greys it out and blocks
+ *  the pointer; this is the keyboard/AT half. The original tabindex is parked
+ *  in a data attribute so unlocking (preview clock) restores it exactly. */
+function setLinkDisabled(a: HTMLAnchorElement, disabled: boolean) {
+  const PARKED = 'lockTabindex';
+  if (disabled) {
+    a.setAttribute('aria-disabled', 'true');
+    if (!(PARKED in a.dataset)) {
+      a.dataset[PARKED] = a.getAttribute('tabindex') ?? '';
+      a.setAttribute('tabindex', '-1');
+    }
+  } else {
+    a.removeAttribute('aria-disabled');
+    if (PARKED in a.dataset) {
+      const parked = a.dataset[PARKED]!;
+      if (parked) a.setAttribute('tabindex', parked);
+      else a.removeAttribute('tabindex');
+      delete a.dataset[PARKED];
+    }
+  }
+}
+
+/** Client-side: toggle `is-locked` on every date-gated element, disable the
+ *  links inside the locked ones, and note the unlock date in their tooltip. */
 export function applyLocks(root: ParentNode = document, preview: Preview = parsePreview(readStored())) {
-  root
-    .querySelectorAll<HTMLElement>('[data-unlock-on]')
-    .forEach((el) => el.classList.toggle('is-locked', isLocked(el.dataset.unlockOn, preview)));
+  root.querySelectorAll<HTMLElement>('[data-unlock-on]').forEach((el) => {
+    const locked = isLocked(el.dataset.unlockOn, preview);
+    el.classList.toggle('is-locked', locked);
+
+    if (el.dataset.unlockLabel) {
+      const base = (el.dataset.lockBaseTitle ??= el.getAttribute('title') ?? '');
+      const title = lockTitle(base, el.dataset.unlockLabel, locked);
+      if (title) el.setAttribute('title', title);
+      else el.removeAttribute('title');
+    }
+
+    const links = el instanceof HTMLAnchorElement ? [el] : [];
+    links.push(...el.querySelectorAll('a'));
+    links.forEach((a) => setLinkDisabled(a, locked));
+  });
+}
+
+/** Swallow clicks (and Enter) on links inside a locked entry, so a greyed-out
+ *  week cannot be navigated into by any route the CSS pointer block misses. */
+export function guardLockedLinks(doc: Document = document) {
+  if (doc.documentElement.dataset.lockGuard) return;
+  doc.documentElement.dataset.lockGuard = '';
+  doc.addEventListener(
+    'click',
+    (event) => {
+      const link = (event.target as Element | null)?.closest?.('a');
+      if (link?.closest('[data-unlock-on].is-locked')) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    true,
+  );
 }
 
 /** Corner badge so a preview session is never mistaken for the real site. */

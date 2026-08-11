@@ -4,12 +4,12 @@
 // no cards, no elevation. Crimson appears only on interaction and the code.
 import { getCollection, getEntry } from 'astro:content';
 import { weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
+import { unlockLabel } from '@lib/unlock';
 import Layout from '@layout/Layout.astro';
 import SiteHeader from '@layout/SiteHeader.astro';
 import Footer from '@layout/Footer.astro';
 import Icon from '@components/Icon.astro';
 import type { IconName } from '@lib/icons';
-import { unlockLabel } from '@lib/unlock';
 
 const course = (await getEntry('course', 'course'))!.data;
 const allWeeks = await getCollection('weeks');
@@ -57,14 +57,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
               <h2 class="week-title">
                 <a href={weekUrl(week.id)}>{week.data.title}</a>
               </h2>
-              {week.data.summary && <p class="wsum">{week.data.summary}</p>}
-
+              {/* Shown only while the row carries .is-locked (applyLocks()). */}
               {week.data.unlockOn && (
-                <p class="week-unlock">
-                  <Icon name="lock" size={14} />
+                <p class="lock-note">
+                  <Icon name="lock" size={13} />
                   <span>Unlocks {unlockLabel(week.data.unlockOn)}</span>
                 </p>
               )}
+              {week.data.summary && <p class="wsum">{week.data.summary}</p>}
 
               <ul class="tabs-row">
                 {tabs.map((t) => (
@@ -184,28 +184,51 @@ const pad = (n: number) => String(n).padStart(2, '0');
     font-size: var(--fs-sm);
   }
 
-  /* Date-gated rows (applyLocks() adds .is-locked client-side): dim the row,
-   * show the unlock date, drop the sub-page links. */
-  .week-unlock {
+  /* Date-gated rows: listed but greyed out and un-clickable until the unlock
+   * date (applyLocks() adds .is-locked client-side and disables the links for
+   * keyboard/AT). The whole term stays readable as a syllabus; a direct URL
+   * still works — this is a courtesy gate, not a lock. */
+  .week-row.is-locked {
+    cursor: not-allowed;
+  }
+
+  /* The numeral is already grey when open — go a shade fainter, and drop the
+   * crimson it picks up on row hover. */
+  .week-row.is-locked .week-num,
+  .week-row.is-locked:hover .week-num {
+    color: var(--gray-300);
+    pointer-events: none;
+  }
+
+  .week-row.is-locked .week-title a,
+  .week-row.is-locked .wsum,
+  .week-row.is-locked .tab-link {
+    /* Muted enough to read as "not yet", legible enough to still scan as
+     * syllabus. Disabled controls are exempt from the contrast floor. */
+    color: var(--gray-500);
+    pointer-events: none;
+  }
+
+  .week-row.is-locked .tab-link {
+    border-color: var(--gray-200);
+    background: transparent;
+  }
+
+  /* "Unlocks <date>" — the reason the row is grey. Hidden while open. */
+  .lock-note {
     display: none;
+  }
+
+  .week-row.is-locked .lock-note {
+    display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    margin: 0;
-    font-size: var(--fs-sm);
-    font-weight: 500;
-    color: var(--gray-500);
-  }
-
-  .week-row.is-locked {
-    opacity: 0.55;
-  }
-
-  .week-row.is-locked .week-unlock {
-    display: inline-flex;
-  }
-
-  .week-row.is-locked .tabs-row {
-    display: none;
+    margin: 0 0 var(--space-2);
+    color: var(--ink-muted);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   /* Sub-page links — a compact icon row per week */

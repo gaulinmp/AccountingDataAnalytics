@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { isLocked, parsePreview, unlockLabel } from '../../src/lib/unlock';
+import { isLocked, lockTitle, parsePreview, unlockLabel } from '../../src/lib/unlock';
 
 const WEEK_5 = '2026-09-21T00:00:00.000Z';
 
@@ -52,6 +52,25 @@ describe('lock evaluation', () => {
   it('never locks an element without a parsable unlock date', () => {
     expect(isLocked(undefined, null)).toBe(false);
     expect(isLocked('not-a-date', null)).toBe(false);
+  });
+});
+
+describe('lockTitle', () => {
+  const label = 'Monday, September 21';
+
+  it('appends the unlock date only while the entry is locked', () => {
+    expect(lockTitle('Week 5: Databases', label, true)).toBe(
+      'Week 5: Databases · Unlocks Monday, September 21',
+    );
+    expect(lockTitle('Week 5: Databases', label, false)).toBe('Week 5: Databases');
+  });
+
+  it('stands alone when the element has no title of its own', () => {
+    expect(lockTitle('', label, true)).toBe('Unlocks Monday, September 21');
+  });
+
+  it('leaves the title alone when there is no date to report', () => {
+    expect(lockTitle('Week 5: Databases', undefined, true)).toBe('Week 5: Databases');
   });
 });
 

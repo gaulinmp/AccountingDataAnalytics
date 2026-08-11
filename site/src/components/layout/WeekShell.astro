@@ -6,7 +6,6 @@ import type { CollectionEntry } from 'astro:content';
 import type { WeekTab } from '@lib/url';
 import Layout from '@layout/Layout.astro';
 import SiteHeader from '@layout/SiteHeader.astro';
-import WeekLock from '@layout/WeekLock.astro';
 import Footer from '@layout/Footer.astro';
 
 interface Props {
@@ -32,9 +31,7 @@ const { week, tab, title, lede, wide = false } = Astro.props;
         {lede && <p class="lede">{lede}</p>}
       </header>
 
-      <WeekLock week={week}>
-        <slot />
-      </WeekLock>
+      <slot />
     </main>
 
     <Footer />

@@ -1,12 +1,8 @@
 import { expect, test } from '@playwright/test';
-import { DECK, DECK_SLIDES, QUIZ_SLIDE, unlockWeeks } from './support';
+import { DECK, DECK_SLIDES, QUIZ_SLIDE } from './support';
 
 // Wide viewport so the reinforcement pane (and relocated quiz) exist.
 test.use({ viewport: { width: 1280, height: 800 } });
-
-test.beforeEach(async ({ page }) => {
-  await unlockWeeks(page);
-});
 
 // Playwright CSS locators pierce open shadow roots, so we can target the
 // <ai-tutor> internals directly.

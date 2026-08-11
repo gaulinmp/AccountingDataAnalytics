@@ -6,7 +6,6 @@ import { getCollection } from 'astro:content';
 import { weekTabUrl, type WeekTab } from '@lib/url';
 import Layout from '@layout/Layout.astro';
 import SiteHeader from '@layout/SiteHeader.astro';
-import WeekLock from '@layout/WeekLock.astro';
 import Footer from '@layout/Footer.astro';
 import Icon from '@components/Icon.astro';
 import type { IconName } from '@lib/icons';
@@ -53,7 +52,6 @@ const cards: { tab: WeekTab; label: string; icon: IconName; desc: string; ready:
         {week.data.summary && <p class="week-summary">{week.data.summary}</p>}
       </header>
 
-      <WeekLock week={week}>
       <div class="week-body">
         {week.data.description && (
           <section class="week-section">
@@ -96,7 +94,6 @@ const cards: { tab: WeekTab; label: string; icon: IconName; desc: string; ready:
           </ul>
         </section>
       </div>
-      </WeekLock>
     </main>
 
     <Footer />

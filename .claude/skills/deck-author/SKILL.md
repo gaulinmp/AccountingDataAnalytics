@@ -136,7 +136,8 @@ import { Slide, Bullets, Quiz } from '@components/blocks';
   check that file for the current list (currently: `layers`, `database`, `splitSquare`,
   `playCircle`, `grid`, `chart`, `tools`, `terminal`, `document`, `clipboard`, `trend`,
   `gitMerge`, `bubble`, `sparkles`, `award`, `book`, `chevronLeft`, `chevronRight`,
-  `search`, `user`, `slides`, `info`, `puzzle`, `flask`, `pencil`, `helpCircle`). A typo'd or new icon name **fails the build** —
+  `search`, `user`, `slides`, `info`, `puzzle`, `flask`, `pencil`, `helpCircle`, `lock`,
+  `home`). A typo'd or new icon name **fails the build** —
   don't invent one. Adding an icon is a `src/` change: use the `site-dev` skill.
 - Plain Markdown prose and standard bullets also work directly inside a `<Slide>` body
   (see `1-1-course-welcome.mdx`); `Bullets` is for when you want nesting/inline formatting.

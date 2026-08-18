@@ -4,7 +4,7 @@
 // no cards, no elevation. Crimson appears only on interaction and the code.
 import { getCollection, getEntry } from 'astro:content';
 import { weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
-import { unlockLabel } from '@lib/unlock';
+import { gateDate, unlockLabel } from '@lib/unlock';
 import Layout from '@layout/Layout.astro';
 import SiteHeader from '@layout/SiteHeader.astro';
 import Footer from '@layout/Footer.astro';
@@ -47,8 +47,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
     <ol class="syllabus">
       {
-        weeks.map((week) => (
-          <li id={week.id} class="week-row" data-unlock-on={week.data.unlockOn?.toISOString()}>
+        weeks.map((week, i) => {
+          // Week 1 is never gated, whatever its date — see gateDate().
+          const gate = gateDate(week.data.unlockOn, i);
+          return (
+          <li id={week.id} class="week-row" data-unlock-on={gate?.toISOString()}>
             <a href={weekUrl(week.id)} class="week-num" aria-hidden="true" tabindex="-1">
               {pad(week.data.number)}
             </a>
@@ -58,10 +61,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
                 <a href={weekUrl(week.id)}>{week.data.title}</a>
               </h2>
               {/* Shown only while the row carries .is-locked (applyLocks()). */}
-              {week.data.unlockOn && (
+              {gate && (
                 <p class="lock-note">
                   <Icon name="lock" size={13} />
-                  <span>Unlocks {unlockLabel(week.data.unlockOn)}</span>
+                  <span>Unlocks {unlockLabel(gate)}</span>
                 </p>
               )}
               {week.data.summary && <p class="wsum">{week.data.summary}</p>}
@@ -78,7 +81,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
               </ul>
             </div>
           </li>
-        ))
+          );
+        })
       }
     </ol>
   </main>

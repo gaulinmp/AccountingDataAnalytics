@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { isLocked, lockTitle, parsePreview, unlockLabel } from '../../src/lib/unlock';
+import { gateDate, isLocked, lockTitle, parsePreview, unlockLabel } from '../../src/lib/unlock';
 
 const WEEK_5 = '2026-09-21T00:00:00.000Z';
 
@@ -52,6 +52,24 @@ describe('lock evaluation', () => {
   it('never locks an element without a parsable unlock date', () => {
     expect(isLocked(undefined, null)).toBe(false);
     expect(isLocked('not-a-date', null)).toBe(false);
+  });
+});
+
+describe('gateDate', () => {
+  const date = new Date(WEEK_5);
+
+  it('never gates the first week of the term', () => {
+    expect(gateDate(date, 0)).toBeUndefined();
+  });
+
+  it('gates every later week on its own date', () => {
+    expect(gateDate(date, 1)).toBe(date);
+    expect(gateDate(date, 12)).toBe(date);
+  });
+
+  it('leaves a dateless week ungated wherever it sits', () => {
+    expect(gateDate(undefined, 0)).toBeUndefined();
+    expect(gateDate(undefined, 4)).toBeUndefined();
   });
 });
 

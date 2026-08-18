@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
-import { weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
-import { unlockLabel } from '@lib/unlock';
+import { href, weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
+import { gateDate, unlockLabel } from '@lib/unlock';
 import Icon from '@components/Icon.astro';
 import type { IconName } from '@lib/icons';
 
@@ -39,6 +39,12 @@ const tabs: { id: HeaderTab; label: string; icon: IconName }[] = [
 
 const tabHref = (weekId: string, tab: HeaderTab) =>
   tab === 'overview' ? weekUrl(weekId) : weekTabUrl(weekId, tab);
+
+// The home entry sits at the head of the week rail. Trailing slashes vary
+// between dev and the built site, so compare the paths without one.
+const homeUrl = href();
+const trim = (p: string) => p.replace(/\/+$/, '');
+const isHome = trim(Astro.url.pathname) === trim(homeUrl);
 ---
 
 <header class="site-header">
@@ -46,23 +52,38 @@ const tabHref = (weekId: string, tab: HeaderTab) =>
   <div class="row-top">
     <div class="row-top__content">
       <div class="week-nav-wrapper">
+        {/* Home sits outside the scroller, so the way back to the week list is
+            always on screen no matter how far the rail has been scrolled. */}
+        <a
+          href={homeUrl}
+          class:list={['week-nav-item', 'home-nav-item', { 'is-active': isHome }]}
+          title={`${course.code}: all weeks`}
+          aria-current={isHome ? 'page' : undefined}
+        >
+          <span class="week-nav-item__icon">
+            <Icon name="home" size={20} />
+          </span>
+          <span class="week-nav-item__label">Home</span>
+        </a>
+
         <button class="nav-arrow nav-arrow--left" aria-label="Scroll left">
           <Icon name="chevronLeft" size={16} />
         </button>
 
         <nav class="week-nav-scroll" aria-label="Week navigation">
-          {weeks.map((week) => {
+          {weeks.map((week, i) => {
             const label = week.data.navLabel ?? `Week ${week.data.number}`;
             const icon = (week.data.icon ?? 'book') as IconName;
             const isActive = activeWeekId === week.id;
+            const gate = gateDate(week.data.unlockOn, i);
             return (
               <a
                 href={weekUrl(week.id)}
                 class:list={['week-nav-item', { 'is-active': isActive }]}
                 title={`Week ${week.data.number}: ${week.data.title}`}
                 aria-current={isActive ? 'page' : undefined}
-                data-unlock-on={week.data.unlockOn?.toISOString()}
-                data-unlock-label={week.data.unlockOn && unlockLabel(week.data.unlockOn)}
+                data-unlock-on={gate?.toISOString()}
+                data-unlock-label={gate && unlockLabel(gate)}
               >
                 <span class="week-nav-item__icon">
                   <Icon name={icon} size={20} />
@@ -217,6 +238,24 @@ const tabHref = (weekId: string, tab: HeaderTab) =>
   .week-nav-item.is-active:hover {
     background: var(--brand-hover);
     color: var(--brand-contrast);
+  }
+
+  /* Home: the way back to the syllabus. Wears the week-nav-item look so the
+   * rail reads as one row, but lives outside the scroller — pinned at the head
+   * of the list, with a hairline separating it from week 1. */
+  .home-nav-item {
+    position: relative;
+    flex-shrink: 0;
+    min-width: 4.25rem;
+    margin-inline-end: var(--space-3);
+  }
+
+  .home-nav-item::after {
+    content: '';
+    position: absolute;
+    inset-block: 20%;
+    inset-inline-end: calc(-1 * var(--space-2));
+    border-inline-end: 1px solid var(--header-border-color);
   }
 
   .week-nav-item__icon {

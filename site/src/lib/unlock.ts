@@ -3,7 +3,8 @@
 // header nav and the home-page syllabus use that class to grey the entry out
 // and stop its links from being followed. A locked week stays *visible* — the
 // upcoming term is part of the syllabus — it just reads as not-yet-open, with
-// an "Unlocks <date>" note. Individual week pages are not gated: a student who
+// an "Unlocks <date>" note. Week 1 is exempt — see gateDate() — so the course
+// always has an open door. Individual week pages are not gated: a student who
 // knows (or guesses) a URL gets the normal page. The gate is a listing
 // courtesy, to keep attention on this week; there is nothing to secure here.
 //
@@ -35,6 +36,17 @@ export function parsePreview(raw: string | null | undefined): Preview {
   // every timezone (unlockOn dates are midnight UTC — see content.config.ts).
   const at = Date.parse(/^\d{4}-\d{2}-\d{2}$/.test(v) ? `${v}T12:00:00Z` : v);
   return Number.isNaN(at) ? null : { mode: 'date', at };
+}
+
+/** The date a listing entry actually gates on. The **first week of the term is
+ *  never gated** — it is the way into the course (and into the syllabus itself),
+ *  so it stays open no matter what its `unlockOn` says or how early a student
+ *  arrives. Every later week gates on its own date. Callers pass the week's
+ *  index in `course.weekOrder`; the returned date is what goes in
+ *  `data-unlock-on` (and drives the "Unlocks …" note), so `undefined` means the
+ *  entry emits no gate at all. */
+export function gateDate(unlockOn: Date | undefined, index: number): Date | undefined {
+  return index === 0 ? undefined : unlockOn;
 }
 
 /** Is `unlockOn` still in the future, given the (possibly simulated) clock? */

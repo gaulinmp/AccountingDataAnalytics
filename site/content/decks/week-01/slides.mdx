@@ -1,0 +1,363 @@
+---
+week: week-01
+title: "Welcome to Accounting Analytics"
+---
+
+import { Slide, CoverMeta, Bullets, ImageCaption, Quiz } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 1" icon="playCircle">
+
+Welcome to Accounting Analytics
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"Business Analytics Map"}>
+
+<ImageCaption src={"/decks/week-01/ug1-intro/img1.png"} alt={"Graphic 6"} />
+
+<Bullets items={[
+  { l: 1, h: "Source: mckinsey.com/industries/financial-services/our-insights/building-an-effective-analytics-organization" },
+]} />
+
+</Slide>
+
+<Slide title={"Class Pedagogy"}>
+
+<Bullets items={[
+  { l: 1, h: "High level overview" },
+  { l: 1, h: "Hands-on practice" },
+  { l: 1, h: "Invest where your interest lies" },
+]} />
+
+</Slide>
+
+<Slide title={"Class Goals"} key={"Your accounting expertise is your competitive advantage in analytics"}>
+
+<Bullets items={[
+  { l: 1, h: "Learn how to communicate and consume data analytics in a business setting" },
+  { l: 2, h: "Learn some jargon" },
+  { l: 2, h: "Learn to identify (and avoid) fluff / deception" },
+  { l: 1, h: "Learn the tools to perform data analytics" },
+  { l: 2, h: "Hands-on practice of the topics & tools" },
+  { l: 1, h: "Learn how your Accounting domain knowledge is your key to success" },
+]} />
+
+</Slide>
+
+<Slide title={"Healthy Skepticism"} key={"Analytics augments professional judgment — it doesn't replace it"}>
+
+<Bullets items={[
+  { l: 1, h: "Analytics can be very powerful" },
+  { l: 1, h: "But that doesn’t obviate your professional skepticism" },
+  { l: 2, h: "Apply your domain knowledge" },
+  { l: 2, h: "Question the assumptions" },
+  { l: 2, h: "Question the model" },
+  { l: 2, h: "Question the data" },
+]} />
+
+</Slide>
+
+<Slide title={"Class Structure"}>
+
+<Bullets items={[
+  { l: 1, h: "Motivate" },
+  { l: 1, h: "Lectures" },
+  { l: 1, h: "Learn" },
+  { l: 1, h: "Apply" },
+  { l: 1, h: "Projects" },
+  { l: 1, h: "Lab" },
+  { l: 1, h: "Practice" },
+  { l: 1, h: "Homework" },
+]} />
+
+</Slide>
+
+<Slide title={"Lectures"} aiNotes={"https://github.com/gaulinmp/AccountingDataAnalytics"}>
+
+<Bullets items={[
+  { l: 1, h: "Cover the content for the course" },
+  { l: 1, h: "High level, dense descriptions" },
+  { l: 2, h: "You should deep-dive on those topics that tickle your fancy, as you will do in your career" },
+  { l: 1, h: "All visualizations made with python, all code available on github" },
+]} />
+
+</Slide>
+
+<Slide title={"Deliverables"}>
+
+<Bullets items={[
+  { l: 1, h: "Assignments all focus on destination, not the journey" },
+  { l: 1, h: "I have structured the course around 2 “modalities”" },
+  { l: 2, h: "Spreadsheets (e.g., Excel)" },
+  { l: 2, h: "Programming (e.g., Python)" },
+  { l: 2, h: "*Optional: BI software (e.g., Tableau)*" },
+  { l: 1, h: "Consider what your strengths are, what you want to learn, and what LLMs can help you with" },
+]} />
+
+</Slide>
+
+<Slide title={"Labs and Homework"} key={"Use any tool you like — Excel, Tableau/Power BI, or Python/R"}>
+
+<Bullets items={[
+  { l: 1, h: "Labs will focus on application of the week’s topics" },
+  { l: 2, h: "Guided, application focused" },
+  { l: 1, h: "Homeworks will be practice of the week’s topics" },
+  { l: 2, h: "Self guided, deliverable focused" },
+  { l: 1, h: "You can work in any language/platform" },
+  { l: 2, h: "Excel – easier for some topics, harder for others" },
+  { l: 2, h: "Python/R – DIY, bigger learning curve, what I use" },
+  { l: 2, h: "*Tableau/Power BI* – more fully featured, learning curve" },
+]} />
+
+<Quiz
+  id="w1-tools"
+  q="Which tool are you required to use for the labs and homework?"
+  opts={["Python", "Excel", "Tableau", "Any language or platform you choose"]}
+  correct={3}
+  why="The course is tool-agnostic — pick whatever fits the task. Each option trades ease against power and reproducibility."
+/>
+
+</Slide>
+
+<Slide title={"Projects"} key={"Deliverables are short, audience-aware slide decks — just like a real analyst's"}>
+
+<Bullets items={[
+  { l: 1, h: "4 projects throughout the course" },
+  { l: 2, h: "3 pre-determined, 1 choose your own adventure" },
+  { l: 1, h: "Deliverable will be short slide-deck" },
+  { l: 2, h: "Focus on communicating conclusion" },
+  { l: 2, h: "Your audience will be clearly defined" },
+  { l: 2, h: "Intended to simulate what a DA would do" },
+  { l: 2, h: "Project 4 will have presentations in weeks 14&15" },
+]} />
+
+</Slide>
+
+<Slide title={"Grading"} key={"Projects and homework carry the most weight — applied work matters most"}>
+
+<Bullets items={[
+  { l: 1, h: "Based on Labs, Homeworks, Projects" },
+  { l: 1, h: "Not based on: exams, quizzes, presentation" },
+]} />
+
+</Slide>
+
+<Slide title={"About me…"}>
+
+</Slide>
+
+<Slide title={"Uses of Data Analytics in Business"}>
+
+<Bullets items={[
+  { l: 1, h: "Data-driven decision-making" },
+  { l: 1, h: "Improved operations" },
+  { l: 2, h: "Improving efficiency of existing business lines" },
+  { l: 2, h: "Reducing product and administrative costs" },
+  { l: 2, h: "Supply chain optimization" },
+  { l: 1, h: "Better customer understanding" },
+  { l: 2, h: "Demand estimation" },
+  { l: 2, h: "Customized product offerings and support provision" },
+  { l: 1, h: "Risk assessment/management" },
+  { l: 1, h: "Regulatory compliance" },
+]} />
+
+</Slide>
+
+<Slide title={"Gamut of analytics in accounting"}>
+
+<Bullets items={[
+  { l: 1, h: "*Acquisition*: collecting and measuring data" },
+  { l: 1, h: "*Cleaning*: ensuring the quality of the data, audits" },
+  { l: 1, h: "*Storage*: could just be excel, but hopefully not!" },
+  { l: 1, h: "*Combination*: combining multiple data sources" },
+  { l: 1, h: "*Analysis*: modeling the economics" },
+  { l: 1, h: "*Data driven decisions*: using analytical conclusions to inform decision-makers" },
+  { l: 1, h: "*Communication*: conveying accounting insights" },
+]} />
+
+</Slide>
+
+<Slide title={"Where you fit in"}>
+
+<Bullets items={[
+  { l: 1, h: "Regardless of your analytics chops, your domain expertise will always be valuable" },
+  { l: 2, h: "Don’t underestimate how impactful knowing accounting can be in DA conversations" },
+  { l: 2, h: "Don’t overestimate how much others know about accounting, you’re the expert!" },
+  { l: 1, h: "Play to your strengths" },
+]} />
+
+</Slide>
+
+<Slide title={"Illusion of Knowledge"}>
+
+<Bullets items={[
+  { l: 1, h: "“The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.” ~ Daniel J. Boorstin" },
+  { l: 1, h: "“The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge people using big words.” ~ Daniel J. Boorstin Mac" },
+  { l: 1, h: "“If you can't explain something to a six-year-old, you really don't understand it yourself.” ~ not Albert Einstein" },
+]} />
+
+</Slide>
+
+<Slide title={"value realization gap"}>
+
+<Bullets items={[
+  { l: 1, h: "Desire to implement data analytics is ubiquitous" },
+  { l: 1, h: "Ability to do so is not, creating the value gap" },
+  { l: 1, h: "Common frictions to adoption:" },
+  { l: 2, h: "Technology learning curve" },
+  { l: 2, h: "Employee adoption" },
+  { l: 2, h: "C-level acceptance" },
+  { l: 2, h: "Implementation difficulty" },
+  { l: 2, h: "Data availability" },
+]} />
+
+</Slide>
+
+<Slide title={"Audit Analytics"}>
+
+<Bullets items={[
+  { l: 1, h: "Move to full-population testing (Audit by exception)" },
+  { l: 1, h: "Risk assessment" },
+  { l: 2, h: "Trend analysis, clustering" },
+  { l: 1, h: "Substantive testing for material misstatement risk" },
+  { l: 1, h: "Internal and continual audit" },
+]} />
+
+</Slide>
+
+<Slide title={"Tax Analytics"}>
+
+<Bullets items={[
+  { l: 1, h: "What-if analyses for tax planning (e.g. tax credits, bonus depreciation, etc.)" },
+  { l: 1, h: "Separate the sources of tax burden (segment, geographic, category, etc.)" },
+  { l: 1, h: "Industry comparison of effective tax rates" },
+  { l: 1, h: "Analyze and explain GAAP vs tax income differences" },
+  { l: 1, h: "Estimate risk of tax positions & compliance" },
+  { l: 1, h: "Transfer pricing schedule optimization" },
+]} />
+
+</Slide>
+
+<Slide title={"Financial Analytics"}>
+
+<Bullets items={[
+  { l: 1, h: "Preparation of financials" },
+  { l: 2, h: "Data combination, cleaning, aggregation, error detection and correction" },
+  { l: 1, h: "Financial Statement Analysis (FSA)" },
+  { l: 1, h: "Market returns and volume analyses" },
+  { l: 1, h: "Investor communication analysis" },
+]} />
+
+</Slide>
+
+<Slide title={"Managerial Analytics"}>
+
+<Bullets items={[
+  { l: 1, h: "Decision-making with accounting/business data" },
+  { l: 1, h: "Budgeting and forecasting" },
+  { l: 1, h: "Reporting and Key Performance Indicators (KPIs)" },
+  { l: 1, h: "Cost Accounting and production function estimation" },
+  { l: 1, h: "Performance measures and evaluation" },
+  { l: 1, h: "Efficient, performance-based compensation" },
+]} />
+
+</Slide>
+
+<Slide title={"AI in Accounting"}>
+
+<Bullets items={[
+  { l: 1, h: "Automation, Robotic Process Automation (RPA)" },
+  { l: 2, h: "Data ingest, cleaning, merging, quality control" },
+  { l: 2, h: "Continual process monitoring (i.e., internal controls)" },
+  { l: 1, h: "Analysis of all transactions instead of sampling" },
+  { l: 2, h: "Move from hoping to catch errors to looking for them" },
+  { l: 1, h: "Risk assessment and management" },
+  { l: 1, h: "Detection of anomalies, misstatements, fraud, etc." },
+  { l: 1, h: "Forecasting and predictive modeling" },
+]} />
+
+</Slide>
+
+<Slide title={"KPMG 2024/Q4 survey on AI Adoption"} aiNotes={"https://kpmg.com/kpmg-us/content/dam/kpmg/corporate-communications/pdf/2025/q4-pulse-deck.pdf https://www.deloitte.com/content/dam/assets-zone3/us/en/docs/campaigns/2025/us-state-of-gen-ai-2024-q4.pdf"}>
+
+<Bullets items={[
+  { l: 1, h: "50% currently scaling their GenAI & adopting agents" },
+  { l: 2, h: "Only 12% have deployed agents" },
+  { l: 1, h: "31% expect positive ROI in the next six months" },
+  { l: 2, h: "0 believe they have positive ROI now" },
+  { l: 1, h: "Top challenges to adoption:" },
+  { l: 2, h: "data: 85%, data privacy: 71%, employee adoption: 46%" },
+]} />
+
+</Slide>
+
+<Slide title={"PCAOB 2024/Q2: on Current Use of GenAI"}>
+
+<Bullets items={[
+  { l: 1, h: "Creating initial drafts of internal documents" },
+  { l: 1, h: "Preparing administrative documents and initial drafts of memos and presentations related to an audit" },
+  { l: 1, h: "Preparing account reconciliations and assisting with identifying reconciling items" },
+  { l: 1, h: "Research internal accounting and auditing guidance" },
+]} />
+
+</Slide>
+
+<Slide title={"PCAOB 2024/Q2: on Future Uses of GenAI"}>
+
+<Bullets items={[
+  { l: 1, h: "Assisting with summarizing accounting policy and legal documents" },
+  { l: 1, h: "Evaluating the completeness of audit documentation against relevant documentation requirements" },
+  { l: 1, h: "Performing certain risk assessment procedures" },
+  { l: 1, h: "Scoping the audit" },
+  { l: 1, h: "Evaluating the completeness of financial statement disclosures" },
+  { l: 1, h: "Comparing amounts in the financial statements or notes with audited amounts" },
+]} />
+
+</Slide>
+
+<Slide title={"AI Caveats and Concerns"} aiNotes={"https://news.mit.edu/2024/generative-ai-lacks-coherent-world-understanding-1105 https://arxiv.org/pdf/2406.03689"}>
+
+<Bullets items={[
+  { l: 1, h: "Output quality" },
+  { l: 2, h: "Mistakes / errors leading to real-world consequences" },
+  { l: 2, h: "Not achieving expected value" },
+  { l: 1, h: "Good at some things, bad at others" },
+  { l: 2, h: "Models learn the data they were trained on" },
+  { l: 2, h: "LLMs seem to model simple logic" },
+  { l: 2, h: "“Thinking” models break task down into simple steps" },
+  { l: 2, h: "LLMs don’t form a coherent world model" },
+]} />
+
+</Slide>
+
+<Slide title={"Course Overview"} key={"Five moving parts: videos, webinar, lab, homework, projects"}>
+
+<Bullets items={[
+  { l: 1, h: "Week 1: This, right now, it’s almost over" },
+  { l: 1, h: "Week 2: Data in Companies" },
+  { l: 1, h: "Week 3: Visualization" },
+  { l: 1, h: "Week 4: Exploratory Data Analyses" },
+  { l: 1, h: "Week 5: Combining Data" },
+  { l: 1, h: "Week 6: Automation and ETL" },
+  { l: 1, h: "Week 7: Unstructured data" },
+  { l: 1, h: "Week 8: Analytics Overview" },
+  { l: 1, h: "Week 9: Regressions" },
+  { l: 1, h: "Week 10: Classification" },
+  { l: 1, h: "Week 11: Unsupervised Learning" },
+  { l: 1, h: "Week 12: Foundational Models" },
+  { l: 1, h: "Week 13: Flex Week" },
+  { l: 1, h: "Weeks 14-15: Presentations" },
+  { l: 1, h: "Data" },
+  { l: 1, h: "Analytics" },
+  { l: 1, h: "AI" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-01/ug1-intro/img2.png"} alt={"Welcome to Accounting Analytics"} />
+
+</Slide>

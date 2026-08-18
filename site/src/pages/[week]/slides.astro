@@ -1,0 +1,101 @@
+---
+// The week's monolithic lecture deck: /week-NN/slides/. One deck per week
+// (content/decks/week-NN/slides.mdx); former per-lecture decks are sections
+// inside it, opened by title-variant divider slides.
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Layout from '@layout/Layout.astro';
+import SiteHeader from '@layout/SiteHeader.astro';
+import Companion from '@layout/Companion.astro';
+import Footer from '@layout/Footer.astro';
+import WeekShell from '@layout/WeekShell.astro';
+import ComingSoon from '@layout/ComingSoon.astro';
+import QuizCard from '@islands/QuizCard.astro';
+import ReinforcementPane from '@islands/ReinforcementPane.astro';
+import DeckController from '@islands/DeckController.astro';
+import AiTutorMount from '@islands/AiTutorMount.astro';
+import * as Blocks from '@components/blocks';
+
+export const getStaticPaths = (async () => {
+  const weeks = await getCollection('weeks');
+  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
+}) satisfies GetStaticPaths;
+
+const { week } = Astro.props;
+
+const allDecks = await getCollection('decks');
+const deck = allDecks.find((d) => d.data.week.id === week.id) ?? null;
+const rendered = deck ? await render(deck) : null;
+const Content = rendered?.Content;
+---
+
+{
+  deck && Content ? (
+    <Layout title={deck.data.title} description={deck.data.subtitle}>
+      {/* Header top, slides middle, footer bottom — the deck is flat page content. */}
+      <div class="deck-page">
+        <SiteHeader activeWeekId={week.id} activeTab="slides" />
+        <Companion>
+          <Content />
+        </Companion>
+        <Footer />
+
+        {/* Force Astro and Vite to bundle CSS stylesheets for all slide-level blocks */}
+        <div style="display: none;" aria-hidden="true">
+          <Blocks.Slide title="temp" />
+          <Blocks.Bullets items={[{ l: 1, h: 'temp' }]} />
+          <Blocks.ThreeCol cols={[{ title: 'temp', body: 'temp' }]} />
+          <Blocks.SqlWalk sql="" rows={[{ clause: '', desc: '' }]} />
+          <Blocks.JoinCompare inputs={[{ title: '', items: [''] }]} result={{ title: '', items: [''] }} />
+          <Blocks.Schema tables={[{ name: '', columns: [{ name: '' }] }]} />
+          <Blocks.DataTable columns={['temp']} rows={[['temp']]} />
+          <Blocks.CodeBlock code="" />
+          <Blocks.Demo />
+          <Blocks.Cta label="temp" href="" />
+          <Blocks.Quiz id="temp" q="temp" opts={['a', 'b']} correct={0} why="temp" />
+          <Blocks.CoverMeta />
+          <Blocks.TwoColumn />
+          <Blocks.ImageCaption src="" alt="" />
+          <Blocks.ChartPane />
+          <Blocks.FullBleed />
+          <Blocks.CardGrid />
+        </div>
+      </div>
+
+      {/* Islands (Astro client scripts — enhance the static DOM, no re-render). */}
+      <QuizCard />
+      <ReinforcementPane />
+      <DeckController />
+      <AiTutorMount
+        deckId={deck.id}
+        deckTitle={deck.data.title}
+        deckTopic={deck.data.topic ?? ''}
+        aiPrompt={deck.data.aiPrompt ?? ''}
+      />
+    </Layout>
+  ) : (
+    <WeekShell week={week} tab="slides" title="Slides" lede="The lecture deck for this week.">
+      <ComingSoon icon="slides" label="Slides coming soon." note="This week's deck hasn't been posted yet." />
+    </WeekShell>
+  )
+}
+
+<style>
+  .deck-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--surface);
+  }
+  .deck-page :global(.companion) {
+    flex: 1;
+  }
+
+  @media print {
+    .deck-page {
+      display: block;
+      height: auto;
+      background-color: transparent;
+    }
+  }
+</style>

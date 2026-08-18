@@ -2,6 +2,10 @@
 
 **Instructor:** Mac Gaulin
 
+**Course site:** <https://gaulinmp.github.io/AccountingDataAnalytics> — lecture
+slides, labs, and quizzes for each week. Built from `site/` and published by
+GitHub Actions.
+
 ## Course Description
 This course provides accounting students with an introduction to data analytics as used in the accounting profession. The course covers accounting data, analytical methods, and applications across financial, managerial, audit, forensic, and tax accounting. The focus is on understanding and communicating analytics insights and conclusions through hands-on application and practice.
 
@@ -35,11 +39,11 @@ The course is designed to equip students with the gamut of data analytics skills
 
 ### Week 6: Automation and ETL
 - **Topic**: Extract-Transform-Load (ETL) processes, pipelines, storage mechanics, and automation logic (RPA).
-- **Lab**: Build automated data pipelines to extract, transform, and load data for analysis.
+- **[Lab 6](labs_hw/week6_ETL-SQL-LLM)**: Build automated data pipelines to extract, transform, and load data for analysis, using SQL and an LLM assistant.
 
 ### Week 7: Unstructured Data
 - **Topic**: Types and sources of unstructured data (text, images, video, audio), feature extraction, and Natural Language Processing (NLP).
-- **Lab**: Extract features from unstructured data sources and apply NLP techniques to text data.
+- **[Lab 7](labs_hw/week7_unstructured-review)**: Extract features from unstructured data sources and apply NLP techniques to text data.
 - **[Project 2](labs_hw/project2)**: Combine fundamental statement data with market returns data for integrated analysis.
 
 ### Week 8: Analytical Modeling
@@ -53,7 +57,7 @@ The course is designed to equip students with the gamut of data analytics skills
 ### Week 10: Supervised Learning: Classification
 - **Topic**: Predicting categories (e.g., bankruptcy risk vs. status). Classifiers and their evaluation.
 - **[Lab 10](labs_hw/week10_classifiers)**: Build logistic regression classifiers to predict customer payment defaults, evaluate using confusion matrices and ROC/AUC analysis, and perform cost-benefit analysis to optimize classification thresholds.
-- **[Project 3](labs_hw/project3)**: Apply regression analysis to predict returns using fundamental and market data.
+- **[Project 3](labs_hw/project3)**: Apply regression analysis to forecast financial outcomes using fundamental and market data.
 
 ### Week 11: Unsupervised Learning
 - **Topic**: Dimension reduction and clustering. Finding structure in data without labeled outcomes.
@@ -62,3 +66,8 @@ The course is designed to equip students with the gamut of data analytics skills
 ### Week 12: Foundational Models, LLMs, LMMs
 - **Topic**: Large Language Models (LLMs) and Large Multimodal Models (LMMs) like ChatGPT and Gemini. AI in accounting.
 - **[Lab 12](labs_hw/week12_AI)**: Use GitHub Copilot to set up development environment and build a web scraper using Playwright to collect local event data and export to Excel and iCalendar formats.
+- **[Project 4](labs_hw/project4)**: Self-guided capstone — students pose and answer their own analytics question using the skills from the course.
+
+### Week 13: Recap
+- **Topic**: Course recap, tying the analytical methods back to the accounting settings they serve.
+- **Lab**: None

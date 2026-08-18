@@ -1,0 +1,350 @@
+---
+import Icon from '@components/Icon.astro';
+import type { IconName } from '@lib/icons';
+
+interface Props {
+  variant?: 'title' | 'default';
+  title?: string;
+  kicker?: string;
+  icon?: IconName;
+  /** Key Concept reinforcement line. Exposed as data-slide-key for the pane/tutor. */
+  key?: string;
+  /** Per-slide topic for the AI tutor context; overrides the deck-level `topic`.
+   *  Exposed as data-slide-topic and read by AiTutorMount. */
+  topic?: string;
+  /** Instructor notes for the AI tutor only (common misconceptions, worked-
+   *  solution steps). Exposed as data-ai-notes; never rendered on the slide. */
+  aiNotes?: string;
+}
+
+const { variant = 'default', title, kicker, icon, key: conceptKey, topic, aiNotes } = Astro.props;
+const isTitle = variant === 'title';
+---
+
+<section
+  class:list={['slide', { 'slide--title': isTitle }]}
+  data-slide
+  data-slide-key={conceptKey}
+  data-slide-topic={topic}
+  data-ai-notes={aiNotes}
+>
+  {
+    (kicker || title || icon) && (
+      <header class="slide__head">
+        {kicker && <p class="slide__kicker">{kicker}</p>}
+        {
+          title && (
+            <h2 class="slide__title">
+              {icon && <Icon name={icon} size={28} />}
+              <span>{title}</span>
+            </h2>
+          )
+        }
+        {
+          !title && icon && (
+            <div class="slide__icon-only">
+              <Icon name={icon} size={40} />
+            </div>
+          )
+        }
+      </header>
+    )
+  }
+
+  <div class="slide__body">
+    <slot />
+  </div>
+
+  {conceptKey && (
+    <div class="slide__key-concept rp-key">
+      <p class="rp-label">Key concept</p>
+      <p class="rp-body">{conceptKey}</p>
+    </div>
+  )}
+</section>
+
+<style>
+  /* Flat content, not a card: the slide *is* the page's left column, so it has
+   * no surface, frame, or elevation of its own. Structure comes from the
+   * hairline under the head and from the reinforcement rail beside it. */
+  .slide {
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: 0;
+    /* Column gap doubles as the minimum spacing above the bottom-anchored key
+     * concept (and, on narrow screens, the quizzes moved in beside it). */
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+    padding: 0;
+  }
+
+  .slide__head {
+    padding: 0 0 var(--space-4);
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .slide__kicker {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+
+  .slide__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    font-size: var(--fs-2xl);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+  }
+
+  .slide__title :global(svg) {
+    flex: none;
+    color: var(--brand);
+  }
+
+  .slide__body {
+    padding: 0;
+    font-size: var(--fs-lg);
+    line-height: var(--lh-base);
+    flex: 1;
+  }
+
+  /* Inline (narrow / no-JS) placement only — on wide screens the
+   * ReinforcementPane moves this into the companion rail. `margin-top: auto`
+   * anchors it to the bottom edge when the frame stretches a short slide. */
+  .slide__key-concept {
+    display: block;
+    margin: auto 0 0;
+  }
+
+  /* Shared key concept styling */
+  .rp-key {
+    position: relative;
+    padding: var(--space-4);
+    padding-top: calc(var(--space-4) + 1.75rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+  }
+
+  .rp-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brand);
+    background: rgba(204, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.1);
+    border-top: 3px solid var(--brand);
+    margin: 0;
+  }
+
+  .rp-body {
+    margin: 0;
+    font-size: var(--fs-base);
+    line-height: var(--lh-base);
+  }
+
+  /* Mobile/default stacked layout columns */
+  .slide__col-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .slide__col-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  /* Callouts & side pane blocks: support both legacy split columns (for safety) and new inline blocks */
+  .slide__col-right > .note,
+  .slide__col-right > .tip,
+  .slide__col-right > .key-learning,
+  .slide__col-right > .key-learnings,
+  .slide__col-right > aside,
+  .slide__body > .note,
+  .slide__body > .tip,
+  .slide__body > .key-learning,
+  .slide__body > .key-learnings,
+  .slide__body > aside {
+    position: relative;
+    padding: var(--space-4);
+    padding-top: calc(var(--space-4) + 1.75rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-base);
+    line-height: var(--lh-base);
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  .slide__col-right > .note :first-child,
+  .slide__col-right > .tip :first-child,
+  .slide__col-right > .key-learning :first-child,
+  .slide__col-right > .key-learnings :first-child,
+  .slide__col-right > aside :first-child,
+  .slide__body > .note :first-child,
+  .slide__body > .tip :first-child,
+  .slide__body > .key-learning :first-child,
+  .slide__body > .key-learnings :first-child,
+  .slide__body > aside :first-child {
+    margin-top: 0;
+  }
+
+  .slide__col-right > .note :last-child,
+  .slide__col-right > .tip :last-child,
+  .slide__col-right > .key-learning :last-child,
+  .slide__col-right > .key-learnings :last-child,
+  .slide__col-right > aside :last-child,
+  .slide__body > .note :last-child,
+  .slide__body > .tip :last-child,
+  .slide__body > .key-learning :last-child,
+  .slide__body > .key-learnings :last-child,
+  .slide__body > aside :last-child {
+    margin-bottom: 0;
+  }
+
+  .slide__col-right > .note::before,
+  .slide__col-right > aside.note::before,
+  .slide__body > .note::before,
+  .slide__body > aside.note::before {
+    content: "NOTE";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.06);
+    border-bottom: 1px solid rgba(2, 132, 199, 0.1);
+    border-top: 3px solid #0284c7;
+  }
+
+  .slide__col-right > .tip::before,
+  .slide__col-right > aside.tip::before,
+  .slide__body > .tip::before,
+  .slide__body > aside.tip::before {
+    content: "TIP";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #d97706;
+    background: rgba(217, 119, 6, 0.06);
+    border-bottom: 1px solid rgba(217, 119, 6, 0.1);
+    border-top: 3px solid #d97706;
+  }
+
+  .slide__col-right > .key-learning::before,
+  .slide__col-right > .key-learnings::before,
+  .slide__col-right > aside.key-learning::before,
+  .slide__body > .key-learning::before,
+  .slide__body > .key-learnings::before,
+  .slide__body > aside.key-learning::before {
+    content: "KEY LEARNING";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.06);
+    border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+    border-top: 3px solid #7c3aed;
+  }
+
+  .slide__col-right > aside:not(.note):not(.tip):not(.key-learning):not(.key-learnings)::before,
+  .slide__body > aside:not(.note):not(.tip):not(.key-learning):not(.key-learnings)::before {
+    content: "INFO";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--brand);
+    background: rgba(204, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(204, 0, 0, 0.1);
+    border-top: 3px solid var(--brand);
+  }
+
+  /* Title / cover variant */
+  .slide--title {
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: transparent;
+    padding: var(--space-8) 0;
+  }
+
+  .slide--title .slide__head {
+    border-bottom: 0;
+  }
+
+  .slide--title .slide__icon-only {
+    color: var(--brand);
+    margin-bottom: var(--space-4);
+  }
+
+  .slide--title .slide__body {
+    padding: 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 600;
+    line-height: var(--lh-tight);
+    max-width: 24ch;
+    flex: none;
+  }
+</style>

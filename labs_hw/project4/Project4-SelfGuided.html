@@ -38,24 +38,6 @@ details.inline-image {
      /* padding: 2px 4px; */
  }
 
- /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
- /* Make horizontal lines connect through column boundaries */
- /* table {
-     border-collapse: collapse;
- } */
- /* General styling of all cells */
- table > :is(thead, tbody) > tr > :is(th, td) {
-     padding: 3px;
-     text-align: left;
- }
- table > thead > tr > :is(th, td) {
-     border-top: 2px solid; /* Top thick line */
-     border-bottom: 1px solid; /* Below head thin line */
- }
- table > tbody > tr:last-child > :is(th, td) {
-     border-bottom: 2px solid; /* Bottom thick line */
- }
-
 /* Claud's generated CSS */
 /* Base Styles */
 body {
@@ -212,11 +194,27 @@ pre[class*="language-"]::before {
 
 /* Tables */
 table {
-    /* width: 100%; */
     border-collapse: collapse;
     margin: 1.5rem 0;
-    /* background-color: white; */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
 }
 
 tr:nth-child(even) {
@@ -244,9 +242,10 @@ blockquote p:last-child {
 /* Special callout boxes */
 .note, .warning, .tip {
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem;
     border-radius: 6px;
     border-left: 5px solid;
+    border-right: 5px solid;
 }
 
 .note {
@@ -273,6 +272,11 @@ em {
 strong {
     font-weight: 600;
     color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
 }
 
 /* Links */
@@ -342,6 +346,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -350,6 +360,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {

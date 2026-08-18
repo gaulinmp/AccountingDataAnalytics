@@ -1,0 +1,482 @@
+---
+week: week-04
+title: "Exploratory Data Analyses"
+---
+
+import { Slide, CoverMeta, Bullets, TwoColumn, DataTable, ImageCaption, Cta } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 4" icon="search">
+
+Exploratory Data Analyses
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"What is exploratory Data analysis?"}>
+
+<Bullets items={[
+  { l: 1, h: "Initial analysis to understand data and its structure" },
+  { l: 2, h: "Data types, distributions, statistics" },
+  { l: 1, h: "Can illuminate data issues" },
+  { l: 2, h: "Missing data, outliers, errors" },
+  { l: 1, h: "Identify broad patterns or regularities" },
+  { l: 2, h: "Relationships, clustering, temporal regularity" },
+  { l: 1, h: "Build intuition and inform hypothesis development" },
+]} />
+
+</Slide>
+
+<Slide title={"Why use EDA?"} aiNotes={"The greatest value of a picture is when it forces us to notice what we never expected to see. – John W. Tukey https://cran.r-project.org/web/packages/statquotes/vignettes/statquotes.html"}>
+
+<Bullets items={[
+  { l: 1, h: "*“You can see a lot, just by looking” ~ Yogi Berra*" },
+  { l: 1, h: "EDA establishes understanding of the data before assumptions are made or complex modeling techniques are applied" },
+  { l: 1, h: "More EDA now, fewer mistakes later" },
+  { l: 1, h: "Finds “unknown unknowns”" },
+  { l: 1, h: "Be curious *and* judgmental" },
+  { l: 2, h: "Skepticism is important, look for errors, bias, misinformation, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"EDA Caveats"}>
+
+<Bullets items={[
+  { l: 1, h: "Confirmation Bias – the tendency to subconsciously identify, prefer, or interpret information in a way that confirms pre-existing beliefs or hypotheses" },
+  { l: 2, h: "Look for patterns that contradict initial ideas or expectations" },
+  { l: 2, h: "Require higher burden of proof for conclusions that align with priors" },
+  { l: 1, h: "Correlation vs. Causation – relationships discovered with EDA do not necessarily entail causal (functional) relationships" },
+  { l: 2, h: "Observing that two variables move together during EDA does not prove that one causes the other" },
+  { l: 2, h: "Establishing causal relationships requires experiments or causal inference" },
+  { l: 2, h: "*Note: correlation is not causation, but they are highly correlated*" },
+]} />
+
+</Slide>
+
+<Slide title={"Caution"}>
+
+<Bullets items={[
+  { l: 1, h: "“There are 3 kinds of lies: lies, damned lies, and statistics.” ~ Mark Twain" },
+  { l: 1, h: "Visualizations can be misleading (intentionally or not)" },
+  { l: 1, h: "Important to consider whether the interpretation of your visualization will be what is intended" },
+]} />
+
+</Slide>
+
+<Slide title={"Common Visualization mistakes"}>
+
+<Bullets items={[
+  { l: 1, h: "Visual distortion" },
+  { l: 1, h: "Cherry-picking Data" },
+  { l: 2, h: "Outlier treatment" },
+  { l: 1, h: "Misleading Aggregations" },
+  { l: 1, h: "Comparing Dissimilar Data" },
+]} />
+
+</Slide>
+
+<Slide title={"Visual Distortion"}>
+
+<Bullets items={[
+  { l: 1, h: "Truncation: Truncating axes can make variation appear greater or less" },
+  { l: 1, h: "Scaling: Scaling axes by non-constant amounts distorts visual comparison" },
+  { l: 2, h: "Log-scale axes are an example of well-understood non-constant scaling" },
+  { l: 2, h: "Twin axes: A second axis can be misleading if using same units as first" },
+]} />
+
+</Slide>
+
+<Slide title={"Truncated Axes"}>
+
+</Slide>
+
+<Slide title={"Scaled Axes"}>
+
+</Slide>
+
+<Slide title={"Cherry-Picking Data"}>
+
+<Bullets items={[
+  { l: 1, h: "Including only those observations that support a specific conclusion or omitting contradictory evidence" },
+  { l: 1, h: "Removing outliers without justification can present a cleaner, but potentially misleading, picture" },
+  { l: 1, h: "Selecting sub-group may imply the results generalize to the full group" },
+]} />
+
+</Slide>
+
+<Slide title={"Misleading Aggregation"}>
+
+<Bullets items={[
+  { l: 1, h: "Using the mean for highly skewed data can be misleading, where the median might be better" },
+  { l: 1, h: "Aggregating data can mask recent changes in trends" },
+]} />
+
+</Slide>
+
+<Slide title={"mean vs median"}>
+
+<Bullets items={[
+  { l: 1, h: "Median is “middle” of data" },
+  { l: 1, h: "Data: https://www.cbo.gov/publication/60706#_idTextAnchor039" },
+]} />
+
+</Slide>
+
+<Slide title={"mean vs median"}>
+
+<Bullets items={[
+  { l: 1, h: "Median is “middle” of data" },
+  { l: 1, h: "Mean (expected value) is weighted by values" },
+  { l: 1, h: "Data: https://www.cbo.gov/publication/60706#_idTextAnchor039" },
+]} />
+
+</Slide>
+
+<Slide title={"mean vs median"}>
+
+<Bullets items={[
+  { l: 1, h: "Median is “middle” of data" },
+  { l: 1, h: "Mean (expected value) is weighted by values" },
+  { l: 1, h: "Be careful to assess what you believe your audience will interpret each to mean" },
+  { l: 1, h: "Data: https://www.cbo.gov/publication/60706#_idTextAnchor039" },
+]} />
+
+</Slide>
+
+<Slide title={"Misleading Axis redux"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img1.png"} alt={"Misleading Axis redux"} />
+
+<Bullets items={[
+  { l: 1, h: "Data: https://www.cbo.gov/publication/60706#_idTextAnchor039" },
+]} />
+
+</Slide>
+
+<Slide title={"Comparing Dissimilar Data"}>
+
+<Bullets items={[
+  { l: 1, h: "Comparing metrics that aren’t truly comparable (e.g., plotting levels and percentages on the same graph without clear labels)" },
+  { l: 1, h: "Plotting spurious correlations together to imply a relationship" },
+  { l: 2, h: "e.g., tylervigen.com/spurious-correlations" },
+]} />
+
+<Cta label={"tylervigen.com/spurious-correlations"} href={"https://www.tylervigen.com/spurious-correlations"} />
+
+</Slide>
+
+<Slide title={"Spurious Correlations"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img2.png"} alt={"Graphic 6"} />
+
+<Bullets items={[
+  { l: 1, h: "Credit Tyler Vigen" },
+]} />
+
+</Slide>
+
+<Slide title={"Exploring Data Quality"}>
+
+<Bullets items={[
+  { l: 1, h: "Missing data: drop observations, fill with default, interpolate based on some model" },
+  { l: 1, h: "Input errors: unit errors, transcription errors (OCR, human input)" },
+  { l: 1, h: "Processing errors: conversion logic errors (e.g. date formatting), calculation errors (e.g., divide by 0)" },
+  { l: 1, h: "Duplicates: mistakes or informative" },
+  { l: 1, h: "Outliers: caused by errors, uninformative observations, informative and necessary to understand" },
+]} />
+
+</Slide>
+
+<Slide title={"Multidimensional data"}>
+
+<Bullets items={[
+  { l: 1, h: "Multiple measurements for single observation" },
+  { l: 2, h: "Journal entry – date, account info, names, amount, etc." },
+  { l: 2, h: "Consumer – demographics, location, interactions" },
+  { l: 2, h: "Financials" },
+  { l: 1, h: "Multidimensional due to computer representation" },
+  { l: 2, h: "Location stored as latitude and longitude (& height?)" },
+  { l: 1, h: "Text? Images?" },
+]} />
+
+</Slide>
+
+<Slide title={"Seeing beyond 2D"}>
+
+<Bullets items={[
+  { l: 1, h: "Visualization of three or more dimensions is difficult" },
+  { l: 2, h: "3D graphs can be hard to interpret without interactivity" },
+  { l: 2, h: "Other features can be introduced (bubble size, color, etc.) but are less self-explanatory and more complex" },
+  { l: 1, h: "Interactive visualizations can help by giving audience control over what they viewing" },
+  { l: 2, h: "Can swap between dimensions being observed" },
+  { l: 2, h: "Can incorporate time / motion" },
+]} />
+
+</Slide>
+
+<Slide title={"3D Example – 2D + categories"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img3.png"} alt={"3D Example – 2D + categories"} />
+
+</Slide>
+
+<Slide title={"4D Example – 2D + Time + Size"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img4.png"} alt={"4D Example – 2D + Time + Size"} />
+
+</Slide>
+
+<Slide title={"Interactive Visualization"}>
+
+<TwoColumn ratio="1-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Software to interact with data in predetermined ways" },
+    { l: 1, h: "Set of parameters to adjust, visualization updates accordingly" },
+    { l: 1, h: "Often web-based" },
+  ]} />
+  </div>
+  <div slot="right">
+  <ImageCaption src={"/decks/week-04/4-ug-eda/img5.png"} alt={"Interactive Visualization"} />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"LLM/LMM Tangent"}>
+
+<TwoColumn ratio="1-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Prompted Sora for dashboard with interactive elements" },
+  ]} />
+  </div>
+  <div slot="right">
+  <Bullets items={[
+    { l: 1, h: "Follow up prompt asking for added trendline" },
+  ]} />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Caveats and Pitfalls"}>
+
+<Bullets items={[
+  { l: 1, h: "Overfitting – Insight found during EDA should be understood to be potentially limited to the specific “pull” of the dataset" },
+  { l: 2, h: "Understand conditions of data to determine generalizability" },
+  { l: 1, h: "Multicollinearity – highly correlated variablesidentified by EDA may be problematic in subsequentmodeling or testing" },
+]} />
+
+</Slide>
+
+<Slide title={"Example"}>
+
+<Bullets items={[
+  { l: 1, h: "You are given transaction data for a month" },
+  { l: 2, h: "Date, Amount, Payee, Category, Vendor, Notes, Approver" },
+  { l: 1, h: "Look at data" },
+  { l: 2, h: "Columns, data types, missing values, etc." },
+  { l: 2, h: "Five-number analysis" },
+  { l: 1, h: "Initial plots" },
+  { l: 2, h: "Line plot of amount over time (Date)" },
+  { l: 2, h: "Bar chart of count by payee, vendor, approver" },
+  { l: 2, h: "Word-cloud of Category and Notes" },
+]} />
+
+</Slide>
+
+<Slide title={"The Data"}>
+
+<DataTable
+  columns={["Date", "Amount", "Personell", "Vendor", "Notes", "Expense_Category", "Approver"]}
+  rows={[
+    ["2024-01-10", "12,000", "Ben Blue", "Innovate Solutions Group LLC", "Synergy Project Kickoff Fee", "Consulting", "Ben Blue"],
+    ["2024-01-02", "12,150", "", "Corporate Realty Partners LLC", "January 2024 Office Rent", "Rent", "Charlie Brown"],
+    ["2024-01-15", "41,534", "Jennifer Lee", "Internal Transfer / Payroll Service", "Salary payment Jan 1-15", "Salaries", "Charlie Brown"],
+    ["2024-01-25", "41,582", "David Brown", "Internal Transfer / Payroll Service", "Salary payment Jan 16-31", "Salaries", "Charlie Brown"],
+    ["2024-01-16", "48,500", "Ben Blue", "Apex Universal Consulting Inc.", "Market Research Analysis Q1", "Consulting", "Ben Blue"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Familiarization with the data"}>
+
+<Bullets items={[
+  { l: 1, h: "Understanding the broader context of the data" },
+  { l: 2, h: "Where did it come from?" },
+  { l: 2, h: "How was it collected?" },
+  { l: 2, h: "Are there known limitations or potential biases in the collection process?" },
+  { l: 1, h: "This is where your accounting knowledge is key" },
+]} />
+
+</Slide>
+
+<Slide title={"Familiarization with the specific data"}>
+
+<Bullets items={[
+  { l: 1, h: "Understanding the dataset at hand" },
+  { l: 2, h: "What do the variables represent?" },
+  { l: 2, h: "What contextual information should be incorporated into understanding this data?" },
+  { l: 2, h: "Is more data needed before use (merging)?" },
+]} />
+
+</Slide>
+
+<Slide title={"Initial Inspection"}>
+
+<Bullets items={[
+  { l: 1, h: "Examine the dataset’s dimensions (# of rows and columns)" },
+  { l: 1, h: "Identify the data types of each variable" },
+  { l: 2, h: "numerical continuous/discrete, categorical nominal/ordinal, date/time, text short/long" },
+  { l: 1, h: "View rows of data to get a sense of the content and structure" },
+  { l: 1, h: "Identify “special” columns like merge keys, unique IDs" },
+  { l: 1, h: "Identify how missing observations are represented" },
+  { l: 2, h: "Identify whether variables have default values" },
+  { l: 2, h: "Investigate whether and how missings can be filled/imputed" },
+  { l: 1, h: "Identify whether duplicates exist and can be removed" },
+]} />
+
+</Slide>
+
+<Slide title={"Look at data"}>
+
+<DataTable
+  columns={["Date", "Amount", "Personell", "Vendor", "Notes", "Expense_Category", "Approver"]}
+  rows={[
+    ["2024-01-10", "12,000", "Ben Blue", "Innovate Solutions Group LLC", "Synergy Project Kickoff Fee", "Consulting", "Ben Blue"],
+    ["2024-01-02", "12,150", "", "Corporate Realty Partners LLC", "January 2024 Office Rent", "Rent", "Charlie Brown"],
+    ["2024-01-15", "41,534", "Jennifer Lee", "Internal Transfer / Payroll Service", "Salary payment Jan 1-15", "Salaries", "Charlie Brown"],
+    ["2024-01-25", "41,582", "David Brown", "Internal Transfer / Payroll Service", "Salary payment Jan 16-31", "Salaries", "Charlie Brown"],
+    ["2024-01-16", "48,500", "Ben Blue", "Apex Universal Consulting Inc.", "Market Research Analysis Q1", "Consulting", "Ben Blue"],
+  ]}
+/>
+
+<DataTable
+  columns={["", "count", "mean", "std", "min", "25%", "50%", "75%", "max"]}
+  rows={[
+    ["Date", "62", "2024-01-15", "", "2024-01-01", "2024-01-08", "2024-01-15", "2024-01-23", "2024-01-31"],
+    ["Amount", "62", "3,645", "9,762", "11.0", "75.8", "157.9", "469.3", "48,500"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Visual exploration"}>
+
+<Bullets items={[
+  { l: 1, h: "*“There is no excuse for failing to plot and look” ~ John Tukey*" },
+  { l: 1, h: "Histograms: Understand the distribution of numerical variables, identify outliers" },
+  { l: 1, h: "Box Plots: Visualize the distribution, central tendency, spread, and outliers of numerical data, possibly by category" },
+  { l: 1, h: "Bar Charts: Compare categorical data" },
+  { l: 1, h: "Scatter Plots: Investigate relationships between numerical variables" },
+  { l: 1, h: "Line Charts: Show trends over time, across categories" },
+  { l: 1, h: "Heatmaps: Visualize correlation matrices, missing values, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"amount over time"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img6.png"} alt={"amount over time"} />
+
+</Slide>
+
+<Slide title={"Transactions by employee"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img7.png"} alt={"Transactions by employee"} />
+
+</Slide>
+
+<Slide title={"Approvals by employee"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img8.png"} alt={"Approvals by employee"} />
+
+</Slide>
+
+<Slide title={"Transactions by vendor"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img9.png"} alt={"Transactions by vendor"} />
+
+</Slide>
+
+<Slide title={"Transactions by expense"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img10.png"} alt={"Transactions by expense"} />
+
+</Slide>
+
+<Slide title={"Note field Wordcloud"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img11.png"} alt={"Note field Wordcloud"} />
+
+</Slide>
+
+<Slide title={"Next steps: dig deeper"}>
+
+<Bullets items={[
+  { l: 1, h: "Start looking for abnormalities & outliers" },
+  { l: 2, h: "Amounts by day of week (box plot)" },
+  { l: 2, h: "Amounts over time by approver (line plot)" },
+  { l: 2, h: "Distribution of amounts by approver (box plot)" },
+  { l: 2, h: "Amounts by vendor (histogram)" },
+]} />
+
+</Slide>
+
+<Slide title={"Next Step: Day of Week"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img12.png"} alt={"Next Step: Day of Week"} />
+
+</Slide>
+
+<Slide title={"Over Time by approver"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img13.png"} alt={"Over Time by approver"} />
+
+</Slide>
+
+<Slide title={"Amounts by approver"}>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img14.png"} alt={"Amounts by approver"} />
+
+</Slide>
+
+<Slide title={"Investigate Ben Blue"}>
+
+<DataTable
+  columns={["Date", "Amount", "Personell", "Vendor", "Notes", "Category", "Approver"]}
+  rows={[
+    ["2024-01-05", "9,500", "Ben Blue", "Global Strategic Solutions Ltd.", "Phase 1 Strategic Review Payment", "Consulting", "Ben Blue"],
+    ["2024-01-08", "7,651", "Ben Blue", "Apex Universal Consulting Inc.", "Consulting Services - Project Alpha", "Consulting", "Ben Blue"],
+    ["2024-01-10", "12,000", "Ben Blue", "Innovate Solutions Group LLC", "Synergy Project Kickoff Fee", "Consulting", "Ben Blue"],
+    ["2024-01-12", "8,500", "Ben Blue", "Global Strategic Solutions Ltd.", "Ongoing Strategic Support Retainer", "Consulting", "Ben Blue"],
+    ["2024-01-16", "48,500", "Ben Blue", "Apex Universal Consulting Inc.", "Market Research Analysis Q1", "Consulting", "Ben Blue"],
+    ["2024-01-19", "9,800", "Ben Blue", "Global Strategic Solutions Ltd.", "Discreet Project Support", "Consulting", "Ben Blue"],
+    ["2024-01-22", "8,000", "Ben Blue", "Apex Universal Consulting Inc.", "Expedited Advisory Fee", "Consulting", "Ben Blue"],
+    ["2024-01-26", "9,100", "Ben Blue", "Global Strategic Solutions Ltd.", "Final Strategic Consultation Jan", "Consulting", "Ben Blue"],
+    ["2024-01-27", "150", "Emily Jones", "Amtrak", "Train ticket E. Jones - Regional Meeting", "Travel", "Ben Blue"],
+    ["2024-01-27", "88.90", "Emily Jones", "Regional Conference Hotels", "Hotel E. Jones - Regional Meeting", "Travel", "Ben Blue"],
+    ["2024-01-28", "75.20", "Emily Jones", "Fine Dining Group LLC", "Dinner E. Jones - Regional Meeting", "Meals & Ent.", "Ben Blue"],
+    ["2024-01-30", "8,450", "Ben Blue", "Apex Universal Consulting Inc.", "Final Jan Retainer - Project Alpha", "Consulting", "Ben Blue"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Project 1 – Due Sunday"}>
+
+<Bullets items={[
+  { l: 1, h: "Groups up to 5 optional" },
+  { l: 1, h: "Deliverable pdf slide-deck" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-04/4-ug-eda/img15.png"} alt={"Exploratory Data Analyses"} />
+
+</Slide>

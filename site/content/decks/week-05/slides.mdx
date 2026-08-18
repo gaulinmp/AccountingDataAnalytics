@@ -1,0 +1,765 @@
+---
+week: week-05
+title: "Combining Data and Relationships"
+---
+
+import { Slide, CoverMeta, Bullets, TwoColumn, DataTable, ImageCaption, Cta } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 5" icon="database">
+
+Combining Data and Relationships
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"Industry Outliers"}>
+
+<DataTable
+  columns={["Ticker", "Year", "Industry", "NI", "EPS"]}
+  rows={[
+    ["BOOT", "2024", "Consumer Discr.", "180.9", "5.93"],
+    ["BRSL", "2024", "Consumer Discr.", "348.0", "1.73"],
+    ["BRIA", "2024", "Consumer Discr.", "2.8", "0.11"],
+    ["ETD", "2024", "Consumer Discr.", "63.8", "2.50"],
+    ["EDAP", "2024", "Health Care", "(19.6)", "(0.53)"],
+    ["CNTB", "2024", "Health Care", "(15.6)", "(0.28)"],
+    ["SPRO", "2024", "Health Care", "(68.5)", "(1.27)"],
+    ["PCLOF", "2024", "Health Care", "(11.3)", "(0.07)"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "(BRILLIA INC)" },
+  { l: 1, h: "(PHARMACIELO LTD)" },
+  { l: 1, h: "How to compare firms to the industry “norm”?" },
+]} />
+
+</Slide>
+
+<Slide title={"Why combine data?"}>
+
+<Bullets items={[
+  { l: 1, h: "Myriad data sources" },
+  { l: 2, h: "External data (marketing data, economic data, etc.)" },
+  { l: 2, h: "Various internal systems (invoices, production, etc.)" },
+  { l: 1, h: "Aggregation" },
+  { l: 2, h: "Aggregation can require combining data with itself" },
+  { l: 1, h: "Analysis, cleaning, and verification" },
+  { l: 2, h: "Comparing observations, interpolating, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"Relational Database"}>
+
+<Bullets items={[
+  { l: 1, h: "Database" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Table 1: `GL_Detail`" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Table 2: `Chart_of_Accounts`" },
+]} />
+
+<DataTable
+  columns={["journal_id", "line_id", "account_id", "amount"]}
+  rows={[
+    ["1", "1", "9003", "500"],
+    ["1", "2", "2002", "500"],
+    ["1", "3", "9500", "350"],
+    ["1", "4", "4002", "350"],
+  ]}
+/>
+
+<DataTable
+  columns={["account_id", "account_name", "segment"]}
+  rows={[
+    ["1000", "Cash", "SW"],
+    ["2002", "Receivables", "SW"],
+    ["4002", "Inventory", "SW"],
+    ["8002", "Retained Earn.", "SW"],
+    ["9003", "Revenue", "SW"],
+    ["9500", "COGS", "SW"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Relational database"} aiNotes={"role start_date salary_level"}>
+
+<Bullets items={[
+  { l: 1, h: "Relations often through “keys” that link tables" },
+  { l: 2, h: "*Primary key* is used to define an observation (row) in a table" },
+  { l: 2, h: "*Foreign key* is included in a table to link to the *primary key* of another table (link the rows)" },
+  { l: 2, h: "E.g. `account_id` is a foreign key in `GL_Detail`, and the primary key in `Chart_of_Accounts`" },
+]} />
+
+</Slide>
+
+<Slide title={"Base & General Ledger"}>
+
+<ImageCaption src={"/decks/week-05/5-ug-rdb/img1.png"} alt={"Base & General Ledger"} />
+
+</Slide>
+
+<Slide title={"Relationship Types"}>
+
+<Bullets items={[
+  { l: 1, h: "Relationships can be singular or multiple" },
+  { l: 2, h: "1:1 – one row in table 1 matches one row in table 2" },
+  { l: 2, h: "1:m – one row in T1 matches multiple rows in T2" },
+  { l: 3, h: "E.g. 1 employee matches with multiple salary payments" },
+  { l: 2, h: "m:1 – multiple rows in T1 match with one row in T2" },
+  { l: 3, h: "E.g. multiple employees will match with 1 manager" },
+  { l: 2, h: "m:m – multiple rows in T1 match multiple rows in T2" },
+  { l: 3, h: "E.g. employees could be in multiple committees, and the committees have multiple employees in them" },
+]} />
+
+</Slide>
+
+<Slide title={"Many to Many relationships"}>
+
+<DataTable
+  columns={["employee_id", "name"]}
+  rows={[
+    ["0", "Alice"],
+    ["1", "Bob"],
+    ["2", "Candice"],
+  ]}
+/>
+
+<DataTable
+  columns={["employee_id", "committee_id"]}
+  rows={[
+    ["0", "0"],
+    ["0", "1"],
+    ["1", "0"],
+    ["1", "2"],
+    ["2", "1"],
+    ["2", "2"],
+  ]}
+/>
+
+<DataTable
+  columns={["committee_id", "name"]}
+  rows={[
+    ["0", "Xcelerate Growth Strategy"],
+    ["1", "Year-End Financial Review"],
+    ["2", "Zero-Based Budgeting"],
+  ]}
+/>
+
+<DataTable
+  columns={["Employee", "Committee"]}
+  rows={[
+    ["Alice", "Xcelerate Growth Strategy"],
+    ["Alice", "Year-End Financial Review"],
+    ["Bob", "Xcelerate Growth Strategy"],
+    ["Bob", "Zero-Based Budgeting"],
+    ["Candice", "Year-End Financial Review"],
+    ["Candice", "Zero-Based Budgeting"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"AICPA Standards"}>
+
+<Bullets items={[
+  { l: 1, h: "*Base standard* addressing users, business units, segments, and tax" },
+  { l: 1, h: "*General Ledger* (chart of accounts, GL, trial balance)" },
+  { l: 1, h: "*Order to Cash* subledger" },
+  { l: 1, h: "*Procure to Pay* subledger" },
+  { l: 1, h: "*Inventory* subledger" },
+  { l: 1, h: "*Fixed Asset* subledger" },
+]} />
+
+</Slide>
+
+<Slide title={"Order to Cash subledger"}>
+
+<ImageCaption src={"/decks/week-05/5-ug-rdb/img2.png"} alt={"Order to Cash subledger"} />
+
+</Slide>
+
+<Slide title={"SQL: Structured Query Language"}>
+
+<Bullets items={[
+  { l: 1, h: "SQL is the language used to interact with RDBs" },
+  { l: 1, h: "SQL playground: sqlbolt.com" },
+  { l: 1, h: "Do you need to know SQL?" },
+  { l: 2, h: "You should understand conceptually the moving parts" },
+  { l: 2, h: "You should understand what it can and can’t do" },
+  { l: 3, h: "Which you can ask LLMs" },
+  { l: 2, h: "Learn it if you need it, are interested, or taking the ISC section of the CPA" },
+]} />
+
+<Cta label={"sqlbolt.com"} href={"https://sqlbolt.com/"} />
+
+</Slide>
+
+<Slide title={"Types of joins"}>
+
+<Bullets items={[
+  { l: 1, h: "Inner: just keep rows that match" },
+  { l: 1, h: "Outer: keep all rows" },
+  { l: 1, h: "Left/right: keep all rows from one table" },
+  { l: 1, h: "Cross: every row in one table for every row in the other" },
+  { l: 1, h: "*Self*: joining a table with itself (could be inner, outer, or left/right)" },
+  { l: 1, h: "*Union*: concatenating datasets, e.g. adding rows together, not columns together" },
+]} />
+
+</Slide>
+
+<Slide title={"Inner join"}>
+
+<Bullets items={[
+  { l: 1, h: "Just keep rows that match (join keys are in both tables)" },
+  { l: 1, h: "Most common join (JOIN keyword in SQL is inner)" },
+]} />
+
+</Slide>
+
+<Slide title={"Outer join"}>
+
+<TwoColumn ratio="2-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Keeps all rows from both tables" },
+    { l: 1, h: "Rows that do not match other table are filled with missing (NULL)" },
+    { l: 1, h: "Can create large datasets" },
+  ]} />
+  </div>
+  <div slot="right">
+  <DataTable
+    columns={["NULLs", ""]}
+    rows={[
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", "NULLs"],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+    ]}
+  />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Left/Right join"}>
+
+<Bullets items={[
+  { l: 1, h: "Keeps all rows in one table" },
+  { l: 1, h: "Used to add columns from another table without altering original rows" },
+  { l: 1, h: "Left and right join are the same with swapped table orders" },
+  { l: 2, h: "A `left join` B = B `right join` A" },
+]} />
+
+<DataTable
+  columns={[""]}
+  rows={[
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
+    ["NULLs"],
+    [""],
+    [""],
+    [""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Cross Join"}>
+
+<Bullets items={[
+  { l: 1, h: "Creates all combinations of rows" },
+  { l: 2, h: "Every row in T1 will be merged with every row in T2" },
+  { l: 1, h: "Used to expand datasets" },
+  { l: 2, h: "Example: going from yearly to monthly" },
+  { l: 1, h: "Used to get all combinations of values" },
+  { l: 2, h: "Example: match every buyer to every seller to find best trades" },
+]} />
+
+</Slide>
+
+<Slide title={"Range Merges"}>
+
+<Bullets items={[
+  { l: 1, h: "Join tables based on data from one being within a range based on columns from the other" },
+  { l: 2, h: "E.g. Get last year of transactions (with *fiscal year end*)" },
+  { l: 2, h: "SQL: `b.date` `BETWEEN` `a.last_fye` `AND` `a.fye`" },
+  { l: 1, h: "Used for time-series, binning, finding overlaps, etc." },
+  { l: 1, h: "Considering overlaps is key to avoid duplication" },
+]} />
+
+</Slide>
+
+<Slide title={"Range Merges"}>
+
+<Bullets items={[
+  { l: 1, h: "Most accounting/financial data is time-based, range merges very common" },
+  { l: 1, h: "Returns Dataset" },
+]} />
+
+<DataTable
+  columns={["date", "ticker", "returns"]}
+  rows={[
+    ["1/3/2023", "AAPL", "-3.7%"],
+    ["1/4/2023", "AAPL", "1.0%"],
+    ["1/5/2023", "AAPL", "-1.1%"],
+    ["1/6/2023", "AAPL", "3.7%"],
+    ["1/9/2023", "AAPL", "0.4%"],
+    ["…", "…", "…"],
+    ["12/29/2023", "AAPL", "-0.5%"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Financials Dataset" },
+]} />
+
+<DataTable
+  columns={["fye", "ticker", "AT"]}
+  rows={[
+    ["12/31/2023", "AAPL", "352,583"],
+    ["12/31/2024", "AAPL", "364,980"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Multiple Merges"}>
+
+<Bullets items={[
+  { l: 1, h: "Connecting merges are a common use of multiple merges" },
+  { l: 1, h: "Often built one merge at a time" },
+  { l: 1, h: "Transaction Dataset" },
+  { l: 1, h: "Customer Dataset" },
+  { l: 1, h: "Financials Dataset" },
+]} />
+
+<DataTable
+  columns={["customer_id", "Name"]}
+  rows={[
+    ["0", "Alice"],
+    ["1", "Bob"],
+    ["…", "…"],
+  ]}
+/>
+
+<DataTable
+  columns={["date", "customer_id", "amount"]}
+  rows={[
+    ["1/3/2023", "0", "156.34"],
+    ["1/4/2023", "1", "2,000.41"],
+    ["1/5/2023", "1", "75.05"],
+    ["…", "…", "…"],
+  ]}
+/>
+
+<DataTable
+  columns={["fye", "ticker", "AT"]}
+  rows={[
+    ["12/31/2023", "AAPL", "352,583"],
+    ["12/31/2024", "AAPL", "364,980"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Merging without keys"}>
+
+<Bullets items={[
+  { l: 1, h: "Keys work for perfect matches (equality)" },
+  { l: 1, h: "What about when there is no key?" },
+  { l: 2, h: "Data from external source" },
+  { l: 2, h: "Data with noise or errors" },
+  { l: 2, h: "Data with non-perfect overlap (e.g. spatial data)" },
+  { l: 1, h: "Statistical / fuzzy matching used in these cases" },
+]} />
+
+</Slide>
+
+<Slide title={"Aggregations"}>
+
+<Bullets items={[
+  { l: 1, h: "Calculations across multiple rows" },
+  { l: 2, h: "Counting, summing, averaging, regressions, etc." },
+  { l: 1, h: "Aggregations collapse multiple rows into one" },
+  { l: 1, h: "Often combined with merges" },
+  { l: 2, h: "E.g. total expenses by vendor within date range" },
+  { l: 1, h: "Often done in “subquery” and merged" },
+]} />
+
+</Slide>
+
+<Slide title={"Aggregations"}>
+
+<Bullets items={[
+  { l: 1, h: "Adding yearly returns to financial dataset" },
+  { l: 1, h: "Returns Dataset" },
+  { l: 1, h: "Financials Dataset" },
+  { l: 1, h: "*sub-query*" },
+]} />
+
+<DataTable
+  columns={["fye", "ticker", "AT"]}
+  rows={[
+    ["12/31/2023", "AAPL", "352,583"],
+    ["12/31/2024", "AAPL", "364,980"],
+  ]}
+/>
+
+<DataTable
+  columns={["date", "ticker", "returns"]}
+  rows={[
+    ["1/3/2023", "AAPL", "-3.7%"],
+    ["…", "…", "…"],
+    ["12/29/2023", "AAPL", "-0.5%"],
+    ["1/2/2024", "AAPL", "-3.5%"],
+    ["…", "…", "…"],
+    ["12/29/2024", "AAPL", "-0.7%"],
+    ["1/3/2023", "GOOGL", "-2.5%"],
+    ["…", "…", "…"],
+  ]}
+/>
+
+<DataTable
+  columns={["fyear", "ticker", "ave_ret", "cuml_ret"]}
+  rows={[
+    ["2023", "AAPL", "0.1%", "49.0%"],
+    ["2024", "AAPL", "0.1%", "30.7%"],
+    ["2023", "GOOG", "0.2%", "58.8%"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Levels of Aggregation"}>
+
+<DataTable
+  columns={["Year", "Month", "Day", "State", "City", "Amount"]}
+  rows={[
+    ["2024", "1", "1", "UT", "SLC", "10"],
+    ["2024", "1", "2", "UT", "SLC", "11"],
+    ["2024", "2", "1", "UT", "SLC", "12"],
+    ["2024", "2", "2", "UT", "SLC", "13"],
+    ["2023", "1", "1", "UT", "SLC", "14"],
+    ["2023", "1", "2", "UT", "SLC", "15"],
+    ["2023", "2", "1", "UT", "SLC", "16"],
+    ["2023", "2", "2", "UT", "SLC", "17"],
+    ["2024", "1", "1", "UT", "Provo", "20"],
+    ["2024", "1", "2", "UT", "Provo", "21"],
+    ["2024", "2", "1", "UT", "Provo", "22"],
+    ["2024", "2", "2", "UT", "Provo", "23"],
+    ["2023", "1", "1", "UT", "Provo", "24"],
+    ["2023", "1", "2", "UT", "Provo", "25"],
+    ["2023", "2", "1", "UT", "Provo", "26"],
+    ["2023", "2", "2", "UT", "Provo", "27"],
+    ["2024", "1", "1", "CO", "Denver", "30"],
+    ["2024", "1", "2", "CO", "Denver", "31"],
+    ["2024", "2", "1", "CO", "Denver", "32"],
+    ["2024", "2", "2", "CO", "Denver", "33"],
+    ["2023", "1", "1", "CO", "Denver", "34"],
+    ["2023", "1", "2", "CO", "Denver", "35"],
+    ["2023", "2", "1", "CO", "Denver", "36"],
+    ["2023", "2", "2", "CO", "Denver", "37"],
+    ["2024", "1", "1", "CO", "Boulder", "40"],
+    ["2024", "1", "2", "CO", "Boulder", "41"],
+    ["2024", "2", "1", "CO", "Boulder", "42"],
+    ["2024", "2", "2", "CO", "Boulder", "43"],
+    ["2023", "1", "1", "CO", "Boulder", "44"],
+    ["2023", "1", "2", "CO", "Boulder", "45"],
+    ["2023", "2", "1", "CO", "Boulder", "46"],
+    ["2023", "2", "2", "CO", "Boulder", "47"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "The same data can be aggregated many different ways" },
+  { l: 1, h: "How we aggregate changes what information we get" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<DataTable
+  columns={["Year", "Month", "Day", "State", "City", "Amount"]}
+  rows={[
+    ["2024", "1", "1", "UT", "SLC", "10"],
+    ["2024", "1", "2", "UT", "SLC", "11"],
+    ["2024", "2", "1", "UT", "SLC", "12"],
+    ["2024", "2", "2", "UT", "SLC", "13"],
+    ["2023", "1", "1", "UT", "SLC", "14"],
+    ["2023", "1", "2", "UT", "SLC", "15"],
+    ["2023", "2", "1", "UT", "SLC", "16"],
+    ["2023", "2", "2", "UT", "SLC", "17"],
+    ["2024", "1", "1", "UT", "Provo", "20"],
+    ["2024", "1", "2", "UT", "Provo", "21"],
+    ["2024", "2", "1", "UT", "Provo", "22"],
+    ["2024", "2", "2", "UT", "Provo", "23"],
+    ["2023", "1", "1", "UT", "Provo", "24"],
+    ["2023", "1", "2", "UT", "Provo", "25"],
+    ["2023", "2", "1", "UT", "Provo", "26"],
+    ["2023", "2", "2", "UT", "Provo", "27"],
+    ["2024", "1", "1", "CO", "Denver", "30"],
+    ["2024", "1", "2", "CO", "Denver", "31"],
+    ["2024", "2", "1", "CO", "Denver", "32"],
+    ["2024", "2", "2", "CO", "Denver", "33"],
+    ["2023", "1", "1", "CO", "Denver", "34"],
+    ["2023", "1", "2", "CO", "Denver", "35"],
+    ["2023", "2", "1", "CO", "Denver", "36"],
+    ["2023", "2", "2", "CO", "Denver", "37"],
+    ["2024", "1", "1", "CO", "Boulder", "40"],
+    ["2024", "1", "2", "CO", "Boulder", "41"],
+    ["2024", "2", "1", "CO", "Boulder", "42"],
+    ["2024", "2", "2", "CO", "Boulder", "43"],
+    ["2023", "1", "1", "CO", "Boulder", "44"],
+    ["2023", "1", "2", "CO", "Boulder", "45"],
+    ["2023", "2", "1", "CO", "Boulder", "46"],
+    ["2023", "2", "2", "CO", "Boulder", "47"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Group by Year" },
+  { l: 1, h: "Average *across* location, *within* year" },
+]} />
+
+<DataTable
+  columns={["Years", "Average Amount"]}
+  rows={[
+    ["2023", "30.5"],
+    ["2024", "26.5"],
+  ]}
+/>
+
+</Slide>
+
+<Slide>
+
+<DataTable
+  columns={["Year", "Month", "Day", "State", "City", "Amount"]}
+  rows={[
+    ["2024", "1", "1", "UT", "SLC", "10"],
+    ["2024", "1", "2", "UT", "SLC", "11"],
+    ["2024", "2", "1", "UT", "SLC", "12"],
+    ["2024", "2", "2", "UT", "SLC", "13"],
+    ["2023", "1", "1", "UT", "SLC", "14"],
+    ["2023", "1", "2", "UT", "SLC", "15"],
+    ["2023", "2", "1", "UT", "SLC", "16"],
+    ["2023", "2", "2", "UT", "SLC", "17"],
+    ["2024", "1", "1", "UT", "Provo", "20"],
+    ["2024", "1", "2", "UT", "Provo", "21"],
+    ["2024", "2", "1", "UT", "Provo", "22"],
+    ["2024", "2", "2", "UT", "Provo", "23"],
+    ["2023", "1", "1", "UT", "Provo", "24"],
+    ["2023", "1", "2", "UT", "Provo", "25"],
+    ["2023", "2", "1", "UT", "Provo", "26"],
+    ["2023", "2", "2", "UT", "Provo", "27"],
+    ["2024", "1", "1", "CO", "Denver", "30"],
+    ["2024", "1", "2", "CO", "Denver", "31"],
+    ["2024", "2", "1", "CO", "Denver", "32"],
+    ["2024", "2", "2", "CO", "Denver", "33"],
+    ["2023", "1", "1", "CO", "Denver", "34"],
+    ["2023", "1", "2", "CO", "Denver", "35"],
+    ["2023", "2", "1", "CO", "Denver", "36"],
+    ["2023", "2", "2", "CO", "Denver", "37"],
+    ["2024", "1", "1", "CO", "Boulder", "40"],
+    ["2024", "1", "2", "CO", "Boulder", "41"],
+    ["2024", "2", "1", "CO", "Boulder", "42"],
+    ["2024", "2", "2", "CO", "Boulder", "43"],
+    ["2023", "1", "1", "CO", "Boulder", "44"],
+    ["2023", "1", "2", "CO", "Boulder", "45"],
+    ["2023", "2", "1", "CO", "Boulder", "46"],
+    ["2023", "2", "2", "CO", "Boulder", "47"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Group by Year and Month" },
+  { l: 1, h: "Average *across* location, *within* year and month" },
+]} />
+
+<DataTable
+  columns={["Year/Month", "Average Amount"]}
+  rows={[
+    ["2023 – 01", "29.5"],
+    ["2023 – 02", "31.5"],
+    ["2024 – 01", "25.5"],
+    ["2024 – 02", "27.5"],
+  ]}
+/>
+
+</Slide>
+
+<Slide>
+
+<DataTable
+  columns={["Year", "Month", "Day", "State", "City", "Amount"]}
+  rows={[
+    ["2024", "1", "1", "UT", "SLC", "10"],
+    ["2024", "1", "2", "UT", "SLC", "11"],
+    ["2024", "2", "1", "UT", "SLC", "12"],
+    ["2024", "2", "2", "UT", "SLC", "13"],
+    ["2023", "1", "1", "UT", "SLC", "14"],
+    ["2023", "1", "2", "UT", "SLC", "15"],
+    ["2023", "2", "1", "UT", "SLC", "16"],
+    ["2023", "2", "2", "UT", "SLC", "17"],
+    ["2024", "1", "1", "UT", "Provo", "20"],
+    ["2024", "1", "2", "UT", "Provo", "21"],
+    ["2024", "2", "1", "UT", "Provo", "22"],
+    ["2024", "2", "2", "UT", "Provo", "23"],
+    ["2023", "1", "1", "UT", "Provo", "24"],
+    ["2023", "1", "2", "UT", "Provo", "25"],
+    ["2023", "2", "1", "UT", "Provo", "26"],
+    ["2023", "2", "2", "UT", "Provo", "27"],
+    ["2024", "1", "1", "CO", "Denver", "30"],
+    ["2024", "1", "2", "CO", "Denver", "31"],
+    ["2024", "2", "1", "CO", "Denver", "32"],
+    ["2024", "2", "2", "CO", "Denver", "33"],
+    ["2023", "1", "1", "CO", "Denver", "34"],
+    ["2023", "1", "2", "CO", "Denver", "35"],
+    ["2023", "2", "1", "CO", "Denver", "36"],
+    ["2023", "2", "2", "CO", "Denver", "37"],
+    ["2024", "1", "1", "CO", "Boulder", "40"],
+    ["2024", "1", "2", "CO", "Boulder", "41"],
+    ["2024", "2", "1", "CO", "Boulder", "42"],
+    ["2024", "2", "2", "CO", "Boulder", "43"],
+    ["2023", "1", "1", "CO", "Boulder", "44"],
+    ["2023", "1", "2", "CO", "Boulder", "45"],
+    ["2023", "2", "1", "CO", "Boulder", "46"],
+    ["2023", "2", "2", "CO", "Boulder", "47"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Group by Year and State" },
+  { l: 1, h: "Average *across* City and month/day, *within* year and state" },
+]} />
+
+<DataTable
+  columns={["Year/State", "Average Amount"]}
+  rows={[
+    ["2023 UT", "20.5"],
+    ["2023 CO", "40.5"],
+    ["2024 UT", "16.5"],
+    ["2024 CO", "36.5"],
+  ]}
+/>
+
+</Slide>
+
+<Slide>
+
+<DataTable
+  columns={["Year", "Month", "Day", "State", "City", "Amount"]}
+  rows={[
+    ["2024", "1", "1", "UT", "SLC", "10"],
+    ["2024", "1", "2", "UT", "SLC", "11"],
+    ["2024", "2", "1", "UT", "SLC", "12"],
+    ["2024", "2", "2", "UT", "SLC", "13"],
+    ["2023", "1", "1", "UT", "SLC", "14"],
+    ["2023", "1", "2", "UT", "SLC", "15"],
+    ["2023", "2", "1", "UT", "SLC", "16"],
+    ["2023", "2", "2", "UT", "SLC", "17"],
+    ["2024", "1", "1", "UT", "Provo", "20"],
+    ["2024", "1", "2", "UT", "Provo", "21"],
+    ["2024", "2", "1", "UT", "Provo", "22"],
+    ["2024", "2", "2", "UT", "Provo", "23"],
+    ["2023", "1", "1", "UT", "Provo", "24"],
+    ["2023", "1", "2", "UT", "Provo", "25"],
+    ["2023", "2", "1", "UT", "Provo", "26"],
+    ["2023", "2", "2", "UT", "Provo", "27"],
+    ["2024", "1", "1", "CO", "Denver", "30"],
+    ["2024", "1", "2", "CO", "Denver", "31"],
+    ["2024", "2", "1", "CO", "Denver", "32"],
+    ["2024", "2", "2", "CO", "Denver", "33"],
+    ["2023", "1", "1", "CO", "Denver", "34"],
+    ["2023", "1", "2", "CO", "Denver", "35"],
+    ["2023", "2", "1", "CO", "Denver", "36"],
+    ["2023", "2", "2", "CO", "Denver", "37"],
+    ["2024", "1", "1", "CO", "Boulder", "40"],
+    ["2024", "1", "2", "CO", "Boulder", "41"],
+    ["2024", "2", "1", "CO", "Boulder", "42"],
+    ["2024", "2", "2", "CO", "Boulder", "43"],
+    ["2023", "1", "1", "CO", "Boulder", "44"],
+    ["2023", "1", "2", "CO", "Boulder", "45"],
+    ["2023", "2", "1", "CO", "Boulder", "46"],
+    ["2023", "2", "2", "CO", "Boulder", "47"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Group by City" },
+  { l: 1, h: "Average *across* City, *within* year/month/day" },
+]} />
+
+<DataTable
+  columns={["Year/State", "Average Amount"]}
+  rows={[
+    ["SLC", "13.5"],
+    ["Provo", "23.5"],
+    ["Denver", "33.5"],
+    ["Boulder", "43.5"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Self Joins – Time series"}>
+
+<Bullets items={[
+  { l: 1, h: "Lead/Lag variables can also be merges" },
+  { l: 1, h: "JOIN ON ticker" },
+  { l: 1, h: "AND fyear = fyear + 1" },
+]} />
+
+<DataTable
+  columns={["fyear", "ticker", "ave_ret"]}
+  rows={[
+    ["2023", "AAPL", "0.2%"],
+    ["2024", "AAPL", "0.1%"],
+    ["2023", "GOOG", "0.2%"],
+  ]}
+/>
+
+<DataTable
+  columns={["fyear", "ticker", "ave_ret", "ave_ret_last_year"]}
+  rows={[
+    ["2023", "AAPL", "0.2%", "–"],
+    ["2024", "AAPL", "0.1%", "0.2%"],
+    ["2023", "GOOG", "0.2%", "–"],
+  ]}
+/>
+
+<DataTable
+  columns={["fyear", "fyear+1", "ticker", "ave_ret"]}
+  rows={[
+    ["2023", "2024", "AAPL", "0.2%"],
+    ["2024", "2025", "AAPL", "0.1%"],
+    ["2023", "2024", "GOOG", "0.2%"],
+  ]}
+/>
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-05/5-ug-rdb/img3.png"} alt={"Combining Data and Relationships"} />
+
+</Slide>

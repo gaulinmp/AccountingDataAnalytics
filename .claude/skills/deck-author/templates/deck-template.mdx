@@ -1,0 +1,63 @@
+---
+{/* Required: must match an existing content/weeks/week-NN.yaml id. */}
+week: week-03
+{/* Required: deck title (breadcrumb + present mode). */}
+title: "Data Sources: Files, Databases, APIs"
+{/* Optional one-line framing. */}
+subtitle: "Real analysis is many tables, not one file an LLM can see."
+{/* Optional: estimated length in minutes. */}
+estMinutes: 50
+{/* Optional: AI-tutor context for every slide in this deck (a <Slide topic> overrides it). */}
+topic: "Relational data and where accounting data lives"
+{/* Optional: appended to the AI tutor's system prompt for this deck only. */}
+aiPrompt: "This deck is about relational data. Favor JOIN intuition over syntax."
+---
+{/* Import ONLY the blocks you use, from the barrel. */}
+import { Slide, CoverMeta, Bullets, SqlWalk, Quiz } from '@components/blocks';
+
+{/* ── Cover slide: variant="title", with a kicker, an icon (must be in the icon map),
+     and a CoverMeta block. The slide body is the one-line hook. ───────────────── */}
+<Slide variant="title" kicker="Week 3 · Lecture" icon="database">
+
+This week: where accounting data actually lives.
+
+<CoverMeta instructors={["Maclean Gaulin"]} estMinutes={50} />
+
+</Slide>
+
+{/* ── Content slide: `key=` is the one-sentence Key Concept shown in the side pane.
+     Bullets `l` = indent level (1–4); `h` = text with **bold**/*italic*/`code` only. ── */}
+<Slide title="Three places data lives" icon="database"
+       key="Files, databases, and APIs are the three shapes of source data.">
+
+  <Bullets items={[
+    { l: 1, h: "**Files** — CSV, Excel, JSON exported from a system" },
+    { l: 1, h: "**Databases** — many related tables, queried with `SQL`" },
+    { l: 2, h: "This is where most accounting data really lives" },
+    { l: 1, h: "**APIs** — data fetched live over HTTP" },
+  ]} />
+
+  {/* One inline <Quiz> per concept slide. `correct` is the 0-based index into `opts`. */}
+  <Quiz
+    id="w3-data-shapes"
+    q="Which source is queried with SQL?"
+    opts={["A flat CSV", "A relational database", "A PDF"]}
+    correct={1}
+    why="Relational databases store related tables and are queried with SQL JOINs." />
+
+</Slide>
+
+{/* ── A teaching-a-query slide using SqlWalk: each row pairs a clause with its
+     explanation (inline formatting allowed in `desc`). ─────────────────────────── */}
+<Slide title="Reading a JOIN, clause by clause"
+       key="A JOIN stitches two tables together on a shared key.">
+
+  <SqlWalk
+    sql={`SELECT f.gvkey, f.fyear, f.ni\nFROM funda f\nWHERE f.fyear = 2023`}
+    rows={[
+      { clause: "SELECT", desc: "the columns we want — here net income (`ni`)" },
+      { clause: "FROM",   desc: "the **funda** table (Compustat fundamentals)" },
+      { clause: "WHERE",  desc: "keep only fiscal year 2023" },
+    ]} />
+
+</Slide>

@@ -1,0 +1,8 @@
+id: w3-data-shapes
+q: "Which source is queried with SQL?"
+opts:
+  - "A flat CSV"
+  - "A relational database"
+  - "A PDF"
+correct: 1
+why: "Relational databases store related tables and are queried with SQL JOINs."

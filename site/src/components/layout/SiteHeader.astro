@@ -1,0 +1,470 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { href, weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
+import { gateDate, unlockLabel } from '@lib/unlock';
+import Icon from '@components/Icon.astro';
+import type { IconName } from '@lib/icons';
+
+type HeaderTab = 'overview' | WeekTab;
+
+interface Props {
+  activeWeekId?: string;
+  activeTab?: HeaderTab;
+}
+
+const { activeWeekId, activeTab = 'overview' } = Astro.props;
+
+// Fetch course configuration
+const courseEntry = await getEntry('course', 'course');
+const course = courseEntry!.data;
+
+// Fetch and sort weeks according to course.weekOrder
+const allWeeks = await getCollection('weeks');
+const weeks = course.weekOrder
+  .map((ref) => allWeeks.find((w) => w.id === ref.id))
+  .filter((w): w is NonNullable<typeof w> => !!w);
+
+const activeWeek = activeWeekId ? weeks.find((w) => w.id === activeWeekId) : null;
+
+// The fixed week sub-page tabs (row 2). Overview is the bare week URL; the rest
+// are the /<week>/<tab>/ routes owned by weekTabUrl().
+const tabs: { id: HeaderTab; label: string; icon: IconName }[] = [
+  { id: 'overview', label: 'Overview', icon: 'info' },
+  { id: 'slides', label: 'Slides', icon: 'slides' },
+  { id: 'activity', label: 'Activity', icon: 'puzzle' },
+  { id: 'lab', label: 'Lab', icon: 'flask' },
+  { id: 'homework', label: 'Homework', icon: 'pencil' },
+  { id: 'quiz', label: 'Quiz', icon: 'helpCircle' },
+];
+
+const tabHref = (weekId: string, tab: HeaderTab) =>
+  tab === 'overview' ? weekUrl(weekId) : weekTabUrl(weekId, tab);
+
+// The home entry sits at the head of the week rail. Trailing slashes vary
+// between dev and the built site, so compare the paths without one.
+const homeUrl = href();
+const trim = (p: string) => p.replace(/\/+$/, '');
+const isHome = trim(Astro.url.pathname) === trim(homeUrl);
+---
+
+<header class="site-header">
+  {/* First Row: Week Scroll Nav */}
+  <div class="row-top">
+    <div class="row-top__content">
+      <div class="week-nav-wrapper">
+        {/* Home sits outside the scroller, so the way back to the week list is
+            always on screen no matter how far the rail has been scrolled. */}
+        <a
+          href={homeUrl}
+          class:list={['week-nav-item', 'home-nav-item', { 'is-active': isHome }]}
+          title={`${course.code}: all weeks`}
+          aria-current={isHome ? 'page' : undefined}
+        >
+          <span class="week-nav-item__icon">
+            <Icon name="home" size={20} />
+          </span>
+          <span class="week-nav-item__label">Home</span>
+        </a>
+
+        <button class="nav-arrow nav-arrow--left" aria-label="Scroll left">
+          <Icon name="chevronLeft" size={16} />
+        </button>
+
+        <nav class="week-nav-scroll" aria-label="Week navigation">
+          {weeks.map((week, i) => {
+            const label = week.data.navLabel ?? `Week ${week.data.number}`;
+            const icon = (week.data.icon ?? 'book') as IconName;
+            const isActive = activeWeekId === week.id;
+            const gate = gateDate(week.data.unlockOn, i);
+            return (
+              <a
+                href={weekUrl(week.id)}
+                class:list={['week-nav-item', { 'is-active': isActive }]}
+                title={`Week ${week.data.number}: ${week.data.title}`}
+                aria-current={isActive ? 'page' : undefined}
+                data-unlock-on={gate?.toISOString()}
+                data-unlock-label={gate && unlockLabel(gate)}
+              >
+                <span class="week-nav-item__icon">
+                  <Icon name={icon} size={20} />
+                  {/* Shown only while .is-locked — see the gate styles below. */}
+                  <span class="week-nav-item__lock" aria-hidden="true">
+                    <Icon name="lock" size={11} />
+                  </span>
+                </span>
+                <span class="week-nav-item__label">{label}</span>
+              </a>
+            );
+          })}
+        </nav>
+
+        <button class="nav-arrow nav-arrow--right" aria-label="Scroll right">
+          <Icon name="chevronRight" size={16} />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {/* Second Row: the week's fixed sub-page tabs */}
+  {activeWeek && (
+    <div class="row-bottom">
+      <div class="row-bottom__content">
+        <div class="active-week-info">
+          <span class="active-week-info__title" title={activeWeek.data.title}>
+            Week {activeWeek.data.number}
+          </span>
+        </div>
+
+        <nav class="content-tabs" aria-label="Week content navigation">
+          {tabs.map((tab) => (
+            <a
+              href={tabHref(activeWeek.id, tab.id)}
+              class:list={['tab-item', { 'is-active': activeTab === tab.id }]}
+              aria-current={activeTab === tab.id ? 'page' : undefined}
+            >
+              <Icon name={tab.icon} size={18} />
+              <span class="tab-item__label">{tab.label}</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+    </div>
+  )}
+</header>
+
+<style>
+  :root {
+    /* Active/selected state in the header uses the brand crimson — the header
+     * is the one place chrome and identity meet. */
+    --header-accent: var(--brand);
+    --header-border-color: var(--hairline);
+  }
+
+  .site-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--header-border-color);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+  }
+
+  /* First Row Styling */
+  .row-top {
+    border-bottom: 1px solid var(--header-border-color);
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .row-top__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* Week scroll selector navigation */
+  .week-nav-wrapper {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 80rem;
+    position: relative;
+    width: 100%;
+  }
+
+  .week-nav-scroll {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex: 1;
+    padding: 0 var(--space-2);
+  }
+
+  .week-nav-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 0;
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  .nav-arrow:hover {
+    background: var(--surface-muted);
+    color: var(--ink);
+  }
+
+  .week-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--ink-muted);
+    padding: var(--space-1) var(--space-3);
+    min-width: 5.5rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition);
+  }
+
+  .week-nav-item:hover {
+    color: var(--ink);
+    background: var(--surface-muted);
+  }
+
+  /* Current module: a rounded crimson box that inverts the icon/label colours. */
+  .week-nav-item.is-active {
+    background: var(--header-accent);
+    color: var(--brand-contrast);
+    font-weight: 600;
+  }
+
+  .week-nav-item.is-active:hover {
+    background: var(--brand-hover);
+    color: var(--brand-contrast);
+  }
+
+  /* Home: the way back to the syllabus. Wears the week-nav-item look so the
+   * rail reads as one row, but lives outside the scroller — pinned at the head
+   * of the list, with a hairline separating it from week 1. */
+  .home-nav-item {
+    position: relative;
+    flex-shrink: 0;
+    min-width: 4.25rem;
+    margin-inline-end: var(--space-3);
+  }
+
+  .home-nav-item::after {
+    content: '';
+    position: absolute;
+    inset-block: 20%;
+    inset-inline-end: calc(-1 * var(--space-2));
+    border-inline-end: 1px solid var(--header-border-color);
+  }
+
+  .week-nav-item__icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.5rem;
+  }
+
+  /* Date-gated weeks: still listed, but greyed out and inert until the unlock
+   * date (applyLocks() toggles .is-locked client-side, and also disables the
+   * link for keyboard/AT). The week stays in the nav so students can see the
+   * shape of the term; the page itself still renders at its URL.
+   * Pointer events stay live so the "Unlocks <date>" tooltip and the
+   * not-allowed cursor still land — guardLockedLinks() eats the click. */
+  .week-nav-item.is-locked,
+  .week-nav-item.is-locked:hover {
+    color: var(--gray-500);
+    background: transparent;
+    cursor: not-allowed;
+  }
+
+  .week-nav-item.is-locked .week-nav-item__icon > :global(svg) {
+    opacity: 0.5;
+  }
+
+  .week-nav-item__lock {
+    display: none;
+    position: absolute;
+    inset-block-end: -2px;
+    inset-inline-end: -6px;
+    color: var(--ink-muted);
+  }
+
+  .week-nav-item.is-locked .week-nav-item__lock {
+    display: block;
+  }
+
+  .week-nav-item__label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  /* Second Row Styling */
+  .row-bottom {
+    background: var(--surface-muted);
+    padding: 0 var(--space-4);
+  }
+
+  .row-bottom__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-6);
+    max-width: 90rem;
+    width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .row-bottom__content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .active-week-info {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: var(--space-3) 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .active-week-info__title {
+    color: var(--ink-muted);
+  }
+
+  .content-tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .tab-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--ink-muted);
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 2px solid transparent;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+
+  .tab-item:hover {
+    color: var(--ink);
+  }
+
+  .tab-item.is-active {
+    color: var(--header-accent);
+    border-bottom-color: var(--header-accent);
+    font-weight: 600;
+  }
+
+  .tab-item :global(svg) {
+    opacity: 0.7;
+    transition: opacity var(--transition);
+  }
+
+  .tab-item.is-active :global(svg) {
+    opacity: 1;
+    color: var(--header-accent);
+  }
+
+  @media (max-width: 768px) {
+    .row-bottom__content {
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: var(--space-2) 0;
+    }
+
+    .active-week-info {
+      padding: var(--space-1) 0;
+    }
+
+    .content-tabs {
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+      justify-content: center;
+    }
+    .content-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-item__label {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { applyLocks, guardLockedLinks, mountPreviewBadge, syncPreviewFromUrl } from '../../lib/unlock';
+
+  // Date-gate every [data-unlock-on] element on the page (nav items here and
+  // week rows on the home page): grey them out and make them un-clickable
+  // until their unlock date. The header ships on every page, so this is the
+  // one place the check runs — and the one place that picks up a `?preview=…`
+  // clock override (see src/lib/unlock.ts).
+  const preview = syncPreviewFromUrl();
+  applyLocks(document, preview);
+  guardLockedLinks(document);
+  mountPreviewBadge(preview);
+
+  // Dynamic horizontal scrolling behavior for week navigation
+  const scrollNav = () => {
+    const nav = document.querySelector('.week-nav-scroll');
+    const leftArrow = document.querySelector('.nav-arrow--left');
+    const rightArrow = document.querySelector('.nav-arrow--right');
+
+    if (nav && leftArrow && rightArrow) {
+      leftArrow.addEventListener('click', () => {
+        nav.scrollBy({ left: -240, behavior: 'smooth' });
+      });
+
+      rightArrow.addEventListener('click', () => {
+        nav.scrollBy({ left: 240, behavior: 'smooth' });
+      });
+
+      // Update visibility of arrows based on scroll position
+      const toggleArrows = () => {
+        const scrollLeft = nav.scrollLeft;
+        const maxScroll = nav.scrollWidth - nav.clientWidth;
+
+        leftArrow.classList.toggle('is-disabled', scrollLeft <= 0);
+        rightArrow.classList.toggle('is-disabled', scrollLeft >= maxScroll - 1);
+      };
+
+      nav.addEventListener('scroll', toggleArrows);
+      window.addEventListener('resize', toggleArrows);
+
+      // Run once on load
+      toggleArrows();
+
+      // Scroll active week into view
+      const activeItem = nav.querySelector('.week-nav-item.is-active') as HTMLElement | null;
+      if (activeItem) {
+        const offset = activeItem.offsetLeft - (nav.clientWidth / 2) + (activeItem.clientWidth / 2);
+        nav.scrollTo({ left: offset, behavior: 'auto' });
+      }
+    }
+  };
+
+  // Run initial hookup
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scrollNav);
+  } else {
+    scrollNav();
+  }
+</script>

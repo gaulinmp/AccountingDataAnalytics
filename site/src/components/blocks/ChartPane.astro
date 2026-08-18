@@ -1,0 +1,35 @@
+---
+// A framed pane for a chart/visual (slotted) with an optional caption.
+interface Props {
+  title?: string;
+  caption?: string;
+}
+const { title, caption } = Astro.props;
+---
+
+<figure class="chart-pane">
+  {title && <p class="chart-pane__title">{title}</p>}
+  <div class="chart-pane__body"><slot /></div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .chart-pane {
+    margin: var(--space-4) 0;
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+  }
+  .chart-pane__title {
+    margin: 0 0 var(--space-3);
+    font-weight: 700;
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+  }
+  figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+</style>

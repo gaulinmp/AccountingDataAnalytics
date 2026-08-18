@@ -1,0 +1,29 @@
+---
+// Full-width band that breaks out of the slide's content padding.
+interface Props {
+  tone?: 'default' | 'brand' | 'muted';
+}
+const { tone = 'default' } = Astro.props;
+---
+
+<div class:list={['full-bleed', `tone-${tone}`]}>
+  <div class="inner"><slot /></div>
+</div>
+
+<style>
+  .full-bleed {
+    margin: var(--space-5) calc(-1 * var(--space-5));
+    padding: var(--space-6) var(--space-5);
+  }
+  .inner {
+    max-width: 60rem;
+    margin: 0 auto;
+  }
+  .tone-brand {
+    background: var(--brand);
+    color: var(--brand-contrast);
+  }
+  .tone-muted {
+    background: var(--surface-muted);
+  }
+</style>

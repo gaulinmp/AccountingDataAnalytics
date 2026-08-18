@@ -1,0 +1,45 @@
+---
+import { href as baseHref } from '@lib/url';
+
+// Call-to-action. Internal links (relative paths) are routed through the
+// base-path-safe href() helper; absolute URLs are passed through untouched.
+interface Props {
+  label: string;
+  href: string;
+}
+
+const { label, href } = Astro.props;
+const isExternal = /^https?:\/\//.test(href);
+const resolved = isExternal ? href : baseHref(href);
+---
+
+<p class="cta">
+  <a
+    href={resolved}
+    class="cta__btn"
+    {...isExternal ? { rel: 'noopener', target: '_blank' } : {}}
+  >
+    {label}
+  </a>
+</p>
+
+<style>
+  .cta {
+    margin: var(--space-5) 0;
+  }
+
+  .cta__btn {
+    display: inline-block;
+    padding: var(--space-3) var(--space-5);
+    background: var(--brand);
+    color: var(--brand-contrast);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: background var(--transition);
+  }
+
+  .cta__btn:hover {
+    background: var(--brand-hover);
+  }
+</style>

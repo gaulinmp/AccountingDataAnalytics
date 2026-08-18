@@ -14,7 +14,7 @@ Lab 9 introduces you to building, interpreting, and evaluating regression models
 3. **Volume with Quarter Fixed Effects**: Regression of total cost on production volume, adding indicator variables for each quarter, with coefficient comparison to Exercise 1
 4. **Out-of-Sample Validation**: Train volume model on 2015-2022 data, apply to 2023-2024 data, and compare RMSE/MAE/MAPE between training and test sets
 
-The breakdown of submissions will generally be the regression and error metrics screenshots will be submitted in the Lab, and the written questions asked in each exercise will be submitted in the Homework.
+Generally, you will submit screenshots of your regression output and error metrics for the Lab assignment, while answers to the written questions for each exercise will be submitted as part of the Homework.
 
 *Note*: This lab demonstrates a fundamental cost accounting principle: detailed cost driver analysis provides better predictions than simple volume-based costing. The skills you practice here, running regressions, interpreting output, and evaluating predictions, are essential for cost management and budgeting. {: .note}
 
@@ -33,7 +33,7 @@ By the end of this lab, you will be able to:
 
 ### 1.2. Tools
 
-As always, you can use whatever modality you are comfortable with, but it should be noted that these regression calculations are far more difficult in Tableau, so I recommend using Excel or Python for this lab (and I won't be providing Tableau guidance).
+As always, you can use whatever modality you are comfortable with, but I recommend using Python for this lab, as regressions are far easier there.
 
 * **Excel**: Data Analysis ToolPak provides regression analysis with full output tables, or you can use the `LINEST` function for more compact output
 * **Python**: `statsmodels` library provides formula-based regression interface, with well-formatted regression output
@@ -148,7 +148,7 @@ Most basic cost accounting systems use a traditional cost system that assumes on
 
 1. What is the coefficient on `volume`? In cost accounting terms, what does this represent?
 2. What is the intercept? What does this represent in cost accounting terms?
-3. What are the RMSE and MAE? How should you interpret these dollar values? Do you think the difference between them is material? Which would you use in communication and why?
+3. What are the RMSE and MAE? How should you interpret these dollar values? Why is RMSE typically larger than MAE, and what does the magnitude of the difference tell you about the presence of large prediction errors? Which metric would you prefer to use when communicating results, and why?
 4. What is the MAPE? How should you interpret this value? Is it more or less useful than RMSE/MAE when communicating results?
 
 
@@ -229,7 +229,7 @@ The real test of a cost model is out-of-sample performance, or how well it predi
 1. **Split the data**:
     * Training set: `year < 2023` (8 years of historical data)
     * Test set: `year >= 2023` (most recent 2 years)
-    * *Note*: You can literally split the data, or just omit the test years when training the model
+    * *Note*: You can split the data into separate datasets, or simply filter out the test years when training the model
 2. **Train the volume model on training data only**:
     * Outcome variable (Y): `total_cost`
     * Predictor variable (X): `volume`
@@ -497,6 +497,3 @@ pd.DataFrame([train_metrics, test_metrics], index=['Training (2015-2022)', 'Test
 * **Problem**: Test set error much higher than training set error
     * **Cause**: Model overfitting and/or conditions changed in test period
     * **Solution**: This can happen. If it were real-world data, you would document the degradation and consider possible explanations (inflation spike, supply chain disruption, etc.)
-
-
-Hi, those of you who have scrolled to the bottom! You might have noticed that my instruction formatting is less horrificly plain. That's because I went to Claude Code, pointed it at my last set of instructions, and said "Write some CSS to make these instructions aesthetically pleasing" and this is what it came up with. Including dynamically adding emoji to the headers, learning objectives, etc. I hope you enjoy! And sorry it took me so long to do. {: .note}

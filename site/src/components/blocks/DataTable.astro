@@ -1,0 +1,85 @@
+---
+interface Props {
+  columns: string[];
+  rows: (string | number)[][];
+  caption?: string;
+}
+
+const { columns, rows, caption } = Astro.props;
+---
+
+<div class="datatable-wrap">
+  <table class="datatable">
+    {caption && <caption>{caption}</caption>}
+    <thead>
+      <tr>{columns.map((c) => <th scope="col">{c}</th>)}</tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row) => (
+          <tr>
+            {row.map((cell) => (
+              <td>{cell}</td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .datatable-wrap {
+    margin: var(--space-4) 0;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--brand);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.01);
+    background: var(--surface);
+  }
+
+  .datatable {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: var(--fs-sm);
+  }
+
+  .datatable caption {
+    caption-side: top;
+    text-align: left;
+    margin-bottom: var(--space-2);
+    color: var(--ink-muted);
+    font-size: var(--fs-xs);
+  }
+
+  .datatable th,
+  .datatable td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .datatable thead th {
+    background: var(--surface-muted);
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .datatable tbody tr {
+    transition: background-color var(--transition-smooth);
+  }
+
+  .datatable tbody tr:hover {
+    background-color: var(--gray-100) !important;
+  }
+
+  .datatable tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .datatable tbody tr:nth-child(even) {
+    background: var(--gray-50);
+  }
+</style>

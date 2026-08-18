@@ -1,0 +1,37 @@
+---
+import { icons, type IconName } from '@lib/icons';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  /** Provide for a meaningful icon; omit to mark it decorative (aria-hidden). */
+  title?: string;
+  class?: string;
+}
+
+const { name, size = 24, title, class: className } = Astro.props;
+const inner = icons[name];
+const labelled = Boolean(title);
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  role={labelled ? 'img' : undefined}
+  aria-hidden={labelled ? undefined : 'true'}
+  aria-label={labelled ? title : undefined}
+>
+  {title && <title>{title}</title>}
+  {/* `inner` is a trusted, hardcoded build-time constant from icons.ts — not user
+      or runtime content — so set:html here is safe (cf. the runtime AI-output
+      surface in §11, which is the only sanitized one). */}
+  <Fragment set:html={inner} />
+</svg>

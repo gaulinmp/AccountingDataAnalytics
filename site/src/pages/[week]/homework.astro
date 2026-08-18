@@ -1,0 +1,55 @@
+---
+// Weekly homework: /week-NN/homework/. Renders the instruction sheet from the
+// repo-level labs_hw/ tree plus the grading rubric slot.
+// See src/lib/labs.ts for the id contract.
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import WeekShell from '@layout/WeekShell.astro';
+import ComingSoon from '@layout/ComingSoon.astro';
+import InstructionDocs from '@layout/InstructionDocs.astro';
+import { docForWeek } from '@lib/labs';
+
+export const getStaticPaths = (async () => {
+  const weeks = await getCollection('weeks');
+  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
+}) satisfies GetStaticPaths;
+
+const { week } = Astro.props;
+const doc = docForWeek(await getCollection('labs'), week.data.number, 'Homework');
+const rendered = doc ? await render(doc) : null;
+---
+
+<WeekShell week={week} tab="homework" title="Homework" lede="This week's homework assignment." wide>
+  {
+    rendered ? (
+      <InstructionDocs Doc={rendered.Content} />
+    ) : (
+      <ComingSoon icon="pencil" label="Homework instructions coming soon." note="This week's homework hasn't been posted yet." />
+    )
+  }
+
+  <section class="rubric">
+    <h2>Grading rubric</h2>
+    <p class="rubric-empty">Rubric coming soon — what graders look for in this week's homework will be posted here.</p>
+  </section>
+</WeekShell>
+
+<style>
+  .rubric {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .rubric h2 {
+    margin: 0 0 var(--space-3);
+    font-size: var(--fs-xl);
+    color: var(--ink);
+  }
+
+  .rubric-empty {
+    margin: 0;
+    color: var(--gray-500);
+    font-style: italic;
+  }
+</style>

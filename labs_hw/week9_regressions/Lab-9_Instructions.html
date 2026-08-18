@@ -274,7 +274,7 @@ strong {
     color: #1a202c;
 }
 
-.small {
+.small, .smol {
     font-size: 0.75rem;
     color: #555;
 }
@@ -346,6 +346,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -354,6 +360,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {
@@ -581,7 +610,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><strong>Volume with Quarter Fixed Effects</strong>: Regression of total cost on production volume, adding indicator variables for each quarter, with coefficient comparison to Exercise 1</li>
 <li><strong>Out-of-Sample Validation</strong>: Train volume model on 2015-2022 data, apply to 2023-2024 data, and compare RMSE/MAE/MAPE between training and test sets</li>
 </ol>
-<p>The breakdown of submissions will generally be the regression and error metrics screenshots will be submitted in the Lab, and the written questions asked in each exercise will be submitted in the Homework.</p>
+<p>Generally, you will submit screenshots of your regression output and error metrics for the Lab assignment, while answers to the written questions for each exercise will be submitted as part of the Homework.</p>
 <p class="note"><em>Note</em>: This lab demonstrates a fundamental cost accounting principle: detailed cost driver analysis provides better predictions than simple volume-based costing. The skills you practice here, running regressions, interpreting output, and evaluating predictions, are essential for cost management and budgeting.</p>
 <h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
 <p>By the end of this lab, you will be able to:</p>
@@ -595,7 +624,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Apply regression analysis to cost management and budgeting decisions</li>
 </ul>
 <h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
-<p>As always, you can use whatever modality you are comfortable with, but it should be noted that these regression calculations are far more difficult in Tableau, so I recommend using Excel or Python for this lab (and I won't be providing Tableau guidance).</p>
+<p>As always, you can use whatever modality you are comfortable with, but I recommend using Python for this lab, as regressions are far easier there.</p>
 <ul>
 <li><strong>Excel</strong>: Data Analysis ToolPak provides regression analysis with full output tables, or you can use the <code class="fixed-width">LINEST</code> function for more compact output</li>
 <li><strong>Python</strong>: <code class="fixed-width">statsmodels</code> library provides formula-based regression interface, with well-formatted regression output</li>
@@ -715,7 +744,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <ol>
 <li>What is the coefficient on <code class="fixed-width">volume</code>? In cost accounting terms, what does this represent?</li>
 <li>What is the intercept? What does this represent in cost accounting terms?</li>
-<li>What are the RMSE and MAE? How should you interpret these dollar values? Do you think the difference between them is material? Which would you use in communication and why?</li>
+<li>What are the RMSE and MAE? How should you interpret these dollar values? Why is RMSE typically larger than MAE, and what does the magnitude of the difference tell you about the presence of large prediction errors? Which metric would you prefer to use when communicating results, and why?</li>
 <li>What is the MAPE? How should you interpret this value? Is it more or less useful than RMSE/MAE when communicating results?</li>
 </ol>
 <h3 class="ada-h3" id="32-exercise-2-abc-activity-based-costing-model">3.2. Exercise 2: ABC (Activity-Based Costing) Model</h3>
@@ -837,7 +866,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><strong>Split the data</strong>:<ul>
 <li>Training set: <code class="fixed-width">year &lt; 2023</code> (8 years of historical data)</li>
 <li>Test set: <code class="fixed-width">year &gt;= 2023</code> (most recent 2 years)</li>
-<li><em>Note</em>: You can literally split the data, or just omit the test years when training the model</li>
+<li><em>Note</em>: You can split the data into separate datasets, or simply filter out the test years when training the model</li>
 </ul>
 </li>
 <li><strong>Train the volume model on training data only</strong>:<ul>
@@ -1182,6 +1211,5 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ul>
 </li>
 </ul>
-<p class="note">Hi, those of you who have scrolled to the bottom! You might have noticed that my instruction formatting is less horrificly plain. That's because I went to Claude Code, pointed it at my last set of instructions, and said "Write some CSS to make these instructions aesthetically pleasing" and this is what it came up with. Including dynamically adding emoji to the headers, learning objectives, etc. I hope you enjoy! And sorry it took me so long to do.</p>
 </body>
 </html>

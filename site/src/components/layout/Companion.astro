@@ -1,0 +1,167 @@
+---
+// The deck shell: a horizontal, one-slide-per-page carousel (left/right to change
+// slides) with vertical scroll *within* a long slide. CSS scroll-snap makes the
+// paging native (works even with JS off — you can swipe); the DeckController adds
+// keyboard nav + a pager and tracks the active slide. The reinforcement aside
+// (desktop, interactive mode) hosts the active slide's Key Concept + quiz —
+// the ReinforcementPane island relocates them; with JS off they stay inline.
+//
+// Visually this is *not* a projector stage: the slide is flat content flowing
+// the full width of the page, left-aligned. When the active slide has a Key
+// Concept or a quiz, the reinforcement rail claims the right ~30% and the slide
+// column shrinks to fit; otherwise the layout collapses to a single column.
+---
+
+<div class="companion" data-deck>
+  <main class="slide-pane"><slot /></main>
+  <aside class="companion__aside" data-deck-aside aria-label="Key concept and self-check" hidden>
+    <div data-aside-key></div>
+    <details class="companion__quiz" data-aside-quiz hidden>
+      <summary>Self-check</summary>
+      <div data-aside-quiz-body></div>
+    </details>
+  </aside>
+</div>
+
+<style>
+  .companion {
+    width: 100%;
+    margin: 0;
+    /* Extra bottom padding keeps slide content clear of the fixed Ask-AI
+     * launcher (bottom-right). */
+    padding: var(--space-6) var(--space-5) var(--space-12);
+  }
+
+  .slide-pane {
+    display: block;
+  }
+
+  /* By default (no-JS), slides stack vertically and are all visible */
+  .slide-pane :global([data-slide]) {
+    display: block;
+    margin-bottom: var(--space-8);
+  }
+
+  /* Stacked slides no longer have a card edge to separate them, so give the
+   * seam a hairline. Only when stacked — in paged mode one slide is on screen
+   * and the rule would read as a stray line above the title. */
+  .companion:not(.is-interactive) .slide-pane :global([data-slide] + [data-slide]) {
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--space-8);
+  }
+
+  /* When JS interactive mode is activated, only show the active slide */
+  .companion.is-interactive .slide-pane :global([data-slide]) {
+    display: none;
+  }
+
+  .companion.is-interactive .slide-pane :global([data-slide].is-active) {
+    display: flex;
+  }
+
+  /* The active slide keeps a consistent frame height so short slides don't
+   * collapse into a strip of dead space. Slide.astro lays out as a flex column
+   * (body grows, key-concept anchors to the bottom edge). */
+  .companion.is-interactive .slide-pane :global([data-slide].is-active) {
+    min-height: clamp(24rem, 68vh, 44rem);
+  }
+
+  /* The reinforcement aside is a JS/desktop-only affordance: hidden until the
+   * ReinforcementPane island populates it (and only at >=1100px, mirroring the
+   * island's matchMedia). With JS off, key concepts and quizzes stay inline. */
+  .companion__aside {
+    display: none;
+  }
+
+  @media (min-width: 1100px) {
+    /* Two columns only when the rail actually has something in it — otherwise
+     * the slide flows the whole width instead of reserving dead space. */
+    .companion.is-interactive:has(.companion__aside:not([hidden])) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(17rem, 30%);
+      column-gap: var(--space-6);
+      align-items: start;
+    }
+
+    .companion.is-interactive .slide-pane,
+    .companion.is-interactive :global(.deck-progress),
+    .companion.is-interactive :global(.deck-pager) {
+      grid-column: 1;
+    }
+
+    .companion.is-interactive .companion__aside:not([hidden]) {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      position: sticky;
+      top: var(--space-5);
+    }
+  }
+
+  /* Relocated nodes keep their component styles; only undo slide-edge spacing.
+   * (Never zero the padding here — .rp-key reserves its top padding for the
+   * absolutely-positioned "Key concept" label bar.) */
+  .companion__aside :global(.slide__key-concept) {
+    margin: 0;
+  }
+
+  /* The rail is a sidebar, not the slide: dial the self-check down a step so it
+   * reads as support material rather than a second headline. */
+  .companion__aside :global(.quiz) {
+    margin: var(--space-3) 0 0;
+    font-size: var(--fs-sm);
+  }
+
+  .companion__aside :global(.quiz label) {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .companion__quiz > summary {
+    cursor: pointer;
+    font-size: var(--fs-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    user-select: none;
+    transition: color var(--transition);
+  }
+
+  .companion__quiz > summary:hover {
+    color: var(--ink);
+  }
+
+  /* Print: stack every slide vertically so the whole deck prints. (The island
+   * restores relocated nodes inline on beforeprint.) */
+  @media print {
+    .companion {
+      display: block;
+      height: auto;
+      padding: 0;
+    }
+    .companion__aside {
+      display: none;
+    }
+    .slide-pane {
+      display: block;
+      height: auto;
+    }
+    .slide-pane :global([data-slide]) {
+      display: block !important;
+      height: auto;
+      break-inside: avoid;
+      margin-bottom: var(--space-8);
+    }
+    /* Same specificity as the paged-mode frame height, or the printed active
+     * slide keeps its 68vh floor and wastes most of a page. */
+    .companion.is-interactive .slide-pane :global([data-slide].is-active) {
+      min-height: 0;
+    }
+    .slide-pane :global([data-slide] + [data-slide]) {
+      border-top: 1px solid var(--hairline);
+      padding-top: var(--space-8);
+    }
+  }
+</style>

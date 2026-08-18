@@ -1,0 +1,19 @@
+{
+  "name": "@acctg5150/ai-tutor",
+  "version": "0.1.0",
+  "description": "Framework-agnostic on-device Socratic tutor web component (<ai-tutor>) with a mandatory copy-paste fallback.",
+  "type": "module",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "marked": "^18.0.4",
+    "dompurify": "^3.4.7"
+  },
+  "sideEffects": [
+    "./index.ts",
+    "./ai-tutor.ts"
+  ]
+}

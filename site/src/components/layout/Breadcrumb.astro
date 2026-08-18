@@ -1,0 +1,96 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
+import { href, weekUrl } from '@lib/url';
+import { buildBreadcrumb } from '@lib/breadcrumb';
+
+interface Props {
+  deck?: CollectionEntry<'decks'>;
+  week?: CollectionEntry<'weeks'>;
+}
+
+const { deck, week: weekProp } = Astro.props;
+
+let trail;
+if (deck) {
+  const week = await getEntry(deck.data.week);
+  trail = buildBreadcrumb({
+    homeHref: href(),
+    weekHref: weekUrl(week!.id),
+    weekNumber: week!.data.number,
+    weekTitle: week!.data.title,
+    deckTitle: deck.data.title,
+  });
+} else if (weekProp) {
+  trail = [
+    { label: 'Course', href: href() },
+    { label: `Week ${weekProp.data.number}`, current: true, title: weekProp.data.title },
+  ];
+} else {
+  throw new Error("Breadcrumb requires either a 'deck' or 'week' prop.");
+}
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    {
+      trail.map((c) => (
+        <li>
+          {c.href ? (
+            <a href={c.href} title={c.title}>{c.label}</a>
+          ) : (
+            <span aria-current={c.current ? 'page' : undefined} title={c.title}>
+              {c.label}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-3) var(--space-5);
+    list-style: none;
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  .breadcrumb li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* separator */
+  .breadcrumb li + li::before {
+    content: "\203A"; /* › */
+    color: var(--gray-500);
+  }
+
+  .breadcrumb a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb [aria-current="page"] {
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

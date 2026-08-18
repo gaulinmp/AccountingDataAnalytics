@@ -1,0 +1,103 @@
+---
+import Inline from './Inline.astro';
+
+// Visualizes inputs → result (e.g. two tables joined into one). Each panel lists
+// rows; the result panel is highlighted.
+interface Panel {
+  title: string;
+  items: string[];
+}
+interface Props {
+  inputs: Panel[];
+  result: Panel;
+  caption?: string;
+}
+
+const { inputs, result, caption } = Astro.props;
+---
+
+<figure class="joincompare">
+  <div class="grid">
+    {
+      inputs.map((p) => (
+        <div class="panel">
+          <h4>{p.title}</h4>
+          <ul>
+            {p.items.map((it) => (
+              <li>
+                <Inline text={it} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="panel panel--result">
+      <h4>{result.title}</h4>
+      <ul>
+        {
+          result.items.map((it) => (
+            <li>
+              <Inline text={it} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .joincompare {
+    margin: var(--space-4) 0;
+  }
+
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .panel {
+    flex: 1 1 12rem;
+    padding: var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  .panel--result {
+    border-color: var(--brand);
+    background: var(--gradient-brand-subtle);
+    box-shadow: var(--shadow-premium);
+  }
+
+  .panel h4 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-base);
+    font-family: var(--font-mono);
+    color: var(--brand);
+  }
+
+  .panel ul {
+    margin: 0;
+    padding-left: var(--space-5);
+    font-size: var(--fs-sm);
+  }
+
+  .arrow {
+    font-size: var(--fs-2xl);
+    color: var(--brand);
+    flex: none;
+  }
+
+  figcaption {
+    margin-top: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+</style>

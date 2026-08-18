@@ -1,0 +1,102 @@
+---
+import { quizSchema, type Quiz } from '@lib/quiz';
+
+// Static render only. Question + options are readable/answerable with no JS.
+// `correct` and `why` are emitted into the DOM (data attr + hidden template) for
+// the QuizCard island (Stage 5) to enhance — not revealed pre-JS.
+type Props = Quiz;
+
+// astro check doesn't type-check MDX component props, so validate at build time:
+// a malformed inline <Quiz> (e.g. correct as a string, or out of range) throws
+// here and fails `astro build`.
+const { id, q, opts, correct, why } = quizSchema.parse(Astro.props);
+const name = `quiz-${id}`;
+---
+
+<form class="quiz" data-quiz data-quiz-id={id} data-correct={correct}>
+  <fieldset>
+    <legend>{q}</legend>
+    <ul class="opts">
+      {
+        opts.map((opt, i) => (
+          <li>
+            <label>
+              <input type="radio" name={name} value={i} />
+              <span>{opt}</span>
+            </label>
+          </li>
+        ))
+      }
+    </ul>
+  </fieldset>
+  {/* Hidden until the island reveals it after an answer. */}
+  <template data-quiz-why>{why}</template>
+</form>
+
+<style>
+  .quiz {
+    margin: var(--space-4) 0;
+    padding: var(--space-4);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--brand);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    font-size: var(--fs-base);
+    box-shadow: var(--shadow-1);
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  legend {
+    font-weight: 700;
+    padding: 0;
+    margin-bottom: var(--space-3);
+    color: var(--ink);
+  }
+
+  .opts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    cursor: pointer;
+    transition: transform var(--transition-smooth), border-color var(--transition-smooth), background-color var(--transition-smooth), box-shadow var(--transition-smooth);
+    font-weight: 500;
+  }
+
+  label:hover {
+    border-color: rgba(204, 0, 0, 0.4);
+    background: var(--surface-muted);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px -2px rgba(0, 0, 0, 0.04);
+  }
+
+  label:has(input:checked) {
+    border-color: var(--brand);
+    background: rgba(204, 0, 0, 0.03);
+    box-shadow: 0 0 0 1px var(--brand);
+    font-weight: 600;
+  }
+
+  input {
+    accent-color: var(--brand);
+    width: 1.15rem;
+    height: 1.15rem;
+    cursor: pointer;
+  }
+</style>

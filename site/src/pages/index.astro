@@ -1,0 +1,278 @@
+---
+// Course home: the weeks → sub-pages outline, built from the typed graph.
+// Editorial syllabus layout: one column, hairline rules, big serif numerals —
+// no cards, no elevation. Crimson appears only on interaction and the code.
+import { getCollection, getEntry } from 'astro:content';
+import { weekUrl, weekTabUrl, type WeekTab } from '@lib/url';
+import { gateDate, unlockLabel } from '@lib/unlock';
+import Layout from '@layout/Layout.astro';
+import SiteHeader from '@layout/SiteHeader.astro';
+import Footer from '@layout/Footer.astro';
+import Icon from '@components/Icon.astro';
+import type { IconName } from '@lib/icons';
+
+const course = (await getEntry('course', 'course'))!.data;
+const allWeeks = await getCollection('weeks');
+
+const weeks = course.weekOrder
+  .map((ref) => allWeeks.find((w) => w.id === ref.id))
+  .filter((w): w is NonNullable<typeof w> => !!w);
+
+const tabs: { tab: WeekTab; label: string; icon: IconName }[] = [
+  { tab: 'slides', label: 'Slides', icon: 'slides' },
+  { tab: 'activity', label: 'Activity', icon: 'puzzle' },
+  { tab: 'lab', label: 'Lab', icon: 'flask' },
+  { tab: 'homework', label: 'Homework', icon: 'pencil' },
+  { tab: 'quiz', label: 'Quiz', icon: 'helpCircle' },
+];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<Layout title={`${course.code} · ${course.title}`} description={course.title}>
+  <SiteHeader />
+
+  <main class="home">
+    <header class="masthead">
+      <p class="school-tag">{course.school}</p>
+      <h1>{course.title}</h1>
+      <p class="meta">
+        <span class="meta__code">{course.code}</span>
+        <span class="meta__sep" aria-hidden="true">·</span>
+        <span>{course.term}</span>
+        <span class="meta__sep" aria-hidden="true">·</span>
+        <span>{course.instructors.join(' · ')}</span>
+      </p>
+    </header>
+
+    <ol class="syllabus">
+      {
+        weeks.map((week, i) => {
+          // Week 1 is never gated, whatever its date — see gateDate().
+          const gate = gateDate(week.data.unlockOn, i);
+          return (
+          <li id={week.id} class="week-row" data-unlock-on={gate?.toISOString()}>
+            <a href={weekUrl(week.id)} class="week-num" aria-hidden="true" tabindex="-1">
+              {pad(week.data.number)}
+            </a>
+
+            <div class="week-content">
+              <h2 class="week-title">
+                <a href={weekUrl(week.id)}>{week.data.title}</a>
+              </h2>
+              {/* Shown only while the row carries .is-locked (applyLocks()). */}
+              {gate && (
+                <p class="lock-note">
+                  <Icon name="lock" size={13} />
+                  <span>Unlocks {unlockLabel(gate)}</span>
+                </p>
+              )}
+              {week.data.summary && <p class="wsum">{week.data.summary}</p>}
+
+              <ul class="tabs-row">
+                {tabs.map((t) => (
+                  <li>
+                    <a href={weekTabUrl(week.id, t.tab)} class="tab-link">
+                      <Icon name={t.icon} size={15} />
+                      <span>{t.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+          );
+        })
+      }
+    </ol>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .home {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-5) var(--space-12);
+  }
+
+  /* Masthead */
+  .masthead {
+    margin-bottom: var(--space-8);
+  }
+
+  .school-tag {
+    margin: 0 0 var(--space-3);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-muted);
+  }
+
+  .masthead h1 {
+    margin: 0 0 var(--space-4);
+    font-size: clamp(2.2rem, 5vw, var(--fs-4xl));
+    line-height: var(--lh-tight);
+    color: var(--ink);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  .meta__code {
+    font-weight: 700;
+    color: var(--brand);
+  }
+
+  .meta__sep {
+    color: var(--gray-400);
+  }
+
+  /* Syllabus list */
+  .syllabus {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .week-row {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: var(--space-5);
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .week-num {
+    font-family: var(--font-display);
+    font-size: var(--fs-3xl);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--gray-400);
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+    transition: color var(--transition);
+  }
+
+  .week-row:hover .week-num {
+    color: var(--brand);
+  }
+
+  .week-title {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-xl);
+    line-height: var(--lh-tight);
+  }
+
+  .week-title a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+
+  .week-title a:hover {
+    color: var(--brand);
+  }
+
+  .wsum {
+    margin: 0 0 var(--space-4);
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+  }
+
+  /* Date-gated rows: listed but greyed out and un-clickable until the unlock
+   * date (applyLocks() adds .is-locked client-side and disables the links for
+   * keyboard/AT). The whole term stays readable as a syllabus; a direct URL
+   * still works — this is a courtesy gate, not a lock. */
+  .week-row.is-locked {
+    cursor: not-allowed;
+  }
+
+  /* The numeral is already grey when open — go a shade fainter, and drop the
+   * crimson it picks up on row hover. */
+  .week-row.is-locked .week-num,
+  .week-row.is-locked:hover .week-num {
+    color: var(--gray-300);
+    pointer-events: none;
+  }
+
+  .week-row.is-locked .week-title a,
+  .week-row.is-locked .wsum,
+  .week-row.is-locked .tab-link {
+    /* Muted enough to read as "not yet", legible enough to still scan as
+     * syllabus. Disabled controls are exempt from the contrast floor. */
+    color: var(--gray-500);
+    pointer-events: none;
+  }
+
+  .week-row.is-locked .tab-link {
+    border-color: var(--gray-200);
+    background: transparent;
+  }
+
+  /* "Unlocks <date>" — the reason the row is grey. Hidden while open. */
+  .lock-note {
+    display: none;
+  }
+
+  .week-row.is-locked .lock-note {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0 0 var(--space-2);
+    color: var(--ink-muted);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Sub-page links — a compact icon row per week */
+  .tabs-row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    transition: color var(--transition), border-color var(--transition), background var(--transition);
+  }
+
+  .tab-link:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+    background: var(--brand-tint);
+  }
+
+  @media (max-width: 540px) {
+    .week-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .week-num {
+      font-size: var(--fs-xl);
+    }
+  }
+</style>

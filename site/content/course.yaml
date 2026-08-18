@@ -1,0 +1,25 @@
+# The course singleton. The top-level key (`course`) becomes the entry id, so it
+# is read with getEntry('course', 'course') / getCollection('course')[0].
+course:
+  title: "Accounting Analytics"
+  code: "ACCTG 5150"
+  term: "Fall 2026"
+  school: "University of Utah"
+  instructors:
+    - "Maclean Gaulin"
+  brand:
+    primary: "#CC0000"
+  weekOrder:
+    - week-01
+    - week-02
+    - week-03
+    - week-04
+    - week-05
+    - week-06
+    - week-07
+    - week-08
+    - week-09
+    - week-10
+    - week-11
+    - week-12
+    - week-13

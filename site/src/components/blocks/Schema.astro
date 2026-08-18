@@ -1,0 +1,102 @@
+---
+// Relational schema diagram — a row of table boxes with PK/FK badges.
+interface Column {
+  name: string;
+  pk?: boolean;
+  fk?: boolean;
+}
+interface Table {
+  name: string;
+  columns: Column[];
+}
+interface Props {
+  tables: Table[];
+}
+
+const { tables } = Astro.props;
+---
+
+<div class="schema" role="group" aria-label="Database schema">
+  {
+    tables.map((t) => (
+      <table class="tbl">
+        <caption>{t.name}</caption>
+        <tbody>
+          {t.columns.map((c) => (
+            <tr class:list={[{ pk: c.pk, fk: c.fk }]}>
+              <th scope="row">{c.name}</th>
+              <td>
+                {c.pk && <span class="badge badge--pk">PK</span>}
+                {c.fk && <span class="badge badge--fk">FK</span>}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ))
+  }
+</div>
+
+<style>
+  .schema {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin: var(--space-4) 0;
+  }
+
+  .tbl {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    font-size: var(--fs-sm);
+    min-width: 12rem;
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  }
+
+  .tbl caption {
+    caption-side: top;
+    padding: var(--space-3) var(--space-3);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%);
+    color: var(--brand-contrast);
+    font-weight: 700;
+    text-align: left;
+    font-family: var(--font-mono);
+  }
+
+  .tbl th,
+  .tbl td {
+    padding: var(--space-2) var(--space-3);
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .tbl th {
+    font-weight: 500;
+    font-family: var(--font-mono);
+  }
+
+  tr.pk th {
+    font-weight: 700;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1em 0.4em;
+    border-radius: var(--radius-sm);
+    margin-left: var(--space-1);
+  }
+
+  .badge--pk {
+    background: var(--brand);
+    color: var(--brand-contrast);
+  }
+
+  .badge--fk {
+    background: var(--gray-200);
+    color: var(--ink-muted);
+  }
+</style>

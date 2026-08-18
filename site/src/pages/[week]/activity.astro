@@ -1,0 +1,19 @@
+---
+// In-class interactive activity: /week-NN/activity/. Placeholder until each
+// week's interactive widget lands (site-dev islands).
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import WeekShell from '@layout/WeekShell.astro';
+import ComingSoon from '@layout/ComingSoon.astro';
+
+export const getStaticPaths = (async () => {
+  const weeks = await getCollection('weeks');
+  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
+}) satisfies GetStaticPaths;
+
+const { week } = Astro.props;
+---
+
+<WeekShell week={week} tab="activity" title="Activity" lede="An interactive, in-class exercise for this week's topic.">
+  <ComingSoon icon="puzzle" label="Activity coming soon." note="This week's interactive widget hasn't been built yet." />
+</WeekShell>

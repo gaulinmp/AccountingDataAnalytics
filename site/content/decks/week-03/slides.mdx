@@ -1,0 +1,397 @@
+---
+week: week-03
+title: "Describing and visualizing Data"
+---
+
+import { Slide, CoverMeta, Bullets, DataTable, ImageCaption, Cta, Quiz } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 3" icon="chart">
+
+Describing and visualizing Data
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"Descriptive Statistics Overview"} key={"descriptive statistics summarize the location, spread, and shape of data"}>
+
+<Bullets items={[
+  { l: 1, h: "Central tendency – where is the data located" },
+  { l: 2, h: "Mean (μ), median, mode" },
+  { l: 1, h: "Dispersion / variability – how spread out is the data" },
+  { l: 2, h: "Variance, standard deviation (σ), inter-quartile range, coefficient of variation (σ/μ), mean absolute deviation" },
+  { l: 1, h: "Shape – what are the “tails” of your data?" },
+  { l: 2, h: "Skewness / kurtosis, percentiles, min/max" },
+  { l: 1, h: "Frequency – categorical data" },
+]} />
+
+</Slide>
+
+<Slide title={"Where: Central tendency"} key={"central tendency metrics locate the 'center' of a distribution"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img1.png"} alt={"Where: Central tendency"} />
+
+</Slide>
+
+<Slide title={"How Spread Out: variability"} key={"dispersion measures how spread out data points are around the center"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img2.png"} alt={"How Spread Out: variability"} />
+
+</Slide>
+
+<Slide title={"Shape: Skewness"} key={"skewness indicates asymmetry in the distribution tails"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img3.png"} alt={"Shape: Skewness"} />
+
+</Slide>
+
+<Slide title={"Tails: Kurtosis"} key={"kurtosis measures the thickness of the distribution tails (outlier frequency)"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img4.png"} alt={"Tails: Kurtosis"} />
+
+</Slide>
+
+<Slide title={"Tails: Kurtosis"} key={"heavy-tailed distributions contain more frequent extreme events than normal distributions"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img5.png"} alt={"Tails: Kurtosis"} />
+
+</Slide>
+
+<Slide title={"Shape – Kurtosis"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img6.png"} alt={"Shape – Kurtosis"} />
+
+</Slide>
+
+<Slide title={"Central tendency"} key={"median is robust to outliers, while the mean is highly sensitive"}>
+
+<Bullets items={[
+  { l: 1, h: "Mean (μ)" },
+  { l: 2, h: "Most common measure, basis of most statistics" },
+  { l: 2, h: "Weighs observations differently, sensitive to outliers" },
+  { l: 1, h: "Median" },
+  { l: 2, h: "The “typical” value, with half above & half below" },
+  { l: 2, h: "Immune to outliers" },
+  { l: 1, h: "Mode" },
+  { l: 2, h: "The “peak” of the distribution, most common value" },
+  { l: 2, h: "Can have multiple modes, but may be less informative" },
+]} />
+
+<Quiz
+  id="w3-median-vs-mean"
+  q="When analyzing employee salaries in a firm with a few very highly compensated executives, which metric best represents the 'typical' employee salary?"
+  opts={[
+    "The mean (average)",
+    "The median (middle value)",
+    "The standard deviation",
+    "The variance"
+  ]}
+  correct={1}
+  why="The median represents the 50th percentile and is robust to outliers (the executive salaries), whereas the mean will be pulled upward and be unrepresentative of a typical employee."
+/>
+
+</Slide>
+
+<Slide title={"Dispersion / variability"} key={"standard deviation is sensitive to outliers; IQR is robust"}>
+
+<Bullets items={[
+  { l: 1, h: "Standard deviation (σ)" },
+  { l: 2, h: "Most common dispersion measure, basis of most statistics" },
+  { l: 2, h: "Strongly affected by outliers (because math), normality" },
+  { l: 1, h: "Inter-quartile range" },
+  { l: 2, h: "Robust to outliers, good for skewed data, interpretable" },
+  { l: 1, h: "Coefficient of variation" },
+  { l: 2, h: "Dispersion as % of mean, comparable across units" },
+  { l: 1, h: "Mean absolute deviation (or w/ medians)" },
+  { l: 2, h: "Like σ, but less sensitive to outliers" },
+]} />
+
+</Slide>
+
+<Slide title={"Shape"} key={"skewed data violates standard normality assumptions in many statistical models"}>
+
+<Bullets items={[
+  { l: 1, h: "Skewness – asymmetric “tails”" },
+  { l: 2, h: "Positive / right skewed: mean > median, more high values" },
+  { l: 2, h: "Negative / left skewed: mean < median, more low values" },
+  { l: 2, h: "Some models assume symmetrical data (skewness = 0)" },
+  { l: 1, h: "Kurtosis – heavy or light “tails”" },
+  { l: 2, h: "High  heavy tails, low  light tails" },
+  { l: 1, h: "Percentiles – bins of data" },
+  { l: 2, h: "Further resolution of full distribution, less of a summary" },
+]} />
+
+<Quiz
+  id="w3-skewness-direction"
+  q="If a firm's distribution of invoice processing times is right-skewed (positive skew), what does this tell us about the mean and median?"
+  opts={[
+    "The mean is less than the median",
+    "The mean is greater than the median",
+    "The mean and median are equal"
+  ]}
+  correct={1}
+  why="In a right-skewed (positively skewed) distribution, the long tail extends to the right (larger values), pulling the mean to be greater than the median."
+/>
+
+</Slide>
+
+<Slide title={"Frequency Information"} key={"categorical analysis focuses on frequency, mode, and ordinal percentile distributions"}>
+
+<Bullets items={[
+  { l: 1, h: "Count of values" },
+  { l: 1, h: "Most common value" },
+  { l: 1, h: "For ordinal data, 5-number summary" },
+  { l: 2, h: "Min, 25%, 50%, 75%, Max" },
+]} />
+
+<DataTable
+  columns={["", "count", "mean", "std", "min", "25%", "50%", "75%", "max"]}
+  rows={[
+    ["x", "142", "54.3", "16.8", "22.3", "44.1", "53.3", "64.7", "98.2"],
+    ["y", "142", "47.8", "26.9", "2.9", "25.3", "46.0", "68.5", "99.5"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"What doN’T descriptives convey?"} key={"identical summary statistics can hide vastly different data shapes"} aiNotes={"Visualizations help us instantly spot trends, outliers, and patterns that might be invisible in spreadsheets. It allows for quicker comprehension and speeds up the data analysis process significantly Charts are a universal language. They make it easier to share complex findings with stakeholders, regardless of their technical background."}>
+
+<DataTable
+  columns={["", "Anscombe's quartet", "", "", "", "", "", "", ""]}
+  rows={[
+    ["", "Dataset I", "", "Dataset II", "", "Dataset III", "", "Dataset IV", ""],
+    ["", "x", "y", "x", "y", "x", "y", "x", "y"],
+    ["", "10.0", "8.04", "10.0", "9.14", "10.0", "7.46", "8.0", "6.58"],
+    ["", "8.0", "6.95", "8.0", "8.14", "8.0", "6.77", "8.0", "5.76"],
+    ["", "13.0", "7.58", "13.0", "8.74", "13.0", "12.74", "8.0", "7.71"],
+    ["", "9.0", "8.81", "9.0", "8.77", "9.0", "7.11", "8.0", "8.84"],
+    ["", "11.0", "8.33", "11.0", "9.26", "11.0", "7.81", "8.0", "8.47"],
+    ["", "14.0", "9.96", "14.0", "8.1", "14.0", "8.84", "8.0", "7.04"],
+    ["", "6.0", "7.24", "6.0", "6.13", "6.0", "6.08", "8.0", "5.25"],
+    ["", "4.0", "4.26", "4.0", "3.1", "4.0", "5.39", "19.0", "12.5"],
+    ["", "12.0", "10.84", "12.0", "9.13", "12.0", "8.15", "8.0", "5.56"],
+    ["", "7.0", "4.82", "7.0", "7.26", "7.0", "6.42", "8.0", "7.91"],
+    ["", "5.0", "5.68", "5.0", "4.74", "5.0", "5.73", "8.0", "6.89"],
+    ["Mean", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5"],
+    ["Variance", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75"],
+    ["Correlation", "0.816", "", "0.816", "", "0.816", "", "0.816", ""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"What doN’T descriptives convey?"} key={"visualization reveals hidden structure the summary statistics erased"} aiNotes={"Visualizations help us instantly spot trends, outliers, and patterns that might be invisible in spreadsheets. It allows for quicker comprehension and speeds up the data analysis process significantly Charts are a universal language. They make it easier to share complex findings with stakeholders, regardless of their technical background."}>
+
+<DataTable
+  columns={["", "Anscombe's quartet", "", "", "", "", "", "", ""]}
+  rows={[
+    ["", "Dataset I", "", "Dataset II", "", "Dataset III", "", "Dataset IV", ""],
+    ["", "x", "y", "x", "y", "x", "y", "x", "y"],
+    ["", "10.0", "8.04", "10.0", "9.14", "10.0", "7.46", "8.0", "6.58"],
+    ["", "8.0", "6.95", "8.0", "8.14", "8.0", "6.77", "8.0", "5.76"],
+    ["", "13.0", "7.58", "13.0", "8.74", "13.0", "12.74", "8.0", "7.71"],
+    ["", "9.0", "8.81", "9.0", "8.77", "9.0", "7.11", "8.0", "8.84"],
+    ["", "11.0", "8.33", "11.0", "9.26", "11.0", "7.81", "8.0", "8.47"],
+    ["", "14.0", "9.96", "14.0", "8.1", "14.0", "8.84", "8.0", "7.04"],
+    ["", "6.0", "7.24", "6.0", "6.13", "6.0", "6.08", "8.0", "5.25"],
+    ["", "4.0", "4.26", "4.0", "3.1", "4.0", "5.39", "19.0", "12.5"],
+    ["", "12.0", "10.84", "12.0", "9.13", "12.0", "8.15", "8.0", "5.56"],
+    ["", "7.0", "4.82", "7.0", "7.26", "7.0", "6.42", "8.0", "7.91"],
+    ["", "5.0", "5.68", "5.0", "4.74", "5.0", "5.73", "8.0", "6.89"],
+    ["Mean", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5", "9.0", "7.5"],
+    ["Variance", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75", "10.0", "3.75"],
+    ["Correlation", "0.816", "", "0.816", "", "0.816", "", "0.816", ""],
+  ]}
+/>
+
+<ImageCaption
+  src={"/decks/week-03/3-ug-visualization/img7.png"}
+  alt={"The four Anscombe datasets plotted, showing four completely different shapes"} />
+
+<Quiz
+  id="w3-anscombe-quartet"
+  q="What does Anscombe's Quartet demonstrate?"
+  opts={[
+    "Datasets with identical descriptive statistics can have completely different distributions and relationships.",
+    "SQL is the only way to analyze large datasets.",
+    "Standard deviation is a perfect measure of data distribution."
+  ]}
+  correct={0}
+  why="Anscombe's Quartet consists of four datasets with nearly identical statistical summaries (mean, variance, correlation), yet they look entirely different when graphed, demonstrating that visualization is essential to understand data structure."
+/>
+
+</Slide>
+
+<Slide title={"Why Visualize?"} key={"identical statistics can mask different patterns"} aiNotes={"Visualizations help us instantly spot trends, outliers, and patterns that might be invisible in spreadsheets. It allows for quicker comprehension and speeds up the data analysis process significantly Charts are a universal language. They make it easier to share complex findings with stakeholders, regardless of their technical background."}>
+
+<DataTable
+  columns={["Dataset", ""]}
+  rows={[
+    ["x", "y"],
+    ["55.4", "97.2"],
+    ["51.5", "96.0"],
+    ["46.2", "94.5"],
+    ["42.8", "91.4"],
+    ["40.8", "88.3"],
+    ["38.7", "84.9"],
+    ["35.6", "79.9"],
+    ["33.1", "77.6"],
+    ["29.0", "74.5"],
+    ["26.2", "71.4"],
+    ["55.4", "97.2"],
+    ["…", "…"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Why Visualize"} key={"human brains are optimized for visual pattern recognition"} aiNotes={"Balance visual form and analytic function"}>
+
+<Bullets items={[
+  { l: 1, h: "Human capacity for processing information is limited" },
+  { l: 1, h: "Human brain adapted to visual pattern recognition" },
+  { l: 1, h: "Improved understanding of complex data" },
+  { l: 1, h: "Identification of patterns, trends, and outliers" },
+  { l: 1, h: "Effective communication of analytical findings to various audiences" },
+  { l: 1, h: "Inform decisions – insight, reasoning, understanding" },
+]} />
+
+</Slide>
+
+<Slide title={"Leverage Strengths, Mitigate Weaknesses"} key={"visuals shift the burden from working memory to perception"} aiNotes={"\"pre-attentively\" – very rapidly and in parallel, without conscious effort Auditory is 39 bits per second"}>
+
+<Bullets items={[
+  { l: 1, h: "Leveraging strengths of human cognition" },
+  { l: 2, h: "Visual bandwidth1: About 20 Mbps (1Gbps total)" },
+  { l: 2, h: "Pre-attentive processing2: Instinctive processing" },
+  { l: 2, h: "Graphical perception3: Process some designs better" },
+  { l: 1, h: "Mitigate constraints of human cognition" },
+  { l: 2, h: "Avoid overloading limited “working memory”4" },
+  { l: 2, h: "Leverage external recognition" },
+]} />
+
+<Cta label={"1"} href={"https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.02246/full"} />
+
+<Cta label={"2"} href={"https://www.interaction-design.org/literature/article/preattentive-visual-properties-and-how-to-use-them-in-information-visualization"} />
+
+<Cta label={"3"} href={"https://doi.org/10.1080%2F01621459.1984.10478080"} />
+
+<Cta label={"4"} href={"https://pmc.ncbi.nlm.nih.gov/articles/PMC4207727/"} />
+
+<Quiz
+  id="w3-preattentive-attributes"
+  q="Which of the following is a pre-attentive visual attribute that the brain processes instantly?"
+  opts={[
+    "Spelling of data labels",
+    "Orientation, color, and size contrast",
+    "Underlying standard deviation formulas"
+  ]}
+  correct={1}
+  why="Pre-attentive attributes like color, size, and orientation are processed by our low-level visual system in milliseconds, without active conscious effort, allowing us to spot outliers or trends instantly."
+/>
+
+</Slide>
+
+<Slide title={"Visualization as Communication"} key={"visual communication must be tailored to the message and audience"}>
+
+<Bullets items={[
+  { l: 1, h: "Concisely conveying data" },
+  { l: 1, h: "Telling stories for retention" },
+  { l: 1, h: "Relevant XKCD" },
+]} />
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img8.jpg"} alt={"Visualization as Communication"} />
+
+<Cta label={"Relevant XKCD"} href={"https://xkcd.com/1732/"} />
+
+</Slide>
+
+<Slide title={"Communicate by Storytelling"} key={"a story connects data to an intended conclusion"}>
+
+<Bullets items={[
+  { l: 1, h: "A story is a set of data, observations, or events that are presented in a way or order intended to evoke a reaction or specific conclusion" },
+  { l: 1, h: "Can be as simple as well designed visualization" },
+  { l: 1, h: "Can be fully narrative, without tables or figures" },
+]} />
+
+</Slide>
+
+<Slide title={"Data Example"} key={"raw data without context fails to drive action"}>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img9.jpg"} alt={"Data Example"} />
+
+</Slide>
+
+<Slide title={"Storytelling Example"} key={"narratives help audiences remember and internalize facts"}>
+
+<Bullets items={[
+  { l: 1, h: "As the global population grows, much of that growth is happening in cities. In 1950, 70% of the global population lived in rural areas. In 2050 that is expected to decline to 30%" },
+]} />
+
+</Slide>
+
+<Slide title={"Visual Narrative"} key={"visual storytelling combines narrative structure with data visualization"}>
+
+<ImageCaption
+  src={"/decks/week-03/3-ug-visualization/img10.jpg"}
+  alt={"The same urbanization data presented as a visual story rather than a table"} />
+
+<Bullets items={[
+  { l: 1, h: "Global populations are flocking to cities" },
+  { l: 1, h: "In 2050, that is expected to fall to 30%" },
+]} />
+
+</Slide>
+
+<Slide title={"How to tell stories"} key={"begin with the main takeaway and storyboard the path to get there"} aiNotes={"Instead of simply presenting numbers (Actual: $115K, Budget: $100K), tell a story: \"Marketing's campaign success came at a higher-than-planned cost, driven specifically by digital ads and contractors exceeding budget by 15%. Let's examine this to improve future campaign budgeting.“"}>
+
+<Bullets items={[
+  { l: 1, h: "Start with main idea" },
+  { l: 2, h: "What conclusion do you want your audience to draw?" },
+  { l: 1, h: "Consider audience and format, customize to match" },
+  { l: 1, h: "Find a hook – something to grab attention and anchor memory" },
+  { l: 1, h: "Storyboard – lay out the structure of your story" },
+  { l: 2, h: "Slides, post-it notes, pen and paper. Flexibility is key." },
+]} />
+
+<Quiz
+  id="w3-storytelling-purpose"
+  q="What is the primary purpose of using narrative storytelling in a financial variance presentation?"
+  opts={[
+    "To replace quantitative figures with qualitative adjectives",
+    "To contextualize the 'why' behind the numbers and prompt action",
+    "To distract the audience from unfavorable budget results"
+  ]}
+  correct={1}
+  why="Storytelling in business analytics connects numbers to context (the cause) and points toward decisions or solutions (the action)."
+/>
+
+</Slide>
+
+<Slide title={"Lab 3 - Visualizations"} key={"start with the question, not the chart type"} aiNotes={"The lab covers the chart gallery in depth — bar, histogram, scatter, box, violin. Here just plant the selection habit: the analytical question picks the chart, not the other way round."}>
+
+<Bullets items={[
+  { l: 1, h: "Types of graphs" },
+  { l: 1, h: "Learning through visualization" },
+]} />
+
+<Quiz
+  id="w3-choosing-viz"
+  q="If you want to show the composition of a firm's expenses over time (e.g., how research, SG&A, and interest expense share of total has changed), which chart type is most appropriate?"
+  opts={[
+    "A scatter plot",
+    "A stacked area or stacked bar chart",
+    "A box plot",
+    "A single line graph"
+  ]}
+  correct={1}
+  why="Stacked bar or stacked area charts are excellent for showing how parts of a whole (composition) change over time."
+/>
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-03/3-ug-visualization/img11.png"} alt={"Describing and visualizing Data"} />
+
+</Slide>

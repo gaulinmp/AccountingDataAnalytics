@@ -1,0 +1,377 @@
+---
+// Paged deck navigation. One slide per page; left/right pages between slides
+// (native horizontal scroll-snap + keyboard + a prev/next pager), vertical scroll
+// stays within a slide. The active slide drives the reinforcement pane and the
+// AI-tutor context via `slidechange`. ?slide= deep-links. Enhances in place.
+---
+
+<script>
+  import { SLIDE_CHANGE, type SlideChangeDetail } from '../../lib/deck';
+
+  const companion = document.querySelector<HTMLElement>('[data-deck]');
+  const pane = companion?.querySelector<HTMLElement>('.slide-pane') ?? null;
+  const slides = pane ? Array.from(pane.querySelectorAll<HTMLElement>('[data-slide]')) : [];
+
+  if (companion && pane && slides.length > 0) {
+    const total = slides.length;
+    let index = -1;
+
+
+
+    function setIndexEmit(i: number, scroll: boolean = true) {
+      const target = Math.max(0, Math.min(total - 1, i));
+      if (target === index) return;
+      index = target;
+
+      slides.forEach((s, n) => {
+        const isActive = n === index;
+        s.classList.toggle('is-active', isActive);
+
+        // Dynamically add/remove data-reinforcement attribute on the active slide's key concept
+        // so Playwright's page.locator('[data-reinforcement]') matches ONLY the active one.
+        const keyConcept = s.querySelector('.slide__key-concept');
+        if (keyConcept) {
+          if (isActive) {
+            keyConcept.setAttribute('data-reinforcement', '');
+          } else {
+            keyConcept.removeAttribute('data-reinforcement');
+          }
+        }
+      });
+
+      companion!.dataset.active = String(index);
+      syncUrl();
+
+      if (scroll) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+
+      const detail: SlideChangeDetail = { index, total, slideEl: slides[index] };
+      companion!.dispatchEvent(new CustomEvent(SLIDE_CHANGE, { bubbles: true, detail }));
+    }
+
+    function syncUrl() {
+      const p = new URLSearchParams(location.search);
+      p.set('slide', String(index + 1));
+      history.replaceState(null, '', `${location.pathname}?${p.toString()}${location.hash}`);
+    }
+
+    // Keyboard: left/right page
+    const isTyping = (e: KeyboardEvent) => {
+      const path = (e.composedPath?.() ?? [e.target]) as Array<EventTarget | null>;
+      return path.some((n) => {
+        const el = n as HTMLElement | null;
+        return (
+          !!el &&
+          (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable === true)
+        );
+      });
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (isTyping(e)) return;
+      switch (e.key) {
+        case 'ArrowRight':
+          e.preventDefault();
+          setIndexEmit(index + 1);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          setIndexEmit(index - 1);
+          break;
+        case 'Home':
+          e.preventDefault();
+          setIndexEmit(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setIndexEmit(total - 1);
+          break;
+      }
+    });
+
+    // Pager: prev / numbers / next, flowing statically below the slide pane
+    function buildPager() {
+      const pager = document.createElement('nav');
+      pager.className = 'deck-pager';
+      pager.setAttribute('aria-label', 'Slide navigation');
+
+      const prev = document.createElement('button');
+      prev.type = 'button';
+      prev.className = 'deck-pager__btn deck-pager__btn--prev';
+      prev.setAttribute('aria-label', 'Previous slide');
+      prev.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      `;
+      prev.addEventListener('click', () => setIndexEmit(index - 1));
+
+      const numbersContainer = document.createElement('div');
+      numbersContainer.className = 'deck-pager__numbers';
+
+      const numberButtons: HTMLButtonElement[] = [];
+      for (let i = 0; i < total; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'deck-pager__num';
+        btn.textContent = String(i + 1);
+        btn.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        btn.addEventListener('click', () => setIndexEmit(i));
+        numbersContainer.appendChild(btn);
+        numberButtons.push(btn);
+      }
+
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'deck-pager__btn deck-pager__btn--next';
+      next.setAttribute('aria-label', 'Next slide');
+      next.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      `;
+      next.addEventListener('click', () => setIndexEmit(index + 1));
+
+      pager.append(prev, numbersContainer, next);
+      companion!.appendChild(pager);
+
+      // Slim progress bar under the slide: position in deck at a glance.
+      const progress = document.createElement('div');
+      progress.className = 'deck-progress';
+      progress.setAttribute('role', 'progressbar');
+      progress.setAttribute('aria-label', 'Deck progress');
+      const progressFill = document.createElement('span');
+      progressFill.className = 'deck-progress__fill';
+      progress.appendChild(progressFill);
+      companion!.insertBefore(progress, pager);
+
+      // The strip only scrolls when it actually overflows, and each edge only
+      // fades when there is something clipped behind it — otherwise the first
+      // and last numbers sit *under* the fade and the current slide reads as
+      // missing at either end of the deck.
+      const maxScroll = () => numbersContainer.scrollWidth - numbersContainer.clientWidth;
+
+      function updateFades() {
+        const max = maxScroll();
+        const left = numbersContainer.scrollLeft;
+        numbersContainer.classList.toggle('is-clipped-start', left > 1);
+        numbersContainer.classList.toggle('is-clipped-end', max > 1 && left < max - 1);
+      }
+
+      // Scroll the current number into the middle of the strip, clamped to the
+      // ends so slide 1 and the last slide sit flush instead of half-scrolled.
+      // Two things this has to avoid: offsetLeft, which is measured from the
+      // nearest *positioned* ancestor rather than the strip, and smooth
+      // scrolling, which some engines drop entirely on an overflow container —
+      // either one leaves the strip parked at 0 with the active number offscreen.
+      function centerActive() {
+        const active = numberButtons[index];
+        const max = maxScroll();
+        if (!active || max <= 0) {
+          numbersContainer.scrollLeft = 0;
+          updateFades();
+          return;
+        }
+        const delta =
+          active.getBoundingClientRect().left - numbersContainer.getBoundingClientRect().left;
+        const target =
+          numbersContainer.scrollLeft +
+          delta -
+          (numbersContainer.clientWidth - active.offsetWidth) / 2;
+        numbersContainer.scrollLeft = Math.max(0, Math.min(target, max));
+        updateFades();
+      }
+
+      numbersContainer.addEventListener('scroll', updateFades, { passive: true });
+      window.addEventListener('resize', centerActive);
+      // Widths shift once the display face swaps in; re-center when it lands.
+      document.fonts?.ready.then(centerActive);
+
+      companion!.addEventListener(SLIDE_CHANGE, (e) => {
+        const d = (e as CustomEvent<SlideChangeDetail>).detail;
+        prev.disabled = d.index === 0;
+        next.disabled = d.index === d.total - 1;
+
+        progressFill.style.width = `${((d.index + 1) / d.total) * 100}%`;
+        progress.setAttribute('aria-valuenow', String(d.index + 1));
+        progress.setAttribute('aria-valuemin', '1');
+        progress.setAttribute('aria-valuemax', String(d.total));
+
+        numberButtons.forEach((btn, idx) => {
+          const isActive = idx === d.index;
+          btn.classList.toggle('is-active', isActive);
+          if (isActive) {
+            btn.setAttribute('aria-current', 'page');
+            btn.disabled = true;
+          } else {
+            btn.removeAttribute('aria-current');
+            btn.disabled = false;
+          }
+        });
+
+        // Keep the active number centered in the scrolling strip.
+        centerActive();
+      });
+    }
+
+    function init() {
+      companion!.classList.add('is-interactive');
+      buildPager();
+      const start = parseInt(new URLSearchParams(location.search).get('slide') || '1', 10);
+      const target = Number.isFinite(start) ? Math.max(0, Math.min(total - 1, start - 1)) : 0;
+      setIndexEmit(target, false);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
+</script>
+
+<style is:global>
+  /* Pager + progress sit under the slide column on the page surface: quiet
+   * hairline chrome, crimson only for the current position. */
+  .deck-progress {
+    display: none;
+    height: 2px;
+    margin: var(--space-5) auto 0;
+    max-width: 24rem;
+    background: var(--hairline);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  .companion.is-interactive .deck-progress {
+    display: block;
+  }
+
+  .deck-progress__fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--brand);
+    transition: width var(--transition-smooth);
+  }
+
+  .deck-pager {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0 0;
+    max-width: fit-content;
+    margin: 0 auto;
+  }
+
+  .companion.is-interactive .deck-pager {
+    display: flex;
+  }
+
+  /* A single scrolling strip — long decks scroll the numbers instead of
+   * wrapping into rows. The active number is kept centered by the controller,
+   * which also toggles the is-clipped-* classes: each edge fades only while
+   * something is actually hidden behind it, so slide 1 and the last slide stay
+   * fully legible when the strip is parked at either end. */
+  .deck-pager__numbers {
+    --fade-start: 0px;
+    --fade-end: 0px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-width: min(60vw, 24rem);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent);
+    mask-image: linear-gradient(to right, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent);
+  }
+
+  .deck-pager__numbers.is-clipped-start {
+    --fade-start: 1.25rem;
+  }
+
+  .deck-pager__numbers.is-clipped-end {
+    --fade-end: 1.25rem;
+  }
+
+  .deck-pager__numbers::-webkit-scrollbar {
+    display: none;
+  }
+
+  .deck-pager__num {
+    flex: none;
+  }
+
+  .deck-pager__num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--ink-muted);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: color var(--transition), background var(--transition);
+  }
+
+  .deck-pager__num:hover:not(:disabled) {
+    color: var(--ink);
+    background: var(--surface-muted);
+  }
+
+  /* Filled, not underlined: the current slide has to stay obvious even when
+   * it's the first or last chip in the strip. */
+  .deck-pager__num.is-active,
+  .deck-pager__num.is-active:disabled {
+    color: var(--brand-contrast);
+    background: var(--brand);
+    font-weight: 700;
+    cursor: default;
+    opacity: 1;
+  }
+
+  .deck-pager__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: color var(--transition), border-color var(--transition);
+  }
+
+  .deck-pager__btn svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .deck-pager__btn:hover:not(:disabled) {
+    border-color: var(--ink-muted);
+    color: var(--ink);
+  }
+
+  .deck-pager__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  @media print {
+    .deck-pager,
+    .deck-progress {
+      display: none;
+    }
+  }
+</style>

@@ -31,12 +31,12 @@ By the end of this lab, you will be able to:
 
 ### 1.2. Tools
 
-As always, you can use whatever modality you are comfortable with, but it should again be noted that Tableau doesn't have logistic regression capabilities, so Python or Excel are recommended. Further, not even Excel has native logistic regression support (it's possible using the Solver add-in with manual log-likelihood setup, but not practical for this lab). So if you are planning on using Excel, we will use OLS as our regression, and pretend the output is a probability like a logistic regression (which is fine when we're wanting to use the prediction as a classifier, meaning we're just taking a cutoff at a threshold). This also hopefully serves as a nice reminder that a) OLS is awesome, and b) OLS and logistic regression often give similar results (and in this dataset, almost exactly the same results!).
+Excel does not have native logistic regression support (it's possible using the Solver add-in with manual log-likelihood setup, but not practical for this lab). So if you are planning on using Excel, we will use OLS as our regression, and treat the output as a probability like a logistic regression (which is fine when we're using the prediction as a classifier, meaning we're just taking a cutoff at a threshold). This also hopefully serves as a nice reminder that a) OLS is awesome, and b) OLS and logistic regression often give similar results (and in this dataset, almost exactly the same results!).
 
 * **Excel**: Use OLS regression via Data Analysis Toolpak. Predicted values will be interpreted as probabilities, as with a logistic regression, and from there everything will be calculated as if it were a logistic regression, including classification metrics.
 * **Python**: `statsmodels` library provides `logit()` function for logistic regression with well-formatted output. `sklearn.metrics` provides all classification metrics. Gotta love Python!
 
----
+
 ## 2. Data
 
 The dataset for this lab contains customer accounts receivable (AR) payment data from an anonymous company. The data includes 29,881 customer records with information about their payment behavior, credit limits, and demographic characteristics. This allows you to build predictive models for identifying customers at risk of non-payment, and to evaluate the trade-offs between different types of classification errors.
@@ -130,7 +130,7 @@ Here are the key concepts:
 *Note*: With imbalanced classes (78% non-default, 22% default), simply predicting "everyone pays" achieves 78% accuracy but is useless for risk management. This is why precision, recall, and AUC are more informative metrics than accuracy alone. {: .note}
 
 
----
+
 ## 3. Step-by-Step Instructions
 
 This lab walks you through building and evaluating classification models for credit risk prediction.
@@ -281,8 +281,8 @@ We're going to take an extreme example, and say that the company does not extend
 3. Why is this cost-benefit approach more useful for business decision-making than simply maximizing an accuracy score?
 
 
----
-## 4. Technical Guidance
+
+## 4. Software-specific Instructions
 
 This section provides step-by-step instructions for implementing the lab exercises.
 
@@ -570,4 +570,4 @@ plt.show()
     * **Solution**: Usually not a problem if warning says "nearly converged". If persistent, try increasing max iterations: `model.fit(maxiter=100)` or check for perfect separation
 
 
-*Excel tip*: Don't use Excel for analytics :) {: .tip}
+*Excel tip*: Don't use Excel for advanced analytics :) {: .tip}

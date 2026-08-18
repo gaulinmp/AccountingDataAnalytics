@@ -1,0 +1,462 @@
+---
+week: week-10
+title: "Classification"
+---
+
+import { Slide, CoverMeta, Bullets, TwoColumn, DataTable, ImageCaption } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 10" icon="splitSquare">
+
+Classification
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"What is Classification"}>
+
+<Bullets items={[
+  { l: 1, h: "Predicting outcome “groups” not “levels”" },
+  { l: 2, h: "Regression: what is bankruptcy risk" },
+  { l: 2, h: "Classification: is firm bankrupt" },
+]} />
+
+</Slide>
+
+<Slide title={"What’s different from Regression?"}>
+
+<Bullets items={[
+  { l: 1, h: "Regression Approach" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Classification Approach" },
+]} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img1.png"} alt={"What’s different from Regression?"} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img1.png"} alt={"What’s different from Regression?"} />
+
+</Slide>
+
+<Slide title={"What’s different from Regression?"}>
+
+<Bullets items={[
+  { l: 1, h: "Regression Approach" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Classification Approach" },
+]} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img2.png"} alt={"What’s different from Regression?"} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img3.png"} alt={"What’s different from Regression?"} />
+
+</Slide>
+
+<Slide title={"What’s different from Regression?"}>
+
+<Bullets items={[
+  { l: 1, h: "Regression Approach" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Classification Approach" },
+]} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img2.png"} alt={"What’s different from Regression?"} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img3.png"} alt={"What’s different from Regression?"} />
+
+</Slide>
+
+<Slide title={"Most basic: Logistic Regression"}>
+
+</Slide>
+
+<Slide title={"Most basic: Logistic Regression"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img4.png"} alt={"Most basic: Logistic Regression"} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img4.png"} alt={"Most basic: Logistic Regression"} />
+
+</Slide>
+
+<Slide title={"Most basic: Logistic Regression"}>
+
+</Slide>
+
+<Slide title={"Classifier Models"}>
+
+<TwoColumn ratio="1-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Many different classifiers" },
+    { l: 2, h: "Differ in assumptions" },
+    { l: 2, h: "Differ in treatment of data" },
+    { l: 2, h: "Differ in treatment of “error”" },
+    { l: 2, h: "Differ in what the analyst must specify" },
+  ]} />
+  </div>
+  <div slot="right">
+  <ImageCaption src={"/decks/week-10/10-ug-classifiers2/img5.png"} alt={"Classifier Models"} />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Other Regression Classifiers"} aiNotes={"Logistic: Most common, symmetric S-curve with moderate tails Probit: Based on normal CDF, slightly steeper in the middle than logistic Cloglog: Asymmetric, approaches 0 slowly and 1 quickly (good for rare events) Cauchy: Heavier tails than logistic/probit (robust to outliers)"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img6.png"} alt={"Other Regression Classifiers"} />
+
+</Slide>
+
+<Slide title={"Improving on Regression Classifiers"}>
+
+<Bullets items={[
+  { l: 1, h: "Like OLS, we can add non-linearity in the x variables" },
+  { l: 1, h: "We can also add more x variables" },
+  { l: 1, h: "Deal with “unbalanced labels”" },
+  { l: 2, h: "Bankruptcy is rare, so mostly 0s, a few 1s" },
+  { l: 2, h: "This is the intent of C-log-log" },
+  { l: 2, h: "Down-sampling & upweighting the “majority” class" },
+]} />
+
+</Slide>
+
+<Slide title={"FICO Score"}>
+
+<Bullets items={[
+  { l: 1, h: "Payment History (35%): Timeliness of past payments" },
+  { l: 1, h: "Amounts Owed (30%): Total debt and credit utilization ratio" },
+  { l: 1, h: "Length of Credit History (15%): How long accounts have been open" },
+  { l: 1, h: "New Credit (10%): Number of recent inquiries and new accounts" },
+  { l: 1, h: "Credit Mix (10%): Variety of credit types (credit cards, loans)" },
+]} />
+
+</Slide>
+
+<Slide title={"Non-regression Classifiers"}>
+
+<Bullets items={[
+  { l: 1, h: "Regression classifiers try to predict classes *as if* they were some continuous variable (e.g., probability)" },
+  { l: 1, h: "Other classifiers just try to learn the best separation" },
+  { l: 2, h: "Examples: SVM, perceptron" },
+]} />
+
+</Slide>
+
+<Slide title={"Classifying without Probability (SVM)"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img7.png"} alt={"Classifying without Probability (SVM)"} />
+
+</Slide>
+
+<Slide title={"Selecting Parametric Classifiers"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img8.png"} alt={"Selecting Parametric Classifiers"} />
+
+</Slide>
+
+<Slide title={"Parametric vs Non-parametric"}>
+
+<Bullets items={[
+  { l: 1, h: "Parametric classifiers specify some structure with which to approach splitting the groups or labels" },
+  { l: 1, h: "Non-parametric classifiers just learn unconstrained" },
+  { l: 2, h: "The “parameters” grow with the data" },
+  { l: 1, h: "Non-parametric classifiers often better at handling text than parametric" },
+  { l: 2, h: "Mostly because the “functional form” of text is unknown" },
+]} />
+
+</Slide>
+
+<Slide title={"K Nearest Neighbors"}>
+
+<Bullets items={[
+  { l: 1, h: "Assign average neighbor’s label (instead of value)" },
+]} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img9.png"} alt={"K Nearest Neighbors"} />
+
+</Slide>
+
+<Slide title={"Tree-based models"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img10.png"} alt={"Tree-based models"} />
+
+</Slide>
+
+<Slide title={"Neural Networks"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img11.png"} alt={"Neural Networks"} />
+
+</Slide>
+
+<Slide title={"Neural Networks"}>
+
+<Bullets items={[
+  { l: 1, h: "Inputs: features believed to be useful for prediction" },
+  { l: 1, h: "Outputs: Each class has its own “neuron”" },
+  { l: 2, h: "Output is 1 or 0 to signal that it’s class is “True”" },
+  { l: 1, h: "In the middle: “hidden” layers learn the complex relationship between features & classes" },
+  { l: 2, h: "Connections between neurons, and calculations in each neuron define the NN architecture" },
+]} />
+
+</Slide>
+
+<Slide title={"Neural Networks"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img11.png"} alt={"Neural Networks"} />
+
+</Slide>
+
+<Slide title={"Cautions and Caveats"}>
+
+<Bullets items={[
+  { l: 1, h: "Overfitting is still an issue, solved the same way" },
+  { l: 1, h: "Interpretability is harder with more complex models" },
+  { l: 1, h: "Measure of “accuracy” is even more important for classifiers" },
+  { l: 2, h: "Especially as it pertains to real business costs" },
+]} />
+
+</Slide>
+
+<Slide title={"Duration Analysis"}>
+
+<Bullets items={[
+  { l: 1, h: "Many classifiers are “one shot”" },
+  { l: 1, h: "What about factors that build to a tipping point?" },
+  { l: 2, h: "E.g., bankruptcy, M&A completion" },
+  { l: 1, h: "Duration analysis, survival analysis, hazard models" },
+  { l: 1, h: "Two components:" },
+  { l: 2, h: "Discrete: did it happen" },
+  { l: 2, h: "Continuous: when did it happen" },
+]} />
+
+</Slide>
+
+<Slide title={"Example: Loan Default"} aiNotes={"https://d-nb.info/1122167008/34"}>
+
+<Bullets items={[
+  { l: 1, h: "Syndicated loan is instantiated" },
+  { l: 1, h: "Borrower must adhere to covenants, tested regularly" },
+  { l: 1, h: "Default on violated covenant or missed payments" },
+  { l: 1, h: "Over life of loan, outcome either default or term ends" },
+  { l: 1, h: "Prediction: will borrower default and when?" },
+]} />
+
+</Slide>
+
+<Slide title={"Duration Analysis"}>
+
+<Bullets items={[
+  { l: 1, h: "Identify what correlates with “survival”" },
+  { l: 2, h: "Whether a variable relates to the outcome occurring" },
+  { l: 2, h: "How much that variable effects outcome probability" },
+  { l: 1, h: "Measure effect on probability (more likely ever)" },
+  { l: 1, h: "Measure effect on time to failure (more likely sooner)" },
+]} />
+
+</Slide>
+
+<Slide title={"Hazard Function"}>
+
+<Bullets items={[
+  { l: 1, h: "How likely outcome is to occur at time t" },
+]} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img12.png"} alt={"Hazard Function"} />
+
+<Bullets items={[
+  { l: 1, h: "Credit: https://www.linkedin.com/pulse/using-survival-model-credit-risk-scoring-loan-pricing-tirabassi-66i5c/" },
+]} />
+
+</Slide>
+
+<Slide title={"Survival Function"}>
+
+<Bullets items={[
+  { l: 1, h: "Probability that outcome hasn’t happened at time t" },
+]} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img13.png"} alt={"Survival Function"} />
+
+<Bullets items={[
+  { l: 1, h: "Credit: https://www.linkedin.com/pulse/using-survival-model-credit-risk-scoring-loan-pricing-tirabassi-66i5c/" },
+]} />
+
+</Slide>
+
+<Slide title={"Hazard & Survival"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img12.png"} alt={"Hazard & Survival"} />
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img13.png"} alt={"Hazard & Survival"} />
+
+<Bullets items={[
+  { l: 1, h: "Credit: https://www.linkedin.com/pulse/using-survival-model-credit-risk-scoring-loan-pricing-tirabassi-66i5c/" },
+]} />
+
+</Slide>
+
+<Slide title={"Censoring"}>
+
+<Bullets items={[
+  { l: 1, h: "Right censoring is when the outcome is not observed" },
+  { l: 2, h: "E.g., loan term ends before default" },
+  { l: 1, h: "Left censoring is when outcome has already occurred" },
+  { l: 2, h: "E.g., firm already in default when observation starts" },
+  { l: 1, h: "Interval censoring is when outcome occurs in some range, or window" },
+  { l: 2, h: "E.g., default only measured quarterly" },
+]} />
+
+</Slide>
+
+<Slide title={"Measuring Classifier Performance"}>
+
+<Bullets items={[
+  { l: 1, h: "Accuracy has many definitions" },
+  { l: 2, h: "How many predicted customers actually default?" },
+  { l: 2, h: "How many defaulting customers were predicted so?" },
+  { l: 1, h: "Different measures used for different goals" },
+]} />
+
+</Slide>
+
+<Slide title={"Confusion Matrix"}>
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "Defaulted", "Paid"],
+    ["Predictions", "Predict default", "Correctly predict default", "Paying customer called defaulter"],
+    ["", "Predict paying", "Defaulter predicted paying", "Correctly predict paying"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Confusion Matrix"}>
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "Is Positive", "Is Negative"],
+    ["Predictions", "Predict Positive", "True Positive", "False Positive"],
+    ["", "Predict Negative", "False Negative", "True Negative"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Positive and negative don’t mean anything other than the two outcomes" },
+  { l: 2, h: "You could reverse them, nothing would change" },
+]} />
+
+</Slide>
+
+<Slide title={"Accuracy Calculations"}>
+
+<DataTable
+  columns={["", "Outcomes", ""]}
+  rows={[
+    ["", "", ""],
+    ["Predictions", "TP", "FP"],
+    ["", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Accuracy Calculations"}>
+
+<DataTable
+  columns={["", "Outcomes", ""]}
+  rows={[
+    ["", "", ""],
+    ["Predictions", "TP", "FP"],
+    ["", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Precision and Recall Shortcomings"}>
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "➕", "➖"],
+    ["Predictions", "➕", "99", "1"],
+    ["", "➖", "0", "0"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Classifier asymmetric Costs"}>
+
+<Bullets items={[
+  { l: 1, h: "TP / TN – predicted correctly" },
+  { l: 1, h: "False Positive – expect default, customer pays" },
+  { l: 2, h: "Loss of customer, or waste of resources to mitigate risk" },
+  { l: 1, h: "False Negative – expect paying customer, defaults instead" },
+  { l: 2, h: "Up to complete loss" },
+]} />
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "➕", "➖"],
+    ["Predictions", "➕", "TP", "FP"],
+    ["", "➖", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Receiver Operating Curve"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img14.png"} alt={"Receiver Operating Curve"} />
+
+</Slide>
+
+<Slide title={"Receiver Operating Curve"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img15.png"} alt={"Receiver Operating Curve"} />
+
+</Slide>
+
+<Slide title={"Receiver Operating Curve"}>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img16.png"} alt={"Receiver Operating Curve"} />
+
+</Slide>
+
+<Slide title={"Cost Functions and Training"}>
+
+<Bullets items={[
+  { l: 1, h: "Training minimizes cost" },
+  { l: 1, h: "Specifying different cost functions will result in different classifiers" },
+  { l: 2, h: "They will weight different errors (FP/FN) differently" },
+  { l: 1, h: "Understanding the business decision is imperative to designing a good cost function and classifier" },
+]} />
+
+</Slide>
+
+<Slide title={"Coming Up"}>
+
+<Bullets items={[
+  { l: 1, h: "Project 4 Proposal – Due Sunday" },
+  { l: 1, h: "Lab/Homework 10 – Due Sunday" },
+  { l: 1, h: "Project 3 – Due next Sunday" },
+  { l: 2, h: "Lab next week will be a work-session for Project 3" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-10/10-ug-classifiers2/img17.png"} alt={"Classification"} />
+
+</Slide>

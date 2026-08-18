@@ -1,0 +1,947 @@
+---
+week: week-13
+title: "Accounting Analytics"
+---
+
+import { Slide, CoverMeta, Bullets, TwoColumn, DataTable, ImageCaption, Cta } from '@components/blocks';
+
+<Slide variant="title" kicker="Week 13" icon="book">
+
+Accounting Analytics
+
+<CoverMeta instructors={["Maclean Gaulin"]} />
+
+</Slide>
+
+<Slide title={"Gamut of analytics in accounting"}>
+
+<Bullets items={[
+  { l: 1, h: "*Acquisition*: collecting and measuring data" },
+  { l: 1, h: "*Storage*: could just be excel, but hopefully not!" },
+  { l: 1, h: "*Cleaning*: ensuring the quality of the data, audits" },
+  { l: 1, h: "*Combination*: combining multiple data sources" },
+  { l: 1, h: "*Analysis*: modeling the economics" },
+  { l: 1, h: "*Communication*: conveying accounting insights" },
+  { l: 1, h: "*Data driven decisions*: using analytical conclusions to inform decision-makers" },
+]} />
+
+</Slide>
+
+<Slide title={"Uses of Data Analytics in Business"}>
+
+<Bullets items={[
+  { l: 1, h: "Data-driven decision-making" },
+  { l: 1, h: "Improved operations" },
+  { l: 1, h: "Better customer understanding" },
+  { l: 1, h: "Risk assessment & management" },
+  { l: 1, h: "Regulatory compliance" },
+]} />
+
+</Slide>
+
+<Slide title={"Where you fit in"}>
+
+<Bullets items={[
+  { l: 1, h: "Regardless of your analytics chops, your domain expertise will always be valuable" },
+  { l: 2, h: "Don’t underestimate how impactful knowing accounting can be in DA conversations" },
+  { l: 2, h: "Don’t overestimate how much others know about accounting, you’re the expert!" },
+  { l: 1, h: "Play to your strengths" },
+]} />
+
+</Slide>
+
+<Slide title={"Data in 2025"} aiNotes={"The Associated Press style guide classifies data as a collective noun that takes the singular when treated as a unit but the plural when referring to individual items (e.g., \"The data is sound\" and \"The data have been carefully collected\"). https://explodingtopics.com/blog/data-generated-per-day"}>
+
+<Bullets items={[
+  { l: 1, h: "There’s a lot of it" },
+  { l: 1, h: "The 5 Vs:" },
+  { l: 2, h: "Volume" },
+  { l: 2, h: "Velocity" },
+  { l: 2, h: "Variety" },
+  { l: 2, h: "Veracity" },
+  { l: 2, h: "Value" },
+]} />
+
+</Slide>
+
+<Slide title={"Move to the (Private) cloud"}>
+
+<Bullets items={[
+  { l: 1, h: "Only pay for storage (bits) and usage (CPU cycles)" },
+  { l: 1, h: "Server hardware maintained by third party" },
+  { l: 2, h: "Shifting CapEx to OpEx with EBITDA impact" },
+  { l: 2, h: "Provider shares resources amongst clients (or not)" },
+  { l: 1, h: "Server software maintained by third party" },
+  { l: 2, h: "Firm avoids dealing with software updates, fixes, etc." },
+  { l: 2, h: "Customization often more difficult (platform lock-in)" },
+  { l: 2, h: "Leverage external analytics expertise" },
+]} />
+
+</Slide>
+
+<Slide title={"Cloud Computing caveats"} aiNotes={"https://kpmg.com/us/en/articles/2023/financial-operations-cloud-cost.html https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2022/five-major-auditing-challenges-in-cloud-computing-and-how-to-overcome-them"}>
+
+<Bullets items={[
+  { l: 1, h: "Cloud systems solve problems (tech assets, access, scale) but create others (security, complexity)" },
+  { l: 1, h: "ROI on moving to the cloud is unclear" },
+  { l: 2, h: "66% of execs say cloud hasn’t lowered IT cost (KPMG 2022)" },
+  { l: 1, h: "Can create audit-trail concerns (right to audit)" },
+]} />
+
+</Slide>
+
+<Slide title={"Big Data Storage"} aiNotes={"$364 billion of capital investment in 2025: https://finance.yahoo.com/news/spending-ai-data-centers-massive-150110727.html"}>
+
+<Bullets items={[
+  { l: 1, h: "Data Lake: centralized hub of *unstructured* data" },
+  { l: 2, h: "Stores data in “raw” unprocessed format (as-is)" },
+  { l: 2, h: "Because storage is “cheap,” firms now often keep all data in its raw form, and process later when needed" },
+  { l: 1, h: "Data Warehouse: centralized hub of structured data" },
+  { l: 2, h: "Stores pre-processed data (schema-on-write)" },
+  { l: 2, h: "Governance and quality controls ensure datasets are properly formatted, normalized, ready to use" },
+]} />
+
+</Slide>
+
+<Slide title={"Unstructured Data"}>
+
+<Bullets items={[
+  { l: 1, h: "Text, images, etc." },
+  { l: 2, h: "Structure is missing, not-consistent, or complex" },
+  { l: 1, h: "80-90% of collected data is unstructured" },
+  { l: 1, h: "Needs processing before it can be used" },
+  { l: 2, h: "AI is making processing this data far easier" },
+  { l: 1, h: "Examples:" },
+  { l: 2, h: "Invoices, receipts" },
+  { l: 2, h: "Regulations, FAQs, instructions, guidance" },
+]} />
+
+</Slide>
+
+<Slide title={"Structured Data"}>
+
+<Bullets items={[
+  { l: 1, h: "Think of a spreadsheet with columns (variables) and rows (observations)" },
+  { l: 1, h: "Often quantitative, easily processed for analytics" },
+  { l: 1, h: "Can be broken into multiple, related tables (RDB)" },
+  { l: 1, h: "Examples:" },
+  { l: 2, h: "General ledger" },
+  { l: 2, h: "Chart of accounts" },
+]} />
+
+</Slide>
+
+<Slide title={"Wide vs Long"} aiNotes={"Left wide, right long. What would you use Wide/Long data for?"}>
+
+<DataTable
+  columns={["ID", "First Name", "Last Name", "# Sales"]}
+  rows={[
+    ["1", "Aryll", "Zelda", "394"],
+    ["2", "Byrne", "Yunobo", "604"],
+    ["3", "Cia", "Xani", "12"],
+  ]}
+/>
+
+<DataTable
+  columns={["ID", "Variable", "Value"]}
+  rows={[
+    ["1", "First Name", "Aryll"],
+    ["1", "Last Name", "Zelda"],
+    ["1", "# Sales", "394"],
+    ["2", "First Name", "Byrne"],
+    ["2", "Last Name", "Yunobo"],
+    ["2", "# Sales", "604"],
+    ["3", "First Name", "Cia"],
+    ["3", "Last Name", "Xani"],
+    ["3", "# Sales", "12"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "“Wide” format: add data in columns" },
+  { l: 2, h: "Each column is a different variable" },
+  { l: 1, h: "“Long” format: add data in rows" },
+  { l: 2, h: "Repeat IDs, columns for variable and value" },
+]} />
+
+</Slide>
+
+<Slide title={"Where: Central tendency"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img1.png"} alt={"Where: Central tendency"} />
+
+</Slide>
+
+<Slide title={"How Spread Out: variability"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img2.png"} alt={"How Spread Out: variability"} />
+
+</Slide>
+
+<Slide title={"Shape: Skewness"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img3.png"} alt={"Shape: Skewness"} />
+
+</Slide>
+
+<Slide title={"Why Visualize?"} aiNotes={"Visualizations help us instantly spot trends, outliers, and patterns that might be invisible in spreadsheets. It allows for quicker comprehension and speeds up the data analysis process significantly Charts are a universal language. They make it easier to share complex findings with stakeholders, regardless of their technical background."}>
+
+<DataTable
+  columns={["Dataset", ""]}
+  rows={[
+    ["x", "y"],
+    ["55.4", "97.2"],
+    ["51.5", "96.0"],
+    ["46.2", "94.5"],
+    ["42.8", "91.4"],
+    ["40.8", "88.3"],
+    ["38.7", "84.9"],
+    ["35.6", "79.9"],
+    ["33.1", "77.6"],
+    ["29.0", "74.5"],
+    ["26.2", "71.4"],
+    ["55.4", "97.2"],
+    ["…", "…"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Visualization as Communication"}>
+
+<Bullets items={[
+  { l: 1, h: "Concisely conveying data" },
+  { l: 1, h: "Telling stories for retention" },
+  { l: 1, h: "Relevant XKCD" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img4.jpg"} alt={"Visualization as Communication"} />
+
+<Cta label={"Relevant XKCD"} href={"https://xkcd.com/1732/"} />
+
+</Slide>
+
+<Slide title={"Leverage Strengths, Mitigate Weaknesses"} aiNotes={"\"pre-attentively\" – very rapidly and in parallel, without conscious effort Auditory is 39 bits per second"}>
+
+<Bullets items={[
+  { l: 1, h: "Leveraging strengths of human cognition" },
+  { l: 2, h: "Visual bandwidth1: About 20 Mbps (1Gbps total)" },
+  { l: 2, h: "Pre-attentive processing2: Instinctive processing" },
+  { l: 2, h: "Graphical perception3: Process some designs better" },
+  { l: 1, h: "Mitigate constraints of human cognition" },
+  { l: 2, h: "Avoid overloading limited “working memory”4" },
+  { l: 2, h: "Leverage external recognition" },
+]} />
+
+<Cta label={"1"} href={"https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2019.02246/full"} />
+
+<Cta label={"2"} href={"https://www.interaction-design.org/literature/article/preattentive-visual-properties-and-how-to-use-them-in-information-visualization"} />
+
+<Cta label={"3"} href={"https://doi.org/10.1080%2F01621459.1984.10478080"} />
+
+<Cta label={"4"} href={"https://pmc.ncbi.nlm.nih.gov/articles/PMC4207727/"} />
+
+</Slide>
+
+<Slide title={"4D Example – 2D + Time + Size"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img5.png"} alt={"4D Example – 2D + Time + Size"} />
+
+</Slide>
+
+<Slide title={"Truncated Axes"}>
+
+</Slide>
+
+<Slide title={"Scaled Axes"}>
+
+</Slide>
+
+<Slide title={"mean vs median"}>
+
+<Bullets items={[
+  { l: 1, h: "Median is “middle” of data" },
+  { l: 1, h: "Mean (expected value) is weighted by values" },
+  { l: 1, h: "Data: https://www.cbo.gov/publication/60706#_idTextAnchor039" },
+]} />
+
+</Slide>
+
+<Slide title={"Spurious Correlations"}>
+
+<Bullets items={[
+  { l: 1, h: "Credit Tyler Vigen" },
+]} />
+
+</Slide>
+
+<Slide title={"Exploratory Data Analysis"} aiNotes={"The greatest value of a picture is when it forces us to notice what we never expected to see. – John W. Tukey https://cran.r-project.org/web/packages/statquotes/vignettes/statquotes.html"}>
+
+<Bullets items={[
+  { l: 1, h: "*“You can see a lot, just by looking” ~ Yogi Berra*" },
+  { l: 1, h: "EDA establishes understanding of the data before assumptions are made or complex modeling techniques are applied" },
+  { l: 1, h: "More EDA now, fewer mistakes later" },
+  { l: 1, h: "Finds “unknown unknowns”" },
+  { l: 1, h: "Be curious *and* judgmental" },
+  { l: 2, h: "Skepticism is important, look for errors, bias, misinformation, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"combining data"}>
+
+<Bullets items={[
+  { l: 1, h: "Combining to get variables from multiple sources" },
+  { l: 2, h: "External data (marketing data, economic data, etc.)" },
+  { l: 2, h: "Various internal systems (invoices, production, etc.)" },
+  { l: 1, h: "Aggregation" },
+  { l: 2, h: "Aggregation can require combining data with itself" },
+  { l: 1, h: "Analysis, cleaning, and verification" },
+  { l: 2, h: "Comparing observations, interpolating, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"Relational Database"}>
+
+<Bullets items={[
+  { l: 1, h: "Database" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Table 1: `GL_Detail`" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Table 2: `Chart_of_Accounts`" },
+]} />
+
+<DataTable
+  columns={["journal_id", "line_id", "account_id", "amount"]}
+  rows={[
+    ["1", "1", "9003", "500"],
+    ["1", "2", "2002", "500"],
+    ["1", "3", "9500", "350"],
+    ["1", "4", "4002", "350"],
+  ]}
+/>
+
+<DataTable
+  columns={["account_id", "account_name"]}
+  rows={[
+    ["1000", "Cash"],
+    ["2002", "Receivables"],
+    ["4002", "Inventory"],
+    ["8002", "Retained Earnings"],
+    ["9003", "Revenue"],
+    ["9500", "COGS"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"SQL: Structured Query Language"}>
+
+<Bullets items={[
+  { l: 1, h: "SQL is the language used to interact with RDBs" },
+  { l: 1, h: "SQL playground: sqlbolt.com" },
+  { l: 1, h: "Do you need to know SQL?" },
+  { l: 2, h: "You should understand conceptually the moving parts" },
+  { l: 2, h: "You should understand what it can and can’t do" },
+  { l: 3, h: "Which you can ask LLMs" },
+  { l: 2, h: "Learn it if you need it, are interested, or taking the ISC section of the CPA" },
+]} />
+
+<Cta label={"sqlbolt.com"} href={"https://sqlbolt.com/"} />
+
+</Slide>
+
+<Slide title={"Inner join"}>
+
+<Bullets items={[
+  { l: 1, h: "Just keep rows that match (join keys are in both tables)" },
+  { l: 1, h: "Most common join (JOIN keyword in SQL is inner)" },
+]} />
+
+</Slide>
+
+<Slide title={"Outer join"}>
+
+<TwoColumn ratio="2-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Keeps all rows from both tables" },
+    { l: 1, h: "Rows that do not match other table are filled with missing (NULL)" },
+    { l: 1, h: "Can create large datasets" },
+  ]} />
+  </div>
+  <div slot="right">
+  <DataTable
+    columns={["NULLs", ""]}
+    rows={[
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+      ["", "NULLs"],
+      ["", ""],
+      ["", ""],
+      ["", ""],
+    ]}
+  />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Left/Right join"}>
+
+<Bullets items={[
+  { l: 1, h: "Keeps all rows in one table" },
+  { l: 1, h: "Used to add columns from another table without altering original rows" },
+  { l: 1, h: "Left and right join are the same with swapped table orders" },
+  { l: 2, h: "A `left join` B = B `right join` A" },
+]} />
+
+<DataTable
+  columns={[""]}
+  rows={[
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
+    [""],
+    ["NULLs"],
+    [""],
+    [""],
+    [""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Aggregations"}>
+
+<Bullets items={[
+  { l: 1, h: "Calculations across multiple rows" },
+  { l: 2, h: "Counting, summing, averaging, regressions, etc." },
+  { l: 1, h: "Aggregations collapse multiple rows into one" },
+  { l: 1, h: "Often combined with merges" },
+  { l: 2, h: "E.g. total expenses by vendor within date range" },
+  { l: 1, h: "Often done in “subquery” and merged" },
+]} />
+
+</Slide>
+
+<Slide title={"Extract, Transform, Load"} aiNotes={"https://commons.wikimedia.org/wiki/File:Extract,_Transform,_Load_Data_Flow_Diagram.svg"}>
+
+<TwoColumn ratio="1-1">
+  <div slot="left">
+  <Bullets items={[
+    { l: 1, h: "Acquiring data needs to be robust and repeatable" },
+    { l: 1, h: "Extract" },
+    { l: 2, h: "Ingest data" },
+    { l: 1, h: "Transform" },
+    { l: 2, h: "Clean and format data" },
+    { l: 1, h: "Load" },
+    { l: 2, h: "Save data to storage" },
+  ]} />
+  </div>
+  <div slot="right">
+  <ImageCaption src={"/decks/week-13/13-ug-outro/img6.png"} alt={"Content Placeholder 9"} />
+  </div>
+</TwoColumn>
+
+</Slide>
+
+<Slide title={"Automating Data Use"}>
+
+<Bullets items={[
+  { l: 1, h: "Dashboards, KPIs for decision makers" },
+  { l: 1, h: "Continual process analysis, internal audit" },
+  { l: 1, h: "Robotic Process Automation (RPA) to achieve specific tasks" },
+  { l: 1, h: "Small one-off tasks (filing PDFs, scraping data, etc.)" },
+]} />
+
+</Slide>
+
+<Slide title={"Human in the Loop"}>
+
+<Bullets items={[
+  { l: 1, h: "RPA can’t handle un-known circumstances" },
+  { l: 2, h: "Well it will, but you probably won’t like it" },
+  { l: 1, h: "Human in the loop is when your process calls a human for help" },
+  { l: 2, h: "Important decision oversight" },
+  { l: 2, h: "When something goes wrong" },
+]} />
+
+</Slide>
+
+<Slide title={"Common RPA Uses"}>
+
+<Bullets items={[
+  { l: 1, h: "Accounts Payable (procure-to-pay): automate invoice processing (OCR) and vendor payments" },
+  { l: 1, h: "Accounts Receivable (order-to-cash): automate invoicing, billing, and collections" },
+  { l: 1, h: "Data Acquisition: automate downloading data, client files, etc." },
+  { l: 1, h: "Account Reconciliations: automatically reconcile financial accounts and ledgers, 100% testing, flagging errors for review" },
+  { l: 1, h: "Report Generation: automate pulling, processing, and formatting of data into regular reports" },
+  { l: 1, h: "Payroll & HR expenses: validate timesheets, initiate direct deposits, employee expense reimbursements" },
+]} />
+
+</Slide>
+
+<Slide title={"What to do with our data?"}>
+
+<Bullets items={[
+  { l: 1, h: "Once we have data, what then?" },
+  { l: 1, h: "Use it!" },
+  { l: 1, h: "Model the world" },
+  { l: 2, h: "Descriptive: *What* happened?" },
+  { l: 2, h: "Diagnostic: *Why* did it happen?" },
+  { l: 2, h: "Predictive: What *will* happen?" },
+  { l: 2, h: "Prescriptive: What *should* we make happen?" },
+]} />
+
+</Slide>
+
+<Slide title={"Healthy Skepticism"}>
+
+<Bullets items={[
+  { l: 1, h: "Analytical models can be very powerful" },
+  { l: 1, h: "But that doesn’t obviate your professional skepticism" },
+  { l: 2, h: "Apply your domain knowledge" },
+  { l: 2, h: "Question the assumptions" },
+  { l: 2, h: "Question the model" },
+  { l: 2, h: "Question the data" },
+]} />
+
+</Slide>
+
+<Slide title={"Garbage in, Garbage out"}>
+
+<Bullets items={[
+  { l: 1, h: "Random errors (called noise) results in worse measures and outcomes, but randomly" },
+  { l: 2, h: "E.g. predicting default risk inaccurately" },
+  { l: 1, h: "Errors all in the same direction (called bias) can result in consistently wrong results" },
+  { l: 2, h: "E.g. always underestimating default risk" },
+  { l: 1, h: "Minimize noise, beware bias" },
+]} />
+
+</Slide>
+
+<Slide title={"Correlation is not Causation"}>
+
+<Bullets items={[
+  { l: 1, h: "Important to differentiate when making decisions" },
+  { l: 1, h: "Causal inference is designed to identify causation" },
+  { l: 2, h: "Has its own caveats, but better than nothing" },
+]} />
+
+</Slide>
+
+<Slide title={"Model interpretability"}>
+
+<Bullets items={[
+  { l: 1, h: "Machine learning is great at capturing correlation" },
+  { l: 1, h: "ML models are often impossible to understand" },
+  { l: 1, h: "Understanding a model is important to understanding when it will work and when it won’t" },
+  { l: 2, h: "E.g. ChatGPT seems to be able to “think” until you come across non-existent citations" },
+  { l: 1, h: "Accountants must justify their work" },
+  { l: 2, h: "To auditors, investors, regulators, etc." },
+]} />
+
+</Slide>
+
+<Slide title={"Business Significance"}>
+
+<Bullets items={[
+  { l: 1, h: "Statistical significance: high certainty in the model" },
+  { l: 1, h: "Economic significance: how many dollar signs?" },
+  { l: 1, h: "Remember that models don’t have business sense" },
+  { l: 1, h: "Important to translate model conclusions into economic impact on costs or revenues" },
+]} />
+
+</Slide>
+
+<Slide title={"Categorizing Analytical Methods"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img7.png"} alt={"Categorizing Analytical Methods"} />
+
+</Slide>
+
+<Slide title={"Fitting Lines and Errors"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img8.gif"} alt={"Fitting Lines and Errors"} />
+
+</Slide>
+
+<Slide title={"What is a good fit?"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img9.png"} alt={"What is a good fit?"} />
+
+<Bullets items={[
+  { l: 1, h: "How well does the model describe the data you have" },
+  { l: 2, h: "Called in sample fit, based on training data" },
+  { l: 1, h: "How well does the model predict new data" },
+  { l: 2, h: "Called out of sample fit, based on test data" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img10.png"} alt={"What is a good fit?"} />
+
+</Slide>
+
+<Slide title={"Overfitting: too much of a good thing"}>
+
+<Bullets items={[
+  { l: 1, h: "Some models can just memorize the training data" },
+  { l: 1, h: "Does not mean they have learnt the “truth”" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img11.png"} alt={"Overfitting: too much of a good thing"} />
+
+</Slide>
+
+<Slide title={"Time-series data – Forecasting"} aiNotes={"Graph of walmart and apple revenue over time, from 2011 to 2024. Walmart's (.4T to .7T) is above Apple's (.1T to .4T)"}>
+
+<Bullets items={[
+  { l: 1, h: "Each observation is related to the next" },
+  { l: 1, h: "Order matters" },
+  { l: 1, h: "Example: Revenue data over time" },
+]} />
+
+</Slide>
+
+<Slide title={"Forecasting Cautions"}>
+
+<Bullets items={[
+  { l: 1, h: "Training data could contain random economic events that aren’t indicative of the future (overfitting)" },
+  { l: 1, h: "New economic events that aren’t modeled can occur (underfitting)" },
+  { l: 1, h: "Uncertainty increases when forecasting further out" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img12.png"} alt={"Forecasting Cautions"} />
+
+</Slide>
+
+<Slide title={"Causal Analysis"}>
+
+<Bullets items={[
+  { l: 1, h: "Compare outcome to “counterfactual”" },
+  { l: 1, h: "Anything that is different between treatment and control could potentially cause the estimated effect" },
+  { l: 2, h: "Called omitted variables or measurement error" },
+  { l: 1, h: "Solutions to identify causality limit generalizability" },
+  { l: 1, h: "If you can’t define how treatment results in outcome (the mechanism), be very skeptical" },
+  { l: 2, h: "If you can, then that’s potentially testable" },
+]} />
+
+</Slide>
+
+<Slide title={"Classifier vs Regression?"}>
+
+<Bullets items={[
+  { l: 1, h: "Regression Approach" },
+]} />
+
+<Bullets items={[
+  { l: 1, h: "Classification Approach" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img13.png"} alt={"Classifier vs Regression?"} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img14.png"} alt={"Classifier vs Regression?"} />
+
+</Slide>
+
+<Slide title={"Confusion Matrix"}>
+
+<DataTable
+  columns={["", "", "Outcomes", ""]}
+  rows={[
+    ["", "", "Is Positive", "Is Negative"],
+    ["Predictions", "Predict Positive", "True Positive", "False Positive"],
+    ["", "Predict Negative", "False Negative", "True Negative"],
+  ]}
+/>
+
+<Bullets items={[
+  { l: 1, h: "Positive and negative don’t mean anything other than the two outcomes" },
+  { l: 2, h: "You could reverse them, nothing would change" },
+]} />
+
+</Slide>
+
+<Slide title={"Accuracy Calculations"}>
+
+<DataTable
+  columns={["", "Outcomes", ""]}
+  rows={[
+    ["", "", ""],
+    ["Predictions", "TP", "FP"],
+    ["", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Accuracy Calculations"}>
+
+<DataTable
+  columns={["", "Outcomes", ""]}
+  rows={[
+    ["", "", ""],
+    ["Predictions", "TP", "FP"],
+    ["", "FN", "TN"],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Confusion Matrix"}>
+
+<DataTable
+  columns={["", "", "Actual Outcome", ""]}
+  rows={[
+    ["", "", "Defaulted", "Paid"],
+    ["Prediction", "Predict default", "TP", "FP"],
+    ["", "Predict pay", "FN", "TN"],
+    ["", "", "", ""],
+  ]}
+/>
+
+</Slide>
+
+<Slide title={"Receiver Operating Curve"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img15.png"} alt={"Receiver Operating Curve"} />
+
+</Slide>
+
+<Slide title={"Unsupervised Learning"}>
+
+<Bullets items={[
+  { l: 1, h: "A bag of skittles is dumped on the floor, and all measurements taken (color, size, location, etc.)" },
+  { l: 1, h: "*Clustering* – separate skittles into colors" },
+  { l: 1, h: "*Dimensionality Reduction* – first “factor” is color, then location, no difference in size" },
+]} />
+
+</Slide>
+
+<Slide title={"Centroid Clustering"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img16.png"} alt={"Centroid Clustering"} />
+
+</Slide>
+
+<Slide title={"Density Clustering"}>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img17.png"} alt={"Density Clustering"} />
+
+</Slide>
+
+<Slide title={"Hierarchical Clustering"}>
+
+</Slide>
+
+<Slide title={"Dimensionality Reduction"}>
+
+</Slide>
+
+<Slide title={"AI is a big regression"}>
+
+<Bullets items={[
+  { l: 1, h: "Still just fitting a line" },
+  { l: 2, h: "A very very very complex line" },
+  { l: 2, h: "LLMs predict next-word probability (e.g., logistic regression)" },
+  { l: 1, h: "Fits the line with a neural network" },
+  { l: 2, h: "Different types of NNs based on connection of neurons" },
+  { l: 2, h: "Transformers changed the game" },
+]} />
+
+</Slide>
+
+<Slide title={"Transformers: Chat GPT"} aiNotes={"https://platform.openai.com/tokenizer"}>
+
+<Bullets items={[
+  { l: 1, h: "Text is broken into “tokens”" },
+  { l: 2, h: "E.g., shareholder equity = assets - liabilities" },
+  { l: 1, h: "Network predicts probabilities of next word" },
+  { l: 1, h: "Next word is randomly selected" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img18.png"} alt={"Transformers: Chat GPT"} />
+
+</Slide>
+
+<Slide title={"How LLMs process information"}>
+
+<Bullets items={[
+  { l: 1, h: "next word = m * X" },
+  { l: 2, h: "m is the weights (learned coefficients)" },
+  { l: 2, h: "X is the context (input data)" },
+  { l: 1, h: "Human analogy: long vs short term memory" },
+  { l: 2, h: "Weights are everything you know and how you think" },
+  { l: 2, h: "Context is what you’re thinking now (applying that knowledge)" },
+]} />
+
+</Slide>
+
+<Slide title={"Context Considerations"}>
+
+<Bullets items={[
+  { l: 1, h: "The entire context window is included in processing" },
+  { l: 2, h: "A prompt may need refining with some back & forth" },
+  { l: 2, h: "Consider ending with “write a new prompt that captures all the updates over our conversation”, try in new chat" },
+  { l: 1, h: "Use files or other resource to provide necessary info" },
+  { l: 2, h: "E.g. The HTML file from Lab 6 with table details" },
+  { l: 1, h: "Attempt different prompts, require & check citations" },
+  { l: 1, h: "Assistants have pre-set context, data, or examples" },
+]} />
+
+</Slide>
+
+<Slide title={"Updating LLM Knowledge"}>
+
+<Bullets items={[
+  { l: 1, h: "Preloaded context (GPTs / Gems)" },
+  { l: 2, h: "Customized system prompt for specific functionality" },
+  { l: 1, h: "Retrieval Augmented Generation (RAG)" },
+  { l: 2, h: "LLM does a google search (of just your documents)" },
+]} />
+
+</Slide>
+
+<Slide title={"Enabling Tools for AI"}>
+
+<Bullets items={[
+  { l: 1, h: "MCP describes tools in English, simple syntax to call" },
+  { l: 2, h: "MCP client takes LLM output, talks to MCP server" },
+]} />
+
+</Slide>
+
+<Slide title={"Agentic AI"}>
+
+<Bullets items={[
+  { l: 1, h: "*Tool using AI*: an employee told to do a specific task" },
+  { l: 1, h: "*Agentic AI*: a manager that decides *what* tasks to do" },
+  { l: 2, h: "Example: tax agent to analyze tax positions, evaluate adherence to existing regulations and estimate risk" },
+  { l: 1, h: "Incorporates feedback/looping, executing until it observes and decides its objective is met" },
+  { l: 2, h: "Can be hierarchical, high-level agents orchestrating a series of specialized sub-agents" },
+]} />
+
+</Slide>
+
+<Slide title={"Survey Evidence"}>
+
+<Bullets items={[
+  { l: 1, h: "44% of CFOs report using AI, only 33% at scale" },
+  { l: 1, h: "88% of employees report using AI" },
+  { l: 2, h: "37% worry reliance on AI will erode skills & expertise" },
+  { l: 1, h: "64% of employees report higher workload" },
+  { l: 2, h: "Only 5% using AI to significantly alter their workflow" },
+  { l: 1, h: "Q1 2026: 54% of firms deploying AI agents" },
+  { l: 2, h: "60% expect humans to manage agent “teams”" },
+]} />
+
+</Slide>
+
+<Slide title={"value realization gap"}>
+
+<Bullets items={[
+  { l: 1, h: "Desire to implement AI / data analytics is ubiquitous" },
+  { l: 1, h: "Ability to do so is not, creating the value gap" },
+  { l: 1, h: "Common frictions to adoption:" },
+  { l: 2, h: "Technology learning curve" },
+  { l: 2, h: "Employee adoption" },
+  { l: 2, h: "C-level acceptance" },
+  { l: 2, h: "Implementation difficulty (trust & governance)" },
+  { l: 2, h: "Data availability" },
+]} />
+
+</Slide>
+
+<Slide title={"Barriers to Adoption"} aiNotes={"https://kpmg.com/kpmg-us/content/dam/kpmg/pdf/2024/kpmgus-ai-in-financial-reporting-and-audit-may-24.pdf"}>
+
+<Bullets items={[
+  { l: 1, h: "Data security & privacy" },
+  { l: 2, h: "36% employees admit to using non-approved LLM" },
+  { l: 1, h: "Accuracy & data" },
+  { l: 2, h: "Mitigating hallucinations" },
+  { l: 2, h: "Acquiring useful, clean, and reliable data" },
+]} />
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img19.png"} alt={"Barriers to Adoption"} />
+
+<Bullets items={[
+  { l: 1, h: "Source: KPMG AI in financial reporting and audit, 2024" },
+]} />
+
+</Slide>
+
+<Slide title={"Smart Alliance"} aiNotes={"Association of Chartered Certified Accountants"}>
+
+<Bullets items={[
+  { l: 1, h: "ACCA report finds half of accounting and finance leadership in AI adoption roles, 20% strategic owners" },
+  { l: 1, h: "Natural extension for the business data roles" },
+  { l: 2, h: "Moving from data preparation to advisory roles" },
+]} />
+
+</Slide>
+
+<Slide title={"What you did"}>
+
+<Bullets items={[
+  { l: 1, h: "Data engineering: clean data, ETL, SQL, EDA" },
+  { l: 1, h: "Data visualization: histograms, line charts, trends" },
+  { l: 1, h: "Data analysis: regressions, classifiers" },
+  { l: 1, h: "AI: vibe coding" },
+]} />
+
+</Slide>
+
+<Slide title={"Illusion of Knowledge"}>
+
+<Bullets items={[
+  { l: 1, h: "“The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.” ~ Daniel J. Boorstin" },
+  { l: 1, h: "“If you can't explain something to a six-year-old, you really don't understand it yourself.” ~ not Albert Einstein" },
+  { l: 1, h: "As the data expert, you are the most valuable and necessary part of the analysis. ~ Me" },
+]} />
+
+</Slide>
+
+<Slide title={"Healthy Skepticism"}>
+
+<Bullets items={[
+  { l: 1, h: "Analytical models can be very powerful" },
+  { l: 1, h: "But that doesn’t obviate your professional skepticism" },
+  { l: 2, h: "Apply your domain knowledge" },
+  { l: 2, h: "Question the assumptions" },
+  { l: 2, h: "Question the model" },
+  { l: 2, h: "Question the data" },
+]} />
+
+</Slide>
+
+<Slide title={"Coming up"}>
+
+<Bullets items={[
+  { l: 1, h: "*Wednesday*: Lab 12 & Project 4 work-session" },
+  { l: 1, h: "*Next week* (week 14):" },
+  { l: 2, h: "Monday: Live lab / demo" },
+  { l: 2, h: "Wednesday: KPMG AI guest speakers" },
+  { l: 1, h: "*Week 15*: Presentations" },
+  { l: 2, h: "Sign up on spreadsheet in announcement" },
+  { l: 2, h: "Load presentation slides before class" },
+  { l: 2, h: "Hard stop at 10 minutes" },
+]} />
+
+</Slide>
+
+<Slide>
+
+<ImageCaption src={"/decks/week-13/13-ug-outro/img20.png"} alt={"Accounting Analytics"} />
+
+</Slide>

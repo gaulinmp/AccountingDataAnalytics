@@ -1,0 +1,62 @@
+---
+// Deck metadata line, typically placed on the title slide.
+interface Props {
+  instructors?: string[];
+  date?: Date | string;
+  estMinutes?: number;
+}
+
+const { instructors, date, estMinutes } = Astro.props;
+const dateStr =
+  date instanceof Date ? date.toLocaleDateString(undefined, { dateStyle: 'long' }) : date;
+---
+
+<dl class="cover-meta">
+  {
+    instructors && instructors.length > 0 && (
+      <div>
+        <dt>Instructors</dt>
+        <dd>{instructors.join(' · ')}</dd>
+      </div>
+    )
+  }
+  {
+    dateStr && (
+      <div>
+        <dt>Date</dt>
+        <dd>{dateStr}</dd>
+      </div>
+    )
+  }
+  {
+    estMinutes && (
+      <div>
+        <dt>Length</dt>
+        <dd>{estMinutes} min</dd>
+      </div>
+    )
+  }
+</dl>
+
+<style>
+  .cover-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin: var(--space-5) 0 0;
+    font-size: var(--fs-sm);
+  }
+
+  .cover-meta dt {
+    font-weight: 600;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: var(--fs-xs);
+  }
+
+  .cover-meta dd {
+    margin: var(--space-1) 0 0;
+    color: var(--ink);
+  }
+</style>

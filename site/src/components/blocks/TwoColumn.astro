@@ -1,0 +1,34 @@
+---
+// Two-column layout wrapper. Fill the `left` and `right` named slots.
+interface Props {
+  ratio?: '1-1' | '1-2' | '2-1';
+}
+const { ratio = '1-1' } = Astro.props;
+---
+
+<div class:list={['two-col', `r-${ratio}`]}>
+  <div class="col"><slot name="left" /></div>
+  <div class="col"><slot name="right" /></div>
+</div>
+
+<style>
+  .two-col {
+    display: grid;
+    gap: var(--space-5);
+    margin: var(--space-4) 0;
+  }
+  .r-1-1 {
+    grid-template-columns: 1fr 1fr;
+  }
+  .r-1-2 {
+    grid-template-columns: 1fr 2fr;
+  }
+  .r-2-1 {
+    grid-template-columns: 2fr 1fr;
+  }
+  @media (max-width: 640px) {
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

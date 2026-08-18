@@ -38,24 +38,6 @@ details.inline-image {
      /* padding: 2px 4px; */
  }
 
- /* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
- /* Make horizontal lines connect through column boundaries */
- /* table {
-     border-collapse: collapse;
- } */
- /* General styling of all cells */
- table > :is(thead, tbody) > tr > :is(th, td) {
-     padding: 3px;
-     text-align: left;
- }
- table > thead > tr > :is(th, td) {
-     border-top: 2px solid; /* Top thick line */
-     border-bottom: 1px solid; /* Below head thin line */
- }
- table > tbody > tr:last-child > :is(th, td) {
-     border-bottom: 2px solid; /* Bottom thick line */
- }
-
 /* Claud's generated CSS */
 /* Base Styles */
 body {
@@ -212,11 +194,27 @@ pre[class*="language-"]::before {
 
 /* Tables */
 table {
-    /* width: 100%; */
     border-collapse: collapse;
     margin: 1.5rem 0;
-    /* background-color: white; */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Credit https://stackoverflow.com/questions/68779936/booktabs-like-tables-for-markdown */
+/* Make horizontal lines connect through column boundaries */
+table td, table th {
+    border: 1px solid #aaaaaaaa;
+}
+
+table > :is(thead, tbody) > tr > :is(th, td) {
+    padding: 3px;
+    text-align: left;
+}
+table > thead > tr > :is(th, td) {
+    border-top: 2px solid; /* Top thick line */
+    border-bottom: 1px solid; /* Below head thin line */
+}
+table > tbody > tr:last-child > :is(th, td) {
+    border-bottom: 2px solid; /* Bottom thick line */
 }
 
 tr:nth-child(even) {
@@ -244,9 +242,10 @@ blockquote p:last-child {
 /* Special callout boxes */
 .note, .warning, .tip {
     padding: 1rem 1.25rem;
-    margin: 1.5rem 0;
+    margin: 1.5rem;
     border-radius: 6px;
     border-left: 5px solid;
+    border-right: 5px solid;
 }
 
 .note {
@@ -273,6 +272,11 @@ em {
 strong {
     font-weight: 600;
     color: #1a202c;
+}
+
+.small, .smol {
+    font-size: 0.75rem;
+    color: #555;
 }
 
 /* Links */
@@ -342,6 +346,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -350,6 +360,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {
@@ -545,9 +578,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>You are given access to the same Compustat fundamental data from Project 1 (now limited to S&amp;P 500 constituents only, for easier computation), along with CRSP daily stock return data for these same firms. Your job is to explore whether the FSA ratio patterns you identified in Project 1 show observable relationships with stock returns.</p>
 <p>Your task: <strong>Explore the relationship between your Project 1 FSA ratio findings and stock returns</strong>. This involves:</p>
 <ol>
-<li>Connect to the provided PostgreSQL database containing Compustat and CRSP data</li>
+<li>Upload the provided CSV datasets to the SQL Web Tool (or load them into Python/Excel directly).</li>
 <li>Recreate your FSA ratio(s) and groupings from Project 1, (you can also look at more or fewer ratios, or entirely different ratios / cross sections if you wish)</li>
-<li>Merge the compustat data with stock return data (merge keys being <code class="fixed-width">ticker</code>, <code class="fixed-width">shrcls</code>, and date variables like <code class="fixed-width">earn_annc_date</code> or <code class="fixed-width">fiscal_year_end</code>), ensuring proper timing alignment</li>
+<li>Merge the compustat data with stock return data (merge keys being <code class="fixed-width">permno</code> and date variables like <code class="fixed-width">earn_annc_date</code> or <code class="fixed-width">fiscal_year_end</code>), ensuring proper timing alignment</li>
 <li>Analyze whether firms with different ratio characteristics show different return patterns</li>
 <li>Present your findings as preliminary evidence for potential investment strategies.</li>
 </ol>
@@ -555,7 +588,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>This project directly builds on your Project 1 FSA ratio analysis, extending it with market data. The intent is to build on your existing work, while adding new skills in data merging and return analysis.</p>
 <p>By completing this project, you will:</p>
 <ul>
-<li><strong>Practice Data Merging</strong>: Merge financial statement data with market return data in Power Query, Tableau, or Python</li>
+<li><strong>Practice Data Merging</strong>: Merge financial statement data with market return data using SQL (via the Web Tool), Power Query, or Python</li>
 <li><strong>Practice Visualization</strong>: Create visualizations to illustrate return patterns across FSA ratio groupings</li>
 <li><strong>Explore Return Patterns</strong>: Analyze firm stock return patterns based on FSA ratio groupings</li>
 <li><strong>Test Practical Relevance</strong>: Determine if your Project 1 findings have observable relationships with market performance</li>
@@ -644,32 +677,37 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <hr />
 <h2 class="ada-h2" id="3-data-sources">3. Data Sources</h2>
 <h3 class="ada-h3" id="31-data-access-options">3.1. Data Access Options</h3>
-<p>All students will access the same PostgreSQL database but can choose their preferred tool for data extraction and merging:</p>
-<p><strong>Database Details:</strong>
-* Connection details in Canvas
-* <em>Database</em>: <code class="fixed-width">ADA_SQL</code>
-    * <em>Excel:</em> Can connect via Power Query
-    * <em>Tableau:</em> Built-in database connectivity
-    * <em>Python:</em> See Lab 5 starter notebook for connecting
-    * <em>Tables</em>: 
-        * <code class="fixed-width">compustat_annual</code>: S&amp;P 500 fundamental data (2015-2025, same structure as Project 1)
-        * <code class="fixed-width">crsp_daily</code>: Daily stock return data for S&amp;P 500 firms</p>
+<p>Students will use the web-based SQL tool to access and merge the data (similar to Lab 5):</p>
+<ul>
+<li><strong>Tool URL</strong>: <a href="https://mgaulin.com/ada/sql" target="_blank">mgaulin.com/ada/sql</a></li>
+<li><strong>Input Files</strong>: Download from Canvas<ul>
+<li><code class="fixed-width">project2_compustat.csv</code>: S&amp;P 500 fundamental data (2015-2025)</li>
+<li><code class="fixed-width">project2_crsp.csv</code>: Daily stock return data for S&amp;P 500 firms</li>
+</ul>
+</li>
+<li><strong>Instructions</strong>:<ol>
+<li>Drag <code class="fixed-width">project2_compustat.csv</code> to the <strong>Left</strong> box (Table name: <code class="fixed-width">compustat</code>)</li>
+<li>Drag <code class="fixed-width">project2_crsp.csv</code> to the <strong>Right</strong> box (Table name: <code class="fixed-width">crsp</code>)</li>
+</ol>
+</li>
+</ul>
 <h3 class="ada-h3" id="34-data-dictionary">3.4. Data Dictionary</h3>
 <p><strong>CRSP Variables</strong>:</p>
 <ul>
+<li><code class="fixed-width">permno</code>: Permanent Security Identification Number, used to uniquely identify stocks in CRSP. Note, two different classes of stock for the same firm will have different <code class="fixed-width">permno</code>s.</li>
 <li><code class="fixed-width">ticker</code>: Ticker Symbol</li>
-<li><code class="fixed-width">shrcls</code>: Share Class (e.g., 'A', 'B', 'C', etc.)</li>
 <li><code class="fixed-width">date</code>: Return date (skips weekends and holidays)</li>
 <li><code class="fixed-width">ret</code>: Total return (including dividends)</li>
 <li><code class="fixed-width">prc</code>: Price per share</li>
 <li><code class="fixed-width">shrout</code>: Shares outstanding (thousands)</li>
 <li><code class="fixed-width">vol</code>: Trading volume (number of shares traded)</li>
-<li><code class="fixed-width">bid</code>: End of day bid price</li>
-<li><code class="fixed-width">ask</code>: End of day ask price</li>
 </ul>
 <p><strong>Compustat Variables</strong>:</p>
 <ul>
-<li><code class="fixed-width">firm_id</code>: ID to identify individual firms, preserving continuity through M&amp;A activities</li>
+<li><code class="fixed-width">gvkey</code>: Global Company Key to identify individual firms, preserving continuity through M&amp;A activities</li>
+<li><code class="fixed-width">name</code>: Firm Name</li>
+<li><code class="fixed-width">permno</code>: Permanent Security Identification Number</li>
+<li><code class="fixed-width">ticker</code>: Ticker Symbol</li>
 <li><code class="fixed-width">fyear</code>: Fiscal Year (based on majority of year, so 2000 connotes fiscal year ends between 7/1/1999 and 6/30/2000)</li>
 <li><code class="fixed-width">fiscal_year_end</code>: Fiscal Year End</li>
 <li><code class="fixed-width">fiscal_year_end_prev</code>: Fiscal Year End of the previous year</li>
@@ -677,9 +715,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><code class="fixed-width">earn_annc_date</code>: Earnings announcement date</li>
 <li><code class="fixed-width">earn_annc_date_prev</code>: Earnings announcement date of the previous year</li>
 <li><code class="fixed-width">earn_annc_date_next</code>: Earnings announcement date of the next year</li>
-<li><code class="fixed-width">name</code>: Firm Name</li>
-<li><code class="fixed-width">ticker</code>: Ticker Symbol</li>
-<li><code class="fixed-width">shrcls</code>: Share Class (e.g., 'A', 'B', 'C', etc.)</li>
 <li><code class="fixed-width">age_days</code>: Age (post IPO) of firm, in days (calculated as the number of days since the first filed 10-K)</li>
 <li><code class="fixed-width">act</code>: Current Assets</li>
 <li><code class="fixed-width">ap</code>: Accounts Payable - Trade</li>
@@ -698,11 +733,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><code class="fixed-width">emp</code>: Employees (in thousands)</li>
 <li><code class="fixed-width">epspi</code>: Earnings Per Share (Basic) - Including Extraordinary Items (amount in $ / share)</li>
 <li><code class="fixed-width">epspx</code>: Earnings Per Share (Basic) - Excluding Extraordinary Items (amount in $ / share)</li>
-<li><code class="fixed-width">gics_sector_name</code>: GICS Sector code name (string)</li>
 <li><code class="fixed-width">gics_sector</code>: GICS Sector code (numeric)</li>
+<li><code class="fixed-width">gics_sector_name</code>: GICS Sector code name (string)</li>
 <li><code class="fixed-width">gics_group</code>: GICS Group code (numeric)</li>
+<li><code class="fixed-width">gics_group_name</code>: GICS Group code name (string)</li>
 <li><code class="fixed-width">gics_industry</code>: GICS Industry code (numeric)</li>
+<li><code class="fixed-width">gics_industry_name</code>: GICS Industry code name (string)</li>
 <li><code class="fixed-width">gics_subindustry</code>: GICS Subindustry code (numeric)</li>
+<li><code class="fixed-width">gics_subindustry_name</code>: GICS Subindustry code name (string)</li>
 <li><code class="fixed-width">ib</code>: Income Before Extraordinary Items</li>
 <li><code class="fixed-width">invt</code>: Inventory  </li>
 <li><code class="fixed-width">lct</code>: Current Liabilities  </li>
@@ -729,16 +767,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <h2 class="ada-h2" id="4-suggested-workflow">4. Suggested Workflow</h2>
 <ol>
 <li>
-<p><strong>Database Setup &amp; Exploration</strong></p>
+<p><strong>Data Setup &amp; Exploration</strong></p>
 <ul>
-<li>Establish PostgreSQL connection in your modality</li>
+<li>Navigate to the web tool (<a href="https://mgaulin.com/ada/sql" target="_blank">mgaulin.com/ada/sql</a>) and upload your two CSV files.</li>
 <li>Explore data schema, understand table relationships and date timing</li>
 </ul>
 </li>
 <li>
 <p><strong>Data Integration</strong></p>
 <ul>
-<li>Merge Compustat fundamentals with CRSP returns via <code class="fixed-width">ticker</code>, <code class="fixed-width">shrcls</code>, and some date</li>
+<li>Merge Compustat fundamentals with CRSP returns via <code class="fixed-width">permno</code> and some date</li>
 <li>Decide on timing (e.g. align returns with fiscal year-end or earnings announcement)</li>
 <li>Address missing data and ensure timing decisions are well documented</li>
 </ul>
@@ -780,14 +818,18 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ol>
 <h2 class="ada-h2" id="5-technical-implementation-suggestions">5. Technical Implementation Suggestions</h2>
 <h3 class="ada-h3" id="51-bin-calculations">5.1. Bin Calculations</h3>
-<p><strong>Tableau Bin Calculations</strong></p>
-<div class="highlight"><pre><span></span><code>IF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.2)} THEN &quot;1 - Low&quot;
-    ELSEIF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.4)} THEN &quot;2 - Mid-low&quot;
-    ELSEIF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.6)} THEN &quot;3 - Middle&quot;
-    ELSEIF [ROA] &lt;= {FIXED [Fyear] : PERCENTILE([ROA], 0.8)} THEN &quot;4 - Mid-high&quot;
-    ELSE &quot;5 - High&quot;
-END
-</code></pre></div>
+<p><strong>Excel Bin Calculations</strong></p>
+<p>To create quintiles by year in Excel:</p>
+<ol>
+<li><em>Calculate Rank</em>: Use <code class="fixed-width">COUNTIFS</code> to determine the percentile rank of each firm relative to others in the same year.<ul>
+<li>Formula: <code class="fixed-width">=COUNTIFS([fyear], [@fyear], [roa], "&lt;"&amp;[@roa]) / COUNTIFS([fyear], [@fyear])</code></li>
+</ul>
+</li>
+<li><em>Assign Bins</em>: Use nested <code class="fixed-width">IF</code> statements on the resulting rank.<ul>
+<li>Formula: <code class="fixed-width">=IF([@Rank]&lt;=0.2, "1 - Low", IF([@Rank]&lt;=0.4, "2 - Mid-low", IF([@Rank]&lt;=0.6, "3 - Middle", IF([@Rank]&lt;=0.8, "4 - Mid-high", "5 - High"))))</code></li>
+</ul>
+</li>
+</ol>
 <p><strong>Python Bin Calculations</strong></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># For quintile bins by year</span>
 <span class="n">df</span><span class="p">[</span><span class="s1">&#39;roa_quintile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;fyear&#39;</span><span class="p">)[</span><span class="s1">&#39;roa&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
@@ -815,32 +857,31 @@ To cumulate returns over multiple periods, use the product of (1 + ret), then su
 Writing out the algebra will show you why, because the 1 + ret = P[@t] / P[@t-1], and multiplying that by the next period P[@t-1] / P[@t-2] results in P[@t] / P[@t-2]).</p>
 <p>Often the software used will have functionality for summing a column of values, but not necessarily taking the product.
 For this reason, we sometimes calculate cumulative returns using a log trick, because multiplication and division become addition and subtraction with logs.
-For example, in Tableau, you can calculate cumulative returns with the equation: <code class="fixed-width">(EXP(SUM(LN(1 + [Ret]))) - 1)</code> (a similar trick can be used in SQL).
+For example, in SQL, you can calculate cumulative returns with the equation: <code class="fixed-width">(EXP(SUM(LN(1 + ret))) - 1)</code>.
 In Excel, I have found it helpful to create a new column that is just <code class="fixed-width">[@ret] + 1</code>, and then use the formula <code class="fixed-width">=PRODUCT([@ret_plus1]) - 1</code>.
 A simiple python solution would be <code class="fixed-width">df['return_yearly'] = df.groupby(['ticker', 'fyear'])['ret'].agg(lambda x: (1+x).prod()-1)</code></p>
 <h3 class="ada-h3" id="53-dataset-combination">5.3. Dataset Combination</h3>
 <p>You may find it convenient to do the merge in SQL, and only deal with one, cleanly combined dataset.
 You could also just get the raw datasets from the database, save those as, e.g. CSV files, then use your software to to the merges yourself.
-Or you could download and merge in Python, create a clean dataset, and do the analysis in Tableau.
+Or you could download and merge in Python, create a clean dataset, and do the analysis in Excel.
 In general, because each modality we use has its strengths and weaknesses, I suggest trying to use the "right tool for the job" in each separate step of the project.</p>
 <p><em>Data merging example for 1 day of returns</em>:
 <div class="highlight"><pre><span></span><code><span class="c1">-- Merge fundamentals with returns on earnings announcement date</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">acct</span>
-<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ret</span>
-<span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">ticker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="n">ticker</span>
-<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">acct</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
-<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="nb">date</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">compustat</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp</span>
+<span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">crsp</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">crsp</span><span class="p">.</span><span class="nb">date</span>
 <span class="p">;</span>
 </code></pre></div></p>
 <p><em>Data merging example for next year of returns</em>:
 <div class="highlight"><pre><span></span><code><span class="c1">-- Merge fundamentals with returns on earnings announcement date</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">acct</span>
-<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ret</span>
-<span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">ticker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="n">ticker</span>
-<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">acct</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">shrcls</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
-<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">ret</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">acct</span><span class="p">.</span><span class="n">earn_annc_date_next</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">DAY</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">compustat</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp</span>
+<span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">crsp</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">crsp</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span>
+<span class="w">   </span><span class="k">AND</span><span class="w"> </span><span class="n">crsp</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">earn_annc_date_next</span><span class="w"> </span><span class="c1">-- (Or use date(compustat.earn_annc_date_next, &#39;-1 day&#39;) )</span>
 <span class="p">;</span>
 </code></pre></div></p>
 <p>Getting a fixed number of return days after the earnings announcement date is a bit trickier, because stock doesn't trade on weekends so you can't just take date + 3 and assume it will be 3 days of returns. 
@@ -848,29 +889,27 @@ This is one of those examples of real world data being tricky to deal with.
 The solution to this is usually to just number the trading days sequentially, so you can keep any number of them and not worry about weekends.</p>
 <p>To demonstrate how you could use LLMs to write SQL code for you, I prompted Gemini with the following prompt, and got the SQL code below as an output:</p>
 <blockquote style="background-color: #f9f9f9; border-left: 10px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px;">
-please suggest an sql merge of annual data (table name 'compustat_annual AS f') onto stock returns (table name 'crsp_daily AS r', date variable 'date'), keeping the first three days of returns starting on 'f.earn_annc_date'. The merge needs to handle the fact that stock is only traded on the weekdays, so it can't just be 3 calendar days after f.earn_annc_date. The pertinent variables are f.ticker, f.fyear, f.earn_annc_date, and r.ticker, r.date, r.ret.
+please suggest a *SQLite* sql merge of annual data (table name `compustat`) onto stock returns (table name `crsp`, date variable `date`), keeping the first three days of returns starting on `compustat.earn_annc_date`. The merge needs to handle the fact that stock is only traded on the weekdays, so it can't just be 3 calendar days after `compustat.earn_annc_date`. The pertinent variables are `compustat.permno`, `compustat.fyear`, `compustat.earn_annc_date`, and `crsp.permno`, `crsp.date`, `crsp.ret`.
 </blockquote>
 
 <div class="highlight"><pre><span></span><code><span class="k">WITH</span><span class="w"> </span><span class="n">RankedReturns</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="c1">-- Step 1: Join returns to financials and rank the trading days</span>
 <span class="w">    </span><span class="k">SELECT</span>
-<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">ticker</span><span class="p">,</span>
-<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">fyear</span><span class="p">,</span>
-<span class="w">        </span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="p">,</span>
-<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">trading_date</span><span class="p">,</span>
-<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">ret</span><span class="p">,</span>
-<span class="w">        </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">ticker</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="k">ASC</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">trading_day_rank</span>
-<span class="w">    </span><span class="k">FROM</span>
-<span class="w">        </span><span class="n">compustat_annual</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="c1">-- your annual data table</span>
-<span class="w">    </span><span class="k">JOIN</span>
-<span class="w">        </span><span class="n">crsp_daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="c1">-- your stock returns table</span>
-<span class="w">            </span><span class="k">ON</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">ticker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">ticker</span>
-<span class="w">            </span><span class="k">AND</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="w"> </span><span class="c1">-- Join returns on or after the report date</span>
-<span class="w">            </span><span class="k">AND</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">DATE_ADD</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">earn_annc_date</span><span class="p">,</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;10 DAY&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1">-- Limit to a reasonable window to avoid excessive data</span>
+<span class="w">        </span><span class="n">compustat</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span>
+<span class="w">        </span><span class="n">fyear</span><span class="p">,</span>
+<span class="w">        </span><span class="n">earn_annc_date</span><span class="p">,</span>
+<span class="w">        </span><span class="nb">date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">trading_date</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ret</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="n">earn_annc_date</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">ASC</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">trading_day_rank</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">compustat</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">crsp</span>
+<span class="w">        </span><span class="k">ON</span><span class="w"> </span><span class="n">compustat</span><span class="p">.</span><span class="n">permno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">crsp</span><span class="p">.</span><span class="n">permno</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">earn_annc_date</span><span class="w"> </span><span class="c1">-- Join returns on or after the report date</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nb">date</span><span class="p">(</span><span class="n">earn_annc_date</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;+10 day&#39;</span><span class="p">)</span><span class="w"> </span><span class="c1">-- Limit to a reasonable window to avoid excessive data</span>
 <span class="p">)</span>
 <span class="c1">-- Step 2: Select only the first three ranked trading days</span>
 <span class="k">SELECT</span>
-<span class="w">    </span><span class="n">ticker</span><span class="p">,</span>
+<span class="w">    </span><span class="n">permno</span><span class="p">,</span>
 <span class="w">    </span><span class="n">fyear</span><span class="p">,</span>
 <span class="w">    </span><span class="n">earn_annc_date</span><span class="p">,</span>
 <span class="w">    </span><span class="n">trading_date</span><span class="p">,</span>
@@ -881,7 +920,7 @@ please suggest an sql merge of annual data (table name 'compustat_annual AS f') 
 <span class="k">WHERE</span>
 <span class="w">    </span><span class="n">trading_day_rank</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span>
-<span class="w">    </span><span class="n">ticker</span><span class="p">,</span>
+<span class="w">    </span><span class="n">permno</span><span class="p">,</span>
 <span class="w">    </span><span class="n">fyear</span><span class="p">,</span>
 <span class="w">    </span><span class="n">trading_day_rank</span>
 <span class="p">;</span>

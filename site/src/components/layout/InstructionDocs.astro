@@ -1,0 +1,112 @@
+---
+// Renders a rendered-markdown instruction sheet with the document typography
+// for content that comes out of remark (labs_hw markdown → plain HTML, no
+// component blocks).
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+
+interface Props {
+  Doc: AstroComponentFactory;
+}
+
+const { Doc } = Astro.props;
+---
+
+<article class="doc">
+  <Doc />
+</article>
+
+<style>
+  /* Document typography for the rendered markdown. */
+  .doc {
+    color: var(--ink);
+    line-height: 1.65;
+  }
+
+  .doc :global(h1) {
+    font-size: var(--fs-2xl);
+    line-height: var(--lh-tight);
+    margin: 0 0 var(--space-4);
+  }
+
+  .doc :global(h2) {
+    font-size: var(--fs-xl);
+    margin: var(--space-8) 0 var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .doc :global(h3) {
+    font-size: var(--fs-lg);
+    margin: var(--space-6) 0 var(--space-2);
+  }
+
+  .doc :global(p) {
+    margin: 0 0 var(--space-3);
+  }
+
+  .doc :global(ul),
+  .doc :global(ol) {
+    margin: 0 0 var(--space-3);
+    padding-inline-start: var(--space-5);
+  }
+
+  .doc :global(li) {
+    margin-bottom: var(--space-1);
+  }
+
+  .doc :global(a) {
+    color: var(--brand);
+  }
+
+  .doc :global(code) {
+    font-size: 0.9em;
+    background: var(--surface-muted);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.35em;
+  }
+
+  .doc :global(pre) {
+    background: var(--surface-muted);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    overflow-x: auto;
+    margin: 0 0 var(--space-4);
+  }
+
+  .doc :global(pre code) {
+    background: transparent;
+    border: 0;
+    padding: 0;
+  }
+
+  .doc :global(img) {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    margin: var(--space-2) 0 var(--space-4);
+  }
+
+  .doc :global(table) {
+    border-collapse: collapse;
+    margin: 0 0 var(--space-4);
+    font-size: var(--fs-sm);
+  }
+
+  .doc :global(th),
+  .doc :global(td) {
+    border: 1px solid var(--hairline);
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+  }
+
+  .doc :global(blockquote) {
+    margin: 0 0 var(--space-4);
+    padding: var(--space-2) var(--space-4);
+    border-left: 3px solid var(--brand);
+    background: var(--brand-tint);
+    color: var(--ink-muted);
+  }
+</style>

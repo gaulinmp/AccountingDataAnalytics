@@ -4,6 +4,9 @@ dist/
 .astro/
 # `npm run screenshot` output — throwaway eyeball shots
 .screenshots/
+# Playwright's own run bookkeeping (test-results/) and HTML report output
+test-results/
+playwright-report/
 
 # dependencies
 node_modules/

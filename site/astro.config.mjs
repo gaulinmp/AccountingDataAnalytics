@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import mdx from '@astrojs/mdx';
+import { unified } from '@astrojs/markdown-remark';
 
 import remarkScrubPymd from './src/lib/remark-scrub-pymd.mjs';
 
@@ -20,5 +21,5 @@ export default defineConfig({
   site: SITE,
   base: BASE,
   integrations: [mdx()],
-  markdown: { remarkPlugins: [remarkScrubPymd] },
+  markdown: { processor: unified({ remarkPlugins: [remarkScrubPymd] }) },
 });

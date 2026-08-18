@@ -1,4 +1,4 @@
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 
 // Single source of truth for the Quiz shape. Used as:
 //  - the `quizzes` collection schema (build-time validation of standalone quizzes)

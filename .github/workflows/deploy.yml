@@ -25,8 +25,8 @@ jobs:
       run:
         working-directory: ./site
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -47,11 +47,11 @@ jobs:
       PUBLIC_BASE: ${{ vars.PUBLIC_BASE || format('/{0}', github.event.repository.name) }}
       PUBLIC_OT_TOKEN: ${{ secrets.PUBLIC_OT_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Write CNAME for a custom domain (only if PUBLIC_CNAME is set)
         if: ${{ vars.PUBLIC_CNAME != '' }}
         run: echo "${{ vars.PUBLIC_CNAME }}" > site/public/CNAME
-      - uses: withastro/action@v3
+      - uses: withastro/action@v6
         with:
           path: ./site
           node-version: 22
@@ -64,4 +64,4 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

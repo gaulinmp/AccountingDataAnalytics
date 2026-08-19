@@ -9,7 +9,7 @@ One repo, three content systems, all markdown-first and agent-editable:
 | What | Where | Skill | Validate with |
 |------|-------|-------|---------------|
 | Lecture decks (website slides) | `site/content/decks/`, `site/content/weeks/` | `deck-author` | `cd site && npm run build` |
-| Labs, homework, projects | `labs_hw/` | `lab-author` | `uv run python code/utils/convert_md.py` (regenerates HTML) |
+| Labs, homework, projects | `labs_hw/` | `lab-author` | `uv run python code/utils/convert_md.py <file.md>` (regenerates that file's HTML) |
 | Site code: components, widgets, layout, styling | `site/src/` | `site-dev` | `cd site && npm run --silent gate` |
 
 Source PPTX decks live in `slides/` and convert to site decks via `pptx-to-deck`
@@ -38,6 +38,12 @@ Source PPTX decks live in `slides/` and convert to site decks via `pptx-to-deck`
   `.md` so the rendered handout is versioned with the text it came from —
   regenerate and commit both together. Solution HTML (`*solutions*.html`) is
   ignored, to keep answer keys out of the public repo.
+  **Pass the one `.md` you edited** — `convert_md.py path/to/Lab-N_Instructions.md`
+  converts just that file. With no argument it becomes a *watcher* over all of
+  `labs_hw/` that never exits, and will happily generate HTML for scratch files
+  (`notes.md`) and the MAcc variants the site deliberately excludes.
+  Regenerating a long-untouched lab may also pull in accumulated `themes/*.css`
+  drift — check `git diff` covers only what you meant to change.
 - Python runs through **uv**: `uv run python …`, `uv run jupyter notebook`.
 
 ## Skills index (`.claude/skills/`)

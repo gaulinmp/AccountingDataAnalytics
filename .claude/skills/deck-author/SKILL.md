@@ -28,8 +28,9 @@ The content hierarchy:
 ```
 course.yaml                          (the course singleton — don't edit casually)
 └── content/weeks/week-NN.yaml       (week metadata: title, summary, objectives)
-    └── content/decks/week-NN/slides.mdx     (the week's single monolithic deck)
-        └── <Slide> … <Quiz> …       (slides and their self-checks live in the deck body)
+    ├── content/decks/week-NN/slides.mdx     (the week's single monolithic deck)
+    │   └── <Slide> … <Quiz> …       (slides and their self-checks live in the deck body)
+    └── content/activities/week-NN.yaml      (optional in-class exercise → /week-NN/activity/)
 ```
 
 **One deck per week**, always named `slides.mdx` (served at `/week-NN/slides/`). Former
@@ -144,6 +145,29 @@ import { Slide, Bullets, Quiz } from '@components/blocks';
 - **Full prop types** live in [site/README.md](../../../site/README.md) and the component
   sources under [site/src/components/blocks/](../../../site/src/components/blocks/) — consult
   them for anything beyond this cheatsheet.
+
+## Week activities (`content/activities/week-NN.yaml`)
+
+Separate from decks: the in-class exercise served at `/week-NN/activity/`, rendered
+by `<DataInspector>`. **You never write the component** — the activity is pure data,
+one optional YAML file per week, and a week without one keeps its "coming soon"
+placeholder.
+
+The shape is always *here is a small table, flag what deserves a question, then walk
+the findings*, which suits any week with a dataset worth reading skeptically (a JE
+extract, a dirty ETL pull, a bad join result). Fields, and the reveal contract, are
+documented in [site/content/README.md](../../../site/content/README.md) — read it
+before authoring one.
+
+Two rules worth repeating here, because they're pedagogy and not schema:
+
+- **Always include at least one `kind: clean` reveal** — a check that comes back
+  fine. Without it the activity teaches that skepticism means "everything is fraud".
+- **A reveal's `columns` (rather than `rows`) is for problems that live in the
+  column** — a text-typed amount, an ambiguous date format. Students can't flag
+  those by clicking a record, and saying so is part of the lesson.
+
+`week-01.yaml` is the reference implementation; match its density and its voice.
 
 ## Quiz rules
 

@@ -15,6 +15,9 @@ export { default as CodeBlock } from './CodeBlock.astro';
 export { default as Demo } from './Demo.astro';
 export { default as Cta } from './Cta.astro';
 export { default as Quiz } from './Quiz.astro';
+// NB: DataInspector.astro is deliberately *not* exported here. It belongs to the
+// activity page (which mounts its island), not to the deck engine — a decoration
+// dropped into a slide would render an inert table.
 export { default as CoverMeta } from './CoverMeta.astro';
 
 // Layout wrappers

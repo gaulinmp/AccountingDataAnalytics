@@ -1,0 +1,178 @@
+---
+// "Flag what deserves a question, then walk the findings" — the in-class
+// activity block for /week-NN/activity/.
+//
+// Static render only: the table, the prompt and the source note are readable and
+// complete with no JS. Row flagging, the staged reveal and the scorecard are
+// added in place by the DataInspectorCard island, which reads the reveals out of
+// the hidden <template>s below. Nothing is spoiled pre-JS (cf. Quiz.astro).
+import type { Activity } from '@lib/activity';
+import { scoredFindingRows } from '@lib/activity';
+import Inline from './Inline.astro';
+
+interface Props extends Activity {
+  /** Stable id — keys localStorage progress. Convention: `wN-slug`. */
+  id: string;
+}
+
+const { id, prompt, source, idKey, columns, rows, reveals, closer } = Astro.props;
+const findingRows = scoredFindingRows(reveals);
+---
+
+<section
+  class="inspector"
+  data-inspector
+  data-inspector-id={id}
+  data-id-key={idKey}
+  data-finding-rows={findingRows.join(',')}
+>
+  <p class="ins-prompt"><Inline text={prompt} /></p>
+
+  <div class="ins-tablewrap">
+    <table class="ins-table">
+      <thead>
+        <tr>
+          {/* Flag column header: a dot, not a word — the island explains itself. */}
+          <th scope="col" class="ins-flagcol"><span class="sr-only">Flagged</span></th>
+          {
+            columns.map((c) => (
+              <th scope="col" data-col={c.key} class:list={[{ 'is-right': c.align === 'right' }]}>
+                {c.label}
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((row) => (
+            <tr data-row={String(row[idKey])}>
+              <td class="ins-flagcol" />
+              {columns.map((c) => (
+                <td
+                  data-col={c.key}
+                  class:list={[{ 'is-right': c.align === 'right', 'is-mono': c.mono }]}
+                >
+                  {row[c.key]}
+                </td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {source && (
+    <p class="ins-source"><Inline text={source} /></p>
+  )}
+
+  {/* Reveal payloads — in the DOM for the island, rendered by it, never before. */}
+  {
+    reveals.map((r) => (
+      <template
+        data-reveal
+        data-reveal-id={r.id}
+        data-kind={r.kind}
+        data-rows={(r.rows ?? []).join(',')}
+        data-columns={(r.columns ?? []).join(',')}
+      >
+        <h3 class="rv-title">{r.title}</h3>
+        <p class="rv-body">
+          <Inline text={r.body} />
+        </p>
+      </template>
+    ))
+  }
+
+  {closer && (
+    <template data-closer>
+      <p><Inline text={closer} /></p>
+    </template>
+  )}
+</section>
+
+<style>
+  .inspector {
+    margin: var(--space-5) 0 0;
+  }
+
+  .ins-prompt {
+    margin: 0 0 var(--space-5);
+    font-size: var(--fs-lg);
+    line-height: var(--lh-base);
+    color: var(--ink);
+  }
+
+  .ins-tablewrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--brand);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-1);
+  }
+
+  .ins-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: var(--fs-sm);
+  }
+
+  .ins-table th,
+  .ins-table td {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--hairline);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .ins-table thead th {
+    background: var(--surface-muted);
+    font-weight: 700;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+    /* Thirty rows is a scroll on a laptop; keep the header in view. */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .ins-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .is-right {
+    text-align: right;
+  }
+
+  .is-mono {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+  }
+
+  /* The flag gutter. Empty and near-zero-width until the island fills it. */
+  .ins-flagcol {
+    width: 0;
+    padding-left: var(--space-2) !important;
+    padding-right: 0 !important;
+  }
+
+  .ins-source {
+    margin: var(--space-3) 0 0;
+    font-size: var(--fs-xs);
+    color: var(--ink-muted);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

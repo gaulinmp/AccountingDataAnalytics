@@ -36,6 +36,12 @@
   --ink: var(--gray-900); /* body text — ~16:1 on white */
   --ink-muted: var(--gray-700);
 
+  /* Status — a check that passes, an answer that's right. (Matches the values
+   * QuizCard has always used for its correct state.) */
+  --ok: #2f9e58;
+  --ok-ink: #11633a; /* text on a light --ok-tint wash — ~6.4:1 */
+  --ok-tint: rgba(47, 158, 88, 0.08);
+
   /* Slide stage — the dark chrome that frames a deck in present/read mode. */
   --stage-bg: #191b20;
   --stage-surface: #22242b;

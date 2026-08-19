@@ -1,0 +1,456 @@
+---
+// Enhances every static <DataInspector> ([data-inspector]) in place: row
+// flagging, a staged walk through the reveals, and a scorecard comparing what
+// the student flagged against what the findings cover. Reads every reveal from
+// the <template>s the block emitted — no network, no content import.
+//
+// Flagging locks once the walk starts, so the scorecard reflects what the
+// student actually believed before seeing the answers.
+---
+
+<script>
+  import { NS } from '../../lib/deck';
+  import { scoreInspection, inspectionSummary } from '../../lib/activity-score';
+
+  interface Reveal {
+    id: string;
+    kind: 'finding' | 'clean';
+    rows: number[];
+    columns: string[];
+    node: DocumentFragment;
+  }
+
+  interface Saved {
+    flagged: number[];
+    /** -1 = still flagging; 0..n-1 = on a reveal; n = scorecard. */
+    step: number;
+  }
+
+  const storageKey = (id: string) => `${NS}:activity:${id}`;
+
+  const nums = (s: string | undefined): number[] =>
+    (s ?? '')
+      .split(',')
+      .filter(Boolean)
+      .map(Number);
+
+  const strs = (s: string | undefined): string[] => (s ?? '').split(',').filter(Boolean);
+
+  document.querySelectorAll<HTMLElement>('[data-inspector]').forEach((root) => {
+    if (root.dataset.enhanced) return;
+    root.dataset.enhanced = 'true';
+
+    const id = root.dataset.inspectorId ?? '';
+    const findingRows = nums(root.dataset.findingRows);
+    const table = root.querySelector<HTMLTableElement>('.ins-table');
+    const wrap = root.querySelector<HTMLElement>('.ins-tablewrap');
+    if (!table || !wrap) return;
+
+    const bodyRows = Array.from(table.querySelectorAll<HTMLTableRowElement>('tbody tr[data-row]'));
+    const reveals: Reveal[] = Array.from(
+      root.querySelectorAll<HTMLTemplateElement>('template[data-reveal]')
+    ).map((t) => ({
+      id: t.dataset.revealId ?? '',
+      kind: t.dataset.kind === 'clean' ? 'clean' : 'finding',
+      rows: nums(t.dataset.rows),
+      columns: strs(t.dataset.columns),
+      node: t.content,
+    }));
+    const closerTpl = root.querySelector<HTMLTemplateElement>('template[data-closer]');
+    if (bodyRows.length === 0 || reveals.length === 0) return;
+
+    const flagged = new Set<number>();
+    let step = -1;
+
+    // ---- persistence -------------------------------------------------------
+
+    function save() {
+      try {
+        const data: Saved = { flagged: [...flagged], step };
+        localStorage.setItem(storageKey(id), JSON.stringify(data));
+      } catch {
+        /* storage may be unavailable (private mode) — degrade silently */
+      }
+    }
+
+    function restore(): Saved | null {
+      try {
+        const raw = localStorage.getItem(storageKey(id));
+        if (!raw) return null;
+        const parsed = JSON.parse(raw) as Partial<Saved>;
+        if (!Array.isArray(parsed.flagged)) return null;
+        return { flagged: parsed.flagged.map(Number), step: Number(parsed.step ?? -1) };
+      } catch {
+        return null;
+      }
+    }
+
+    // ---- flag gutter -------------------------------------------------------
+
+    const boxes = new Map<number, HTMLInputElement>();
+
+    bodyRows.forEach((tr) => {
+      const n = Number(tr.dataset.row);
+      const cell = tr.querySelector<HTMLTableCellElement>('.ins-flagcol');
+      if (!cell) return;
+
+      const box = document.createElement('input');
+      box.type = 'checkbox';
+      box.className = 'ins-box';
+      box.setAttribute('aria-label', `Flag row ${n}`);
+      cell.appendChild(box);
+      boxes.set(n, box);
+
+      box.addEventListener('change', () => setFlag(n, box.checked));
+      // The whole row is the target — the checkbox is the affordance, not the
+      // hit area. Ignore clicks that already went through the box itself.
+      tr.addEventListener('click', (e) => {
+        if (e.target === box) return;
+        if (step >= 0) return;
+        setFlag(n, !flagged.has(n));
+      });
+    });
+
+    function setFlag(n: number, on: boolean) {
+      if (step >= 0) return; // locked once the walk begins
+      if (on) flagged.add(n);
+      else flagged.delete(n);
+      paintFlags();
+      syncCount();
+      save();
+    }
+
+    function paintFlags() {
+      bodyRows.forEach((tr) => {
+        const n = Number(tr.dataset.row);
+        const on = flagged.has(n);
+        tr.classList.toggle('is-flagged', on);
+        const box = boxes.get(n);
+        if (box) box.checked = on;
+      });
+      root.classList.toggle('is-locked', step >= 0);
+    }
+
+    // ---- toolbar, then the reveal panel, both below the table --------------
+    // Order matters: the panel opens directly under the button that opened it,
+    // so revealing never jumps the reader away from what they just clicked.
+
+    const panel = document.createElement('div');
+    panel.className = 'ins-panel';
+    panel.setAttribute('role', 'status');
+    panel.hidden = true;
+
+    const bar = document.createElement('div');
+    bar.className = 'ins-bar';
+    const count = document.createElement('p');
+    count.className = 'ins-count';
+    const actions = document.createElement('div');
+    actions.className = 'ins-actions';
+    const primary = document.createElement('button');
+    primary.type = 'button';
+    primary.className = 'ins-btn ins-btn--primary';
+    const reset = document.createElement('button');
+    reset.type = 'button';
+    reset.className = 'ins-btn';
+    reset.textContent = 'Start over';
+    actions.append(primary, reset);
+    bar.append(count, actions);
+    root.append(bar, panel); // below the source note, panel under the button
+
+    primary.addEventListener('click', () => go(step + 1));
+    reset.addEventListener('click', () => {
+      flagged.clear();
+      go(-1);
+    });
+
+    /** The toolbar line while still flagging; the reveal/score views own it after that. */
+    function syncCount() {
+      if (step >= 0) return;
+      count.textContent = flagged.size
+        ? `${flagged.size} row${flagged.size === 1 ? '' : 's'} flagged. Reveal when the room is ready.`
+        : 'Click any row that raises a question. Then reveal.';
+    }
+
+    function highlight(r: Reveal | null) {
+      bodyRows.forEach((tr) =>
+        tr.classList.toggle('is-hit', !!r && r.rows.includes(Number(tr.dataset.row)))
+      );
+      table!.querySelectorAll<HTMLElement>('[data-col]').forEach((cell) => {
+        cell.classList.toggle('is-colhit', !!r && r.columns.includes(cell.dataset.col ?? ''));
+      });
+      table!.classList.toggle('is-clean-hit', r?.kind === 'clean');
+    }
+
+    function renderReveal(i: number) {
+      const r = reveals[i];
+      panel.replaceChildren();
+      panel.hidden = false;
+      panel.dataset.kind = r.kind;
+
+      const kicker = document.createElement('p');
+      kicker.className = 'ins-kicker';
+      kicker.textContent =
+        r.kind === 'clean' ? `Clean check · ${i + 1} of ${reveals.length}` : `Finding ${i + 1} of ${reveals.length}`;
+      panel.appendChild(kicker);
+      panel.appendChild(r.node.cloneNode(true));
+
+      // Name the highlighted rows so they're findable in a 30-row scroll.
+      if (r.rows.length) {
+        const where = document.createElement('p');
+        where.className = 'ins-where';
+        where.textContent = `Highlighted in the table above: ${r.rows.join(', ')}`;
+        panel.appendChild(where);
+      }
+
+      highlight(r);
+      primary.textContent = i === reveals.length - 1 ? 'See how you did' : 'Next finding';
+      count.textContent =
+        `Flagging is locked — you flagged ${flagged.size} row${flagged.size === 1 ? '' : 's'}.`;
+    }
+
+    function renderScore() {
+      const score = scoreInspection([...flagged], findingRows);
+      panel.replaceChildren();
+      panel.hidden = false;
+      panel.dataset.kind = 'score';
+
+      const kicker = document.createElement('p');
+      kicker.className = 'ins-kicker';
+      kicker.textContent = 'How you did';
+
+      const summary = document.createElement('p');
+      summary.className = 'ins-summary';
+      summary.textContent = inspectionSummary(score);
+
+      panel.append(kicker, summary);
+
+      if (score.misses.length) {
+        const missed = document.createElement('p');
+        missed.className = 'ins-where';
+        missed.textContent = `Rows you didn't flag: ${score.misses.join(', ')}`;
+        panel.appendChild(missed);
+      }
+      if (score.extras.length) {
+        const extra = document.createElement('p');
+        extra.className = 'ins-where';
+        extra.textContent =
+          `Rows you flagged that no finding covers: ${score.extras.join(', ')} — not wrong, just unexplained. ` +
+          `Asking is free; the memo is where you decide what survives.`;
+        panel.appendChild(extra);
+      }
+      if (closerTpl) panel.appendChild(closerTpl.content.cloneNode(true));
+
+      highlight(null);
+      bodyRows.forEach((tr) => {
+        const n = Number(tr.dataset.row);
+        tr.classList.toggle('is-hit', findingRows.includes(n));
+      });
+      primary.textContent = 'Review the findings';
+      count.textContent = `${score.hits.length} of ${score.total} finding rows flagged.`;
+    }
+
+    function go(next: number) {
+      // Past the scorecard, "primary" loops back to the first reveal.
+      step = next > reveals.length ? 0 : next;
+      if (step < 0) {
+        panel.hidden = true;
+        panel.replaceChildren();
+        highlight(null);
+        primary.textContent = 'Reveal the findings';
+      } else if (step < reveals.length) {
+        renderReveal(step);
+      } else {
+        renderScore();
+      }
+      paintFlags();
+      syncCount();
+      save();
+      if (step >= 0) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    // ---- boot --------------------------------------------------------------
+
+    const saved = restore();
+    if (saved) saved.flagged.forEach((n) => boxes.has(n) && flagged.add(n));
+    // Restore position without scrolling the page on load.
+    step = saved && saved.step >= 0 ? Math.min(saved.step, reveals.length) : -1;
+    if (step < 0) {
+      panel.hidden = true;
+      primary.textContent = 'Reveal the findings';
+      syncCount();
+    } else if (step < reveals.length) {
+      renderReveal(step);
+    } else {
+      renderScore();
+    }
+    paintFlags();
+  });
+</script>
+
+<style is:global>
+  /* Flag gutter — only real once the island has added the checkboxes. */
+  .inspector .ins-flagcol {
+    width: 2.25rem;
+    padding-right: var(--space-1) !important;
+  }
+
+  .ins-box {
+    accent-color: var(--brand);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  .inspector.is-locked .ins-box {
+    pointer-events: none;
+    opacity: 0.45;
+  }
+
+  .inspector:not(.is-locked) .ins-table tbody tr {
+    cursor: pointer;
+  }
+
+  .inspector:not(.is-locked) .ins-table tbody tr:hover {
+    background: var(--surface-muted);
+  }
+
+  /* A row the student flagged: crimson edge, quiet fill. */
+  .ins-table tbody tr.is-flagged {
+    background: var(--brand-tint);
+    box-shadow: inset 3px 0 0 var(--brand);
+  }
+
+  /* A row the current reveal points at. */
+  .ins-table tbody tr.is-hit td {
+    background: rgba(204, 0, 0, 0.1);
+    font-weight: 600;
+  }
+
+  .ins-table.is-clean-hit tbody tr.is-hit td {
+    background: var(--ok-tint);
+  }
+
+  /* A column the current reveal points at. */
+  .ins-table [data-col].is-colhit {
+    background: rgba(204, 0, 0, 0.1);
+    font-weight: 600;
+  }
+
+  .ins-table.is-clean-hit [data-col].is-colhit {
+    background: var(--ok-tint);
+  }
+
+  /* Toolbar under the table. */
+  .ins-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .ins-count {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+
+  .ins-actions {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .ins-btn {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--transition), background-color var(--transition);
+  }
+
+  .ins-btn:hover {
+    border-color: var(--brand);
+    background: var(--surface-muted);
+  }
+
+  .ins-btn--primary {
+    border-color: var(--brand);
+    background: var(--brand);
+    color: var(--brand-contrast);
+  }
+
+  .ins-btn--primary:hover {
+    background: var(--brand-hover);
+    border-color: var(--brand-hover);
+  }
+
+  /* Reveal / scorecard panel, directly under the toolbar. */
+  .ins-panel {
+    margin: var(--space-4) 0 0;
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--brand);
+    border-radius: var(--radius-md);
+    background: var(--surface-muted);
+  }
+
+  .ins-panel[data-kind='clean'] {
+    border-left-color: var(--ok);
+  }
+
+  .ins-panel[hidden] {
+    display: none;
+  }
+
+  .ins-kicker {
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--brand);
+  }
+
+  .ins-panel[data-kind='clean'] .ins-kicker {
+    color: var(--ok-ink);
+  }
+
+  .ins-panel .rv-title {
+    margin: 0 0 var(--space-3);
+    font-size: var(--fs-xl);
+    line-height: var(--lh-tight);
+    color: var(--ink);
+  }
+
+  .ins-panel .rv-body,
+  .ins-summary {
+    margin: 0;
+    line-height: var(--lh-base);
+    color: var(--ink);
+  }
+
+  .ins-summary {
+    font-size: var(--fs-lg);
+  }
+
+  .ins-panel code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    padding: 0.1em 0.3em;
+    border-radius: var(--radius-sm);
+    background: var(--gray-200);
+  }
+
+  .ins-where {
+    margin: var(--space-3) 0 0;
+    font-size: var(--fs-sm);
+    color: var(--ink-muted);
+  }
+</style>

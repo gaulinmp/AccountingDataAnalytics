@@ -17,8 +17,11 @@ The default location for the virtual environment is `.venv/`.
 # Run Jupyter notebook
 uv run jupyter notebook
 
-# Convert markdown files to HTML with inline images
-uv run python labs_hw/convert_md.py
+# Convert one lab's markdown to HTML with inline images (one-off)
+uv run python code/utils/convert_md.py labs_hw/week1_opening-data/Lab-1_Instructions.md
+
+# Watch labs_hw/ and reconvert on every change (Ctrl-C to stop)
+uv run python code/utils/convert_md.py
 ```
 
 ## Repository Structure

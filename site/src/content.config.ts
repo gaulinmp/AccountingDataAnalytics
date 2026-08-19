@@ -2,6 +2,7 @@ import { defineCollection, reference } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob, file } from 'astro/loaders';
 import { quizSchema } from '@lib/quiz';
+import { activityBase, checkActivity } from '@lib/activity';
 import { icons } from '@lib/icons';
 
 // All content lives in `site/content/` (a sibling of `src/`), so loader
@@ -83,4 +84,12 @@ const quizzes = defineCollection({
   schema: quizSchema,
 });
 
-export const collections = { course, weeks, decks, labs, quizzes };
+// The in-class interactive exercise for a week, rendered by <DataInspector> on
+// /week-NN/activity/. One optional file per week — a week with no activity file
+// keeps the ComingSoon placeholder.
+const activities = defineCollection({
+  loader: glob({ pattern: '**/*.yaml', base: 'content/activities' }),
+  schema: activityBase.extend({ week: reference('weeks') }).superRefine(checkActivity),
+});
+
+export const collections = { course, weeks, decks, labs, quizzes, activities };

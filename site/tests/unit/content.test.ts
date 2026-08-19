@@ -20,7 +20,10 @@ const idsIn = (dir: string) =>
 
 /** Extract + parse a deck's MDX frontmatter block. */
 const deckFrontmatter = (rel: string) => {
-  const src = readFileSync(root(rel), 'utf8');
+  // Normalize EOLs first: the repo stores LF (.gitattributes), but a working
+  // copy on a Dropbox/Windows path can land CRLF on disk and the frontmatter
+  // fence would stop matching.
+  const src = readFileSync(root(rel), 'utf8').replace(/\r\n/g, '\n');
   const m = src.match(/^---\n([\s\S]*?)\n---/);
   if (!m) throw new Error(`no frontmatter in ${rel}`);
   return parse(m[1]) as { week: string; title: string };
@@ -44,6 +47,31 @@ describe('content graph', () => {
       const quiz = loadYaml<{ opts: string[]; correct: number }>(`quizzes/${id}.yaml`);
       expect(quiz.correct).toBeGreaterThanOrEqual(0);
       expect(quiz.correct).toBeLessThan(quiz.opts.length);
+    }
+  });
+
+  it('every activity resolves its week and targets rows/columns that exist', () => {
+    for (const id of idsIn('activities')) {
+      const a = loadYaml<{
+        week: string;
+        idKey: string;
+        columns: { key: string }[];
+        rows: Record<string, string | number>[];
+        reveals: { rows?: number[]; columns?: string[] }[];
+      }>(`activities/${id}.yaml`);
+
+      expect(weekIds).toContain(a.week);
+
+      const colKeys = a.columns.map((c) => c.key);
+      const rowIds = a.rows.map((r) => r[a.idKey]);
+      expect(colKeys).toContain(a.idKey);
+      expect(new Set(rowIds).size).toBe(rowIds.length); // ids are unique
+
+      for (const r of a.reveals) {
+        expect((r.rows?.length ?? 0) + (r.columns?.length ?? 0)).toBeGreaterThan(0);
+        for (const n of r.rows ?? []) expect(rowIds).toContain(n);
+        for (const c of r.columns ?? []) expect(colKeys).toContain(c);
+      }
     }
   });
 });

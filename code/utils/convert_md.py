@@ -210,9 +210,13 @@ def md_to_html_with_inline_images(md_file):
     return output_path
 
 
-def convert_md(md_file, update_if_html_older=True, debug=False):
+def convert_md(md_file, update_if_html_older=True, debug=False, raise_on_error=False):
     """
     Convert a single markdown file to HTML if needed.
+
+    Returns the written .html path, or None if the file was skipped as
+    up-to-date (or failed while `raise_on_error` is False — the watcher must
+    survive a bad file rather than die on it).
     """
     md_file = Path(md_file)
     html_file = md_file.with_suffix(".html")
@@ -222,41 +226,97 @@ def convert_md(md_file, update_if_html_older=True, debug=False):
         pass
     elif html_file.exists() and html_file.stat().st_mtime > md_file.stat().st_mtime:
         # HTML is newer, skip
-        return
+        return None
 
-    print(f"{dt.now():%H:%M:%S} - Detected change in {md_file}.")
+    print(f"{dt.now():%H:%M:%S} - Converting {md_file}")
     try:
-        md_to_html_with_inline_images(md_file)
-        if debug:
-            print(f"Converted {md_file}")
+        output_path = md_to_html_with_inline_images(md_file)
     except Exception as e:
+        if raise_on_error:
+            raise
         print(f"Error processing {md_file}: {e}")
-        # raise # Don't crash on error
+        return None
+
+    if debug:
+        print(f"  -> {output_path}")
+    return output_path
 
 
 def convert_all_md_in_dir(root_dir, update_if_html_older=True, debug=False):
     """
-    Scan directory and convert all markdown files.
+    Scan directory and convert all markdown files. Returns the paths written.
     """
-    for md_file in Path(root_dir).rglob("*.md"):
-        convert_md(md_file, update_if_html_older=update_if_html_older, debug=debug)
+    written = []
+    for md_file in sorted(Path(root_dir).rglob("*.md")):
+        out = convert_md(md_file, update_if_html_older=update_if_html_older, debug=debug)
+        if out is not None:
+            written.append(out)
+    return written
 
 
-@click.command()
-@click.option("--root-dir", default=LAB_DIR, help="Root directory to watch for markdown files.")
-@click.option("--debug", default=False, help="Debug mode.")
-def main(root_dir, debug=False):
-    print(f"Starting at: {Path(root_dir).absolute()}")
+def watch(root_dir, debug=False, interval=5):
+    """Convert on change, forever, until interrupted."""
+    print(f"Watching {Path(root_dir).absolute()} (Ctrl-C to stop)")
+    try:
+        while True:
+            convert_all_md_in_dir(root_dir, update_if_html_older=True, debug=debug)
+            time.sleep(interval)
+    except KeyboardInterrupt:
+        print("\nStopping file watcher...")
 
-    # Convert the Markdown file to HTML with inline images
-    while True:
-        convert_all_md_in_dir(root_dir, update_if_html_older=True, debug=debug)
 
+@click.command(context_settings={"help_option_names": ["-h", "--help"]})
+@click.argument(
+    "target",
+    required=False,
+    type=click.Path(exists=True, path_type=Path),
+)
+@click.option("--watch/--once", "watch_mode", default=None,
+              help="Watch for changes, or make a single pass. Default: watch when "
+                   "TARGET is omitted or a directory, once when TARGET is a file.")
+@click.option("--force", is_flag=True, default=False,
+              help="Rebuild even when the .html is newer than its .md.")
+@click.option("--debug", is_flag=True, default=False, help="Print each file written.")
+def main(target, watch_mode, force, debug):
+    """Convert lab/homework Markdown to standalone HTML with inlined images.
+
+    \b
+    TARGET is a .md file    -> convert just that file, once
+    TARGET is a directory   -> convert every .md under it
+    TARGET omitted          -> watch labs_hw/ and convert on change
+
+    \b
+    Examples:
+      convert_md.py                                   # watch labs_hw/
+      convert_md.py labs_hw/week1_opening-data/Lab-1_Instructions.md
+      convert_md.py labs_hw/week3_visualization --once
+    """
+    # A named .md file is an explicit instruction: convert it, once, regardless
+    # of mtimes. Anything else defaults to watching, which is the old behavior.
+    single_file = target is not None and target.is_file()
+    if watch_mode is None:
+        watch_mode = not single_file
+    if single_file and watch_mode:
+        raise click.UsageError("--watch needs a directory, not a single file.")
+
+    if single_file:
+        if target.suffix.lower() != ".md":
+            raise click.UsageError(f"{target} is not a .md file.")
         try:
-            time.sleep(5)
-        except KeyboardInterrupt:
-            print("\nStopping file watcher...")
-            break
+            out = convert_md(target, update_if_html_older=False, debug=debug,
+                             raise_on_error=True)
+        except Exception as e:
+            raise click.ClickException(f"{target}: {e}") from e
+        print(f"Wrote {out}")
+        return
+
+    root_dir = target if target is not None else Path(LAB_DIR)
+    if watch_mode:
+        watch(root_dir, debug=debug)
+    else:
+        written = convert_all_md_in_dir(root_dir, update_if_html_older=not force, debug=debug)
+        print(f"Wrote {len(written)} file(s).")
+
 
 if __name__ == "__main__":
     main()

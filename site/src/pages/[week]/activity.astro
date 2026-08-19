@@ -1,19 +1,46 @@
 ---
-// In-class interactive activity: /week-NN/activity/. Placeholder until each
-// week's interactive widget lands (site-dev islands).
+// In-class interactive activity: /week-NN/activity/. Renders the week's entry
+// from the `activities` collection through <DataInspector> + its island; weeks
+// with no activity file keep the ComingSoon placeholder.
 import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import WeekShell from '@layout/WeekShell.astro';
 import ComingSoon from '@layout/ComingSoon.astro';
+import DataInspector from '@components/blocks/DataInspector.astro';
+import DataInspectorCard from '@components/islands/DataInspectorCard.astro';
 
 export const getStaticPaths = (async () => {
   const weeks = await getCollection('weeks');
-  return weeks.map((week) => ({ params: { week: week.id }, props: { week } }));
+  const activities = await getCollection('activities');
+  return weeks.map((week) => ({
+    params: { week: week.id },
+    props: { week, activity: activities.find((a) => a.data.week.id === week.id) ?? null },
+  }));
 }) satisfies GetStaticPaths;
 
-const { week } = Astro.props;
+const { week, activity } = Astro.props;
+const data = activity?.data;
 ---
 
-<WeekShell week={week} tab="activity" title="Activity" lede="An interactive, in-class exercise for this week's topic.">
-  <ComingSoon icon="puzzle" label="Activity coming soon." note="This week's interactive widget hasn't been built yet." />
+<WeekShell
+  week={week}
+  tab="activity"
+  title={data?.title ?? 'Activity'}
+  lede={data?.lede ?? "An interactive, in-class exercise for this week's topic."}
+  wide
+>
+  {
+    data ? (
+      <>
+        <DataInspector id={`w${week.data.number}-activity`} {...data} />
+        <DataInspectorCard />
+      </>
+    ) : (
+      <ComingSoon
+        icon="puzzle"
+        label="Activity coming soon."
+        note="This week's interactive widget hasn't been built yet."
+      />
+    )
+  }
 </WeekShell>

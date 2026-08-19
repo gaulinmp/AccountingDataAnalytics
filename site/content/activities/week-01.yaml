@@ -1,0 +1,133 @@
+week: week-01
+title: "Thirty Rows"
+lede: "Before you know a single function, your accounting eye already works. Prove it."
+prompt: >-
+  Below is the rent expense detail you will open in Lab 1 — all 30 rows of it.
+  Click any row you would want to ask a question about. No formulas, no tools,
+  no right answer yet. Just read it the way an accountant reads it.
+source: >-
+  The Lab 1 extract, `JEA Detail.txt`. Every row is the same account
+  (9504 Rent Expense), the same category (SG&A), and the same description
+  ("Rent"), so those three columns are hidden here — the file itself still has them.
+
+idKey: number
+columns:
+  - { key: number, label: "JE #", align: right, mono: true }
+  - { key: date, label: "Date", mono: true }
+  - { key: period, label: "Period", align: right, mono: true }
+  - { key: id, label: "Posted by" }
+  - { key: manual, label: "Manual" }
+  - { key: location, label: "Loc" }
+  - { key: amount, label: "Amount", align: right, mono: true }
+
+rows:
+  - { number: 1000, date: "9/11/2024", period: 9, id: "Laura4", manual: "Yes", location: "LA", amount: "50,000.00" }
+  - { number: 1001, date: "8/11/2024", period: 8, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
+  - { number: 1002, date: "7/11/2024", period: 7, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
+  - { number: 1003, date: "6/11/2024", period: 6, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
+  - { number: 1004, date: "5/11/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
+  - { number: 1005, date: "4/11/2024", period: 4, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
+  - { number: 1006, date: "3/11/2024", period: 3, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
+  - { number: 1007, date: "2/11/2024", period: 2, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
+  - { number: 1008, date: "1/11/2024", period: 1, id: "Laura4", manual: "Yes", location: "LA", amount: "50,000.00" }
+  - { number: 1009, date: "10/11/2024", period: 10, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
+  - { number: 1010, date: "11/11/2024", period: 11, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
+  - { number: 1011, date: "12/11/2024", period: 12, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
+  - { number: 1012, date: "1/5/2024", period: 1, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
+  - { number: 1013, date: "2/5/2024", period: 2, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
+  - { number: 1014, date: "3/5/2024", period: 3, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
+  - { number: 1015, date: "4/5/2024", period: 4, id: "Bob2", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1016, date: "5/5/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1017, date: "6/5/2024", period: 6, id: "Bob2", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1018, date: "7/5/2024", period: 7, id: "Karen15", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1019, date: "8/5/2024", period: 8, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
+  - { number: 1020, date: "9/5/2024", period: 9, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
+  - { number: 1021, date: "10/5/2024", period: 10, id: "BeanCounter25", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1022, date: "11/5/2024", period: 11, id: "Bob2", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1023, date: "12/5/2024", period: 12, id: "CFO2", manual: "Yes", location: "SB", amount: "15,000.00" }
+  - { number: 1024, date: "1/15/2024", period: 1, id: "BeanCounter25", manual: "Yes", location: "HO", amount: "5,000.00" }
+  - { number: 1025, date: "2/15/2024", period: 2, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
+  - { number: 1026, date: "3/15/2024", period: 3, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
+  - { number: 1027, date: "4/15/2024", period: 4, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
+  - { number: 1028, date: "5/15/2024", period: 5, id: "CFO2", manual: "Yes", location: "HO", amount: "5,000.00" }
+  - { number: 1029, date: "6/15/2024", period: 6, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
+
+reveals:
+  - id: cfo-manual
+    kind: finding
+    title: "The CFO hand-keyed the rent"
+    rows: [1023, 1028]
+    body: >-
+      Rent is the most predictable entry a company posts — same amount, same day,
+      every month, and the system posts it by itself. So why is `CFO2` typing two
+      of them by hand? Worse, JE 1023 is period 12: the last close of the year,
+      the period where management override lives. Nothing here proves anything
+      wrong. But it is exactly the question an auditor is paid to ask, and you
+      asked it without running a single query.
+
+  - id: ho-stops
+    kind: finding
+    title: "One location falls off the earth in July"
+    rows: [1024, 1025, 1026, 1027, 1028, 1029]
+    body: >-
+      LA and SB each post twelve months of rent. HO posts six, then stops. Did
+      HO close? Did the lease move to another account? Or did whoever pulled this
+      extract clip it early? No error message will tell you — the file loads
+      perfectly and totals cleanly. This is the failure mode that outlives every
+      tool you will learn this semester: *the data that is missing looks exactly
+      like data that does not exist.*
+
+  - id: manual-share
+    kind: finding
+    scored: false
+    title: "Half of an automated process isn't automated"
+    rows: [1000, 1002, 1003, 1004, 1008, 1010, 1015, 1016, 1017, 1018, 1021, 1022, 1023, 1024, 1028]
+    body: >-
+      Fifteen of thirty postings are manual — on a recurring entry that should be
+      untouched by human hands. Five different user IDs are involved
+      (`BeanCounter25` seven times, `Bob2` three, `Laura4` twice, `CFO2` twice,
+      `Karen15` once). A 50% manual rate on rent is not fraud; it is usually a
+      broken control, a bad interface, or a template nobody fixed. It is still
+      the first thing you would put in the memo.
+
+  - id: amount-is-text
+    kind: finding
+    columns: [amount]
+    title: "Those amounts are not numbers"
+    body: >-
+      In the file, every amount is written `"50,000.00"` — wrapped in quotes,
+      with a comma inside. Excel and Python each decide for themselves what that
+      means. Load it in pandas exactly as Lab 1 tells you to and `df['Amount'].sum()`
+      returns `'50,000.0050,000.00…'` — the strings glued end to end, no error,
+      no warning. You could not have flagged this by clicking a row: some problems
+      live in the column, not the record.
+
+  - id: date-ambiguity
+    kind: finding
+    columns: [date, period]
+    title: "Is 1/5/2024 January 5th or the 1st of May?"
+    body: >-
+      Read the dates alone and you cannot tell — `12/5/2024` is defensible either
+      way, and a machine set to the other convention will parse all thirty rows
+      without complaint and give you a different year. The Period column settles
+      it: JE 1023 is period 12, so 12/5/2024 is December 5th and the file is
+      M/D/YYYY. Two columns, cross-footed, resolve what one column could not.
+      That is professional skepticism doing real work.
+
+  - id: sequence-clean
+    kind: clean
+    columns: [number]
+    title: "And one check that passes"
+    body: >-
+      JE numbers run 1000 to 1029 with no gaps and no duplicates. If entries had
+      been deleted after posting, this is where it would show. It doesn't. Say so
+      out loud — an analyst who only ever reports problems is as useless as one
+      who never finds any, and knowing which checks came back clean is half of
+      what makes the memo credible.
+
+closer: >-
+  Everything you just found came from knowing how accounting works — not from
+  Excel, not from Python, not from AI. That is the whole argument for this course:
+  the tools are learnable in a semester, and the judgment about *what to ask* is
+  what you already brought with you. Lab 1 opens this same file in two of those
+  tools. Now you know what to look for once it's open.

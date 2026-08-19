@@ -3,9 +3,9 @@ name: lab-author
 description: >-
   Author or edit ACCTG 5150 lab, homework, and project instructions under labs_hw/.
   Use whenever the user asks to create, draft, revise, or convert a lab, homework,
-  project, rubric, or assignment (e.g. "write the week 7 lab", "add a MAcc variant
-  for lab 4", "update the project 2 rubric", "regenerate the lab HTML"). Knows the
-  markdown dialect, folder conventions, UG/MAcc split, data-file sourcing, and the
+  project, rubric, or assignment (e.g. "write the week 7 lab", "add a rubric to
+  lab 4", "update the project 2 rubric", "regenerate the lab HTML"). Knows the
+  markdown dialect, folder conventions, data-file sourcing, and the
   convert_md.py HTML pipeline.
 ---
 
@@ -20,8 +20,7 @@ HTML; you edit the `.md`.
 ```
 labs_hw/
 ├── weekN_topic-slug/            e.g. week3_visualization, week6_ETL-SQL-LLM
-│   ├── Lab-N_Instructions.md        ← undergraduate lab (the default)
-│   ├── Lab-N_MAcc_Instructions.md   ← graduate variant (only where tracks diverge)
+│   ├── Lab-N_Instructions.md        ← the lab
 │   ├── *.png                        screenshots referenced by relative path
 │   ├── *.csv / *.xlsx / *.twbx      week-local data + tool files students download
 │   ├── weekN_solutions.ipynb        instructor solutions (not distributed)
@@ -33,9 +32,8 @@ labs_hw/
 ```
 
 - New weekly lab → new folder `weekN_topic-slug` matching the existing naming.
-- **MAcc variant**: start from the UG file; diverge only where needed (extra rigor,
-  different tooling, no-extra-credit notes). Keep shared sections textually identical
-  so diffs stay reviewable.
+- **One lab per week, one audience.** There is no UG/MAcc split — the separate
+  `*_MAcc_*` variants were retired in August 2026. Never create one.
 - **Data**: source from `data/` at repo root. If students need a subset, generate a
   week-local copy named like `CompustatAnnual_subset-for-labN.csv` and put the code
   that made it in the week's notebook. Lab folders must be self-contained.

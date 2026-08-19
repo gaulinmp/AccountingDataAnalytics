@@ -6,8 +6,7 @@ part that isn't written down elsewhere in the repo.
 
 ## Audience
 
-University of Utah accounting students, in two tracks (some weeks have separate **MAcc**
-lab instructions, signalling a graduate vs. undergraduate split):
+University of Utah accounting students — one track, one set of materials per week:
 
 - **Assume accounting domain expertise, not programming.** Students know debits/credits,
   financial statements, audit, tax, managerial accounting. Most do **not** code.

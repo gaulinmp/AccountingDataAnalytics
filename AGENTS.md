@@ -124,7 +124,7 @@ This repository supports learning objectives in:
 ## Custom Skills
 
 - **`deck-author`**: Located at [.claude/skills/deck-author/SKILL.md](file://./.claude/skills/deck-author/SKILL.md). Use this skill when creating, drafting, writing, scaffolding, or revising MDX lecture decks (slides), `week-NN.yaml` metadata, and inline `<Quiz>` blocks under `site/content/`. It defines component schemas, cheatsheets, and validation procedures.
-- **`lab-author`**: Located at [.claude/skills/lab-author/SKILL.md](file://./.claude/skills/lab-author/SKILL.md). Use when creating or revising lab/homework/project instructions under `labs_hw/` — markdown dialect, UG/MAcc variants, rubrics, data sourcing, and the `convert_md.py` HTML pipeline.
+- **`lab-author`**: Located at [.claude/skills/lab-author/SKILL.md](file://./.claude/skills/lab-author/SKILL.md). Use when creating or revising lab/homework/project instructions under `labs_hw/` — markdown dialect, folder conventions, rubrics, data sourcing, and the `convert_md.py` HTML pipeline.
 - **`pptx-to-deck`**: Located at [.claude/skills/pptx-to-deck/SKILL.md](file://./.claude/skills/pptx-to-deck/SKILL.md). Use when converting `slides/**/*.pptx` into site MDX decks — wraps `code/utils/pptx2md.py` plus the required editorial cleanup pass.
 - **`site-dev`**: Located at [.claude/skills/site-dev/SKILL.md](file://./.claude/skills/site-dev/SKILL.md). Use when changing `site/src/` — new slide components, interactive islands, icons, pages/collections, layout, or styling — with the doc-sync and validation rules.
 

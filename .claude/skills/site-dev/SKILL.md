@@ -62,10 +62,9 @@ deck-author cheatsheet's icon note.
 2. Add routes under `src/pages/` mirroring `[week].astro` / `[week]/` and link
    from the week page. All hrefs through `href()`.
 3. For labs specifically: the `labs` collection already exists — a `glob` loader
-   based at `../labs_hw` whose pattern (`week*/{Lab,Homework}-*_Instructions.md`
-   minus `*_MAcc_*`) is the curation: it admits the ACCTG 5150 instruction
-   sheets only. **Never widen it** toward solutions/notebooks/data, or back
-   toward the MAcc variants — the site is undergrad-only. Ids keep the raw path
+   based at `../labs_hw` whose pattern (`week*/{Lab,Homework}-*_Instructions.md`)
+   is the curation: it admits the ACCTG 5150 instruction sheets only.
+   **Never widen it** toward solutions/notebooks/data. Ids keep the raw path
    (custom `generateId`); `src/lib/labs.ts` parses week/type from them. Python-markdown
    artifacts (`[TOC]`, `{: .class}`, missing figures) are scrubbed at render
    time by `src/lib/remark-scrub-pymd.mjs` (registered in `astro.config.mjs`).

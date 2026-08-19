@@ -69,11 +69,11 @@ const decks = defineCollection({
 // They are authored for the python-markdown pipeline; remark-scrub-pymd strips
 // the extension artifacts at render time. `generateId` keeps the raw path (the
 // default would slugify it) so pages can parse week/type from the id.
-// The site serves the ACCTG 5150 (undergrad) sheets only — the `_MAcc_`
-// variants that also live in `labs_hw/` are excluded here.
+// The pattern is the curation: instruction sheets only, never solutions,
+// notebooks, or data files that also live in `labs_hw/`.
 const labs = defineCollection({
   loader: glob({
-    pattern: ['week*/{Lab,Homework}-*_Instructions.md', '!**/*_MAcc_*'],
+    pattern: 'week*/{Lab,Homework}-*_Instructions.md',
     base: '../labs_hw',
     generateId: ({ entry }) => entry.replace(/\.md$/, ''),
   }),

@@ -41,7 +41,7 @@ Source PPTX decks live in `slides/` and convert to site decks via `pptx-to-deck`
   **Pass the one `.md` you edited** — `convert_md.py path/to/Lab-N_Instructions.md`
   converts just that file. With no argument it becomes a *watcher* over all of
   `labs_hw/` that never exits, and will happily generate HTML for scratch files
-  (`notes.md`) and the MAcc variants the site deliberately excludes.
+  (`notes.md`) that the site deliberately excludes.
   Regenerating a long-untouched lab may also pull in accumulated `themes/*.css`
   drift — check `git diff` covers only what you meant to change.
 - Python runs through **uv**: `uv run python …`, `uv run jupyter notebook`.

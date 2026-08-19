@@ -32,7 +32,7 @@ Both tools are available in desktop form on Windows and macOS, while (I believe)
 
 The dataset we will be opening in both tools is a **Tab-Separated Value** file containing journal entry line items. This is a common format for exporting data from accounting systems.
 
-The file is named `JAE Detail.txt` ([link](https://utah.instructure.com/courses/1243774/files/191522756/download?download_frd=1)).
+The file is named `JEA Detail.txt` ([link](https://utah.instructure.com/courses/1243774/files/191522756/download?download_frd=1)).
 
 
 
@@ -52,7 +52,7 @@ While this is entirely optional (it's your computer!), I suggest:
 
 1.  **Create a main class folder:** somewhere on your computer (e.g., `Documents/ACCT_5150`), create a folder for this course.
 2.  **Create a lab folder:** Inside that class folder, create a new sub-folder named `Lab_1`.
-3.  **Download data to this folder:** Move the `JAE Detail.txt` file you downloaded into this `Lab_1` folder.
+3.  **Download data to this folder:** Move the `JEA Detail.txt` file you downloaded into this `Lab_1` folder.
 
 
 
@@ -64,7 +64,7 @@ The first software will be Excel. Instead of simply opening the file, we will us
 2.  **Import data:**
     *   Go to the **Data** tab on the ribbon.
     *   Click `Get Data` > `From File` > `From Text/CSV`.
-    *   Navigate to where you saved `JAE Detail.txt` and select it. Click **Import**.
+    *   Navigate to where you saved `JEA Detail.txt` and select it. Click **Import**.
 3.  **Load data:**
     *   A preview window will appear. Ensure the **Delimiter** is set to **Tab** (Excel usually detects this automatically).
     *   Click **Transform Data**. This opens the Power Query Editor, where you can perform data transformations. You can also open the Power Query Editor directly, then add the data by clicking `New Source` > `File` > `From Text/CSV`. 
@@ -92,13 +92,13 @@ The second software will be Python. We will primarily use **Google Colaboratory 
    2.  Follow the prompts to authorize.
    3.  You can now access your files at `/content/drive/MyDrive/`. I suggest creating a folder there for this class (e.g. `ACCT_5150`, which will then be `/content/drive/MyDrive/ACCT_5150`).
 4. **Upload/access data:**
-   *   **If using Drive:** Upload the `JAE Detail.txt` file to your Drive folder, then find it in the Colab file pane (left side, folder icon > drive > MyDrive). Right-click the file and "Copy path".
-   *   **If not using Drive:** Click the folder icon on the left, then the upload icon (page with arrow) to upload `JAE Detail.txt` to the temporary session storage.
+   *   **If using Drive:** Upload the `JEA Detail.txt` file to your Drive folder, then find it in the Colab file pane (left side, folder icon > drive > MyDrive). Right-click the file and "Copy path".
+   *   **If not using Drive:** Click the folder icon on the left, then the upload icon (page with arrow) to upload `JEA Detail.txt` to the temporary session storage.
 5. **Load data with Pandas:**
    ```python
    import pandas as pd
    # Use the path you copied or just the filename if uploaded directly
-   file_path = "JAE Detail.txt" # or "/content/drive/MyDrive/ACCT_5150/JAE Detail.txt"
+   file_path = "JEA Detail.txt" # or "/content/drive/MyDrive/ACCT_5150/JEA Detail.txt"
    # Note: We use sep='\t' because it is a Tab-Separated Value file
    df = pd.read_csv(file_path, sep='\t')
    ```
@@ -129,7 +129,7 @@ If you prefer to run Python locally (platform agnostic), **Miniconda** is recomm
    ```python
    import pandas as pd
    # Use the path you copied or just the filename if your notebook is in the same folder as the data
-   file_path = "JAE Detail.txt"
+   file_path = "JEA Detail.txt"
    # Note: We use sep='\t' because it is a Tab-Separated Value file
    df = pd.read_csv(file_path, sep='\t')
    ```

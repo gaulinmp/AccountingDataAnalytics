@@ -346,6 +346,12 @@ section[id*="assignment"] {
     margin: 1.5rem 0;
 }
 
+/* Learning objectives header */
+h3[id*="learning"]::before , h3[id*="objective"]::before {
+    content: " 💡 ";
+    margin-right: 0.5rem;
+}
+
 /* Learning objectives lists */
 h3[id*="learning"] ~ ul:first-of-type,
 h3[id*="objective"] ~ ul:first-of-type {
@@ -354,6 +360,29 @@ h3[id*="objective"] ~ ul:first-of-type {
     border-radius: 6px;
     list-style-type: "💡";
 }
+
+/* Rubric and grading header */
+h3[id*="rubric"]::before , h3[id*="grading"]::before {
+    content: " 📝 ";
+    margin-right: 0.5rem;
+}
+/* Excel header */
+h3[id*="excel"]::before {
+    content: " 𝄜 ";
+    margin-right: 0.5rem;
+}
+/* Python header */
+h3[id*="python"]::before {
+    content: " 🐍 ";
+    margin-right: 0.5rem;
+}
+
+/* Hidden Screenshot */
+.inline-image > summary::before {
+    content: " 🖼️ ";
+    margin-right: 0.5rem;
+}
+
 
 /* Formulas and math expressions */
 .math, .formula {
@@ -560,7 +589,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>Both tools are available in desktop form on Windows and macOS, while (I believe) only Python is available on Linux. Both are available online/cloud-based as well. My intent is that these labs can be completed on any machine. If you find this isn't the case, or if you find an issue related to operating systems, please let me know!</p>
 <h2 class="ada-h2" id="data">Data</h2>
 <p>The dataset we will be opening in both tools is a <strong>Tab-Separated Value</strong> file containing journal entry line items. This is a common format for exporting data from accounting systems.</p>
-<p>The file is named <code class="fixed-width">JAE Detail.txt</code> (<a href="https://utah.instructure.com/courses/1243774/files/191522756/download?download_frd=1" target="_blank">link</a>).</p>
+<p>The file is named <code class="fixed-width">JEA Detail.txt</code> (<a href="https://utah.instructure.com/courses/1243774/files/191522756/download?download_frd=1" target="_blank">link</a>).</p>
 <h2 class="ada-h2" id="how-to-steps">How-to Steps</h2>
 <p>The following outline how to perform the lab in each modality.</p>
 <h3 class="ada-h3" id="step-0-set-up-class-folder">Step 0 - Set up class folder</h3>
@@ -574,7 +603,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <ol>
 <li><strong>Create a main class folder:</strong> somewhere on your computer (e.g., <code class="fixed-width">Documents/ACCT_5150</code>), create a folder for this course.</li>
 <li><strong>Create a lab folder:</strong> Inside that class folder, create a new sub-folder named <code class="fixed-width">Lab_1</code>.</li>
-<li><strong>Download data to this folder:</strong> Move the <code class="fixed-width">JAE Detail.txt</code> file you downloaded into this <code class="fixed-width">Lab_1</code> folder.</li>
+<li><strong>Download data to this folder:</strong> Move the <code class="fixed-width">JEA Detail.txt</code> file you downloaded into this <code class="fixed-width">Lab_1</code> folder.</li>
 </ol>
 <h3 class="ada-h3" id="step-1-excel-power-query">Step 1 - Excel (Power Query)</h3>
 <p>The first software will be Excel. Instead of simply opening the file, we will use <strong>Power Query</strong> to import the data. This is a powerful feature that creates a connection to your data source. This means if you update the data file (e.g., replace it with new data), you can simply "refresh" your Excel model to update the analysis automatically, without re-doing your work.</p>
@@ -583,7 +612,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><strong>Import data:</strong><ul>
 <li>Go to the <strong>Data</strong> tab on the ribbon.</li>
 <li>Click <code class="fixed-width">Get Data</code> &gt; <code class="fixed-width">From File</code> &gt; <code class="fixed-width">From Text/CSV</code>.</li>
-<li>Navigate to where you saved <code class="fixed-width">JAE Detail.txt</code> and select it. Click <strong>Import</strong>.</li>
+<li>Navigate to where you saved <code class="fixed-width">JEA Detail.txt</code> and select it. Click <strong>Import</strong>.</li>
 </ul>
 </li>
 <li><strong>Load data:</strong><ul>
@@ -612,12 +641,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Follow the prompts to authorize.</li>
 <li>You can now access your files at <code class="fixed-width">/content/drive/MyDrive/</code>. I suggest creating a folder there for this class (e.g. <code class="fixed-width">ACCT_5150</code>, which will then be <code class="fixed-width">/content/drive/MyDrive/ACCT_5150</code>).</li>
 <li><strong>Upload/access data:</strong>
-   *   <strong>If using Drive:</strong> Upload the <code class="fixed-width">JAE Detail.txt</code> file to your Drive folder, then find it in the Colab file pane (left side, folder icon &gt; drive &gt; MyDrive). Right-click the file and "Copy path".
-   *   <strong>If not using Drive:</strong> Click the folder icon on the left, then the upload icon (page with arrow) to upload <code class="fixed-width">JAE Detail.txt</code> to the temporary session storage.</li>
+   *   <strong>If using Drive:</strong> Upload the <code class="fixed-width">JEA Detail.txt</code> file to your Drive folder, then find it in the Colab file pane (left side, folder icon &gt; drive &gt; MyDrive). Right-click the file and "Copy path".
+   *   <strong>If not using Drive:</strong> Click the folder icon on the left, then the upload icon (page with arrow) to upload <code class="fixed-width">JEA Detail.txt</code> to the temporary session storage.</li>
 <li><strong>Load data with Pandas:</strong>
    <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="c1"># Use the path you copied or just the filename if uploaded directly</span>
-<span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;JAE Detail.txt&quot;</span> <span class="c1"># or &quot;/content/drive/MyDrive/ACCT_5150/JAE Detail.txt&quot;</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;JEA Detail.txt&quot;</span> <span class="c1"># or &quot;/content/drive/MyDrive/ACCT_5150/JEA Detail.txt&quot;</span>
 <span class="c1"># Note: We use sep=&#39;\t&#39; because it is a Tab-Separated Value file</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div></li>
@@ -643,7 +672,7 @@ conda<span class="w"> </span>activate<span class="w"> </span>analytics
 <li><strong>Load data with Pandas:</strong>
    <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="c1"># Use the path you copied or just the filename if your notebook is in the same folder as the data</span>
-<span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;JAE Detail.txt&quot;</span>
+<span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;JEA Detail.txt&quot;</span>
 <span class="c1"># Note: We use sep=&#39;\t&#39; because it is a Tab-Separated Value file</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 </code></pre></div></li>

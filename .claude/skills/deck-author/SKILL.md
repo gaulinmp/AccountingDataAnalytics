@@ -159,7 +159,12 @@ extract, a dirty ETL pull, a bad join result). Fields, and the reveal contract, 
 documented in [site/content/README.md](../../../site/content/README.md) — read it
 before authoring one.
 
-Two rules worth repeating here, because they're pedagogy and not schema:
+Three rules worth repeating here, because they're pedagogy and not schema:
+
+- **The `reveals:` list order is the importance order** — there is no priority
+  field. Strongest finding first, `clean` check last. At runtime the walk
+  promotes findings the student flagged (most matches first, your order breaking
+  ties), so authored order decides both the fallback sequence and the tiebreak.
 
 - **Always include at least one `kind: clean` reveal** — a check that comes back
   fine. Without it the activity teaches that skepticism means "everything is fraud".

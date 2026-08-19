@@ -80,6 +80,7 @@ const findingRows = scoredFindingRows(reveals);
         data-reveal
         data-reveal-id={r.id}
         data-kind={r.kind}
+        data-scored={String(r.scored)}
         data-rows={(r.rows ?? []).join(',')}
         data-columns={(r.columns ?? []).join(',')}
       >

@@ -1,7 +1,27 @@
 import { expect, test } from '@playwright/test';
 
+import type { Page } from '@playwright/test';
+
 const ACTIVITY = '/week-01/activity/';
 const REVEALS = 8;
+
+/**
+ * Click through the walk until `title` is showing.
+ *
+ * Deliberately not a fixed click count: the authored order of `reveals:` in
+ * week-01.yaml is the instructor's importance ranking and is expected to change,
+ * so tests that assert *which* card appears shouldn't also depend on where it
+ * sits in the list. Tests that are genuinely about ordering assert positions
+ * directly instead.
+ */
+async function advanceTo(page: Page, title: string): Promise<void> {
+  const heading = page.locator('.ins-panel .rv-title');
+  for (let i = 0; i < REVEALS; i++) {
+    await page.locator('.ins-btn--primary').click();
+    if ((await heading.textContent())?.trim() === title) return;
+  }
+  throw new Error(`"${title}" never appeared in ${REVEALS} steps`);
+}
 
 test('the table is complete and readable before any interaction', async ({ page }) => {
   await page.goto(ACTIVITY);
@@ -32,7 +52,8 @@ test('the walk reveals findings in order, then scores', async ({ page }) => {
   await page.locator('.ins-btn--primary').click();
 
   await expect(panel).toBeVisible();
-  await expect(panel.locator('.ins-kicker')).toHaveText(`Finding 1 of ${REVEALS}`);
+  // 1023 is a CFO2 row, so that finding leads and is marked as caught.
+  await expect(panel.locator('.ins-kicker')).toHaveText(`You flagged this · Finding 1 of ${REVEALS}`);
   await expect(panel.locator('.rv-title')).toHaveText('The CFO hand-keyed the rent');
   // CFO2 posts three of these by hand.
   await expect(page.locator('.ins-table tbody tr.is-hit')).toHaveCount(3);
@@ -49,12 +70,86 @@ test('the walk reveals findings in order, then scores', async ({ page }) => {
   await expect(panel.locator('.ins-summary')).toContainText('You flagged 1 of the 12 rows');
 });
 
+test('the walk opens on a finding the student actually flagged', async ({ page }) => {
+  await page.goto(ACTIVITY);
+  // 1064 is one of Laura4's bare-amount rows — not the authored-first finding.
+  await page.locator('.ins-table tbody tr[data-row="1064"]').click();
+  await page.locator('.ins-btn--primary').click();
+
+  const panel = page.locator('.ins-panel');
+  await expect(panel.locator('.rv-title')).toHaveText(
+    "One person's numbers are a different shape"
+  );
+  await expect(panel).toHaveAttribute('data-matched', 'true');
+  await expect(panel.locator('.ins-kicker')).toHaveText('You flagged this · Finding 1 of 8');
+  await expect(panel.locator('.ins-caught')).toContainText('You flagged 1 of the 8 rows');
+
+  // 1064 is also one of the 38 manual rows, so that broad card is promoted too —
+  // but only to second, on a share of 1/38 against Laura4's 1/8.
+  await page.locator('.ins-btn--primary').click();
+  await expect(panel.locator('.rv-title')).toHaveText(
+    "Half of an automated process isn't automated"
+  );
+
+  // Everything unflagged follows, and none of it is marked as caught.
+  await page.locator('.ins-btn--primary').click();
+  await expect(panel).toHaveAttribute('data-matched', 'false');
+});
+
+test('more matches outrank fewer, and ties fall back to authored order', async ({ page }) => {
+  await page.goto(ACTIVITY);
+  // Two CFO2 rows vs one Laura4 row: CFO2 leads despite Laura4 being flagged too.
+  for (const n of ['1023', '1035', '1064']) {
+    await page.locator(`.ins-table tbody tr[data-row="${n}"]`).click();
+  }
+  await page.locator('.ins-btn--primary').click();
+
+  const panel = page.locator('.ins-panel');
+  await expect(panel.locator('.rv-title')).toHaveText('The CFO hand-keyed the rent');
+  await expect(panel.locator('.ins-caught')).toContainText('You flagged 2 of the 3 rows');
+
+  await page.locator('.ins-btn--primary').click();
+  await expect(panel.locator('.rv-title')).toHaveText(
+    "One person's numbers are a different shape"
+  );
+});
+
+test('the reordered walk survives a reload mid-way', async ({ page }) => {
+  await page.goto(ACTIVITY);
+  await page.locator('.ins-table tbody tr[data-row="1033"]').click(); // Kayla
+  await page.locator('.ins-btn--primary').click();
+  await expect(page.locator('.ins-panel .rv-title')).toHaveText('Who is Kayla?');
+
+  await page.reload();
+  await expect(page.locator('.ins-panel .rv-title')).toHaveText('Who is Kayla?');
+  await expect(page.locator('.ins-panel')).toHaveAttribute('data-matched', 'true');
+});
+
+test('a sharp finding outranks a broad one caught by a bigger count', async ({ page }) => {
+  await page.goto(ACTIVITY);
+  // Three rows that sit only in the 38-row "half of these are manual" set,
+  // plus one CFO2 row. The broad card has the higher raw count (4 vs 1) but the
+  // lower share (4/38 = .11 vs 1/3 = .33), so the sharp finding still leads.
+  for (const n of ['1002', '1003', '1004', '1023']) {
+    await page.locator(`.ins-table tbody tr[data-row="${n}"]`).click();
+  }
+  await page.locator('.ins-btn--primary').click();
+
+  const panel = page.locator('.ins-panel');
+  await expect(panel.locator('.rv-title')).toHaveText('The CFO hand-keyed the rent');
+  await expect(panel.locator('.ins-caught')).toContainText('You flagged 1 of the 3 rows');
+
+  // The broad card is still promoted ahead of everything unflagged.
+  await page.locator('.ins-btn--primary').click();
+  await expect(panel.locator('.rv-title')).toHaveText(
+    "Half of an automated process isn't automated"
+  );
+});
+
 test('a column-scoped finding highlights the column, not rows', async ({ page }) => {
   await page.goto(ACTIVITY);
-  // Findings 1-4 are row-scoped; the 5th is "Those amounts are not numbers".
-  for (let i = 0; i < 5; i++) await page.locator('.ins-btn--primary').click();
+  await advanceTo(page, 'Those amounts are not numbers');
 
-  await expect(page.locator('.ins-panel .rv-title')).toHaveText('Those amounts are not numbers');
   await expect(page.locator('.ins-table tbody tr.is-hit')).toHaveCount(0);
   // 72 body cells + the header cell.
   await expect(page.locator('.ins-table [data-col="amount"].is-colhit')).toHaveCount(73);

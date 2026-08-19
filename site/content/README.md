@@ -49,6 +49,29 @@ Each reveal is `{ id, kind, title, body, rows?, columns?, scored? }`:
 A reveal pointing at a row id or column key that doesn't exist **fails the
 build**, as does a duplicate `idKey`.
 
+### Ranking the findings
+
+**The order of the `reveals:` list is the importance order.** Move a `- id:`
+block up to make that finding more important; there is no separate priority
+field to keep in sync. Put the strongest finding first and the `clean` check
+last.
+
+That order is not always the order a student sees, though. When the walk starts,
+findings whose rows the student actually flagged are promoted to the front —
+most matches first, ties broken by your authored order — so the reveal opens on
+something they spotted rather than on the same card every time. Everything they
+missed follows in authored order. A promoted card is marked "You flagged this"
+and drawn with a green ring.
+
+Two kinds of reveal never get promoted, by design:
+
+- **`scored: false` findings.** These are the broad pattern cards, and they tend
+  to cover a large share of the table (week 1's manual-postings card covers 38 of
+  72 rows), so they would win the match count on nearly every run and bury the
+  sharp findings. If you *want* a broad finding to be promotable, set
+  `scored: true` — but then it also starts counting in the scorecard.
+- **Column-scoped and `clean` reveals**, which have no rows to match.
+
 ### Transcribe the data exactly, quotes and all
 
 Cell values render verbatim. If the source file writes `"50,000.00"` — quoted,

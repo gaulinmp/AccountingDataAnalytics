@@ -10,12 +10,18 @@
 
 <script>
   import { NS } from '../../lib/deck';
-  import { scoreInspection, inspectionSummary } from '../../lib/activity-score';
+  import {
+    scoreInspection,
+    inspectionSummary,
+    orderReveals,
+    matchCount,
+  } from '../../lib/activity-score';
   import { sortRows, type SortKind } from '../../lib/activity-sort';
 
   interface Reveal {
     id: string;
     kind: 'finding' | 'clean';
+    scored: boolean;
     rows: number[];
     columns: string[];
     node: DocumentFragment;
@@ -53,6 +59,7 @@
     ).map((t) => ({
       id: t.dataset.revealId ?? '',
       kind: t.dataset.kind === 'clean' ? 'clean' : 'finding',
+      scored: t.dataset.scored !== 'false',
       rows: nums(t.dataset.rows),
       columns: strs(t.dataset.columns),
       node: t.content,
@@ -62,6 +69,12 @@
 
     const flagged = new Set<number>();
     let step = -1;
+    /**
+     * Walk order as indices into `reveals`. Recomputed from the frozen flag set
+     * each time the walk starts, so it needs no persisting — same flags in,
+     * same order out, including after a reload mid-walk.
+     */
+    let order: number[] = reveals.map((_, i) => i);
 
     // ---- persistence -------------------------------------------------------
 
@@ -248,20 +261,38 @@
       table!.classList.toggle('is-clean-hit', r?.kind === 'clean');
     }
 
+    /** `i` is the position in the walk, not the authored index. */
     function renderReveal(i: number) {
-      const r = reveals[i];
+      const r = reveals[order[i]];
+      const hits = matchCount(r, [...flagged]);
       panel.replaceChildren();
       panel.hidden = false;
       panel.dataset.kind = r.kind;
+      // Marks the card the student earned — styled as a green ring, distinct
+      // from the clean check's green left edge.
+      panel.dataset.matched = hits > 0 ? 'true' : 'false';
 
       const kicker = document.createElement('p');
       kicker.className = 'ins-kicker';
+      const pos = `${i + 1} of ${reveals.length}`;
       kicker.textContent =
-        r.kind === 'clean' ? `Clean check · ${i + 1} of ${reveals.length}` : `Finding ${i + 1} of ${reveals.length}`;
+        r.kind === 'clean'
+          ? `Clean check · ${pos}`
+          : hits > 0
+            ? `You flagged this · Finding ${pos}`
+            : `Finding ${pos}`;
       panel.appendChild(kicker);
       panel.appendChild(r.node.cloneNode(true));
 
-      // Name the highlighted rows so they're findable in a 30-row scroll.
+      if (hits > 0) {
+        const caught = document.createElement('p');
+        caught.className = 'ins-caught';
+        caught.textContent =
+          `You flagged ${hits} of the ${r.rows.length} row${r.rows.length === 1 ? '' : 's'} behind this one.`;
+        panel.appendChild(caught);
+      }
+
+      // Name the highlighted rows so they're findable in a long scroll.
       if (r.rows.length) {
         const where = document.createElement('p');
         where.className = 'ins-where';
@@ -318,7 +349,10 @@
 
     function go(next: number) {
       // Past the scorecard, "primary" loops back to the first reveal.
-      step = next > reveals.length ? 0 : next;
+      const target = next > reveals.length ? 0 : next;
+      // Entering the walk freezes the flags, so this is where the order is set.
+      if (step < 0 && target >= 0) order = orderReveals(reveals, [...flagged]);
+      step = target;
       if (step < 0) {
         panel.hidden = true;
         panel.replaceChildren();
@@ -339,8 +373,10 @@
 
     const saved = restore();
     if (saved) saved.flagged.forEach((n) => boxes.has(n) && flagged.add(n));
-    // Restore position without scrolling the page on load.
+    // Restore position without scrolling the page on load. The order is a pure
+    // function of the restored flags, so it comes back identical.
     step = saved && saved.step >= 0 ? Math.min(saved.step, reveals.length) : -1;
+    if (step >= 0) order = orderReveals(reveals, [...flagged]);
     if (step < 0) {
       panel.hidden = true;
       primary.textContent = 'Reveal the findings';
@@ -514,6 +550,21 @@
 
   .ins-panel[data-kind='clean'] {
     border-left-color: var(--ok);
+  }
+
+  /* A finding the student flagged: green ring around the card, crimson left
+   * edge kept — it is still a finding, they just caught it. Distinct from the
+   * clean check, which is green on the left edge instead. */
+  .ins-panel[data-matched='true'] {
+    box-shadow: 0 0 0 2px var(--ok);
+    background: var(--ok-tint);
+  }
+
+  .ins-caught {
+    margin: var(--space-3) 0 0;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ok-ink);
   }
 
   .ins-panel[hidden] {

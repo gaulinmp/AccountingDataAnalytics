@@ -103,17 +103,19 @@ rows:
   - { number: 1047, date: "12/25/2024", period: 12, id: "Laura4", manual: "Yes", location: "SF", amount: "20000" }
 
 reveals:
-  - id: cfo-manual
+  - id: kayla-once
     kind: finding
-    title: "The CFO hand-keyed the rent"
-    rows: [1023, 1028, 1035]
+    title: "Who is Kayla?"
+    rows: [1033]
     body: >-
-      Rent is the most predictable entry a company posts — same amount, same day,
-      every month, and the system posts 34 of these 72 rows by itself. So why is
-      `CFO2` typing three of them by hand? Two of the three land in period 12: the
-      last close of the year, the period where management override lives. Nothing
-      here proves anything wrong. But it is exactly the question an auditor is paid
-      to ask, and you asked it without running a single query.
+      Every person's ID here ends in a number — `Laura4`, `Bob2`, `CFO2`,
+      `Karen15`, `BeanCounter25` — and the system posts under `AUTOMATED`.
+      `Kayla` fits neither pattern: no digits, not the system account. She appears
+      exactly once, hand-keys an October rent entry, and is never seen again. A
+      naming convention that holds 71 times and breaks once is not a style
+      question — it usually means the account was provisioned outside the normal
+      process. One row, one question, and you can only see it by reading the
+      column instead of scrolling past it.
 
   - id: laura-format
     kind: finding
@@ -131,20 +133,6 @@ reveals:
       That is the fingerprint of a different route into the ledger — a different
       screen, an import, a paste from somewhere else. Worth knowing before you
       trust the column, and invisible until you look at who posted.
-
-  - id: kayla-once
-    kind: finding
-    title: "Who is Kayla?"
-    rows: [1033]
-    body: >-
-      Every person's ID here ends in a number — `Laura4`, `Bob2`, `CFO2`,
-      `Karen15`, `BeanCounter25` — and the system posts under `AUTOMATED`.
-      `Kayla` fits neither pattern: no digits, not the system account. She appears
-      exactly once, hand-keys an October rent entry, and is never seen again. A
-      naming convention that holds 71 times and breaks once is not a style
-      question — it usually means the account was provisioned outside the normal
-      process. One row, one question, and you can only see it by reading the
-      column instead of scrolling past it.
 
   - id: manual-share
     kind: finding
@@ -176,19 +164,17 @@ reveals:
       have flagged this by clicking a row: some problems live in the column, not
       the record.
 
-  - id: padded-fields
+  - id: cfo-manual
     kind: finding
-    columns: [number, date, period, id, manual, location, amount]
-    title: "Every cell is padded — including the column names"
+    title: "The CFO hand-keyed the rent"
+    rows: [1023, 1028, 1035]
     body: >-
-      The table above is shown trimmed, because this one is invisible by nature.
-      In the file, `Location` is not `LA`, it is `' LA      '`, padded to a fixed
-      width — and so is every other field *and every header*. The column is not
-      named `Amount`, it is named `' Amount'`. Type the obvious thing in Lab 1 and
-      pandas raises `KeyError: 'Amount'` before you compute anything at all. Excel
-      is worse, because it says nothing: it shows you `LA` and quietly answers
-      FALSE to `=A2="LA"`. Nothing about this *looks* wrong, which is why
-      `.str.strip()` is the first thing you will do to this file.
+      Rent is the most predictable entry a company posts — same amount, same day,
+      every month, and the system posts 34 of these 72 rows by itself. So why is
+      `CFO2` typing three of them by hand? Two of the three land in period 12: the
+      last close of the year, the period where management override lives. Nothing
+      here proves anything wrong. But it is exactly the question an auditor is paid
+      to ask, and you asked it without running a single query.
 
   - id: date-ambiguity
     kind: finding
@@ -202,6 +188,20 @@ reveals:
       column is what settles it: JE 1048 is period 1, so 01/02/2024 is January 2nd
       and the file is M/D/YYYY. Two columns, cross-footed, resolve what one column
       could not. That is professional skepticism doing real work.
+
+  - id: padded-fields
+    kind: finding
+    columns: [number, date, period, id, manual, location, amount]
+    title: "Every cell is padded — including the column names"
+    body: >-
+      The table above is shown trimmed, because this one is invisible by nature.
+      In the file, `Location` is not `LA`, it is `' LA      '`, padded to a fixed
+      width — and so is every other field *and every header*. The column is not
+      named `Amount`, it is named `' Amount'`. Type the obvious thing in Lab 1 and
+      pandas raises `KeyError: 'Amount'` before you compute anything at all. Excel
+      is worse, because it says nothing: it shows you `LA` and quietly answers
+      FALSE to `=A2="LA"`. Nothing about this *looks* wrong, which is why
+      `.str.strip()` is the first thing you will do to this file.
 
   - id: checks-that-pass
     kind: clean

@@ -32,7 +32,9 @@ Both tools are available in desktop form on Windows and macOS, while (I believe)
 
 The dataset we will be opening in both tools is a **Tab-Separated Value** file containing journal entry line items. This is a common format for exporting data from accounting systems.
 
-The file is named `JEA Detail.txt` ([link](https://utah.instructure.com/courses/1243774/files/191522756/download?download_frd=1)).
+The file is named `JEA Detail.txt` ([link](https://utah.instructure.com/courses/1262469/files/203073194/download?download_frd=1)). It is a made up company's 2024 rent expense detail (the file came from EYARC, credit to the EY team!).
+
+*Note*: A few things in this file should look wrong: quoted numbers, spacing, etc. That is not a mistake in your download, it is what a real system might export. Cleaning this up is the whole point of Lab 2. For Lab 1, all you need to do is get the file open. {: .note}
 
 
 

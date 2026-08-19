@@ -11,6 +11,7 @@
 <script>
   import { NS } from '../../lib/deck';
   import { scoreInspection, inspectionSummary } from '../../lib/activity-score';
+  import { sortRows, type SortKind } from '../../lib/activity-sort';
 
   interface Reveal {
     id: string;
@@ -130,6 +131,72 @@
       });
       root.classList.toggle('is-locked', step >= 0);
     }
+
+    // ---- sortable headers --------------------------------------------------
+    // Sorting stays live during the reveal walk: reordering is a reading aid,
+    // and highlight/flag state rides on the <tr>, so it survives a reshuffle.
+
+    const tbody = table.querySelector('tbody');
+    const fileOrder = bodyRows.slice(); // the order the extract came in
+    let sortCol = '';
+    let sortDir: 'asc' | 'desc' = 'asc';
+
+    const cellText = (tr: HTMLTableRowElement, col: string) =>
+      tr.querySelector<HTMLElement>(`[data-col="${col}"]`)?.textContent?.trim() ?? '';
+
+    function applySort() {
+      if (!tbody) return;
+      const ordered = sortCol
+        ? sortRows(fileOrder, (tr) => cellText(tr, sortCol), sortKindOf(sortCol), sortDir)
+        : fileOrder;
+      ordered.forEach((tr) => tbody.appendChild(tr));
+
+      table!.querySelectorAll<HTMLTableCellElement>('thead th[data-col]').forEach((th) => {
+        const on = th.dataset.col === sortCol;
+        th.setAttribute('aria-sort', on ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none');
+        th.classList.toggle('is-sorted', on);
+        th.classList.toggle('is-desc', on && sortDir === 'desc');
+      });
+    }
+
+    function sortKindOf(col: string): SortKind {
+      const th = table!.querySelector<HTMLElement>(`thead th[data-col="${col}"]`);
+      const k = th?.dataset.sort;
+      return k === 'number' || k === 'date' ? k : 'text';
+    }
+
+    table.querySelectorAll<HTMLTableCellElement>('thead th[data-col]').forEach((th) => {
+      const label = th.querySelector<HTMLElement>('[data-th-label]');
+      const col = th.dataset.col ?? '';
+      if (!label || !col) return;
+
+      // Swap the static label for a real button: keyboard-reachable, announced.
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ins-sort';
+      btn.append(label.textContent ?? '');
+      const caret = document.createElement('span');
+      caret.className = 'ins-caret';
+      caret.setAttribute('aria-hidden', 'true');
+      btn.appendChild(caret);
+      label.replaceWith(btn);
+      th.setAttribute('aria-sort', 'none');
+
+      btn.addEventListener('click', () => {
+        // Same column toggles direction; a third click returns to file order,
+        // which matters here — the extract's own order is itself information.
+        if (sortCol !== col) {
+          sortCol = col;
+          sortDir = 'asc';
+        } else if (sortDir === 'asc') {
+          sortDir = 'desc';
+        } else {
+          sortCol = '';
+          sortDir = 'asc';
+        }
+        applySort();
+      });
+    });
 
     // ---- toolbar, then the reveal panel, both below the table --------------
     // Order matters: the panel opens directly under the button that opened it,
@@ -305,6 +372,50 @@
   .inspector.is-locked .ins-box {
     pointer-events: none;
     opacity: 0.45;
+  }
+
+  /* Sortable header buttons. */
+  .ins-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    border: 0;
+    padding: 0;
+    background: none;
+    font: inherit;
+    font-weight: 700;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .ins-sort:hover {
+    color: var(--brand);
+  }
+
+  .ins-sort:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Caret: a dim placeholder until this column is the sorted one. */
+  .ins-caret::before {
+    content: '↕';
+    opacity: 0.3;
+    font-size: 0.85em;
+  }
+
+  .ins-table th.is-sorted .ins-caret::before {
+    content: '↑';
+    opacity: 1;
+  }
+
+  .ins-table th.is-sorted.is-desc .ins-caret::before {
+    content: '↓';
+  }
+
+  .ins-table th.is-sorted {
+    color: var(--brand);
   }
 
   .inspector:not(.is-locked) .ins-table tbody tr {

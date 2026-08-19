@@ -19,6 +19,12 @@ const columnSchema = z.object({
   align: z.enum(['left', 'right']).default('left'),
   /** Render in the mono face — for codes, amounts, anything column-scannable. */
   mono: z.boolean().default(false),
+  /**
+   * How clicking this header orders the table. `number` and `date` see past the
+   * export's quotes and commas; `date` assumes M/D/YYYY and is an assertion by
+   * you, the author, not a detection. See src/lib/activity-sort.ts.
+   */
+  sort: z.enum(['text', 'number', 'date']).default('text'),
 });
 
 const revealSchema = z.object({
@@ -148,6 +154,7 @@ export interface ActivityColumn {
   label: string;
   align: 'left' | 'right';
   mono: boolean;
+  sort: 'text' | 'number' | 'date';
 }
 
 export interface ActivityReveal {

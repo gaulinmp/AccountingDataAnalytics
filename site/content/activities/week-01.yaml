@@ -1,129 +1,220 @@
 week: week-01
-title: "Thirty Rows"
+title: "Seventy-Two Rows"
 lede: "Before you know a single function, your accounting eye already works. Prove it."
 prompt: >-
-  Below is the rent expense detail you will open in Lab 1 — all 30 rows of it.
-  Click any row you would want to ask a question about. No formulas, no tools,
-  no right answer yet. Just read it the way an accountant reads it.
+  Below is the complete 2024 rent expense detail you will open in Lab 1 — six
+  locations, twelve months, every row. Click any row you would want to ask a
+  question about. No formulas, no tools, no right answer yet. Just read it the
+  way an accountant reads it. Sorting a column by its header is fair game.
 source: >-
   The Lab 1 extract, `JEA Detail.txt`. Every row is the same account
   (9504 Rent Expense), the same category (SG&A), and the same description
-  ("Rent"), so those three columns are hidden here — the file itself still has them.
+  ("Rent"), so those three columns are hidden here. Values are shown trimmed —
+  in the file itself every field is padded out with spaces, which turns out to
+  matter (see the findings).
 
 idKey: number
+# Values are reproduced from the tab-separated file, including the export's
+# literal quote characters — `"50,000.00"` really is written that way, and the
+# rows that *aren't* written that way are the point of one of the findings. The
+# only thing normalized here is the surrounding space padding, which HTML cannot
+# render meaningfully; the padding reveal covers it in words instead.
 columns:
-  - { key: number, label: "JE #", align: right, mono: true }
-  - { key: date, label: "Date", mono: true }
-  - { key: period, label: "Period", align: right, mono: true }
-  - { key: id, label: "Posted by" }
-  - { key: manual, label: "Manual" }
-  - { key: location, label: "Loc" }
-  - { key: amount, label: "Amount", align: right, mono: true }
+  - { key: number, label: "JE #", align: right, mono: true, sort: number }
+  - { key: date, label: "Date", mono: true, sort: date }
+  - { key: period, label: "Period", align: right, mono: true, sort: number }
+  - { key: id, label: "Posted by", sort: text }
+  - { key: manual, label: "Manual", sort: text }
+  - { key: location, label: "Loc", sort: text }
+  - { key: amount, label: "Amount", align: right, mono: true, sort: number }
 
 rows:
-  - { number: 1000, date: "9/11/2024", period: 9, id: "Laura4", manual: "Yes", location: "LA", amount: "50,000.00" }
-  - { number: 1001, date: "8/11/2024", period: 8, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
-  - { number: 1002, date: "7/11/2024", period: 7, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
-  - { number: 1003, date: "6/11/2024", period: 6, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
-  - { number: 1004, date: "5/11/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
-  - { number: 1005, date: "4/11/2024", period: 4, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
-  - { number: 1006, date: "3/11/2024", period: 3, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
-  - { number: 1007, date: "2/11/2024", period: 2, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
-  - { number: 1008, date: "1/11/2024", period: 1, id: "Laura4", manual: "Yes", location: "LA", amount: "50,000.00" }
-  - { number: 1009, date: "10/11/2024", period: 10, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
-  - { number: 1010, date: "11/11/2024", period: 11, id: "BeanCounter25", manual: "Yes", location: "LA", amount: "50,000.00" }
-  - { number: 1011, date: "12/11/2024", period: 12, id: "Automated", manual: "No", location: "LA", amount: "50,000.00" }
-  - { number: 1012, date: "1/5/2024", period: 1, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
-  - { number: 1013, date: "2/5/2024", period: 2, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
-  - { number: 1014, date: "3/5/2024", period: 3, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
-  - { number: 1015, date: "4/5/2024", period: 4, id: "Bob2", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1016, date: "5/5/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1017, date: "6/5/2024", period: 6, id: "Bob2", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1018, date: "7/5/2024", period: 7, id: "Karen15", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1019, date: "8/5/2024", period: 8, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
-  - { number: 1020, date: "9/5/2024", period: 9, id: "Automated", manual: "No", location: "SB", amount: "15,000.00" }
-  - { number: 1021, date: "10/5/2024", period: 10, id: "BeanCounter25", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1022, date: "11/5/2024", period: 11, id: "Bob2", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1023, date: "12/5/2024", period: 12, id: "CFO2", manual: "Yes", location: "SB", amount: "15,000.00" }
-  - { number: 1024, date: "1/15/2024", period: 1, id: "BeanCounter25", manual: "Yes", location: "HO", amount: "5,000.00" }
-  - { number: 1025, date: "2/15/2024", period: 2, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
-  - { number: 1026, date: "3/15/2024", period: 3, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
-  - { number: 1027, date: "4/15/2024", period: 4, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
-  - { number: 1028, date: "5/15/2024", period: 5, id: "CFO2", manual: "Yes", location: "HO", amount: "5,000.00" }
-  - { number: 1029, date: "6/15/2024", period: 6, id: "Automated", manual: "No", location: "HO", amount: "5,000.00" }
+  - { number: 1048, date: "01/02/2024", period: 1, id: "AUTOMATED", manual: "No", location: "CS", amount: '"5,000.00"' }
+  - { number: 1060, date: "01/02/2024", period: 1, id: "BeanCounter25", manual: "Yes", location: "ML", amount: '"1,000.00"' }
+  - { number: 1012, date: "01/05/2024", period: 1, id: "AUTOMATED", manual: "No", location: "SB", amount: '"15,000.00"' }
+  - { number: 1008, date: "01/11/2024", period: 1, id: "Laura4", manual: "Yes", location: "LA", amount: "50000" }
+  - { number: 1024, date: "01/15/2024", period: 1, id: "BeanCounter25", manual: "Yes", location: "HO", amount: '"5,000.00"' }
+  - { number: 1036, date: "01/25/2024", period: 1, id: "BeanCounter25", manual: "Yes", location: "SF", amount: '"20,000.00"' }
+  - { number: 1049, date: "02/02/2024", period: 2, id: "AUTOMATED", manual: "No", location: "CS", amount: '"5,000.00"' }
+  - { number: 1061, date: "02/02/2024", period: 2, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1013, date: "02/05/2024", period: 2, id: "AUTOMATED", manual: "No", location: "SB", amount: '"15,000.00"' }
+  - { number: 1007, date: "02/11/2024", period: 2, id: "AUTOMATED", manual: "No", location: "LA", amount: '"50,000.00"' }
+  - { number: 1025, date: "02/15/2024", period: 2, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1037, date: "02/25/2024", period: 2, id: "AUTOMATED", manual: "No", location: "SF", amount: '"20,000.00"' }
+  - { number: 1050, date: "03/02/2024", period: 3, id: "AUTOMATED", manual: "No", location: "CS", amount: '"5,000.00"' }
+  - { number: 1062, date: "03/02/2024", period: 3, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1014, date: "03/05/2024", period: 3, id: "AUTOMATED", manual: "No", location: "SB", amount: '"15,000.00"' }
+  - { number: 1006, date: "03/11/2024", period: 3, id: "AUTOMATED", manual: "No", location: "LA", amount: '"50,000.00"' }
+  - { number: 1026, date: "03/15/2024", period: 3, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1038, date: "03/25/2024", period: 3, id: "Laura4", manual: "Yes", location: "SF", amount: "20000" }
+  - { number: 1063, date: "04/02/2024", period: 4, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1051, date: "04/02/2024", period: 4, id: "Laura4", manual: "Yes", location: "CS", amount: "5000" }
+  - { number: 1015, date: "04/05/2024", period: 4, id: "Bob2", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1005, date: "04/11/2024", period: 4, id: "AUTOMATED", manual: "No", location: "LA", amount: '"50,000.00"' }
+  - { number: 1027, date: "04/15/2024", period: 4, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1039, date: "04/25/2024", period: 4, id: "Karen15", manual: "Yes", location: "SF", amount: '"20,000.00"' }
+  - { number: 1052, date: "05/02/2024", period: 5, id: "Bob2", manual: "Yes", location: "CS", amount: '"5,000.00"' }
+  - { number: 1064, date: "05/02/2024", period: 5, id: "Laura4", manual: "Yes", location: "ML", amount: "1000" }
+  - { number: 1016, date: "05/05/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1004, date: "05/11/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "LA", amount: '"50,000.00"' }
+  - { number: 1028, date: "05/15/2024", period: 5, id: "CFO2", manual: "Yes", location: "HO", amount: '"5,000.00"' }
+  - { number: 1040, date: "05/25/2024", period: 5, id: "BeanCounter25", manual: "Yes", location: "SF", amount: '"20,000.00"' }
+  - { number: 1053, date: "06/02/2024", period: 6, id: "Bob2", manual: "Yes", location: "CS", amount: '"5,000.00"' }
+  - { number: 1065, date: "06/02/2024", period: 6, id: "Laura4", manual: "Yes", location: "ML", amount: "1000" }
+  - { number: 1017, date: "06/05/2024", period: 6, id: "Bob2", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1003, date: "06/11/2024", period: 6, id: "BeanCounter25", manual: "Yes", location: "LA", amount: '"50,000.00"' }
+  - { number: 1029, date: "06/15/2024", period: 6, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1041, date: "06/25/2024", period: 6, id: "Laura4", manual: "Yes", location: "SF", amount: "20000" }
+  - { number: 1066, date: "07/02/2024", period: 7, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1054, date: "07/02/2024", period: 7, id: "Bob2", manual: "Yes", location: "CS", amount: '"5,000.00"' }
+  - { number: 1018, date: "07/05/2024", period: 7, id: "Karen15", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1002, date: "07/11/2024", period: 7, id: "BeanCounter25", manual: "Yes", location: "LA", amount: '"50,000.00"' }
+  - { number: 1030, date: "07/15/2024", period: 7, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1042, date: "07/25/2024", period: 7, id: "BeanCounter25", manual: "Yes", location: "SF", amount: '"20,000.00"' }
+  - { number: 1067, date: "08/02/2024", period: 8, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1055, date: "08/02/2024", period: 8, id: "Karen15", manual: "Yes", location: "CS", amount: '"5,000.00"' }
+  - { number: 1019, date: "08/05/2024", period: 8, id: "AUTOMATED", manual: "No", location: "SB", amount: '"15,000.00"' }
+  - { number: 1001, date: "08/11/2024", period: 8, id: "AUTOMATED", manual: "No", location: "LA", amount: '"50,000.00"' }
+  - { number: 1031, date: "08/15/2024", period: 8, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1043, date: "08/25/2024", period: 8, id: "Karen15", manual: "Yes", location: "SF", amount: '"20,000.00"' }
+  - { number: 1056, date: "09/02/2024", period: 9, id: "AUTOMATED", manual: "No", location: "CS", amount: '"5,000.00"' }
+  - { number: 1068, date: "09/02/2024", period: 9, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1020, date: "09/05/2024", period: 9, id: "AUTOMATED", manual: "No", location: "SB", amount: '"15,000.00"' }
+  - { number: 1000, date: "09/11/2024", period: 9, id: "Laura4", manual: "Yes", location: "LA", amount: "50000" }
+  - { number: 1032, date: "09/15/2024", period: 9, id: "AUTOMATED", manual: "No", location: "HO", amount: '"5,000.00"' }
+  - { number: 1044, date: "09/25/2024", period: 9, id: "AUTOMATED", manual: "No", location: "SF", amount: '"20,000.00"' }
+  - { number: 1069, date: "10/02/2024", period: 10, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1057, date: "10/02/2024", period: 10, id: "BeanCounter25", manual: "Yes", location: "CS", amount: '"5,000.00"' }
+  - { number: 1021, date: "10/05/2024", period: 10, id: "BeanCounter25", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1009, date: "10/11/2024", period: 10, id: "AUTOMATED", manual: "No", location: "LA", amount: '"50,000.00"' }
+  - { number: 1033, date: "10/15/2024", period: 10, id: "Kayla", manual: "Yes", location: "HO", amount: '"5,000.00"' }
+  - { number: 1045, date: "10/25/2024", period: 10, id: "AUTOMATED", manual: "No", location: "SF", amount: '"20,000.00"' }
+  - { number: 1070, date: "11/02/2024", period: 11, id: "AUTOMATED", manual: "No", location: "ML", amount: '"1,000.00"' }
+  - { number: 1058, date: "11/02/2024", period: 11, id: "Karen15", manual: "Yes", location: "CS", amount: '"5,000.00"' }
+  - { number: 1022, date: "11/05/2024", period: 11, id: "Bob2", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1010, date: "11/11/2024", period: 11, id: "BeanCounter25", manual: "Yes", location: "LA", amount: '"50,000.00"' }
+  - { number: 1034, date: "11/15/2024", period: 11, id: "BeanCounter25", manual: "Yes", location: "HO", amount: '"5,000.00"' }
+  - { number: 1046, date: "11/25/2024", period: 11, id: "Bob2", manual: "Yes", location: "SF", amount: '"20,000.00"' }
+  - { number: 1059, date: "12/02/2024", period: 12, id: "AUTOMATED", manual: "No", location: "CS", amount: '"5,000.00"' }
+  - { number: 1071, date: "12/02/2024", period: 12, id: "Bob2", manual: "Yes", location: "ML", amount: '"1,000.00"' }
+  - { number: 1023, date: "12/05/2024", period: 12, id: "CFO2", manual: "Yes", location: "SB", amount: '"15,000.00"' }
+  - { number: 1011, date: "12/11/2024", period: 12, id: "AUTOMATED", manual: "No", location: "LA", amount: '"50,000.00"' }
+  - { number: 1035, date: "12/15/2024", period: 12, id: "CFO2", manual: "Yes", location: "HO", amount: '"5,000.00"' }
+  - { number: 1047, date: "12/25/2024", period: 12, id: "Laura4", manual: "Yes", location: "SF", amount: "20000" }
 
 reveals:
   - id: cfo-manual
     kind: finding
     title: "The CFO hand-keyed the rent"
-    rows: [1023, 1028]
+    rows: [1023, 1028, 1035]
     body: >-
       Rent is the most predictable entry a company posts — same amount, same day,
-      every month, and the system posts it by itself. So why is `CFO2` typing two
-      of them by hand? Worse, JE 1023 is period 12: the last close of the year,
-      the period where management override lives. Nothing here proves anything
-      wrong. But it is exactly the question an auditor is paid to ask, and you
-      asked it without running a single query.
+      every month, and the system posts 34 of these 72 rows by itself. So why is
+      `CFO2` typing three of them by hand? Two of the three land in period 12: the
+      last close of the year, the period where management override lives. Nothing
+      here proves anything wrong. But it is exactly the question an auditor is paid
+      to ask, and you asked it without running a single query.
 
-  - id: ho-stops
+  - id: laura-format
     kind: finding
-    title: "One location falls off the earth in July"
-    rows: [1024, 1025, 1026, 1027, 1028, 1029]
+    title: "One person's numbers are a different shape"
+    rows: [1000, 1008, 1038, 1041, 1047, 1051, 1064, 1065]
     body: >-
-      LA and SB each post twelve months of rent. HO posts six, then stops. Did
-      HO close? Did the lease move to another account? Or did whoever pulled this
-      extract clip it early? No error message will tell you — the file loads
-      perfectly and totals cleanly. This is the failure mode that outlives every
-      tool you will learn this semester: *the data that is missing looks exactly
-      like data that does not exist.*
+      Sixty-four amounts are written `"50,000.00"` — quoted, comma-grouped, two
+      decimals. Eight are written `50000`. Sort by Amount and those eight break
+      away as their own block instead of filing in by value, because a machine
+      reads them as a different *type* — the same thing Excel does to a mixed
+      column, and the fastest way to see the problem. Then sort by Posted by and
+      the split turns out to be total: every bare number is `Laura4`, and every
+      one of Laura4's eight entries is bare. The values agree with everyone
+      else's; only the *shape* differs.
+      That is the fingerprint of a different route into the ledger — a different
+      screen, an import, a paste from somewhere else. Worth knowing before you
+      trust the column, and invisible until you look at who posted.
+
+  - id: kayla-once
+    kind: finding
+    title: "Who is Kayla?"
+    rows: [1033]
+    body: >-
+      Every person's ID here ends in a number — `Laura4`, `Bob2`, `CFO2`,
+      `Karen15`, `BeanCounter25` — and the system posts under `AUTOMATED`.
+      `Kayla` fits neither pattern: no digits, not the system account. She appears
+      exactly once, hand-keys an October rent entry, and is never seen again. A
+      naming convention that holds 71 times and breaks once is not a style
+      question — it usually means the account was provisioned outside the normal
+      process. One row, one question, and you can only see it by reading the
+      column instead of scrolling past it.
 
   - id: manual-share
     kind: finding
     scored: false
     title: "Half of an automated process isn't automated"
-    rows: [1000, 1002, 1003, 1004, 1008, 1010, 1015, 1016, 1017, 1018, 1021, 1022, 1023, 1024, 1028]
+    rows: [1000, 1002, 1003, 1004, 1008, 1010, 1015, 1016, 1017, 1018, 1021, 1022,
+           1023, 1024, 1028, 1033, 1034, 1035, 1036, 1038, 1039, 1040, 1041, 1042,
+           1043, 1046, 1047, 1051, 1052, 1053, 1054, 1055, 1057, 1058, 1060, 1064,
+           1065, 1071]
     body: >-
-      Fifteen of thirty postings are manual — on a recurring entry that should be
-      untouched by human hands. Five different user IDs are involved
-      (`BeanCounter25` seven times, `Bob2` three, `Laura4` twice, `CFO2` twice,
-      `Karen15` once). A 50% manual rate on rent is not fraud; it is usually a
-      broken control, a bad interface, or a template nobody fixed. It is still
-      the first thing you would put in the memo.
+      Thirty-eight of seventy-two postings are manual — on a recurring entry that
+      should be untouched by human hands. Six people are involved: `BeanCounter25`
+      thirteen times, `Bob2` and `Laura4` eight each, `Karen15` five, `CFO2` three,
+      `Kayla` once. A 53% manual rate on rent is not fraud; it is usually a broken
+      control, a bad interface, or a template nobody fixed. It is still the first
+      thing you would put in the memo.
 
   - id: amount-is-text
     kind: finding
     columns: [amount]
     title: "Those amounts are not numbers"
     body: >-
-      In the file, every amount is written `"50,000.00"` — wrapped in quotes,
-      with a comma inside. Excel and Python each decide for themselves what that
-      means. Load it in pandas exactly as Lab 1 tells you to and `df['Amount'].sum()`
-      returns `'50,000.0050,000.00…'` — the strings glued end to end, no error,
-      no warning. You could not have flagged this by clicking a row: some problems
-      live in the column, not the record.
+      Most amounts are written `"50,000.00"` — wrapped in quotes, with a comma
+      inside — and eight are written `50000`. Excel and Python each decide for
+      themselves what a column like that means, and neither asks you. In pandas
+      the column loads as text, so summing it returns
+      `' "5,000.00" "1,000.00" "15,000.00" 50000…'` — all 72 values glued end to
+      end, 780 characters long, no error, no warning, and no total. You could not
+      have flagged this by clicking a row: some problems live in the column, not
+      the record.
+
+  - id: padded-fields
+    kind: finding
+    columns: [number, date, period, id, manual, location, amount]
+    title: "Every cell is padded — including the column names"
+    body: >-
+      The table above is shown trimmed, because this one is invisible by nature.
+      In the file, `Location` is not `LA`, it is `' LA      '`, padded to a fixed
+      width — and so is every other field *and every header*. The column is not
+      named `Amount`, it is named `' Amount'`. Type the obvious thing in Lab 1 and
+      pandas raises `KeyError: 'Amount'` before you compute anything at all. Excel
+      is worse, because it says nothing: it shows you `LA` and quietly answers
+      FALSE to `=A2="LA"`. Nothing about this *looks* wrong, which is why
+      `.str.strip()` is the first thing you will do to this file.
 
   - id: date-ambiguity
     kind: finding
     columns: [date, period]
-    title: "Is 1/5/2024 January 5th or the 1st of May?"
+    title: "Is 01/02/2024 January 2nd or the 1st of February?"
     body: >-
-      Read the dates alone and you cannot tell — `12/5/2024` is defensible either
-      way, and a machine set to the other convention will parse all thirty rows
-      without complaint and give you a different year. The Period column settles
-      it: JE 1023 is period 12, so 12/5/2024 is December 5th and the file is
-      M/D/YYYY. Two columns, cross-footed, resolve what one column could not.
-      That is professional skepticism doing real work.
+      Read the dates alone and you cannot tell — 48 of these 72 rows land on a
+      different day under the other convention, and a machine set that way will
+      parse every one of them without complaint and hand you a different year. The
+      zero-padding makes the column look tidy and settles nothing. The Period
+      column is what settles it: JE 1048 is period 1, so 01/02/2024 is January 2nd
+      and the file is M/D/YYYY. Two columns, cross-footed, resolve what one column
+      could not. That is professional skepticism doing real work.
 
-  - id: sequence-clean
+  - id: checks-that-pass
     kind: clean
-    columns: [number]
-    title: "And one check that passes"
+    columns: [number, manual]
+    title: "And three checks that pass"
     body: >-
-      JE numbers run 1000 to 1029 with no gaps and no duplicates. If entries had
-      been deleted after posting, this is where it would show. It doesn't. Say so
-      out loud — an analyst who only ever reports problems is as useless as one
-      who never finds any, and knowing which checks came back clean is half of
-      what makes the memo credible.
+      JE numbers run 1000 to 1071 with no gaps and no duplicates. There is exactly
+      one rent entry per location per period — six locations, twelve months,
+      seventy-two rows, nothing missing and nothing posted twice. And the Manual
+      flag never contradicts the user: every `AUTOMATED` row says No, every human
+      row says Yes. Say so out loud. An analyst who only ever reports problems is
+      as useless as one who never finds any, and knowing which checks came back
+      clean is half of what makes the memo credible.
 
 closer: >-
   Everything you just found came from knowing how accounting works — not from

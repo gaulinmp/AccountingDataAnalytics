@@ -36,8 +36,14 @@ const findingRows = scoredFindingRows(reveals);
           <th scope="col" class="ins-flagcol"><span class="sr-only">Flagged</span></th>
           {
             columns.map((c) => (
-              <th scope="col" data-col={c.key} class:list={[{ 'is-right': c.align === 'right' }]}>
-                {c.label}
+              <th
+                scope="col"
+                data-col={c.key}
+                data-sort={c.sort}
+                class:list={[{ 'is-right': c.align === 'right' }]}
+              >
+                {/* Plain text pre-JS; the island turns this into a sort button. */}
+                <span data-th-label>{c.label}</span>
               </th>
             ))
           }

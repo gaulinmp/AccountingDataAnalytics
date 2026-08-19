@@ -166,6 +166,16 @@ Two rules worth repeating here, because they're pedagogy and not schema:
 - **A reveal's `columns` (rather than `rows`) is for problems that live in the
   column** — a text-typed amount, an ambiguous date format. Students can't flag
   those by clicking a record, and saying so is part of the lesson.
+- **Transcribe cell values byte-for-byte, including the export's quote
+  characters** (`'"50,000.00"'` in YAML). Cleaning the data on the way in
+  destroys the evidence the findings rest on. Generate rows from the real file
+  with a script; never retype them. Whitespace is the one exception — trim it,
+  since HTML can't render it, and disclose the trim in `source`.
+- **When the source data changes, re-derive every claim in the reveal copy.**
+  Counts ("thirty-eight of seventy-two"), row-id lists, and named users are all
+  hand-written prose that the build cannot validate. Week 1 lost two findings
+  outright when its extract was refreshed — verify each one still holds rather
+  than assuming it survived.
 
 `week-01.yaml` is the reference implementation; match its density and its voice.
 

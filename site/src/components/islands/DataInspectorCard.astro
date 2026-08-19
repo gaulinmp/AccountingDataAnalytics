@@ -229,19 +229,36 @@
     const primary = document.createElement('button');
     primary.type = 'button';
     primary.className = 'ins-btn ins-btn--primary';
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'ins-btn ins-btn--back';
+    back.textContent = 'Back';
     const reset = document.createElement('button');
     reset.type = 'button';
     reset.className = 'ins-btn';
     reset.textContent = 'Start over';
-    actions.append(primary, reset);
+    // Reset sits apart from the Back/Next pair, which reads as one stepper.
+    actions.append(reset, back, primary);
     bar.append(count, actions);
     root.append(bar, panel); // below the source note, panel under the button
 
     primary.addEventListener('click', () => go(step + 1));
+    // Never past the first card: step -1 would unlock flagging, letting a
+    // student edit their answers after seeing them. "Start over" is the only
+    // way back to flagging, and it clears the flags on purpose.
+    back.addEventListener('click', () => {
+      if (step > 0) go(step - 1);
+    });
     reset.addEventListener('click', () => {
       flagged.clear();
       go(-1);
     });
+
+    /** Back is absent before the walk, and inert on its first card. */
+    function syncNav() {
+      back.hidden = step < 0;
+      back.disabled = step <= 0;
+    }
 
     /** The toolbar line while still flagging; the reveal/score views own it after that. */
     function syncCount() {
@@ -365,6 +382,7 @@
       }
       paintFlags();
       syncCount();
+      syncNav();
       save();
       if (step >= 0) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }
@@ -387,6 +405,7 @@
       renderScore();
     }
     paintFlags();
+    syncNav();
   });
 </script>
 
@@ -522,9 +541,19 @@
     transition: border-color var(--transition), background-color var(--transition);
   }
 
-  .ins-btn:hover {
+  .ins-btn:hover:not(:disabled) {
     border-color: var(--brand);
     background: var(--surface-muted);
+  }
+
+  .ins-btn:disabled {
+    color: var(--gray-500);
+    border-color: var(--hairline);
+    cursor: not-allowed;
+  }
+
+  .ins-btn[hidden] {
+    display: none;
   }
 
   .ins-btn--primary {

@@ -227,6 +227,43 @@ test('the clean check reads as clean, not as a finding', async ({ page }) => {
   await expect(panel.locator('.ins-kicker')).toContainText('Clean check');
 });
 
+test('Back steps through the walk in reverse', async ({ page }) => {
+  await page.goto(ACTIVITY);
+  const title = page.locator('.ins-panel .rv-title');
+  const backBtn = page.getByRole('button', { name: 'Back' });
+
+  // Absent until the walk starts.
+  await expect(backBtn).toBeHidden();
+  await page.locator('.ins-btn--primary').click();
+  await expect(backBtn).toBeVisible();
+  // Inert on the first card: going further back would unlock flagging.
+  await expect(backBtn).toBeDisabled();
+
+  const first = await title.textContent();
+  await page.locator('.ins-btn--primary').click();
+  const second = await title.textContent();
+  expect(second).not.toBe(first);
+  await expect(backBtn).toBeEnabled();
+
+  await backBtn.click();
+  await expect(title).toHaveText(first!.trim());
+  await expect(backBtn).toBeDisabled();
+
+  // Flagging stays locked the whole way back.
+  await expect(page.locator('[data-inspector]')).toHaveClass(/is-locked/);
+});
+
+test('Back returns from the scorecard to the last finding', async ({ page }) => {
+  await page.goto(ACTIVITY);
+  // From a cold start: one click to open the walk, then one per remaining card.
+  for (let i = 0; i < REVEALS + 1; i++) await page.locator('.ins-btn--primary').click();
+  await expect(page.locator('.ins-panel .ins-kicker')).toHaveText('How you did');
+
+  await page.getByRole('button', { name: 'Back' }).click();
+  await expect(page.locator('.ins-panel .rv-title')).toHaveText(cleanTitle);
+  await expect(page.locator('.ins-panel')).toHaveAttribute('data-kind', 'clean');
+});
+
 test('start over clears flags and returns to the table', async ({ page }) => {
   await page.goto(ACTIVITY);
   await rowLocator(page, cfoRows[0]).click();

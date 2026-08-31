@@ -14,6 +14,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;

@@ -110,11 +110,10 @@ Note: The focus is on demonstrating data merging skills, exploring return patter
 
 ### 3.1. Data Access Options
 
-Students will use the web-based SQL tool to access and merge the data (similar to Lab 5):
+Students can use the web-based SQL tool to access and merge the data (similar to Lab 6), though any method of merging the Compustat and CRSP data is acceptable:
 
-* **Tool URL**: [mgaulin.com/ada/sql](https://mgaulin.com/ada/sql)
 * **Input Files**: Download from Canvas
-    * `project2_compustat.csv`: S&P 500 fundamental data (2015-2025)
+    * `project2_compustat.csv`: S&P 500 fundamental data (2015-2026)
     * `project2_crsp.csv`: Daily stock return data for S&P 500 firms
 * **Instructions**:
     1. Drag `project2_compustat.csv` to the **Left** box (Table name: `compustat`)
@@ -201,7 +200,7 @@ Students will use the web-based SQL tool to access and merge the data (similar t
 ## 4. Suggested Workflow
 
 1. **Data Setup & Exploration**
-    * Navigate to the web tool ([mgaulin.com/ada/sql](https://mgaulin.com/ada/sql)) and upload your two CSV files.
+    * Navigate the web tool from Lab 6 and upload your two CSV files.
     * Explore data schema, understand table relationships and date timing
 
 2. **Data Integration**

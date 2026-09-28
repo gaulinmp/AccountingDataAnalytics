@@ -21,6 +21,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;
@@ -677,11 +697,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <hr />
 <h2 class="ada-h2" id="3-data-sources">3. Data Sources</h2>
 <h3 class="ada-h3" id="31-data-access-options">3.1. Data Access Options</h3>
-<p>Students will use the web-based SQL tool to access and merge the data (similar to Lab 5):</p>
+<p>Students can use the web-based SQL tool to access and merge the data (similar to Lab 6), though any method of merging the Compustat and CRSP data is acceptable:</p>
 <ul>
-<li><strong>Tool URL</strong>: <a href="https://mgaulin.com/ada/sql" target="_blank">mgaulin.com/ada/sql</a></li>
 <li><strong>Input Files</strong>: Download from Canvas<ul>
-<li><code class="fixed-width">project2_compustat.csv</code>: S&amp;P 500 fundamental data (2015-2025)</li>
+<li><code class="fixed-width">project2_compustat.csv</code>: S&amp;P 500 fundamental data (2015-2026)</li>
 <li><code class="fixed-width">project2_crsp.csv</code>: Daily stock return data for S&amp;P 500 firms</li>
 </ul>
 </li>
@@ -769,7 +788,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>
 <p><strong>Data Setup &amp; Exploration</strong></p>
 <ul>
-<li>Navigate to the web tool (<a href="https://mgaulin.com/ada/sql" target="_blank">mgaulin.com/ada/sql</a>) and upload your two CSV files.</li>
+<li>Navigate the web tool from Lab 6 and upload your two CSV files.</li>
 <li>Explore data schema, understand table relationships and date timing</li>
 </ul>
 </li>

@@ -21,6 +21,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;
@@ -541,275 +561,372 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 </head>
 <body>
-    <h1 class="ada-h1" id="lab-4-exploratory-data-analysis">Lab 4: Exploratory Data Analysis</h1>
-<p>Lab 4 introduces you to initial investigation of a dataset, continuing on the initial manipulations and visualizations that were started in Lab 3.
-The dataset is the General Ledger dataset (similar to Lab 2, but now with fraud!) from KPMG's case on forensic accounting.
-The GL data is for a fictitious company operating in California (4 locations), Colorado, and Hawaii.</p>
-<p>This lab and homework are intended to get you familiar with a long general ledger dataset, and comfortable pivoting it to use for analyses.
-You will first explore revenue and cogs, then combine them for a (very rough) approximation of profit.</p>
-<p class="note">Note: <strong>This is a different dataset than Lab 2</strong>, so please make sure you download this new file. Also I've already cleaned it for you, so you don't need to repeat the cleaning steps from Lab 2.</p>
+    <h1 class="ada-h1" id="lab-4-exploratory-data-analysis-of-a-general-ledger">Lab 4: Exploratory Data Analysis of a General Ledger</h1>
+<p>Lab 4 introduces you to exploratory data analysis of a general ledger. You will work with a full fiscal year of journal entry detail from Ride Safe Cycleworks, a (fictitious) assembler and seller of bicycles and e-bikes. The file follows the <strong>AICPA Audit Data Standards</strong>, so the field names are the ones an auditor would request from a client's ERP system.</p>
+<p>Before you analyze a new extract, you profile it. Does it cover the period you asked for? Do debits equal credits? How big is a typical transaction, and how big is the biggest one? The AICPA publishes a checklist for exactly this, the <em><a href="https://www.aicpa-cima.com/resources/download/general-ledger-standard-audit-data-standards" target="_blank">GL Standard Data Profiling Report</a></em>, and section 3 of this lab uses that checklist, slightly trimmed.</p>
 <div class="toc">
 <ul>
-<li><a href="#lab-4-exploratory-data-analysis">Lab 4: Exploratory Data Analysis</a><ul>
+<li><a href="#lab-4-exploratory-data-analysis-of-a-general-ledger">Lab 4: Exploratory Data Analysis of a General Ledger</a><ul>
 <li><a href="#1-assignment">1. Assignment</a><ul>
 <li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-rubric-and-grading">1.2. Rubric and Grading</a></li>
 </ul>
 </li>
 <li><a href="#2-data">2. Data</a><ul>
-<li><a href="#21-data-dictionary">2.1. Data Dictionary</a></li>
+<li><a href="#21-data-dictionary-gl_detail">2.1. Data Dictionary: GL_Detail</a></li>
+<li><a href="#22-data-dictionary-chart_of_accounts">2.2. Data Dictionary: Chart_Of_Accounts</a></li>
+<li><a href="#23-data-dictionary-trial_balance">2.3. Data Dictionary: Trial_Balance</a></li>
 </ul>
 </li>
-<li><a href="#3-how-to-steps">3. How-to Steps</a><ul>
-<li><a href="#31-excel-steps">3.1. Excel Steps</a></li>
-<li><a href="#32-python-steps">3.2. Python Steps</a></li>
+<li><a href="#3-general-steps">3. General Steps</a><ul>
+<li><a href="#31-cleaning-with-power-query">3.1. Cleaning with Power Query</a></li>
+<li><a href="#32-the-profiling-report-for-homework-4">3.2. The Profiling Report (for Homework 4)</a><ul>
+<li><a href="#321-date-ranges">3.2.1. Date ranges</a></li>
+<li><a href="#322-control-totals">3.2.2. Control totals</a></li>
+<li><a href="#323-trial-balance">3.2.3. Trial balance</a></li>
 </ul>
 </li>
+<li><a href="#33-distribution-of-amount-lab-4">3.3. Distribution of Amount (Lab 4)</a></li>
+<li><a href="#34-revenue-and-expenses-over-time-lab-4">3.4. Revenue and Expenses Over Time (Lab 4)</a></li>
+</ul>
+</li>
+<li><a href="#4-python-steps">4. Python Steps</a></li>
+<li><a href="#5-ads-general-ledger-analysis">5. ADS General Ledger Analysis</a></li>
 </ul>
 </li>
 </ul>
 </div>
 <h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
-<p><strong>Submission:</strong> To complete this lab, complete the Canvas quiz, including uploading visualizations in image form:</p>
+<p><strong>Submission:</strong> Complete the Canvas quiz. It asks for the profiling numbers you compute in section 3, plus two uploaded visualizations:</p>
 <ol>
-<li>Line chart of monthly revenue and COGS over time (2 lines on one chart)</li>
-<li>Line chart of monthly revenue by account and COGS over time (4 lines on one chart)</li>
-<li>Line chart of calculated profit over time</li>
+<li>Histogram of <code class="fixed-width">Amount</code> (full)</li>
+<li>Histogram of <code class="fixed-width">Amount</code> (truncated)</li>
+<li>Line chart of monthly Revenue and Expenses for FY2025 (2 lines on one chart)</li>
 </ol>
-<p class="note"><em>Note</em>: Consider the aesthetics of your visualizations. Clear, well-organized visuals will help convey your findings more effectively. For example, should revenue and cogs be positive or negative on your graph (hint: both positive).</p>
+<p class="note"><em>Note</em>: Consider the aesthetics of your visualizations, same standard as Lab 3: clear titles, labeled axes, sensible units.</p>
 <h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
 <p>By the end of this lab, you will be able to:</p>
 <ul>
-<li>Import and explore large-scale general ledger accounting data</li>
-<li>Perform transforms required to extract accounting insight from general ledger data</li>
-<li>Build visualizations to aid in interpreting and understanding accounting transactions</li>
+<li>Profile an unfamiliar accounting extract before analyzing it (date coverage, record counts, and control totals)</li>
+<li>Recognize why a general ledger's <code class="fixed-width">Amount</code> column is unusable in a raw histogram, and truncate it defensibly</li>
+<li>Use a lookup to bring account classification into transaction-level data</li>
+<li>Build a monthly revenue and expense trend from journal entry detail</li>
 </ul>
+<h3 class="ada-h3" id="12-rubric-and-grading">1.2. Rubric and Grading</h3>
+<p>Each visualization is graded on:</p>
+<ol>
+<li><em>Excellent</em>: Aesthetic, clean, correctly and clearly labeled, well-cropped, high quality product. (5 pts)</li>
+<li><em>Good</em>: Aesthetic with a minor issue (cluttered, unlabeled, misleading, or other). (4 pts)</li>
+<li><em>Needs improvement</em>: Cluttered, confusing, misleading, low quality product with multiple issues. (3 pts)</li>
+</ol>
 <h2 class="ada-h2" id="2-data">2. Data</h2>
-<p>The dataset for this lab is <code class="fixed-width">Lab4-GeneralLedger.xlsx</code>, an Excel file containing General Ledger entries for a fictitious company operating in 6 cities across 3 states.</p>
-<h3 class="ada-h3" id="21-data-dictionary">2.1. Data Dictionary</h3>
+<p>The dataset is <code class="fixed-width">RideSafeCycleworks_GL_FY2025.xlsx</code>, containing fiscal year 2025 for Ride Safe Cycleworks. It has six worksheets; you will use three of them.</p>
+<table>
+<thead>
+<tr>
+<th>Sheet</th>
+<th>What it is</th>
+<th>Rows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code class="fixed-width">GL_Detail</code></td>
+<td>One row per journal entry <strong>line</strong></td>
+<td>106,182</td>
+</tr>
+<tr>
+<td><code class="fixed-width">Chart_Of_Accounts</code></td>
+<td>One row per account</td>
+<td>89</td>
+</tr>
+<tr>
+<td><code class="fixed-width">Trial_Balance</code></td>
+<td>Ending balances by account × business unit × period</td>
+<td>2,756</td>
+</tr>
+<tr>
+<td><code class="fixed-width">Source_Listing</code></td>
+<td>What each journal source code means</td>
+<td>11</td>
+</tr>
+<tr>
+<td><code class="fixed-width">Business_Unit_Listing</code></td>
+<td>The six business units</td>
+<td>8</td>
+</tr>
+<tr>
+<td><code class="fixed-width">User_Listing</code></td>
+<td>Everyone who can post an entry</td>
+<td>61</td>
+</tr>
+</tbody>
+</table>
+<p class="note"><em>A note on signs</em>: this ledger stores every <code class="fixed-width">Amount</code>as a positive number and puts the direction in a separate column. That is normal for ERP extracts, and it is a deliberate contrast with Lab 2, where credits were negative. Check the sign convention before you sum anything.</p>
+<h3 class="ada-h3" id="21-data-dictionary-gl_detail">2.1. Data Dictionary: <code class="fixed-width">GL_Detail</code></h3>
+<p>The raw sheet has 31 columns. After the cleaning step in section 3 you will keep these:</p>
 <ul>
-<li><code class="fixed-width">Account Number</code>: Number associated with the account (used for lookup in Chart of Accounts)</li>
-<li><code class="fixed-width">Account Name</code>: Name of the account (e.g. Rent Expense, Bonds Payable, etc.)</li>
-<li><code class="fixed-width">Account Category</code>: Category of the account (e.g. COGS, SG&amp;A, Cash, etc.)</li>
-<li><code class="fixed-width">Post Date</code>: Date the journal entry was posted to the ledger</li>
-<li><code class="fixed-width">Period</code>: Fiscal period (month) of the journal entry</li>
-<li><code class="fixed-width">User ID</code>: Identifier of the user who made the entry (either a person or "Automated" system entry)</li>
-<li><code class="fixed-width">Manual</code>: Whether the entry was made manually (Yes/No)</li>
-<li><code class="fixed-width">Description</code>: Memo line description of the journal entry</li>
-<li><code class="fixed-width">Transaction Number</code>: Unique identifier for the transaction (a transaction comprises multiple journal entries, e.g. debit and credit entries)</li>
-<li><code class="fixed-width">City</code>: City where the transaction took place</li>
-<li><code class="fixed-width">State</code>: State where the transaction took place</li>
-<li><code class="fixed-width">Amount</code>: Amount of the journal entry (positive for debits, negative for credits)</li>
+<li><code class="fixed-width">Journal_ID</code>: Unique identifier for the journal entry. Formatted <code class="fixed-width">{Year}-{Period}-{Source}-{Number}</code>.</li>
+<li><code class="fixed-width">Journal_ID_Line_Number</code>: Line number within that entry. A journal entry has at least two lines (a debit and a credit), so <code class="fixed-width">Journal_ID</code> + <code class="fixed-width">Journal_ID_Line_Number</code> together identify a row.</li>
+<li><code class="fixed-width">JE_Header_Description</code>: Memo description of the entry.</li>
+<li><code class="fixed-width">Business_Unit_Code</code>: Which part of the company posted it (<code class="fixed-width">RSC-WHL</code> wholesale, <code class="fixed-width">RSC-RTL01</code> a retail store, etc.).</li>
+<li><code class="fixed-width">Effective_Date</code>: The <strong>accounting</strong> date, i.e., the date the transaction belongs to.</li>
+<li><code class="fixed-width">Fiscal_Year</code>: 2025 for every row in this file.</li>
+<li><code class="fixed-width">Period</code>: Fiscal month, <code class="fixed-width">M01</code> through <code class="fixed-width">M13</code>. (Yes, thirteen. Not a typo, see section 3.)</li>
+<li><code class="fixed-width">GL_Account_Number</code>: The account. <strong>This is text, not a number</strong>, since some accounts look like <code class="fixed-width">60002-01</code>.</li>
+<li><code class="fixed-width">Amount</code>: The amount of the line, <strong>always positive</strong>.</li>
+<li><code class="fixed-width">Amount_Credit_Debit_Indicator</code>: <code class="fixed-width">D</code> for debit, <code class="fixed-width">C</code> for credit. This is where the sign lives.</li>
+<li><code class="fixed-width">Entered_Date</code>: The date the entry was <strong>keyed</strong>, which is not the same as <code class="fixed-width">Effective_Date</code>.</li>
+<li><code class="fixed-width">Segment03</code>: Product line (<code class="fixed-width">ROAD</code>, <code class="fixed-width">MTB</code>, <code class="fixed-width">GRAVEL</code>, <code class="fixed-width">EBIKE</code>, <code class="fixed-width">KIDS</code>, <code class="fixed-width">PARTS</code>).</li>
+<li><em>Calculated in section 3</em>: <code class="fixed-width">AmountSigned</code>, equal to <code class="fixed-width">Amount</code> for debits and negative <code class="fixed-width">Amount</code> for credits.</li>
 </ul>
-<h2 class="ada-h2" id="3-how-to-steps">3. How-to Steps</h2>
-<p>The general outline for Lab 4 will be:</p>
-<ol>
-<li>Load the data (it's cleaned, no need to repeat Lab 2)</li>
-<li>Explore the data, looking for which accounts pertain to revenue and cogs</li>
-<li>Filter to keep just journal entries related to those accounts</li>
-<li>Pivot to get monthly revenue and cogs</li>
-<li>Calculate a rough profit (revenue - cogs)</li>
-<li>Visualize the results</li>
-</ol>
-<p>My notes on the difficulty of each modality:</p>
+<h3 class="ada-h3" id="22-data-dictionary-chart_of_accounts">2.2. Data Dictionary: <code class="fixed-width">Chart_Of_Accounts</code></h3>
 <ul>
-<li><strong>Excel:</strong> Some manual copy/pasting, but otherwise normal pivots and plots.</li>
-<li><strong>Python:</strong> Difficulty based on your knowledge of pandas, <code class="fixed-width">groupby</code>, and <code class="fixed-width">pivot_table</code>.</li>
+<li><code class="fixed-width">GL_Account_Number</code>: Matches <code class="fixed-width">GL_Detail.GL_Account_Number</code>.</li>
+<li><code class="fixed-width">GL_Account_Name</code>: e.g., "Service &amp; Repair Revenue".</li>
+<li><code class="fixed-width">Account_Type</code>: One of <code class="fixed-width">Assets</code>, <code class="fixed-width">Liabilities</code>, <code class="fixed-width">Equity</code>, <code class="fixed-width">Revenue</code>, <code class="fixed-width">Expenses</code>.</li>
+<li><code class="fixed-width">Account_Subtype</code>, <code class="fixed-width">FS_Caption</code>: Finer classifications, not needed this week.</li>
 </ul>
-<h3 class="ada-h3" id="31-excel-steps">3.1. Excel Steps</h3>
-<ol>
-<li>
-<p><strong>Load and explore the data</strong></p>
-<ol>
-<li>Open <code class="fixed-width">Lab4-GeneralLedger.xlsx</code> in Excel</li>
-<li>Examine the data structure and identify the different <code class="fixed-width">Account Name</code>s and <code class="fixed-width">Account Category</code>s<ul>
-<li>Try looking at <code class="fixed-width">Transaction Number</code> 2468 to see how a typical sale transaction is recorded</li>
-<li>Note that, because KPMG simulated this dataset, the matching between inventory and revenue timing is... odd.</li>
-</ul>
-</li>
-<li>Use filters on the <code class="fixed-width">Account Name</code> column to filter down to just those accounts related to:<ul>
-<li>Revenue (search for "Revenue" in the <code class="fixed-width">Account Name</code> filter)</li>
-<li>Cost of Goods Sold (there's just one "COGS" account)</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>
-<p><strong>Filter transactions by relevant accounts</strong></p>
-<ol>
-<li>Create a new worksheet</li>
-<li>Copy the filtered data to keep only rows where <code class="fixed-width">Account Name</code> contains revenue and COGS-related accounts</li>
-<li>Make the new data a table (Ctrl/Cmd + T) for easier filtering and manipulation</li>
-<li><strong>Alternatively:</strong> You could also just add filters to the pivot table below, if you know that <code class="fixed-width">Account Category</code> has the same 4 relevant accounts.</li>
-</ol>
-</li>
-<li>
-<p><strong>Pivot the data for monthly analysis</strong></p>
-<ol>
-<li>Select any cell in your new table</li>
-<li>Insert a pivot table (Insert &gt; PivotTable)</li>
-<li>Set up the pivot table:<ul>
-<li>Drag <code class="fixed-width">Period</code> to Rows</li>
-<li>Drag <code class="fixed-width">Account Name</code> to Columns</li>
-<li>Drag <code class="fixed-width">Amount</code> to Values (ensure it's set to Sum)</li>
-</ul>
-</li>
-<li>This will give you monthly totals for the revenue accounts and COGS. Note the signs on the values.</li>
-</ol>
-</li>
-<li>
-<p><strong>Calculate profit</strong></p>
-<ol>
-<li>In your pivot table or in a new area, create a column for "Profit"</li>
-<li>For each period, calculate: Revenue - COGS</li>
-<li>You may need to be careful about the sign of the amounts</li>
-</ol>
-</li>
-<li>
-<p><strong>Create visualizations for submission</strong></p>
-<ol>
-<li>Line chart of monthly revenue and COGS over time (2 lines on one chart)</li>
-<li>Line chart of monthly revenue by account and COGS over time (4 lines on one chart)</li>
-<li>Line chart of calculated profit over time</li>
-<li><em>Optional:</em> Enhance your visualizations<ol>
-<li>Add clear titles to each chart (e.g., "Monthly Revenue and COGS Trends")</li>
-<li>Format axis labels to show currency where appropriate</li>
-<li>Use consistent colors (e.g., green for revenue, red for COGS)</li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-<h3 class="ada-h3" id="32-python-steps">3.2. Python Steps</h3>
-<p>The following steps assume you have opened Colab, uploaded the <code class="fixed-width">Lab4-GeneralLedger.xlsx</code> file.</p>
-<ol>
-<li>
-<p><strong>Load and explore the data</strong></p>
+<h3 class="ada-h3" id="23-data-dictionary-trial_balance">2.3. Data Dictionary: <code class="fixed-width">Trial_Balance</code></h3>
 <ul>
-<li>Load the libraries and data: 
-    <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;Lab4-GeneralLedger.xlsx&quot;</span><span class="p">)</span>
-</code></pre></div></li>
-<li>Then examine the data structure and identify the different <code class="fixed-width">Account Name</code>s:
-    <div class="highlight"><pre><span></span><code><span class="c1"># Examine the data structure</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-</code></pre></div></li>
-<li>Then examine transaction 2468 to see how a typical inventory sale is recorded
-    <div class="highlight"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Transaction Number&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2468</span><span class="p">]</span>
-</code></pre></div></li>
+<li><code class="fixed-width">GL_Account_Number</code>, <code class="fixed-width">Business_Unit_Code</code>, <code class="fixed-width">Fiscal_Year</code>, <code class="fixed-width">Period</code>: Together, these identify a row.</li>
+<li><code class="fixed-width">Amount_Beginning</code>, <code class="fixed-width">Amount_Ending</code>: <strong>Signed</strong> balances (debit positive).</li>
+</ul>
+<h2 class="ada-h2" id="3-general-steps">3. General Steps</h2>
+<p>The steps below are general steps for both the homework and lab exercises. The Python specific content is covered in <a href="#4-python-steps">Section 4: Python Steps</a>.</p>
+<h3 class="ada-h3" id="31-cleaning-with-power-query">3.1. Cleaning with Power Query</h3>
+<p>We will walk through this in lab together. The short version: <code class="fixed-width">GL_Detail</code> has 31 columns, most of which you do not need this week, and two of which will cause problems if you treat them carelessly.</p>
+<p>The steps we do together:</p>
+<ol>
+<li><code class="fixed-width">Data → Get Data → From File → From Excel Workbook</code>, select <code class="fixed-width">RideSafeCycleworks_GL_FY2025.xlsx</code>, choose the <code class="fixed-width">GL_Detail</code> sheet, and click <strong>Transform Data</strong> (not Load).</li>
+<li>Remove the columns we don't need this week.</li>
+<li>Set the data type on each remaining column, and watch what happens when we tell Power Query that <code class="fixed-width">GL_Account_Number</code> is a whole number.</li>
+<li>Add the <code class="fixed-width">AmountSigned</code> calculated column.</li>
+<li><code class="fixed-width">Close &amp; Load</code> to a worksheet table.</li>
+</ol>
+<p>Two things we will hit on the way:</p>
+<ul>
+<li><code class="fixed-width">GL_Account_Number</code> <strong>cannot</strong> be a whole number. 1,894 rows in this file post to travel and entertainment sub-accounts like <code class="fixed-width">60002-01</code>, and converting to whole number turns every one of them into an <code class="fixed-width">Error</code>. Account "numbers" are labels, like a ZIP code or an employee ID. <em>If you will never do arithmetic on it, store it as text.</em></li>
+<li><code class="fixed-width">Approved_By</code> contains <code class="fixed-width">#N/A</code> in 52 rows. Excel treats <code class="fixed-width">#N/A</code> as an <em>error value</em> rather than as text, so it does not clean up quietly. Most entries are below the approval threshold and were never approved at all, so we just drop the column this week. (Counting "missing" correctly, when missing has six different spellings, is a lesson for another time.)</li>
+</ul>
+<p>Alternatively, you can skip the clicking entirely. Once you have the GL sheet opened in your Power Query Editor, you can just paste in the following m-code into the advanced editor <code class="fixed-width">View → Advanced Editor</code> (<em>keep your first two lines that have the file path to wherever you saved the file</em>):</p>
+<div class="highlight"><pre><span></span><code>let
+    Source = Excel.Workbook(File.Contents(&quot;C:\Users\[YOUR USERNAME]\Downloads\RideSafeCycleworks_GL_FY2025.xlsx&quot;), null, true),
+    GL_Detail_Sheet = Source{[Item=&quot;GL_Detail&quot;,Kind=&quot;Sheet&quot;]}[Data],
+    #&quot;Promoted Headers&quot; = Table.PromoteHeaders(GL_Detail_Sheet, [PromoteAllScalars=true]),
+    #&quot;Changed Type&quot; = Table.TransformColumnTypes(#&quot;Promoted Headers&quot;,{{&quot;Journal_ID_Line_Number&quot;, Int64.Type}, {&quot;Effective_Date&quot;, type date}, {&quot;Fiscal_Year&quot;, Int64.Type}, {&quot;Amount&quot;, type number}, {&quot;Entered_Date&quot;, type date}, {&quot;Entered_Time&quot;, type time}}),
+    #&quot;Removed Columns&quot; = Table.RemoveColumns(#&quot;Changed Type&quot;,{&quot;JE_Line_Description&quot;, &quot;Source&quot;, &quot;Segment01&quot;, &quot;Segment02&quot;, &quot;Reversal_Indicator&quot;, &quot;Reversal_Journal_ID&quot;, &quot;Last_Modified_By&quot;, &quot;Last_Modified_Date&quot;, &quot;Reporting_Amount&quot;, &quot;Reporting_Amount_Currency&quot;, &quot;Local_Amount&quot;, &quot;Local_Amount_Currency&quot;, &quot;Segment04&quot;, &quot;Segment05&quot;, &quot;Amount_Currency&quot;, &quot;Entered_By&quot;, &quot;Approved_By&quot;, &quot;Approved_Date&quot;}),
+    #&quot;Added Custom&quot; = Table.AddColumn(#&quot;Removed Columns&quot;, &quot;AmountSigned&quot;, each if [Amount_Credit_Debit_Indicator]=&quot;D&quot; then [Amount] else -1*[Amount]),
+    #&quot;Changed Type1&quot; = Table.TransformColumnTypes(#&quot;Added Custom&quot;,{{&quot;AmountSigned&quot;, type number}})
+in
+    #&quot;Changed Type1&quot;
+</code></pre></div>
+<p class="tip"><em>Tip</em>: Notice that the removal step comes <strong>before</strong> the type-setting step. Order matters in Power Query, because every step runs against the output of the one above it. Dropping <code class="fixed-width">Approved_By</code> first means we never have to deal with its <code class="fixed-width">#N/A</code>values.</p>
+<p>If you are working in Python, see <a href="#4-python-steps">Section 4: Python Steps</a>.</p>
+<h3 class="ada-h3" id="32-the-profiling-report-for-homework-4">3.2. The Profiling Report (for Homework 4)</h3>
+<p>The following questions are asked on Homework 4, and are based on AICPA's <a href="https://utah.instructure.com/courses/1262469/files/202136039?wrap=1" target="_blank">GL Standard Data Profiling Report</a>, and every one is a <code class="fixed-width">MIN</code>, <code class="fixed-width">MAX</code>, <code class="fixed-width">COUNT</code>, <code class="fixed-width">SUM</code>, or Pivot. I've put them here because they are useful for understanding the structure and content of the GL data that we'll plot in the Lab. I've put the more complex plots in the lab so that you can ask me questions about them in person.</p>
+<h4 class="ada-h4" id="321-date-ranges">3.2.1. Date ranges</h4>
+<ol>
+<li>Minimum and maximum <code class="fixed-width">Effective_Date</code>.</li>
+<li>Minimum and maximum <code class="fixed-width">Entered_Date</code>.</li>
+<li>Minimum and maximum <code class="fixed-width">Effective_Date</code> and <code class="fixed-width">Entered_Date</code> within each <code class="fixed-width">Period</code>. Build this as a pivot table: <code class="fixed-width">Period</code> in Rows, <code class="fixed-width">Effective_Date</code> and <code class="fixed-width">Entered_Date</code> each in Values twice, once set to Min and once set to Max.<ul>
+<li>Two things in number 3 are worth noticing:<ul>
+<li>There are <strong>thirteen</strong> periods. <code class="fixed-width">M13</code> is not a month; it is the adjustment period where the year-end close and audit entries are posted. Any chart that groups by <code class="fixed-width">Period</code> and calls it "monthly" will have thirteen bars, and any "average month" computed as total ÷ 13 is wrong.</li>
+<li>Look at the max for <code class="fixed-width">M12</code> and <code class="fixed-width">M13</code>. The effective dates are in December; the entered dates are not. The gap between when a transaction happened and when someone recorded it is worth watching.</li>
 </ul>
 </li>
-<li>
-<p><strong>Filter for revenue and COGS accounts</strong></p>
-<ul>
-<li>Keep just the rows where <code class="fixed-width">Account Name</code> contains revenue and COGS-related accounts:
-    <div class="highlight"><pre><span></span><code><span class="c1"># Filter for Account names that match Revenue OR COGS (the | is OR in regex)</span>
-<span class="n">rev_cogs_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">&#39;Revenue|COGS&#39;</span><span class="p">)]</span>
-<span class="c1"># Then verify it worked</span>
-<span class="n">rev_cogs_df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-</code></pre></div></li>
-</ul>
-</li>
-<li>
-<p><strong>Create Detailed Chart (Revenue by Account &amp; COGS)</strong></p>
-<ul>
-<li>We're going to do this chart first, because it's a one-liner in seaborn:
-    <div class="highlight"><pre><span></span><code><span class="c1"># Period is monthly, so we can just use seaborn&#39;s lineplot to do our aggregation</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Account Name&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">errorbar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-</code></pre></div></li>
-<li>Well almost, now we have to fix the signs, because revenue is negative in the dataset (credits are negative, debits are positive)
-    <div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-    <span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Revenue&quot;</span><span class="p">),</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">])),</span>
-    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Account Name&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">errorbar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-</code></pre></div></li>
-<li>Remember to format the axes and labels for aesthetics (see the end for an elaborate example)</li>
-</ul>
-</li>
-<li>
-<p><strong>Create Summary Chart (Total Revenue &amp; COGS)</strong></p>
-<ul>
-<li>We can do this by creating a new column that has just two values, "Revenue" and "COGS", then using that column as our "hue" in seaborn:
-    <div class="highlight"><pre><span></span><code><span class="c1"># Create a new column for Account</span>
-<span class="n">rev_cogs_df</span><span class="p">[</span><span class="s1">&#39;Account&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rev_cogs_df</span><span class="p">[</span><span class="s1">&#39;Account Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;Revenue&#39;</span> <span class="k">if</span> <span class="s1">&#39;Revenue&#39;</span> <span class="ow">in</span> <span class="n">x</span> <span class="k">else</span> <span class="s1">&#39;COGS&#39;</span>
-<span class="p">)</span>
-<span class="c1"># Then same plot as above</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
-    <span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Account&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Revenue&quot;</span><span class="p">,</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">])),</span>
-    <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Account&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">errorbar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-</code></pre></div></li>
-</ul>
-</li>
-<li>
-<p><strong>Create Profit Chart</strong></p>
-<ul>
-<li>Calculating the profit is pretty trivial, because within each month, we can just sum all transactions because the revenue and COGS have opposite signs:
-<div class="highlight"><pre><span></span><code><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]),</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">errorbar</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-</code></pre></div></li>
 </ul>
 </li>
 </ol>
-<p>For aesthetics, I usually format axes, and set limits on the graphs.</p>
-<details>
-<summary>For example, formatting a line graph would be:</summary>
+<h4 class="ada-h4" id="322-control-totals">3.2.2. Control totals</h4>
+<ol start="4">
+<li>Line item count in <code class="fixed-width">GL_Detail</code>.</li>
+<li>Sum of <code class="fixed-width">Amount</code> where <code class="fixed-width">Amount_Credit_Debit_Indicator</code> = <code class="fixed-width">D</code> (total debits).</li>
+<li>Sum of <code class="fixed-width">Amount</code> where <code class="fixed-width">Amount_Credit_Debit_Indicator</code> = <code class="fixed-width">C</code> (total credits).</li>
+<li>Sum of <code class="fixed-width">AmountSigned</code> across the whole file (this should also just be #5 - #6).</li>
+</ol>
+<p class="tip">In Excel, numbers 5 and 6 are <code class="fixed-width">SUMIF</code>, and number 7 is a plain <code class="fixed-width">SUM</code>. Number 7 should give you a number that is either exactly zero or close enough that you can see floating-point rounding at work. If it doesn't, something is wrong with your <code class="fixed-width">AmountSigned</code>formula.</p>
+<h4 class="ada-h4" id="323-trial-balance">3.2.3. Trial balance</h4>
+<ol start="8">
+<li>Count of distinct <code class="fixed-width">GL_Account_Number</code> in <code class="fixed-width">Trial_Balance</code>.<ul>
+<li>This is asking for <em>distinct</em> accounts, not rows. <code class="fixed-width">Trial_Balance</code> has one row per account <em>per business unit per period</em>, so a plain row count will be off by a large factor (here, about 35). Always check the grain of a table before you count anything in it.</li>
+</ul>
+</li>
+<li>Sum of <code class="fixed-width">Amount_Ending</code> for <code class="fixed-width">Period</code> = <code class="fixed-width">M12</code>.</li>
+</ol>
+<p class="note">One important caveat. A clean set of control totals tells you the posting mechanics are sound, meaning every entry has a balanced debit and credit. It tells you nothing about whether the amounts are right, whether the dates are right, or whether something was left out of the extract entirely.</p>
+<h3 class="ada-h3" id="33-distribution-of-amount-lab-4">3.3. Distribution of <code class="fixed-width">Amount</code> (Lab 4)</h3>
+<p>Plot a histogram of <code class="fixed-width">Amount</code> using all 106,182 rows and you will get one bar. Everything is crammed into the leftmost bin, and the x-axis runs out to $57.8 million because of a handful of year-end close entries. The chart is accurate; the distribution is just too skewed to read. Half of all lines are under $2,189, and the largest is over $57 million.</p>
+<p>We will then make a readable histogram by <strong>truncating</strong> (dropping the rows above a cutoff), then report what truncating cost you.</p>
+<ol>
+<li>Make the histogram with no cutoff. It shouldn't look that good, which is the contrast we want.</li>
+<li>Truncate to rows where <code class="fixed-width">Amount</code> ≤ $25,000 and plot again, using bins of $500. You can achieve this by applying a filter in your Excel Table (<code class="fixed-width">Number Filters</code> → <code class="fixed-width">Less Than...</code> → <code class="fixed-width">25000</code>).</li>
+<li>Answer in the quiz:<ul>
+<li>What percentage of <strong>rows</strong> did you keep? (hint: <code class="fixed-width">countif</code> in Excel)</li>
+<li>What percentage of <strong>total dollars</strong> did you keep? (note: unsigned Amount, not signed) (hint: <code class="fixed-width">sumif</code> in Excel)</li>
+</ul>
+</li>
+</ol>
+<p>Pay attention to the gap between those two answers. You will keep the overwhelming majority of the rows and a much smaller share of the dollars, so the tidy histogram you just made describes the company's <em>typical</em> transaction, and says very little about where its dollars actually go. Truncation is common and perfectly legitimate, as long as you report it, which is why every chart you truncate needs "amounts above $25,000 excluded" somewhere on it.</p>
+<p>You will use this same thinking in Project 1, where the financial statement data are even more skewed (Apple and a shell company are in the same dataset).</p>
+<p class="note"><em>Note</em>: <strong>Truncating</strong> drops the outlier rows. <strong>Winsorizing</strong>keeps them but resets them to the cutoff value. Truncating changes your row count and keeps values unchanged; winsorizing keeps your row cound but changes your values. For a histogram, winsorizing piles every large value into one artificially tall bar at the edge.</p>
+<h3 class="ada-h3" id="34-revenue-and-expenses-over-time-lab-4">3.4. Revenue and Expenses Over Time (Lab 4)</h3>
+<p><code class="fixed-width">GL_Detail</code> tells you the account number of every line but not what kind of account it is. <code class="fixed-width">Chart_Of_Accounts</code> has that in <code class="fixed-width">Account_Type</code>. Bringing it across is a <strong>lookup</strong>.</p>
+<ol>
+<li>Load <code class="fixed-width">Chart_Of_Accounts</code> into the workbook. You can use Power Query again, or just copy the sheet in, since it's only 89 rows.</li>
+<li>
+<p>In your <code class="fixed-width">GL</code> table, add a column called <code class="fixed-width">Account_Type</code>:</p>
+<div class="highlight"><pre><span></span><code>=XLOOKUP([@GL_Account_Number], ChartOfAccounts[GL_Account_Number], ChartOfAccounts[Account_Type], &quot;NOT FOUND&quot;)
+</code></pre></div>
+<p>Adjust the table and column names to match yours. The <code class="fixed-width">"NOT FOUND"</code> argument is the important habit: <strong>always</strong> give <code class="fixed-width">XLOOKUP</code> an explicit not-found value, then filter on it to confirm the count is zero. Without it, you cannot tell a lookup that matched everything from one that quietly matched nothing.</p>
+</li>
+<li>
+<p>Build a pivot table:</p>
+<ul>
+<li><code class="fixed-width">Period</code> in Rows</li>
+<li><code class="fixed-width">Account_Type</code> in Columns</li>
+<li><code class="fixed-width">AmountSigned</code> in Values, set to Sum</li>
+</ul>
+</li>
+<li>Filter <code class="fixed-width">Period</code> to exclude <code class="fixed-width">M13</code>, and filter <code class="fixed-width">Account_Type</code> to just <code class="fixed-width">Revenue</code> and <code class="fixed-width">Expenses</code>.</li>
+<li>Revenue will be negative, because revenue accounts carry credit balances. Flip the sign so both lines plot positive with a helper column (e.g., <code class="fixed-width">=-B4</code> off to the right of your pivot table. You might need to hand-enter the <code class="fixed-width">B4</code> reference, as Excel will try and use the <code class="fixed-width">GETPIVOTDATA</code> function if you click on it, which is harder to work with).</li>
+<li>Insert a line chart. Title it, label the axes, and format the vertical axis as currency.</li>
+</ol>
+<p class="tip"><em>Tip</em>: We are doing this with <code class="fixed-width">XLOOKUP</code> rather than a merge on purpose. A lookup pulls one column across when you already have a matching key; a <em>join</em>&nbsp;is the general operation for combining whole tables, and that is week 5. Same idea, more power, and more ways to get it wrong.</p>
+<p><strong>Some things to observe:</strong></p>
+<p>Ride Safe Cycleworks sells bicycles, so revenue should rise into spring and summer and fall off in winter. It mostly does, but there is a soft patch late in the year that seasonality alone doesn't explain.</p>
+<p>You cannot diagnose it with this file. A general ledger tells you that revenue moved, but there are no sales orders, no shipments, and no inventory here to tell you why. Make a note of what you see and we will come back to it when the subledgers show up.</p>
+<h2 class="ada-h2" id="4-python-steps">4. Python Steps</h2>
+<p>The following steps assume you have opened Colab and uploaded <code class="fixed-width">RideSafeCycleworks_GL_FY2025.xlsx</code>.</p>
+<p><strong>Setup</strong> (this replaces the entire Power Query section):</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
 
-<span class="c1"># This just formats the axes nicely.</span>
-<span class="c1"># The Mbt formatter stands for &quot;Millions, Billions, Trillions&quot;</span>
+<span class="n">f</span> <span class="o">=</span> <span class="s2">&quot;RideSafeCycleworks_GL_FY2025.xlsx&quot;</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">mbt_ff</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">FuncFormatter</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">mbt_string_fmt</span><span class="p">(</span>
-        <span class="n">x</span><span class="p">,</span>
-        <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">decimals</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{l_paren}{prefix}</span><span class="s2">{x:,.</span><span class="si">{decimals}</span><span class="s2">f}</span><span class="si">{mbt}{suffix}{r_paren}</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">zero_fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{prefix}</span><span class="s2">0&quot;</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">):</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prefix</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;suffix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">suffix</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;decimals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decimals</span>
+<span class="c1"># GL_Account_Number must be read as text, or 60002-01 breaks the file</span>
+<span class="n">gl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;GL_Detail&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;GL_Account_Number&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">})</span>
+<span class="n">coa</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Chart_Of_Accounts&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;GL_Account_Number&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">})</span>
+<span class="n">tb</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;Trial_Balance&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;GL_Account_Number&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">})</span>
 
-        <span class="k">if</span> <span class="s2">&quot;l_paren&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;l_paren&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;(&quot;</span> <span class="o">*</span> <span class="nb">bool</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;r_paren&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;r_paren&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;)&quot;</span> <span class="o">*</span> <span class="nb">bool</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span>
-
-        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">zero_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="c1"># Divide by 1000s to find the right suffix</span>
-        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">mbt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">]):</span>
-            <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="n">x</span> <span class="o">/=</span> <span class="mf">1000.0</span>
-
-        <span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">mbt</span><span class="o">=</span><span class="n">mbt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">FuncFormatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">mbt_string_fmt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
-
-<span class="c1"># Once the above code is run, you can just run the following to make a nice graph</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="s1">&#39;talk&#39;</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-
-<span class="c1"># The actual plot itself (Example using the Profit data)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rev_cogs_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Amount</span><span class="o">=</span><span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]),</span> 
-             <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Amount&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">errorbar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Profit&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Fiscal Period&quot;</span><span class="p">)</span>
-
-<span class="c1"># format the axes labels (uses that function defined above)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mbt_ff</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;$&quot;</span><span class="p">))</span>
+<span class="c1"># Same calculated column as Power Query</span>
+<span class="n">gl</span><span class="p">[</span><span class="s2">&quot;AmountSigned&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Amount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Amount_Credit_Debit_Indicator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="o">-</span><span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Amount&quot;</span><span class="p">])</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
-</details>
+<p><strong>Profiling report</strong> (section 3.2):</p>
+<p>Date ranges:
+<div class="highlight"><pre><span></span><code><span class="n">gl</span><span class="p">[[</span><span class="s2">&quot;Effective_Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Entered_Date&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">])</span>
+</code></pre></div></p>
+<p>Effective and entered dates by period:
+<div class="highlight"><pre><span></span><code><span class="n">gl</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Period&quot;</span><span class="p">)[[</span><span class="s2">&quot;Effective_Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Entered_Date&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">])</span>
+</code></pre></div></p>
+<p>Control totals:
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of lines:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">gl</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Amount by Credit/Debit Indicator:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">gl</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;Amount_Credit_Debit_Indicator&quot;</span><span class="p">)[</span><span class="s2">&quot;Amount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Amount Signed:&quot;</span><span class="p">,</span> <span class="n">gl</span><span class="p">[</span><span class="s2">&quot;AmountSigned&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trial balance, # unique: &quot;</span><span class="p">,</span> <span class="n">tb</span><span class="p">[</span><span class="s2">&quot;GL_Account_Number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Amount Ending for M12:&quot;</span><span class="p">,</span> <span class="n">tb</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tb</span><span class="p">[</span><span class="s2">&quot;Period&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;M12&quot;</span><span class="p">,</span> <span class="s2">&quot;Amount_Ending&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+</code></pre></div></p>
+<p>In python, it's often nice to format numbers for readability, especially when dealing with large amounts of money. You can use f-strings to achieve this. For example:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Amount Signed: </span><span class="si">{</span><span class="n">gl</span><span class="p">[</span><span class="s1">&#39;AmountSigned&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trial balance, # unique: </span><span class="si">{</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;GL_Account_Number&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total Amount Ending for M12: </span><span class="si">{</span><span class="n">tb</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tb</span><span class="p">[</span><span class="s1">&#39;Period&#39;</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;M12&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Amount_Ending&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Histogram</strong> (section 3.3):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># The unreadable version</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">gl</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Amount&quot;</span><span class="p">)</span>
+
+<span class="c1"># Truncated: keep rows at or below $25,000, bins of $500</span>
+<span class="n">cut</span> <span class="o">=</span> <span class="n">gl</span><span class="p">[</span><span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Amount&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">25_000</span><span class="p">]</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">cut</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Amount&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25_001</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribution of GL line amounts (amounts above $25,000 excluded)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Amount ($)&quot;</span><span class="p">)</span>
+
+<span class="c1"># What truncation cost you</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rows kept:    </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cut</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">gl</span><span class="p">)</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dollars kept: </span><span class="si">{</span><span class="n">cut</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">gl</span><span class="p">[</span><span class="s1">&#39;Amount&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>Revenue and expenses</strong> (section 3.4):</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># .map() is the pandas equivalent of XLOOKUP: one column across on a matching key</span>
+<span class="n">account_types</span> <span class="o">=</span> <span class="n">coa</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;GL_Account_Number&quot;</span><span class="p">)[</span><span class="s2">&quot;Account_Type&quot;</span><span class="p">]</span>
+<span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Account_Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gl</span><span class="p">[</span><span class="s2">&quot;GL_Account_Number&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">account_types</span><span class="p">)</span>
+
+<span class="c1"># Always confirm the lookup found everything</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unmatched accounts:&quot;</span><span class="p">,</span> <span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Account_Type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+
+<span class="n">monthly</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">gl</span><span class="p">[(</span><span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Period&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;M13&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">gl</span><span class="p">[</span><span class="s2">&quot;Account_Type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Revenue&quot;</span><span class="p">,</span> <span class="s2">&quot;Expenses&quot;</span><span class="p">])]</span>
+    <span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s2">&quot;Period&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;Account_Type&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;AmountSigned&quot;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">monthly</span><span class="p">[</span><span class="s2">&quot;Revenue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">monthly</span><span class="p">[</span><span class="s2">&quot;Revenue&quot;</span><span class="p">]</span>   <span class="c1"># revenue is a credit balance, so flip it to plot positive</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">monthly</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Ride Safe Cycleworks: monthly revenue and expenses, FY2025&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Amount ($ millions)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Fiscal period, 2025&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">monthly</span><span class="o">.</span><span class="n">index</span><span class="p">)),</span> <span class="p">[</span><span class="s2">&quot;Jan&quot;</span><span class="p">,</span> <span class="s2">&quot;Feb&quot;</span><span class="p">,</span> <span class="s2">&quot;Mar&quot;</span><span class="p">,</span> <span class="s2">&quot;Apr&quot;</span><span class="p">,</span> <span class="s2">&quot;May&quot;</span><span class="p">,</span> <span class="s2">&quot;Jun&quot;</span><span class="p">,</span> <span class="s2">&quot;Jul&quot;</span><span class="p">,</span> <span class="s2">&quot;Aug&quot;</span><span class="p">,</span> <span class="s2">&quot;Sep&quot;</span><span class="p">,</span> <span class="s2">&quot;Oct&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov&quot;</span><span class="p">,</span> <span class="s2">&quot;Dec&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">x</span><span class="o">/</span><span class="mf">1e6</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">M&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p class="tip"><em>Tip</em>: <code class="fixed-width">.map()</code> on a Series is the direct analogue of <code class="fixed-width">XLOOKUP</code>, and <code class="fixed-width">.isna().sum()</code> afterward is the analogue of filtering for <code class="fixed-width">"NOT FOUND"</code>. Check it every time.</p>
+<h2 class="ada-h2" id="5-ads-general-ledger-analysis">5. ADS General Ledger Analysis</h2>
+<p>Link to <a href="https://utah.instructure.com/courses/1262469/files/202136039?wrap=1" target="_blank">ADS General Ledger Analysis</a></p>
+<table>
+  <thead>
+    <tr>
+      <th>Test</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2" style="text-align:center;"><strong>Date and Control Totals</strong></td>
+    </tr>
+    <tr>
+      <td>Date ranges</td>
+      <td>Minimum and maximum dates for Entry_Date (<code>GL_Detail</code>).<br>Minimum and maximum dates for Effective_Date (<code>GL_Detail</code>).<br>Minimum and maximum dates for Effective_Date with each period for the data provided (<code>GL_Detail</code>).</td>
+    </tr>
+    <tr>
+      <td>Control totals</td>
+      <td>Line item count, sum of total debits, sum of total credits, and total sum of amount (<code>GL_Detail</code>).<br>GL account count and total sum of balance amount (<code>Trial_Balance</code>).</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align:center;"><strong>JE and TB review</strong></td>
+    </tr>
+    <tr>
+      <td>Missing data</td>
+      <td>Number of missing or blank values listed by field.</td>
+    </tr>
+    <tr>
+      <td>Invalid data</td>
+      <td>Count of records by field that do not comply with field format requirements (for example, date or time fields not compliant with date or time format, numeric fields not including two decimal places, and so on).</td>
+    </tr>
+    <tr>
+      <td>Nonbalancing entries</td>
+      <td>Count and percentage of journal entries that do not balance to $0.</td>
+    </tr>
+    <tr>
+      <td>Nonbalancing sources</td>
+      <td>From <code>GL_Detail</code>, the count of records and total of amount by source.</td>
+    </tr>
+    <tr>
+      <td>Accounts missing from TB</td>
+      <td>Count and total of amount by GL_Account_Number for GL accounts that are found in the <code>GL_Detail</code> but not in the <code>Trial_Balance</code>.</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align:center;"><strong>Completeness and Financial Statement Roll-Forward</strong></td>
+    </tr>
+    <tr>
+      <td>Account roll-forward</td>
+      <td>Roll forward all accounts from the beginning of the fiscal year to the end of the period. That is, for each <code>GL_Account_Number</code>, the <code>Amount_Beginning</code> (from <code>Trial_Balance</code>), total of <code>Amount</code> (from <code>GL_Detail</code>), <code>Amount_Ending</code> (from <code>Trial_Balance</code>), and the difference between the <code>Amount_Ending</code> and sum of <code>Amount_Begining</code> and total amount).</td>
+    </tr>
+  </tbody>
+</table>
 </body>
 </html>

@@ -28,7 +28,7 @@ class CRSP(_DataFrameCache):
     """
     # Arguments passed to _pd.read_csv
     file_format = "csv"
-    read_args = {"compression": 'gzip', "parse_dates": ["date"]}
+    read_args = {"compression": 'gzip', "parse_dates": ["date"], 'low_memory': False}
     override_directory = DATA_DIR
 
     def make_dataset(self):
@@ -51,8 +51,8 @@ class CRSP(_DataFrameCache):
         sql_dsf = f"""
         SELECT permno, ticker, dlycaldt AS date,
             dlyret AS ret, dlyprc AS prc, shrout,
-            dlyvol AS vol, dlybid AS bid, dlyask AS ask
-        FROM crspq.dsf_v2
+            dlyvol AS vol, dlybid AS bid, dlyask AS ask, shareclass AS shrcls
+        FROM crspq.wrds_dsfv2_query
         WHERE ShareType = 'NS' 
             AND SecurityType = 'EQTY' 
             AND SecuritySubType = 'COM' 

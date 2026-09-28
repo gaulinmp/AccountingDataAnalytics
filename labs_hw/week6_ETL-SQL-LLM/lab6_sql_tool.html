@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Data SQL Lab (SQLite)</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <!-- PapaParse for CSV Parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <!-- SQL.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+
+  <!-- CodeMirror (Editor & SQL Hint) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/sql-hint.min.js"></script>
+
+  <style>
+    :root {
+      /* Color Palette */
+      --bg-body: #0f172a;
+      --bg-card: #1e293b;
+      --bg-input: #334155;
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent: #8b5cf6;
+      --border: #475569;
+      --success: #10b981;
+      --error: #ef4444;
+      --table-header: #334155;
+      --table-row-even: #1e293b;
+      --table-row-odd: #253347;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 1.5rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 98%;
+      /* Full width as requested */
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Card Styles */
+    .card {
+      background-color: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: var(--primary);
+    }
+
+    /* Data Sources Grid */
+    .data-sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .source-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      /* Minimum height for upload box */
+    }
+
+    /* Unified Upload/Preview States */
+    .upload-state {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .preview-state {
+      display: none;
+      /* Hidden strictly by default */
+      flex-direction: column;
+      gap: 0.5rem;
+      height: 100%;
+    }
+
+    .preview-state.active {
+      display: flex;
+    }
+
+    .upload-state h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      /* Fill the card */
+      min-height: 150px;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .file-input-wrapper:hover {
+      border-color: var(--primary);
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-msg {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+      text-align: center;
+    }
+
+    .file-status {
+      font-size: 0.9rem;
+      text-align: center;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      min-height: 1.5em;
+      /* Prevent jump */
+    }
+
+    /* Preview Headers */
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background-color: var(--bg-input);
+      color: var(--text-secondary);
+    }
+
+    /* Result count styling - made subtle/informational */
+    #result-count {
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.4rem 0;
+      border: none;
+      box-shadow: none;
+    }
+
+    /* SQL Editor Section */
+    .sql-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      .sql-interface {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        /* Side-by-side on wide screens with strict 50% split */
+        gap: 1.5rem;
+        align-items: start;
+      }
+    }
+
+    .editor-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      height: 100%;
+      min-width: 0;
+      /* Important for flex/grid nesting */
+    }
+
+    /* CodeMirror Custom Theme */
+    .CodeMirror {
+      width: 100%;
+      height: 400px !important;
+      /* Slightly taller since we have more space */
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      background-color: #0d1117 !important;
+      /* Github dark code bg */
+      color: #c9d1d9 !important;
+    }
+
+    .CodeMirror-gutters {
+      background-color: #0d1117 !important;
+      border-right: 1px solid var(--border) !important;
+    }
+
+    .CodeMirror-linenumber {
+      color: var(--text-secondary) !important;
+    }
+
+    .CodeMirror-cursor {
+      border-left: 2px solid var(--primary) !important;
+    }
+
+    .CodeMirror-hints {
+      background: var(--bg-card) !important;
+      border: 1px solid var(--border) !important;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .CodeMirror-hint {
+      color: var(--text-secondary) !important;
+      font-family: 'JetBrains Mono', monospace !important;
+      padding: 4px 8px !important;
+    }
+
+    .CodeMirror-hint-active {
+      background-color: var(--primary) !important;
+      color: white !important;
+    }
+
+    /* Syntax Highlighting */
+    .cm-keyword {
+      color: #ff7b72 !important;
+    }
+
+    .cm-atom {
+      color: #79c0ff !important;
+    }
+
+    .cm-number {
+      color: #79c0ff !important;
+    }
+
+    .cm-def {
+      color: #d2a8ff !important;
+    }
+
+    .cm-variable {
+      color: #c9d1d9 !important;
+    }
+
+    .cm-variable-2 {
+      color: #c9d1d9 !important;
+    }
+
+    .cm-variable-3 {
+      color: #7ee787 !important;
+    }
+
+    .cm-property {
+      color: #a5d6ff !important;
+    }
+
+    .cm-operator {
+      color: #c9d1d9 !important;
+    }
+
+    .cm-comment {
+      color: #8b949e !important;
+      font-style: italic;
+    }
+
+    .cm-string {
+      color: #a5d6ff !important;
+    }
+
+    .cm-string-2 {
+      color: #a5d6ff !important;
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      align-self: flex-start;
+      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-input);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      /* Kept for other uses, though download button will upgrade to regular btn size */
+    }
+
+    /* Output / Result Styling */
+    .output-container {
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .table-wrapper {
+      overflow: auto;
+      max-height: 500px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th,
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      background-color: var(--table-header);
+      color: var(--text-main);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: var(--table-row-even);
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: var(--table-row-odd);
+    }
+
+    tbody tr:hover {
+      background-color: var(--bg-input);
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-family: 'Mono', monospace;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--error);
+      border-radius: 6px;
+      padding: 1rem;
+      display: none;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--bg-input);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Notifications */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--bg-card);
+      border-left: 4px solid var(--success);
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transform: translateY(150%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Financial Data SQL Lab</h1>
+      <p class="subtitle">Upload Compustat and CRSP datasets. Powered by SQLite.</p>
+    </header>
+
+    <!-- Unfied Data Sources Section -->
+    <section class="data-sources-grid">
+
+      <!-- Compustat Card -->
+      <div class="card source-card" id="card-compustat">
+
+        <!-- State A: Upload -->
+        <div class="upload-state" id="upload-compustat">
+          <h3>📂 Compustat File (CSV)</h3>
+          <div class="file-input-wrapper">
+            <input type="file" id="file-compustat" accept=".csv" />
+            <div class="file-msg">
+              <span style="font-size: 2.5rem; display:block; margin-bottom: 0.5rem;">📥</span>
+              Drop file here or click to upload
+            </div>
+          </div>
+          <div class="file-status" id="status-compustat"></div>
+        </div>
+
+        <!-- State B: Preview (Hidden initially) -->
+        <div class="preview-state" id="preview-compustat-container">
+          <div class="preview-header">
+            <h3>Compustat Preview</h3>
+            <div style="display:flex; align-items: center; gap: 0.5rem;">
+              <span class="badge">Table: compustat</span>
+            </div>
+          </div>
+          <div class="table-wrapper" id="preview-compustat">
+            <!-- Table rendered here -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CRSP Card -->
+      <div class="card source-card" id="card-crsp">
+
+        <!-- State A: Upload -->
+        <div class="upload-state" id="upload-crsp">
+          <h3>📂 CRSP File (CSV)</h3>
+          <div class="file-input-wrapper">
+            <input type="file" id="file-crsp" accept=".csv" />
+            <div class="file-msg">
+              <span style="font-size: 2.5rem; display:block; margin-bottom: 0.5rem;">📥</span>
+              Drop file here or click to upload
+            </div>
+          </div>
+          <div class="file-status" id="status-crsp"></div>
+        </div>
+
+        <!-- State B: Preview (Hidden initially) -->
+        <div class="preview-state" id="preview-crsp-container">
+          <div class="preview-header">
+            <h3>CRSP Preview</h3>
+            <div style="display:flex; align-items: center; gap: 0.5rem;">
+              <span class="badge">Table: crsp</span>
+            </div>
+          </div>
+          <div class="table-wrapper" id="preview-crsp">
+            <!-- Table rendered here -->
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- SQL Interface -->
+    <section class="card sql-interface">
+      <div class="editor-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <h3>SQL Query Editor</h3>
+          <button class="btn" id="btn-run" disabled>Loading SQL Engine...</button>
+        </div>
+        <textarea id="sql-editor" spellcheck="false">-- Example Query: Join Compustat and CRSP on Permno and Date between fiscal year end dates
+SELECT *
+FROM compustat
+JOIN crsp
+    ON compustat.permno = crsp.permno
+        AND date >= fiscal_year_end
+        AND date < fiscal_year_end_next
+LIMIT 5
+</textarea>
+        <div class="error-msg" id="error-output"></div>
+      </div>
+
+      <div class="output-container">
+        <div class="preview-header">
+          <h3>Query Results</h3>
+          <div style="display:flex; gap: 0.5rem; align-items: center;">
+            <span class="badge" id="result-count">0 rows</span>
+            <button class="btn" id="btn-download-all" title="Download results (CSV)">⬇ CSV</button>
+          </div>
+        </div>
+        <div class="table-wrapper" id="query-result">
+          <div style="padding: 2rem; text-align: center; color: var(--text-secondary);">Run a query to see results here
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">File uploaded successfully!</div>
+
+  <script>
+    // --- Init SQL.js ---
+    let db = null;
+    let dbInitialized = false;
+
+    const config = {
+      locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${filename}`
+    };
+
+    initSqlJs(config).then(function (SQL) {
+      db = new SQL.Database();
+      dbInitialized = true;
+      document.getElementById('btn-run').disabled = false;
+      document.getElementById('btn-run').textContent = "▶ Run Query";
+      console.log("SQL.js initialized");
+    });
+
+    // --- Global State ---
+
+    const dbSchema = {
+      compustat: [],
+      crsp: []
+    };
+
+    // --- Editor Setup ---
+    const sqlEditorTextArea = document.getElementById('sql-editor');
+    const editor = CodeMirror.fromTextArea(sqlEditorTextArea, {
+      mode: 'text/x-sql',
+      indentWithTabs: true,
+      smartIndent: true,
+      lineNumbers: true,
+      matchBrackets: true,
+      autofocus: true,
+      extraKeys: { "Ctrl-Space": "autocomplete" },
+      hintOptions: {
+        tables: dbSchema,
+        completeSingle: false
+      }
+    });
+
+    editor.on("inputRead", function (cm, change) {
+      if (change.text[0] === ".") {
+        cm.showHint({ completeSingle: false });
+      }
+    });
+
+    // --- DOM Elements ---
+    const fileInputCompustat = document.getElementById('file-compustat');
+    const fileInputCrsp = document.getElementById('file-crsp');
+    const statusCompustat = document.getElementById('status-compustat');
+    const statusCrsp = document.getElementById('status-crsp');
+
+    const uploadCompustat = document.getElementById('upload-compustat');
+    const uploadCrsp = document.getElementById('upload-crsp');
+    const previewCompustatContainer = document.getElementById('preview-compustat-container');
+    const previewCrspContainer = document.getElementById('preview-crsp-container');
+
+    const btnRun = document.getElementById('btn-run');
+
+    const btnDownloadAll = document.getElementById('btn-download-all');
+    const errorOutput = document.getElementById('error-output');
+    const resultCount = document.getElementById('result-count');
+    const toast = document.getElementById('toast');
+    const loadingOverlay = document.getElementById('loading-overlay');
+
+    // --- UI Helpers ---
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function toggleLoading(show) {
+      if (show) loadingOverlay.classList.add('active');
+      else loadingOverlay.classList.remove('active');
+    }
+
+
+
+    // --- DB Helpers ---
+    function runQuery(sql) {
+      if (!dbInitialized) return null;
+      try {
+        const results = db.exec(sql);
+        if (!results || results.length === 0) return null;
+        return results[results.length - 1]; // Return last result set
+      } catch (e) {
+        throw e; // re-throw for caller to handle
+      }
+    }
+
+    // --- File Loading (PapaParse -> SQL Insert) ---
+    function loadFile(file, tableName, statusEl, uploadEl, previewContainerEl, previewTableElId) {
+      if (!file) return;
+
+      statusEl.textContent = `Parsing ${file.name}...`;
+      toggleLoading(true);
+
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function (results) {
+          try {
+            const data = results.data;
+            const columns = results.meta.fields;
+
+            if (!columns || columns.length === 0) {
+              throw new Error("No columns found in CSV");
+            }
+
+            // Sanitize column names for SQL
+            const safeColumns = columns.map(c => `"${c.trim()}"`);
+
+            // Drop & Create Table
+            db.run(`DROP TABLE IF EXISTS ${tableName}`);
+            const createSql = `CREATE TABLE ${tableName} (${safeColumns.join(',')})`;
+            db.run(createSql);
+
+            // Batch Insert
+            const placeholders = `(${safeColumns.map(() => '?').join(',')})`;
+
+            db.run("BEGIN TRANSACTION");
+            const stmt = db.prepare(`INSERT INTO ${tableName} VALUES ${placeholders}`);
+
+            for (let i = 0; i < data.length; i++) {
+              const row = data[i];
+              const rowValues = columns.map(col => {
+                let val = row[col];
+                if (val === undefined || val === "") return null;
+                return val;
+              });
+              stmt.run(rowValues);
+            }
+            stmt.free();
+            db.run("COMMIT");
+
+            // Switch View to Preview
+            uploadEl.style.display = 'none';
+            previewContainerEl.classList.add('active');
+
+            showToast(`Table '${tableName}' imported.`);
+
+            // Update Schema for Autocomplete
+            dbSchema[tableName] = columns;
+            editor.setOption("hintOptions", { tables: dbSchema, completeSingle: false });
+
+            // Update Preview
+            updatePreview(tableName, previewTableElId);
+
+          } catch (err) {
+            console.error(err);
+            statusEl.textContent = `❌ Error: ${err.message}`;
+            statusEl.style.color = 'var(--error)';
+            db.run("ROLLBACK");
+          } finally {
+            toggleLoading(false);
+          }
+        },
+        error: function (err) {
+          console.error(err);
+          statusEl.textContent = `❌ CSV Error`;
+          statusEl.style.color = 'var(--error)';
+          toggleLoading(false);
+        }
+      });
+    }
+
+    // --- Preview Helper ---
+    function updatePreview(tableName, elementId) {
+      try {
+        const res = runQuery(`SELECT * FROM ${tableName} LIMIT 5`);
+        renderResult(res, elementId);
+      } catch (e) {
+        console.error("Preview error", e);
+      }
+    }
+
+    // --- Render Result ---
+    function renderResult(result, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      if (!result || !result.values || result.values.length === 0) {
+        container.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">No data returned</div>';
+        return;
+      }
+
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
+
+      // Header
+      const headerRow = document.createElement('tr');
+      result.columns.forEach(col => {
+        const th = document.createElement('th');
+        th.textContent = col;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+
+      // Body
+      result.values.forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(val => {
+          const td = document.createElement('td');
+          td.textContent = (val === null) ? '' : val;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+      container.appendChild(table);
+    }
+
+    // --- Export Helper (SQL Result -> CSV) ---
+    function downloadCSV(columns, values, filename) {
+      if (!columns || !values || values.length === 0) {
+        showToast("No data to download.");
+        return;
+      }
+
+      const csv = Papa.unparse({
+        fields: columns,
+        data: values
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    // --- Event Listeners ---
+    fileInputCompustat.addEventListener('change', (e) => {
+      loadFile(e.target.files[0], 'compustat', statusCompustat, uploadCompustat, previewCompustatContainer, 'preview-compustat');
+    });
+
+    fileInputCrsp.addEventListener('change', (e) => {
+      loadFile(e.target.files[0], 'crsp', statusCrsp, uploadCrsp, previewCrspContainer, 'preview-crsp');
+    });
+
+    btnRun.addEventListener('click', () => {
+      let sql = editor.getValue();
+      const originalSql = sql;
+
+      // Basic heuristic to handle trailing semicolon before wrapping
+      if (sql.trim().endsWith(';')) {
+        sql = sql.trim().slice(0, -1);
+      }
+
+      errorOutput.style.display = 'none';
+      errorOutput.textContent = '';
+
+      try {
+        const startTime = performance.now();
+
+        // 1. Get Display Data (Limit 10)
+        // This handles existing LIMITs safely (e.g. SELECT * FROM (SELECT ... LIMIT 5) LIMIT 10)
+        const displaySql = `SELECT * FROM (${sql}) LIMIT 10`;
+        const displayRes = runQuery(displaySql);
+
+        // 2. Get Total Count
+        // We run a robust count query to know the real total
+        const countSql = `SELECT COUNT(*) FROM (${sql})`;
+        const countRes = runQuery(countSql);
+        const totalRows = countRes ? countRes.values[0][0] : 0;
+
+        const endTime = performance.now();
+
+        if (displayRes) {
+          renderResult(displayRes, 'query-result');
+
+          const displayedCount = displayRes.values.length;
+          resultCount.textContent = `Showing ${displayedCount} / ${totalRows} rows (${Math.round(endTime - startTime)}ms)`;
+
+        } else {
+          document.getElementById('query-result').innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--text-secondary);">Query executed successfully (no results returned).</div>';
+          resultCount.textContent = `Showing 0 / ${totalRows} rows (${Math.round(endTime - startTime)}ms)`;
+        }
+
+      } catch (err) {
+        // If wrapping failed (e.g. multi-statement query), try running original query cautiously?
+        // Or just report error. For this lab, assuming single SELECT is safer vs crashing browser.
+        errorOutput.style.display = 'block';
+        errorOutput.textContent = `SQL Error: ${err.message}`;
+        console.error("Query Error", err);
+      }
+    });
+
+
+
+    btnDownloadAll.addEventListener('click', () => {
+      let sql = editor.getValue();
+      // SQLite uses LIMIT N OFFSET M
+      sql = sql.replace(/\bLIMIT\s+\d+(\s+OFFSET\s+\d+)?\b/gi, "");
+
+      showToast("Processing full download...");
+
+      setTimeout(() => {
+        try {
+          const res = runQuery(sql);
+          if (res) {
+            downloadCSV(res.columns, res.values, 'full_results.csv');
+            showToast(`Downloaded ${res.values.length} rows.`);
+          } else {
+            showToast("Query returned no data.");
+          }
+        } catch (err) {
+          errorOutput.style.display = 'block';
+          errorOutput.textContent = `Download Error: ${err.message}`;
+        }
+      }, 100);
+    });
+
+    // Init Empty
+    renderResult(null, 'query-result');
+
+  </script>
+</body>
+
+</html>

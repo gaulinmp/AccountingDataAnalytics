@@ -21,6 +21,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;
@@ -544,19 +564,23 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <h1 class="ada-h1" id="lab-7-unstructured-data-processing">Lab 7: Unstructured Data Processing</h1>
 <p>In this lab, you will work with a dataset that simulates real-world messy data. The dataset contains standard structured columns (ID, Date, Customer_ID, UPC, Number_Items, Total) but also a "Notes" column that is a dump of unstructured text containing critical information like Invoice Numbers, Account Representative Names, Follow-up Dates, and general notes.</p>
 <p>Your goal is to parse this <code class="fixed-width">Notes</code> column into structured data, using regular expressions (RegEx).
-This lab offers instructions for three different approaches: Excel (RegEx in Office Scripts), Google Sheets (<code class="fixed-width">RegExExtract</code> Formula), and Python (RegEx is a built in library <code class="fixed-width">re</code>).</p>
+This lab offers instructions for three different approaches: Excel or Google Sheets formulas (<code class="fixed-width">REGEXEXTRACT</code>), Excel Office Scripts (TypeScript), and Python (RegEx is the built-in library <code class="fixed-width">re</code>).</p>
 <div class="toc">
 <ul>
 <li><a href="#lab-7-unstructured-data-processing">Lab 7: Unstructured Data Processing</a><ul>
 <li><a href="#1-assignment">1. Assignment</a><ul>
 <li><a href="#11-learning-objectives">1.1. Learning Objectives</a></li>
+<li><a href="#12-rubric-and-grading">1.2. Rubric and Grading</a></li>
 </ul>
 </li>
-<li><a href="#2-data">2. Data</a></li>
+<li><a href="#2-data">2. Data</a><ul>
+<li><a href="#21-practice-your-patterns">2.1. Practice Your Patterns</a></li>
+</ul>
+</li>
 <li><a href="#3-how-to-steps">3. How-to Steps</a><ul>
-<li><a href="#31-option-a-excel-office-scripts">3.1. Option A: Excel (Office Scripts)</a></li>
-<li><a href="#32-option-b-google-sheets-regex">3.2. Option B: Google Sheets (REGEX)</a></li>
-<li><a href="#33-option-c-python-re">3.3. Option C: Python (re)</a></li>
+<li><a href="#31-excelgoogle-sheets-regexextract">3.1. Excel/Google Sheets (REGEXEXTRACT)</a></li>
+<li><a href="#32-excel-office-scripts-a-modern-vba-replacement">3.2. Excel Office Scripts (a modern VBA replacement)</a></li>
+<li><a href="#33-python-re">3.3. Python (re)</a></li>
 </ul>
 </li>
 </ul>
@@ -566,25 +590,33 @@ This lab offers instructions for three different approaches: Excel (RegEx in Off
 <h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
 <p>To complete this lab, submit the following on Canvas:</p>
 <ol>
-<li>Regular Expressions used for each column:<ul>
+<li><em>Regular Expressions</em>: Enter the regular expression you used for each column into the matching input field on the Canvas quiz:<ul>
 <li>Invoice</li>
 <li>Account Rep Name</li>
 <li>Follow-up Date</li>
 <li>General Notes</li>
 </ul>
 </li>
-<li><em>Excel/CSV File</em>: A cleaned version of the dataset where the <code class="fixed-width">Notes</code> column has been split into <code class="fixed-width">Invoice_Number</code>, <code class="fixed-width">Contact_Name</code>, <code class="fixed-width">Follow_Up_Date</code>, and <code class="fixed-width">Clean_Notes</code>.</li>
+<li><em>CSV File</em>: A cleaned version of the dataset where the <code class="fixed-width">Notes</code> column has been split into <code class="fixed-width">Invoice_Number</code>, <code class="fixed-width">Contact_Name</code>, <code class="fixed-width">Follow_Up_Date</code>, and <code class="fixed-width">Clean_Notes</code>.</li>
 </ol>
+<p class="note"><em>Note</em>: The quiz asks for <em>just</em> the regular expression, not the Excel or Python code around it. So if you entered <code class="fixed-width">=REGEXEXTRACT([@notes], "Inv\w*\s*#:\s*([^\n]+)", 2)</code> into an Excel cell, your Canvas answer is only the part inside the quotes, <code class="fixed-width">Inv\w*\s*#:\s*([^\n]+)</code>, without any quotes around it.</p>
 <h3 class="ada-h3" id="11-learning-objectives">1.1. Learning Objectives</h3>
 <p>By the end of this lab, you will be able to:</p>
 <ul>
 <li>Identify unstructured text patterns suitable for regex extraction.</li>
 <li>Use tools to extract usable information from unstructured text, including:<ul>
+<li>Excel and Google Sheets <code class="fixed-width">REGEXEXTRACT</code> formulas for quick text extraction</li>
 <li>Excel Office Scripts (TypeScript) for, among other automation, regex-based text parsing</li>
-<li>Google Sheets <code class="fixed-width">REGEXEXTRACT</code> for quick text extraction</li>
 <li>Python's <code class="fixed-width">re</code> module for robust pattern matching and extracting</li>
 </ul>
 </li>
+</ul>
+<h3 class="ada-h3" id="12-rubric-and-grading">1.2. Rubric and Grading</h3>
+<p>Grading is based the percentage of rows your CSV gets right. Each of the four new columns is checked row by row against the answer key, so a pattern that works on most rows but misses an edge case loses only those rows. The edge cases to check before you submit:</p>
+<ul>
+<li><em>Title variants</em>: every spelling of each field title listed in <a href="#2-data">Section 2</a> must match.</li>
+<li><em>Missing follow-up dates</em>: about a third of the rows have no follow-up date. Leave <code class="fixed-width">Follow_Up_Date</code> blank for those rows (not <code class="fixed-width">#N/A</code>).</li>
+<li><em>Multi-line notes</em>: a few notes continue onto a second line. <code class="fixed-width">Clean_Notes</code> should contain the whole note, not just its first line.</li>
 </ul>
 <h2 class="ada-h2" id="2-data">2. Data</h2>
 <p>The dataset <code class="fixed-width">lab7_data.xlsx</code> is provided on Canvas</p>
@@ -594,10 +626,11 @@ This lab offers instructions for three different approaches: Excel (RegEx in Off
     <div class="highlight"><pre><span></span><code>Inv #: INV2022-68987
 Rep: Gimli Gloinsson
 Follow-up By: 2022-07-07
-Notes: Inspected the Dwarven axe heads delivery. Minor chipping on three units (Lot AX-77). Initiated RMA process. Billing adjustment pending.
+Notes: Inspected the Dwarven axe heads delivery. Minor chipping on three units (Lot AX-77). 
+Initiated RMA process. Billing adjustment pending.
 </code></pre></div></li>
 </ul>
-<p>In the <code class="fixed-width">notes</code> column, there are inconsistencies, typos, and missing fields (a very common scenario in real-world data):</p>
+<p>In the <code class="fixed-width">notes</code> column, there are inconsistencies and missing fields (a very common scenario in real-world data). The following patterns dictate how the data are generally formatted, and will guide your regex extraction logic:</p>
 <ul>
 <li>All fields have <code class="fixed-width">[title]:</code> as a format, meaning you could brute-force search for those, or use regular expressions that look for the general pattern with a colon to end it.</li>
 <li><strong>Invoice #</strong>: Can have the title <code class="fixed-width">Invoice #</code>, <code class="fixed-width">Invoice#</code>, <code class="fixed-width">Inv #</code>, or <code class="fixed-width">Inv#</code><ul>
@@ -613,14 +646,178 @@ Notes: Inspected the Dwarven axe heads delivery. Minor chipping on three units (
 </ul>
 </li>
 <li><strong>Notes</strong>: Can have newlines in it, meaning the notes spill onto the next line. Can have the title <code class="fixed-width">Note</code> or <code class="fixed-width">Notes</code><ul>
-<li>Logic: <code class="fixed-width">Notes?:</code> --&gt; end</li>
+<li>Logic: <code class="fixed-width">Notes?:</code> --&gt; end of the cell, <em>including</em> line breaks</li>
+<li>Careful: <code class="fixed-width">.</code> and <code class="fixed-width">[^\n]</code> both stop at a line break. To capture everything through the end of the cell, use <code class="fixed-width">[\s\S]+</code>, which means "one or more of any whitespace or non-whitespace character," i.e., anything at all, line breaks included.</li>
 </ul>
 </li>
 </ul>
+<h3 class="ada-h3" id="21-practice-your-patterns">2.1. Practice Your Patterns</h3>
+<p>Before writing formulas or code, try your regular expressions here. The left box holds a sample <code class="fixed-width">notes</code> cell; you can edit it, or load one of the other samples to check that your pattern handles the inconsistent titles. Type a pattern on the right and the matches (and any capture groups in parentheses) appear below it as you type.</p>
+<p class="note"><em>Note</em>: This tester runs JavaScript regex, which agrees with Excel, Google Sheets, and Python on everything you need for this lab. Python-style <code class="fixed-width">(?i)</code> at the start and <code class="fixed-width">(?P&lt;name&gt;...)</code>groups are accepted and translated for you.</p>
+<div class="rx-widget">
+<style>
+.rx-widget { display: flex; align-items: flex-start; gap: 1.25rem; margin: 1.25rem 0 2rem; padding: 1.25rem; background: #f7f9fc; border: 1px solid #d6e0ee; border-radius: 8px; }
+.rx-widget .rx-label { display: block; font-weight: 600; color: #2c5282; margin-bottom: 0.4rem; }
+.rx-widget .rx-samples { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
+.rx-widget button { font: inherit; font-size: 0.85rem; padding: 0.2rem 0.65rem; border: 1px solid #0066cc; border-radius: 4px; background: white; color: #0066cc; cursor: pointer; }
+.rx-widget button:hover { background: #e8f1fb; }
+.rx-widget button.rx-active { background: #0066cc; color: white; }
+.rx-widget textarea, .rx-widget input[type=text] { box-sizing: border-box; width: 100%; font-family: Consolas, Monaco, 'Courier New', monospace; font-size: 0.9rem; border: 1px solid #b8c4d4; border-radius: 4px; background: white; padding: 0.5rem 0.6rem; }
+.rx-widget textarea { min-height: 13rem; resize: vertical; line-height: 1.45; }
+.rx-widget textarea:focus, .rx-widget input[type=text]:focus { outline: 2px solid #0066cc; outline-offset: -1px; }
+.rx-widget input.rx-bad { border-color: #BE0000; outline-color: #BE0000; }
+.rx-widget .rx-flags { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.5rem 0 1rem; font-size: 0.85rem; color: #444; }
+.rx-widget .rx-flags label { cursor: pointer; }
+.rx-widget .rx-flags code { font-size: 0.8rem; }
+.rx-widget .rx-out { background: white; border: 1px solid #b8c4d4; border-radius: 4px; padding: 0.6rem 0.75rem; min-height: 6rem; font-size: 0.9rem; }
+.rx-widget .rx-placeholder { color: #999; font-style: italic; }
+.rx-widget .rx-error { color: #BE0000; font-weight: 600; }
+.rx-widget .rx-summary { font-weight: 600; margin-bottom: 0.5rem; }
+.rx-widget .rx-hl { white-space: pre-wrap; word-break: break-word; font-family: Consolas, Monaco, 'Courier New', monospace; font-size: 0.85rem; background: #fafafa; border: 1px dashed #ccc; border-radius: 4px; padding: 0.5rem; margin-bottom: 0.75rem; }
+.rx-widget .rx-hl mark { background: #ffe58a; border-radius: 2px; box-shadow: 0 0 0 1px #e0b400; }
+.rx-widget table { width: 100%; font-size: 0.85rem; margin: 0; box-shadow: none; }
+.rx-widget table > :is(thead, tbody) > tr > :is(th, td) { padding: 0.25rem 0.5rem; vertical-align: top; }
+.rx-widget th { white-space: nowrap; }
+.rx-widget td.rx-val { font-family: Consolas, Monaco, 'Courier New', monospace; white-space: pre-wrap; word-break: break-word; }
+.rx-widget .rx-none { color: #999; font-style: italic; }
+.rx-widget .rx-left { flex: 0 0 40%; min-width: 0; }
+.rx-widget .rx-right { flex: 1 1 0; min-width: 0; }
+@media (max-width: 900px) {
+  .rx-widget { flex-direction: column; align-items: stretch; }
+  .rx-widget .rx-left, .rx-widget .rx-right { flex: none; width: 100%; }
+}
+</style>
+<div class="rx-left">
+<span class="rx-label">Sample <code>notes</code> text</span>
+<div class="rx-samples">
+<button type="button" data-sample="0" class="rx-active">Sample 1</button>
+<button type="button" data-sample="1">Sample 2</button>
+<button type="button" data-sample="2">Sample 3</button>
+<button type="button" data-sample="3">All three</button>
+</div>
+<textarea class="rx-text" spellcheck="false" aria-label="Sample notes text"></textarea>
+</div>
+<div class="rx-right">
+<label class="rx-label" for="rx-pattern">Your regular expression</label>
+<input type="text" id="rx-pattern" class="rx-pattern" spellcheck="false" autocomplete="off" placeholder="e.g. Inv\w*\s*#:\s*([^\n]+)">
+<div class="rx-flags">
+<label><input type="checkbox" class="rx-flag" value="i"> Ignore case <code>i</code></label>
+</div>
+<span class="rx-label">Results</span>
+<div class="rx-out" aria-live="polite"><span class="rx-placeholder">Error</span></div>
+</div>
+<script>
+(function () {
+  var SAMPLES = [
+    "Inv #: INV2022-68987\nRep: Gimli Gloinsson\nFollow-up By: 2022-07-07\nNotes: Inspected the Dwarven axe heads delivery. Minor chipping on three units (Lot AX-77). Initiated RMA process. Billing adjustment pending.",
+    "Invoice#: INV2023-10442\nAccount Rep: Arwen Undomiel\nNote: Customer requested split shipment.\nSecond pallet held at Rivendell warehouse until\nreceiving dock is cleared.",
+    "Inv#: INV2023-55120\nARep: Samwise Gamgee\nFollow up Date: 2023-03-14\nNotes: Price discrepancy on garden supplies; credit memo issued."
+  ];
+  SAMPLES.push(SAMPLES.join("\n\n"));
+  var root = document.currentScript.parentNode;
+  var text = root.querySelector(".rx-text");
+  var pat = root.querySelector(".rx-pattern");
+  var out = root.querySelector(".rx-out");
+  var flags = root.querySelectorAll(".rx-flag");
+  var buttons = root.querySelectorAll("button[data-sample]");
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function show(s) {
+    return s === undefined ? '<span class="rx-none">(not matched)</span>' : s === "" ? '<span class="rx-none">(empty)</span>' : esc(s);
+  }
+  function run() {
+    var src = pat.value;
+    pat.classList.remove("rx-bad");
+    if (!src) { out.innerHTML = '<span class="rx-placeholder">Error</span>'; return; }
+    var f = "g";
+    flags.forEach(function (cb) { if (cb.checked) f += cb.value; });
+    // Accept Python-style syntax: leading (?i)/(?ms) flags and (?P<name>...) groups
+    var lead = src.match(/^\(\?([ims]+)\)/);
+    if (lead) {
+      src = src.slice(lead[0].length);
+      lead[1].split("").forEach(function (c) { if (f.indexOf(c) < 0) f += c; });
+    }
+    src = src.replace(/\(\?P</g, "(?<");
+    var re;
+    try { re = new RegExp(src, f); }
+    catch (e) {
+      pat.classList.add("rx-bad");
+      out.innerHTML = '<span class="rx-error">Error: ' + esc(e.message.replace(/^Invalid regular expression: /, "")) + "</span>";
+      return;
+    }
+    var s = text.value, matches = [], m;
+    var it = s.matchAll(re);
+    while (matches.length < 200 && !(m = it.next()).done) matches.push(m.value);
+    if (!matches.length) {
+      out.innerHTML = '<span class="rx-error">Error: no match</span> <span class="rx-none">(Excel would show #N/A)</span>';
+      return;
+    }
+    var hl = "", pos = 0;
+    matches.forEach(function (mm) {
+      if (mm[0] === "") return;
+      hl += esc(s.slice(pos, mm.index)) + "<mark>" + esc(mm[0]) + "</mark>";
+      pos = mm.index + mm[0].length;
+    });
+    hl += esc(s.slice(pos));
+    var ngroups = matches[0].length - 1;
+    var names = {};
+    if (matches[0].groups) Object.keys(matches[0].groups).forEach(function (k) {
+      for (var g = 1; g <= ngroups; g++) if (matches[0][g] === matches[0].groups[k] && !names[g]) { names[g] = k; break; }
+    });
+    var head = "<thead><tr><th>#</th><th>Full match</th>";
+    for (var g = 1; g <= ngroups; g++) head += "<th>Group " + g + (names[g] ? " (" + esc(names[g]) + ")" : "") + "</th>";
+    var rows = matches.map(function (mm, i) {
+      var r = "<tr><td>" + (i + 1) + '</td><td class="rx-val">' + show(mm[0]) + "</td>";
+      for (var g = 1; g <= ngroups; g++) r += '<td class="rx-val">' + show(mm[g]) + "</td>";
+      return r + "</tr>";
+    }).join("");
+    out.innerHTML = '<div class="rx-summary">' + matches.length + (matches.length === 200 ? "+" : "") +
+      " match" + (matches.length === 1 ? "" : "es") + (ngroups ? ", " + ngroups + " capture group" + (ngroups === 1 ? "" : "s") : "") +
+      '</div><div class="rx-hl">' + hl + "</div><table>" + head + "</tr></thead><tbody>" + rows + "</tbody></table>";
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      buttons.forEach(function (x) { x.classList.remove("rx-active"); });
+      b.classList.add("rx-active");
+      text.value = SAMPLES[+b.getAttribute("data-sample")];
+      run();
+    });
+  });
+  text.value = SAMPLES[0];
+  text.addEventListener("input", function () { buttons.forEach(function (x) { x.classList.remove("rx-active"); }); run(); });
+  pat.addEventListener("input", run);
+  flags.forEach(function (cb) { cb.addEventListener("change", run); });
+})();
+</script>
+</div>
+
 <h2 class="ada-h2" id="3-how-to-steps">3. How-to Steps</h2>
-<h3 class="ada-h3" id="31-option-a-excel-office-scripts">3.1. Option A: Excel (Office Scripts)</h3>
-<p>Modern Excel on the web (and desktop) supports <strong>Office Scripts</strong>, which uses TypeScript to automate tasks. 
-Alternatively, you could use Python in Excel Online, but we won't cover that here.</p>
+<h3 class="ada-h3" id="31-excelgoogle-sheets-regexextract">3.1. Excel/Google Sheets (<code class="fixed-width">REGEXEXTRACT</code>)</h3>
+<p>Modern Excel (or Google Sheets, if you don't have the latest Excel version with built-in regex functions) has built-in regex functions: <code class="fixed-width">REGEXTEST</code> (called <code class="fixed-width">REGEXMATCH</code> in Google Sheets), <code class="fixed-width">REGEXEXTRACT</code>, and <code class="fixed-width">REGEXREPLACE</code>.</p>
+<p>The <code class="fixed-width">REGEXEXTRACT</code> function (<a href="https://support.microsoft.com/en-us/excel/functions/regexextract-function" target="_blank">documentation</a>) is used to extract specific patterns from text. It takes three arguments: the text to search, the regular expression pattern, and whether to return capture groups. That last argument will probably be 2 for yours, so start with that and adjust if necessary.</p>
+<ol>
+<li>Open the Excel file.</li>
+<li>Add new columns that will use <code class="fixed-width">REGEXEXTRACT</code> to extract the data from the <code class="fixed-width">notes</code> column<ol>
+<li>Create four new headers to fill with formulas: <code class="fixed-width">Invoice_Number</code>, <code class="fixed-width">Contact_Name</code>, <code class="fixed-width">Follow_Up_Date</code>, and <code class="fixed-width">Clean_Notes</code>.</li>
+<li>For each row, look at the <code class="fixed-width">notes</code> column.</li>
+<li>Use regex to extract data, for example: <code class="fixed-width">=REGEXEXTRACT([@notes], "Inv\w*\s*#:\s*([^\n]+)", 2)</code> to pull out the Invoice.</li>
+<li>Repeat for Contact, Date, and Clean Notes, using appropriate regular expressions for each.</li>
+</ol>
+</li>
+<li>Save-As (or Export from Google Sheets) the cleaned sheet as CSV for upload to Canvas.</li>
+</ol>
+<p>A few things that will trip you up in a spreadsheet:</p>
+<ul>
+<li><em>Missing values show <code class="fixed-width">#N/A</code></em>: When the pattern finds nothing (e.g., a row with no follow-up date), <code class="fixed-width">REGEXEXTRACT</code> returns <code class="fixed-width">#N/A</code>. Wrap it to get a blank instead: <code class="fixed-width">=IFERROR(REGEXEXTRACT(...), "")</code>.</li>
+<li><em>Extra parentheses spill</em>: With the <code class="fixed-width">2</code> argument, Excel returns <em>every</em> capture group, one per cell. If your pattern has two sets of parentheses, such as <code class="fixed-width">(A\w*\s*)?Rep...:\s*([^\n]+)</code>, the result tries to spill into the next column and you get <code class="fixed-width">#SPILL!</code>. Use <code class="fixed-width">(?:...)</code> for parentheses you need for grouping but don't want it returned, e.g., <code class="fixed-width">(?:A\w*\s*)?Rep</code>. The <code class="fixed-width">?:</code> makes it a non-capturing group.</li>
+<li><em>Case matters</em>: Excel's <code class="fixed-width">REGEXEXTRACT</code> is case-sensitive by default, so <code class="fixed-width">inv</code> won't match <code class="fixed-width">Inv</code>. Add a fourth argument of <code class="fixed-width">1</code> to ignore case.</li>
+<li><em>Google Sheets is slightly different</em>: Its <code class="fixed-width">REGEXEXTRACT</code> takes only two arguments (text and pattern) and returns the capture groups automatically, so leave off the <code class="fixed-width">, 2</code>. To ignore case, start the pattern with <code class="fixed-width">(?i)</code>.</li>
+</ul>
+<h3 class="ada-h3" id="32-excel-office-scripts-a-modern-vba-replacement">3.2. Excel Office Scripts (a modern VBA replacement)</h3>
+<p>Modern Excel supports <strong>Office Scripts</strong>, which uses TypeScript to automate tasks. 
+Office Scripts give you automation capabilities similar to VBA, but using TypeScript instead of Visual Basic, and lacking some of the legacy features and integrations that VBA has like custom functions or event-driven execution.
+Alternatively, you could use VBA on Windows, or Python in Excel Online, but we won't cover that here.</p>
 <p>The basic idea is to write a script that iterates through the <code class="fixed-width">notes</code> column, applies regex patterns to extract the relevant information, and writes it back to new columns.</p>
 <ol>
 <li>Open your Excel file</li>
@@ -628,90 +825,34 @@ Alternatively, you could use Python in Excel Online, but we won't cover that her
 <li>Write a script that iterates through the sheet, adding the 4 new columns by using regular expressions to extract the data from the <code class="fixed-width">notes</code> column<ol>
 <li>Create 4 new headers to fill with data: <code class="fixed-width">Invoice_Number</code>, <code class="fixed-width">Contact_Name</code>, <code class="fixed-width">Follow_Up_Date</code>, and <code class="fixed-width">Clean_Notes</code>.</li>
 <li>For each row, look at the <code class="fixed-width">notes</code> column.</li>
-<li>Use regex to extract data, for example: <code class="fixed-width">const regex = /Invoice: (.*)/;</code></li>
+<li>Use regex to extract data, for example: <code class="fixed-width">const regex = /Inv\w*\s*#:\s*([^\n]+)/;</code></li>
 <li>Write the extracted values into new columns</li>
 </ol>
 </li>
 </ol>
-<p>This is where asking an LLM for help with Office Scripts can be very useful, as the syntax can be a bit tricky if you're not used to it.</p>
-<p>Here's the prompt I asked Claude:</p>
+<p>This is where asking an LLM for help with Office Scripts can be very useful, as the syntax can be a bit tricky if you're not used to it.
+Here's the prompt I asked Claude (also uploading the Excel file and these Lab instructions for context):</p>
 <div class="highlight"><pre><span></span><code>I have this spreadsheet, and want to write an officescript regular expression parser.
 I want to create 4 new columns (<span class="sb">`Invoice_Number`</span>, <span class="sb">`Contact_Name`</span>, <span class="sb">`Follow_Up_Date`</span>,
  and <span class="sb">`Clean_Notes`</span>), extracting the data from the <span class="sb">`notes`</span> field with regular 
  expressions. Please write the officescript macro to do this.
 </code></pre></div>
-<p>And he provided this sample code to get you started:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">main</span><span class="p">(</span><span class="nx">workbook</span><span class="o">:</span><span class="w"> </span><span class="kt">ExcelScript.Workbook</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">sheet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">workbook</span><span class="p">.</span><span class="nx">getActiveWorksheet</span><span class="p">();</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">usedRange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">sheet</span><span class="p">.</span><span class="nx">getUsedRange</span><span class="p">();</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">usedRange</span><span class="p">.</span><span class="nx">getValues</span><span class="p">();</span>
-
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">headers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">data</span><span class="p">[</span><span class="mf">0</span><span class="p">]</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">notesCol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">headers</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;notes&#39;</span><span class="p">);</span>
-
-<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">notesCol</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;&#39;notes&#39; column not found&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">return</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">newHeaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;Invoice_Number&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Contact_Name&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Follow_Up_Date&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Clean_Notes&#39;</span><span class="p">];</span>
-<span class="w">  </span><span class="nx">newHeaders</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">header</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">sheet</span><span class="p">.</span><span class="nx">getCell</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">i</span><span class="p">).</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">header</span><span class="p">);</span>
-<span class="w">  </span><span class="p">});</span>
-
-<span class="w">  </span><span class="c1">// Mac wrote the commented out ones, Claude the ones that aren&#39;t. Mine are a bit more flexible.</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">invoicePattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sr">/(?:Invoice\s*#|Inv\s*#?):\s*([^\n]+)/i</span><span class="p">;</span>
-<span class="w">  </span><span class="c1">// const invoicePattern = /(?:Inv\w*\s*#?):\s*([^\n]+)/i;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">contactPattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sr">/(?:Representative|Account\s+Rep|ARep|Rep):\s*([^\n]+)/i</span><span class="p">;</span>
-<span class="w">  </span><span class="c1">// const contactPattern = /(?:A[count ]*)?Rep(?:[^:]*):\s*([^\n]+)/i;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">followUpPattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sr">/Follow[-\s]*up(?:\s+(?:On|Date))?:\s*([^\n]+)/i</span><span class="p">;</span>
-<span class="w">  </span><span class="c1">// const followUpPattern = /Follow(?:[^:]*):\s*([^\n]+)/i;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">notesPattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sr">/Notes?:\s*(.+)/is</span><span class="p">;</span>
-
-<span class="w">  </span><span class="c1">// Dropping anything in parentheses in the contact:</span>
-<span class="w">  </span><span class="c1">// const contactPattern = /(?:A[count ]*)?Rep(?:[^:]*):\s*([^\n(]+)/i;</span>
-
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">row</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span><span class="w"> </span><span class="nx">row</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">row</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">data</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nx">notesCol</span><span class="p">]</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
-
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">invoiceMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">notes</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">invoicePattern</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">contactMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">notes</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">contactPattern</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">followUpMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">notes</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">followUpPattern</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">notesMatch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">notes</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">notesPattern</span><span class="p">);</span>
-
-<span class="w">    </span><span class="nx">sheet</span><span class="p">.</span><span class="nx">getCell</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">invoiceMatch</span><span class="o">?</span><span class="p">.[</span><span class="mf">1</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="w">    </span><span class="nx">sheet</span><span class="p">.</span><span class="nx">getCell</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">).</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">contactMatch</span><span class="o">?</span><span class="p">.[</span><span class="mf">1</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="w">    </span><span class="nx">sheet</span><span class="p">.</span><span class="nx">getCell</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">2</span><span class="p">).</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">followUpMatch</span><span class="o">?</span><span class="p">.[</span><span class="mf">1</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="w">    </span><span class="nx">sheet</span><span class="p">.</span><span class="nx">getCell</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span><span class="w"> </span><span class="nx">headers</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">3</span><span class="p">).</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">notesMatch</span><span class="o">?</span><span class="p">.[</span><span class="mf">1</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<h3 class="ada-h3" id="32-option-b-google-sheets-regex">3.2. Option B: Google Sheets (REGEX)</h3>
-<p>Google Sheets has powerful built-in regex functions: <code class="fixed-width">REGEXMATCH</code>, <code class="fixed-width">REGEXEXTRACT</code>, and <code class="fixed-width">REGEXREPLACE</code>.</p>
-<ol>
-<li>Import the Excel file into Google Sheets.</li>
-<li>Create a new column <code class="fixed-width">Invoice_Number</code>.</li>
-<li>Use <code class="fixed-width">=REGEXEXTRACT($G2, "(?:Inv\w*\s*#?):\s*([^\n]+)")</code> to pull out the Invoice.</li>
-<li>Repeat for Contact and Date (see above office script for working regular expressions)</li>
-<li>Download the cleaned sheet as CSV for upload to Canvas: <code class="fixed-width">File &gt; Download &gt; Comma-separated values (.csv)</code></li>
-</ol>
-<h3 class="ada-h3" id="33-option-c-python-re">3.3. Option C: Python (<code class="fixed-width">re</code>)</h3>
+<h3 class="ada-h3" id="33-python-re">3.3. Python (<code class="fixed-width">re</code>)</h3>
 <p>Python is great for customized, flexible, and powerful text processing.</p>
 <ol>
 <li>Load the data using <code class="fixed-width">pandas</code>.</li>
-<li>Use the built in pandas <code class="fixed-width">Series.str.extract</code> method with regular expressions to get the data:
+<li>Use the built-in pandas <code class="fixed-width">Series.str.extract</code> method with a regular expression to get the data. It returns the first capture group, so add <code class="fixed-width">expand=False</code> to return just a single column:
     <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;lab7_data.xlsx&quot;</span><span class="p">)</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Invoice_Number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:Inv\w*\s*#?):\s*([^\n]+)&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
-<span class="c1"># Continue with the other three columns using the same approach, just changing the regular expression pattern.</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Invoice_Number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Inv\w*\s*#:\s*([^\n]+)&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div></li>
-<li>Repeat for Contact and Date (see above office script for working regular expressions)</li>
-<li>Save the cleaned dataframe to Excel for upload: <code class="fixed-width">df.to_excel("lab7_data_cleaned.xlsx", index=False)</code></li>
+<li>Repeat for Contact, Date, and Clean Notes, changing the output column name and the regular expression. Rows with no match get a missing value (<code class="fixed-width">NaN</code>), which is written as a blank cell in the CSV.</li>
+<li>Save the cleaned dataframe to csv for upload: <code class="fixed-width">df.to_csv("lab7_data_cleaned.csv", index=False)</code></li>
 </ol>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="c1"># If you&#39;re curious, re is the regex module. You can do things like:</span>
-<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?:Inv\w*\s*#?):\s*([^\n]+)&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Inv\w*\s*#:\s*([^\n]+)&quot;</span><span class="p">)</span>
 <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Inv #: INV2022-68987&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># This would return &#39;INV2022-68987&#39;</span>
 <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;INVOICE#: \1&quot;</span><span class="p">,</span> <span class="s2">&quot;Inv #: INV2022-68987&quot;</span><span class="p">)</span>  <span class="c1"># This would return &#39;INVOICE#: INV2022-68987&#39;.</span>
 <span class="c1"># That \1 is a backreference to the first group in the pattern, which is the actual invoice number. Super cool.</span>

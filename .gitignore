@@ -43,3 +43,6 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Lab-index Pages build output (code/utils/build_lab_index.py)
+_site/

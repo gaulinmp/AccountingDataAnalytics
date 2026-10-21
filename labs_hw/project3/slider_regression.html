@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interactive Regression Sliders</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --accent2: #8b5cf6
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, 'Helvetica Neue', Arial
+    }
+
+    body {
+      background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 60%);
+      color: #1e293b;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 32px
+    }
+
+    .card {
+      width: 980px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.2px
+    }
+
+    .meta {
+      margin-left: auto;
+      text-align: right;
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    .controls {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.4);
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .slider-value {
+      font-weight: 700;
+      color: #1e293b;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(203, 213, 225, 0.6);
+      padding: 4px 8px;
+      border-radius: 6px;
+      width: 70px;
+      text-align: center;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: rgba(203, 213, 225, 0.4);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      cursor: pointer;
+      border: none;
+    }
+
+    button {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .plot-row {
+      display: flex;
+      gap: 20px
+    }
+
+    .plot {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(226, 232, 240, 0.4);
+    }
+
+    .stats {
+      width: 240px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 240, 0.4);
+      color: var(--muted)
+    }
+
+    .stat-item {
+      margin-bottom: 10px
+    }
+
+    .stat-key {
+      font-size: 12px;
+      color: #64748b
+    }
+
+    .stat-val {
+      font-size: 16px;
+      color: #1e293b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-indicator {
+      font-size: 14px;
+      font-weight: 700;
+      display: inline-block;
+      min-width: 16px;
+    }
+
+    .stat-indicator.better {
+      color: #10b981;
+    }
+
+    .stat-indicator.worse {
+      color: #ef4444;
+    }
+
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(30, 41, 59, 0.95);
+      color: white;
+      font-size: 12px;
+      border: 1px solid rgba(203, 213, 225, 0.3);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center
+    }
+
+    @media (max-width:1000px) {
+      .card {
+        width: 100%
+      }
+
+      .plot-row {
+        flex-direction: column
+      }
+
+      .stats {
+        width: 100%
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card" role="main">
+    <div class="top">
+      <div class="title">Interactive Regression Sliders</div>
+      <div class="meta">Adjust slope and intercept to fit the line to the data</div>
+    </div>
+
+    <div class="controls">
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Intercept (α)</span>
+          <input type="number" class="slider-value" id="intercept-value" value="0.00" step="0.1" />
+        </div>
+        <input type="range" id="intercept-slider" min="-10" max="10" step="0.1" value="0" />
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Slope (β)</span>
+          <input type="number" class="slider-value" id="slope-value" value="1.00" step="0.1" />
+        </div>
+        <input type="range" id="slope-slider" min="-3" max="3" step="0.1" value="1" />
+      </div>
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Noise</span>
+          <input type="number" class="slider-value" id="noise-value" value="2.00" step="0.1" />
+        </div>
+        <input type="range" id="noise-slider" min="0" max="10" step="0.1" value="2" />
+      </div>
+      <button id="reset-btn">Reset to Best Fit</button>
+    </div>
+
+    <div class="plot-row" style="margin-top:12px">
+      <div class="plot" id="plot-area">
+        <svg id="svg" width="100%" height="480"></svg>
+      </div>
+      <div class="stats">
+        <div style="font-weight:700;margin-bottom:8px">Regression Stats</div>
+        <div class="stat-item">
+          <div class="stat-key">Slope (β)</div>
+          <div id="slope-stat" class="stat-val"><span>—</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">Intercept (α)</div>
+          <div id="intercept-stat" class="stat-val"><span>—</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">R²</div>
+          <div id="r2" class="stat-val"><span>—</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">RMSE</div>
+          <div id="rmse" class="stat-val"><span>—</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">MAE</div>
+          <div id="mae" class="stat-val"><span>—</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-key">MAPE (%)</div>
+          <div id="mape" class="stat-val"><span>—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>Built with D3, ChatGPT, and Claude Code.</footer>
+  </div>
+  <div id="tooltip" class="tooltip" style="display:none"></div>
+
+  <script>
+    // Generate random data points based on y = x with some noise
+    function generateData(n = 50, noise = 2) {
+      const data = [];
+      for (let i = 0; i < n; i++) {
+        const x = Math.random() * 20 - 10; // Range: -10 to 10
+        const y = x + (Math.random() - 0.5) * noise; // y = x + noise
+        data.push({ x, y });
+      }
+      return data;
+    }
+
+    // Global data and best fit
+    let data = generateData();
+    let bestFit = linearRegression(data);
+
+    // Previous stats for comparison
+    let prevStats = null;
+
+    // Calculate best-fit line
+    function linearRegression(data) {
+      const n = data.length;
+      let sumx = 0, sumy = 0, sumxy = 0, sumxx = 0;
+      for (let i = 0; i < n; i++) {
+        const x = data[i].x;
+        const y = data[i].y;
+        sumx += x;
+        sumy += y;
+        sumxy += x * y;
+        sumxx += x * x;
+      }
+      const slope = (n * sumxy - sumx * sumy) / (n * sumxx - sumx * sumx);
+      const intercept = (sumy - slope * sumx) / n;
+      return { slope, intercept };
+    }
+
+    // UI Elements
+    const interceptSlider = document.getElementById('intercept-slider');
+    const slopeSlider = document.getElementById('slope-slider');
+    const interceptValue = document.getElementById('intercept-value');
+    const slopeValue = document.getElementById('slope-value');
+    const noiseSlider = document.getElementById('noise-slider');
+    const noiseValue = document.getElementById('noise-value');
+    const resetBtn = document.getElementById('reset-btn');
+    const tooltip = d3.select('#tooltip');
+
+    // Stats elements
+    const slopeStat = document.getElementById('slope-stat');
+    const interceptStat = document.getElementById('intercept-stat');
+    const r2El = document.getElementById('r2');
+    const rmseEl = document.getElementById('rmse');
+    const maeEl = document.getElementById('mae');
+    const mapeEl = document.getElementById('mape');
+
+    // Drawing setup
+    const svg = d3.select('#svg');
+    const margin = { top: 40, right: 20, bottom: 50, left: 70 };
+
+    function draw() {
+      svg.selectAll('*').remove();
+
+      const width = parseInt(svg.style('width')) || svg.node().getBoundingClientRect().width;
+      const height = parseInt(svg.style('height')) || svg.node().getBoundingClientRect().height;
+      const w = width - margin.left - margin.right;
+      const h = height - margin.top - margin.bottom;
+
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+      // Scales
+      const xExtent = d3.extent(data, d => d.x);
+      const yExtent = d3.extent(data, d => d.y);
+      const xPad = (xExtent[1] - xExtent[0]) * 0.1 || 1;
+      const yPad = (yExtent[1] - yExtent[0]) * 0.1 || 1;
+
+      const xScale = d3.scaleLinear()
+        .domain([xExtent[0] - xPad, xExtent[1] + xPad])
+        .range([0, w])
+        .nice();
+
+      const yScale = d3.scaleLinear()
+        .domain([yExtent[0] - yPad, yExtent[1] + yPad])
+        .range([h, 0])
+        .nice();
+
+      // Axes
+      const xAxis = d3.axisBottom(xScale).ticks(6).tickSizeOuter(0);
+      const yAxis = d3.axisLeft(yScale).ticks(6).tickSizeOuter(0);
+
+      g.append('g')
+        .attr('transform', `translate(0,${h})`)
+        .call(xAxis)
+        .call(g => g.selectAll('.domain').attr('stroke', '#cbd5e1'));
+
+      g.append('g')
+        .call(yAxis)
+        .call(g => g.selectAll('.domain').attr('stroke', '#cbd5e1'));
+
+      // Axis labels
+      svg.append('text')
+        .attr('x', margin.left + w / 2)
+        .attr('y', height - 6)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#64748b')
+        .text('X');
+
+      svg.append('text')
+        .attr('transform', `translate(14, ${margin.top + h / 2}) rotate(-90)`)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#64748b')
+        .text('Y');
+
+      // Gridlines
+      g.append('g')
+        .attr('class', 'grid')
+        .selectAll('line')
+        .data(yScale.ticks(6))
+        .enter()
+        .append('line')
+        .attr('x1', 0)
+        .attr('x2', w)
+        .attr('y1', d => yScale(d))
+        .attr('y2', d => yScale(d))
+        .attr('stroke', 'rgba(203,213,225,0.4)');
+
+      // Get current slider values
+      const currentSlope = parseFloat(slopeSlider.value);
+      const currentIntercept = parseFloat(interceptSlider.value);
+
+      // Draw user-defined line
+      const x0 = xScale.domain()[0];
+      const x1 = xScale.domain()[1];
+      const y0 = currentIntercept + currentSlope * x0;
+      const y1 = currentIntercept + currentSlope * x1;
+
+      g.append('line')
+        .attr('x1', xScale(x0))
+        .attr('y1', yScale(y0))
+        .attr('x2', xScale(x1))
+        .attr('y2', yScale(y1))
+        .attr('stroke', '#ef4444')
+        .attr('stroke-width', 2.5)
+        .attr('stroke-linecap', 'round')
+        .attr('opacity', 0.9);
+
+      // Draw best-fit line (in lighter color)
+      const yBest0 = bestFit.intercept + bestFit.slope * x0;
+      const yBest1 = bestFit.intercept + bestFit.slope * x1;
+
+      g.append('line')
+        .attr('x1', xScale(x0))
+        .attr('y1', yScale(yBest0))
+        .attr('x2', xScale(x1))
+        .attr('y2', yScale(yBest1))
+        .attr('stroke', '#10b981')
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', '5,5')
+        .attr('stroke-linecap', 'round')
+        .attr('opacity', 0.6);
+
+      // Data points
+      const pointGroup = g.append('g').attr('class', 'points');
+      pointGroup.selectAll('circle')
+        .data(data)
+        .enter()
+        .append('circle')
+        .attr('cx', d => xScale(d.x))
+        .attr('cy', d => yScale(d.y))
+        .attr('r', 4.5)
+        .attr('fill', '#3b82f6')
+        .attr('opacity', 0.8)
+        .on('mouseenter', function (event, d) {
+          const tooltipText = `<div>X: ${d.x.toFixed(2)}</div><div>Y: ${d.y.toFixed(2)}</div>`;
+          tooltip.style('display', 'block')
+            .style('left', (event.pageX + 10) + 'px')
+            .style('top', (event.pageY + 8) + 'px')
+            .html(tooltipText);
+          d3.select(this).attr('r', 6);
+        })
+        .on('mouseleave', function () {
+          tooltip.style('display', 'none');
+          d3.select(this).attr('r', 4.5);
+        });
+
+      // Draw equation text
+      svg.append('text')
+        .attr('x', margin.left + 12)
+        .attr('y', margin.top - 10)
+        .attr('fill', '#ef4444')
+        .style('font-weight', '700')
+        .style('font-size', '14px')
+        .text(`Your line: Y = ${currentSlope.toFixed(2)}X + ${currentIntercept.toFixed(2)}`);
+
+      // Update statistics
+      updateStats(currentSlope, currentIntercept);
+    }
+
+    function getIndicator(current, previous, higherIsBetter = false) {
+      if (previous === null || previous === undefined) return '';
+      const diff = current - previous;
+      if (Math.abs(diff) < 0.0001) return '';
+
+      const isImprovement = higherIsBetter ? (diff > 0) : (diff < 0);
+      const arrow = diff > 0 ? '▲' : '▼';
+      const className = isImprovement ? 'better' : 'worse';
+
+      return `<span class="stat-indicator ${className}">${arrow}</span>`;
+    }
+
+    function updateStats(slope, intercept) {
+      // Calculate statistics for the current line
+      const n = data.length;
+      let ssRes = 0;
+      let ssTot = 0;
+      let sumAbsError = 0;
+      let sumAbsPercentError = 0;
+      let validMapeCount = 0;
+
+      const meanY = d3.mean(data, d => d.y);
+
+      for (let i = 0; i < n; i++) {
+        const actual = data[i].y;
+        const predicted = intercept + slope * data[i].x;
+        const error = actual - predicted;
+
+        ssRes += error * error;
+        ssTot += (actual - meanY) * (actual - meanY);
+        sumAbsError += Math.abs(error);
+
+        // MAPE - only include points where actual != 0
+        if (actual !== 0) {
+          sumAbsPercentError += Math.abs(error / actual) * 100;
+          validMapeCount++;
+        }
+      }
+
+      const r2 = 1 - ssRes / ssTot;
+      const rmse = Math.sqrt(ssRes / n);
+      const mae = sumAbsError / n;
+      const mape = validMapeCount > 0 ? sumAbsPercentError / validMapeCount : 0;
+
+      // Update stats with indicators
+      slopeStat.innerHTML = `<span>${slope.toFixed(4)}</span>${getIndicator(slope, prevStats?.slope)}`;
+      interceptStat.innerHTML = `<span>${intercept.toFixed(4)}</span>${getIndicator(intercept, prevStats?.intercept)}`;
+      r2El.innerHTML = `<span>${r2.toFixed(4)}</span>${getIndicator(r2, prevStats?.r2, true)}`;
+      rmseEl.innerHTML = `<span>${rmse.toFixed(4)}</span>${getIndicator(rmse, prevStats?.rmse)}`;
+      maeEl.innerHTML = `<span>${mae.toFixed(4)}</span>${getIndicator(mae, prevStats?.mae)}`;
+      mapeEl.innerHTML = `<span>${validMapeCount > 0 ? mape.toFixed(2) : 'N/A'}</span>${validMapeCount > 0 ? getIndicator(mape, prevStats?.mape) : ''}`;
+
+      // Store current stats for next comparison
+      prevStats = { slope, intercept, r2, rmse, mae, mape };
+    }
+
+    // Event listeners
+    interceptSlider.addEventListener('input', () => {
+      interceptValue.value = parseFloat(interceptSlider.value).toFixed(2);
+      draw();
+    });
+
+    slopeSlider.addEventListener('input', () => {
+      slopeValue.value = parseFloat(slopeSlider.value).toFixed(2);
+      draw();
+    });
+
+    interceptValue.addEventListener('input', () => {
+      const val = parseFloat(interceptValue.value);
+      if (!isNaN(val)) {
+        interceptSlider.value = val;
+        draw();
+      }
+    });
+
+    slopeValue.addEventListener('input', () => {
+      const val = parseFloat(slopeValue.value);
+      if (!isNaN(val)) {
+        slopeSlider.value = val;
+        draw();
+      }
+    });
+
+    noiseSlider.addEventListener('input', () => {
+      const noise = parseFloat(noiseSlider.value);
+      noiseValue.value = noise.toFixed(2);
+      // Regenerate data with new noise level
+      data = generateData(50, noise);
+      bestFit = linearRegression(data);
+      // Reset sliders to new best fit and clear previous stats
+      prevStats = null;
+      interceptSlider.value = bestFit.intercept.toFixed(2);
+      slopeSlider.value = bestFit.slope.toFixed(2);
+      interceptValue.value = bestFit.intercept.toFixed(2);
+      slopeValue.value = bestFit.slope.toFixed(2);
+      draw();
+    });
+
+    noiseValue.addEventListener('input', () => {
+      const val = parseFloat(noiseValue.value);
+      if (!isNaN(val) && val >= 0 && val <= 10) {
+        noiseSlider.value = val;
+        // Regenerate data with new noise level
+        data = generateData(50, val);
+        bestFit = linearRegression(data);
+        // Reset sliders to new best fit and clear previous stats
+        prevStats = null;
+        interceptSlider.value = bestFit.intercept.toFixed(2);
+        slopeSlider.value = bestFit.slope.toFixed(2);
+        interceptValue.value = bestFit.intercept.toFixed(2);
+        slopeValue.value = bestFit.slope.toFixed(2);
+        draw();
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      interceptSlider.value = bestFit.intercept.toFixed(2);
+      slopeSlider.value = bestFit.slope.toFixed(2);
+      interceptValue.value = bestFit.intercept.toFixed(2);
+      slopeValue.value = bestFit.slope.toFixed(2);
+      draw();
+    });
+
+    // Initial draw
+    draw();
+  </script>
+</body>
+
+</html>

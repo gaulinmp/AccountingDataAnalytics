@@ -1,12 +1,13 @@
-name: Deploy to GitHub Pages
+name: Deploy lab index to GitHub Pages
 
-# Build from the site/ subfolder and publish to Pages. dist/ is never committed —
-# CI builds it (spec §8). The hosting URL is env-driven (astro.config.mjs):
-# defaults to the project site derived from the GitHub context; override by
-# setting repo Variables PUBLIC_SITE / PUBLIC_BASE (and PUBLIC_CNAME for a custom
-# domain). Set the Prompt API origin-trial token as the secret PUBLIC_OT_TOKEN.
+# Placeholder site: an index of the tracked labs_hw/ HTML (handouts and tools),
+# built by code/utils/build_lab_index.py. The full Astro site is parked in
+# deploy-astro.yml (manual trigger only) until it's ready.
 
-on: push
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -18,43 +19,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Test gate — a red suite blocks the deploy.
-  test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./site
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-      - run: npm ci
-      - run: npx astro check
-      - run: npm run build
-      - run: npm test
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
-
   build:
-    needs: test
     runs-on: ubuntu-latest
-    env:
-      # Default to the GitHub project site; override via repo Variables.
-      PUBLIC_SITE: ${{ vars.PUBLIC_SITE || format('https://{0}.github.io', github.repository_owner) }}
-      PUBLIC_BASE: ${{ vars.PUBLIC_BASE || format('/{0}', github.event.repository.name) }}
-      PUBLIC_OT_TOKEN: ${{ secrets.PUBLIC_OT_TOKEN }}
     steps:
       - uses: actions/checkout@v5
+      - run: python3 code/utils/build_lab_index.py _site
       - name: Write CNAME for a custom domain (only if PUBLIC_CNAME is set)
         if: ${{ vars.PUBLIC_CNAME != '' }}
-        run: echo "${{ vars.PUBLIC_CNAME }}" > site/public/CNAME
-      - uses: withastro/action@v6
+        run: echo "${{ vars.PUBLIC_CNAME }}" > _site/CNAME
+      - uses: actions/upload-pages-artifact@v4
         with:
-          path: ./site
-          node-version: 22
+          path: _site
 
   deploy:
     needs: build

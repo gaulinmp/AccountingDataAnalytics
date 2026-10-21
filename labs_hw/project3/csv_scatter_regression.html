@@ -274,6 +274,16 @@
           Show 90% CI
         </label>
       </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px;color:var(--muted);">scale</label>
+        <input type="number" id="scale-input"
+          style="width:60px;padding:4px;border:1px solid rgba(203,213,225,0.6);border-radius:4px" />
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <label style="font-size:13px;color:var(--muted);">Units</label>
+        <input type="text" id="units-input"
+          style="width:70px;padding:4px;border:1px solid rgba(203,213,225,0.6);border-radius:4px" />
+      </div>
       <div class="message" id="message" style="margin-left:8px"></div>
     </div>
 
@@ -320,6 +330,8 @@
     const hueSelect = document.getElementById('hue-select');
     const clearHueBtn = document.getElementById('clear-hue-btn');
     const showCiCheckbox = document.getElementById('show-ci');
+    const scaleInput = document.getElementById('scale-input');
+    const unitsInput = document.getElementById('units-input');
     const messageEl = document.getElementById('message');
     const slopeEl = document.getElementById('slope');
     const interceptEl = document.getElementById('intercept');
@@ -329,6 +341,8 @@
     const tooltip = d3.select('#tooltip');
     const legendContainer = document.getElementById('legend-container');
     let lastData = null;
+    let customXLabel = null;
+    let customYLabel = null;
 
     fileInput.addEventListener('change', async (e) => {
       const f = e.target.files[0];
@@ -415,10 +429,12 @@
     });
 
     // Auto-update on dropdown changes
-    xSelect.addEventListener('change', draw);
-    ySelect.addEventListener('change', draw);
+    xSelect.addEventListener('change', () => { customXLabel = null; draw(); });
+    ySelect.addEventListener('change', () => { customYLabel = null; draw(); });
     hueSelect.addEventListener('change', draw);
     showCiCheckbox.addEventListener('change', draw);
+    scaleInput.addEventListener('input', draw);
+    unitsInput.addEventListener('input', draw);
 
     // Drawing
     const svg = d3.select('#svg');
@@ -432,12 +448,47 @@
       const xcol = xSelect.value; const ycol = ySelect.value; const huecol = hueSelect.value;
       if (!xcol || !ycol) { message('Please select both X and Y columns', true); return; }
 
+      const scaleVal = parseFloat(scaleInput.value);
+      const unitsVal = unitsInput.value.trim();
+
+      const shouldScaleCol = (col) => {
+        if (!col) return false;
+        let isFloat = false;
+        let maxVal = -Infinity;
+        for (let i = 0; i < lastData.length; i++) {
+          const val = lastData[i][col];
+          if (val === '' || val === null || val === undefined || (typeof val === 'string' && val.trim() === '')) continue;
+          const num = +val;
+          if (isFinite(num)) {
+            if (num > maxVal) maxVal = num;
+            if (num % 1 !== 0 || (typeof val === 'string' && val.includes('.'))) isFloat = true;
+          }
+        }
+        return isFloat && maxVal > 100;
+      };
+
+      let scaleX = 1, scaleY = 1, scaleHue = 1;
+      if (!isNaN(scaleVal)) {
+        if (shouldScaleCol(xcol)) scaleX = scaleVal;
+        if (shouldScaleCol(ycol)) scaleY = scaleVal;
+        if (shouldScaleCol(huecol)) scaleHue = scaleVal;
+      }
+
       // extract numeric pairs
       const pairs = lastData.map(d => {
         // Treat empty strings and whitespace-only strings as missing (NaN)
-        const xVal = (d[xcol] === '' || d[xcol] === null || d[xcol] === undefined || (typeof d[xcol] === 'string' && d[xcol].trim() === '')) ? NaN : +d[xcol];
-        const yVal = (d[ycol] === '' || d[ycol] === null || d[ycol] === undefined || (typeof d[ycol] === 'string' && d[ycol].trim() === '')) ? NaN : +d[ycol];
-        return { x: xVal, y: yVal, rawX: d[xcol], rawY: d[ycol], hue: huecol ? d[huecol] : null, row: d };
+        const xRaw = (d[xcol] === '' || d[xcol] === null || d[xcol] === undefined || (typeof d[xcol] === 'string' && d[xcol].trim() === '')) ? NaN : +d[xcol];
+        const yRaw = (d[ycol] === '' || d[ycol] === null || d[ycol] === undefined || (typeof d[ycol] === 'string' && d[ycol].trim() === '')) ? NaN : +d[ycol];
+
+        let hueVal = huecol ? d[huecol] : null;
+        if (huecol && hueVal !== null && hueVal !== undefined && hueVal !== '') {
+          const hNum = +hueVal;
+          if (isFinite(hNum)) {
+            hueVal = hNum * scaleHue;
+          }
+        }
+
+        return { x: xRaw * scaleX, y: yRaw * scaleY, rawX: d[xcol], rawY: d[ycol], hue: hueVal, row: d };
       }).filter(d => isFinite(d.x) && isFinite(d.y));
 
       if (pairs.length === 0) { message('No numeric pairs found for the selected columns.', true); updateStats(null); return; }
@@ -478,8 +529,40 @@
       g.append('g').call(yAxis).call(g => g.selectAll('.domain').attr('stroke', '#cbd5e1'));
 
       // axis labels
-      svg.append('text').attr('x', margin.left + w / 2).attr('y', height - 6).attr('text-anchor', 'middle').attr('fill', '#64748b').text(xcol);
-      svg.append('text').attr('transform', `translate(14, ${margin.top + h / 2}) rotate(-90)`).attr('text-anchor', 'middle').attr('fill', '#64748b').text(ycol);
+      const defaultXLabelText = unitsVal ? `${xcol} (${unitsVal})` : xcol;
+      const defaultYLabelText = unitsVal ? `${ycol} (${unitsVal})` : ycol;
+
+      const xLabelText = customXLabel !== null ? customXLabel : defaultXLabelText;
+      const yLabelText = customYLabel !== null ? customYLabel : defaultYLabelText;
+
+      svg.append('text')
+        .attr('x', margin.left + w / 2)
+        .attr('y', height - 6)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#64748b')
+        .text(xLabelText)
+        .style('cursor', 'pointer')
+        .on('click', () => {
+          const newText = prompt('Enter custom X axis label (leave blank to reset):', xLabelText);
+          if (newText !== null) {
+            customXLabel = newText.trim() === '' ? null : newText;
+            draw();
+          }
+        });
+
+      svg.append('text')
+        .attr('transform', `translate(14, ${margin.top + h / 2}) rotate(-90)`)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#64748b')
+        .text(yLabelText)
+        .style('cursor', 'pointer')
+        .on('click', () => {
+          const newText = prompt('Enter custom Y axis label (leave blank to reset):', yLabelText);
+          if (newText !== null) {
+            customYLabel = newText.trim() === '' ? null : newText;
+            draw();
+          }
+        });
 
       // gridlines for nicer look
       g.append('g').attr('class', 'grid').selectAll('line').data(yScale.ticks(6)).enter().append('line')
@@ -523,7 +606,7 @@
           const yPred = reg.intercept + reg.slope * x;
 
           // Standard error for confidence interval of the mean at point x
-          const seY = reg.se * Math.sqrt(1/reg.n + Math.pow(x - reg.meanX, 2) / reg.sxx);
+          const seY = reg.se * Math.sqrt(1 / reg.n + Math.pow(x - reg.meanX, 2) / reg.sxx);
           const margin = reg.tValue * seY;
 
           ciPoints.push({
@@ -626,7 +709,7 @@
     // Approximation of t-values for 90% confidence interval
     function getTValue90(df) {
       // Simplified t-values for 90% CI for small samples
-      const tValues = {1: 6.314, 2: 2.920, 3: 2.353, 4: 2.132, 5: 2.015, 6: 1.943, 7: 1.895, 8: 1.860, 9: 1.833, 10: 1.812, 15: 1.753, 20: 1.725, 25: 1.708, 30: 1.697};
+      const tValues = { 1: 6.314, 2: 2.920, 3: 2.353, 4: 2.132, 5: 2.015, 6: 1.943, 7: 1.895, 8: 1.860, 9: 1.833, 10: 1.812, 15: 1.753, 20: 1.725, 25: 1.708, 30: 1.697 };
       if (df in tValues) return tValues[df];
       if (df <= 30) return 1.697;
       return 1.645; // Normal approximation for large df
@@ -673,7 +756,7 @@
         const extent = d3.extent(numericValues);
         // If extent is invalid, return null to use default coloring
         if (extent[0] === undefined || extent[0] === null || !isFinite(extent[0]) ||
-            extent[1] === undefined || extent[1] === null || !isFinite(extent[1])) {
+          extent[1] === undefined || extent[1] === null || !isFinite(extent[1])) {
           return null;
         }
         colorScale = d3.scaleSequential(d3.interpolateViridis)

@@ -124,7 +124,7 @@ Your project will be graded based on the following criteria:
 ---
 ## 3. Suggested Steps and Considerations
 
-The below is a suggested set of steps to help you, especially if you're feeling daunted or stuck. You do not need to follow any or all of these steps, they are just provided as a potential guide if it's useful. I happened to choose predicting net income (`ni_next`) as my outcome variable for WalMart (`WMT`), and a cutoff date of 2020. My predictor variables were `ni`, `accruals`, `bhret_m1_p1`, and `byret_year_post_ea`.
+The below is a suggested set of steps to help you, especially if you're feeling daunted or stuck. You do not need to follow any or all of these steps, they are just provided as a potential guide if it's useful. I happened to choose predicting net income (`ni_next`) as my outcome variable for WalMart (`WMT`), and a cutoff date of 2020. My predictor variables were `ni`, `accruals`, `bhret_m1_p1`, and `bhret_year_pre_ea`.
 
 ### 3.1. Outline of Major Steps
 
@@ -136,8 +136,8 @@ The below is a suggested set of steps to help you, especially if you're feeling 
     * Select a focal firm for the firm-specific model:
         * Consider well-known firms for better business context (Microsoft, Johnson & Johnson, Coca-Cola, Walmart, etc.)
         * Consider firms that have features related to your chosen outcome variable (e.g., high or low volatility earnings, if you want to have a good or poor performing model)
-        * Look for firms with long, consistent histories in the dataset (e.g., 20+ years, the maximum is 29)
-        * Verify data quality and completeness for your chosen firm (this is relevant because I have given you truncated data, so some firms may have missing years if they had, e.g., NI in the top 1% across all firms)
+        * Look for firms with long, consistent histories in the dataset (e.g., 20+ years, the maximum is about 30)
+        * Verify data quality and completeness for your chosen firm (this is especially relevant if you use the truncated `_trunc` data, where some firms may have missing years if they had, e.g., NI in the top 1% across all firms; see Section 4)
 
 2. Choose a Model Specification & Data Split
     * **Note:** you will use the same model for your general and firm-specific models, just trained on different data
@@ -146,7 +146,7 @@ The below is a suggested set of steps to help you, especially if you're feeling 
         * Consider both accounting ratios/metrics and stock return variables
         * Consider just choosing a sparse few predictors (5 or fewer) unless you really want the complexity of a larger model
         * Verify data availability for your chosen firm and time periods
-        * *Note*: Don't worry about whether your model is "good" or "bad". The goal is to compare the two models, not to build a perfect model. So just choose something reasonable that you find interesting and can explain. For refernce, my example model had R-squared of 0.726 for the full market, and 0.830 for the firm-specific model.
+        * *Note*: Don't worry about whether your model is "good" or "bad". The goal is to compare the two models, not to build a perfect model. So just choose something reasonable that you find interesting and can explain. For reference, my example model (on the truncated data, training through 2020) had an R-squared of 0.571 for the full market, and 0.812 for the firm-specific model.
     * Define training/in-sample and testing/out-of-sample periods using a chronological split:
         * For example: training = all data through 2017, testing = 2018-2024
         * Ensure sufficient observations in both periods for your focal firm
@@ -158,7 +158,7 @@ The below is a suggested set of steps to help you, especially if you're feeling 
     * *Suggestion*: drop all columns you are not using, and then drop rows with any missing values in your remaining variables
     * Create training and testing datasets based on your chronological split
     * For the firm-specific model, create a subset containing only the focal firm's data
-    * Handle any problematic outliers as you see fit (though note, I have provided a "truncated" dataset that has removed extreme outliers already, so this will likely only be a concern for new calculations)
+    * Handle any problematic outliers as you see fit (I have provided winsorized and truncated versions of the data, see Section 4, so this will likely only be a concern for new calculations)
 
 4. Build & Evaluate the General (Cross-Sectional) Model
     * Fit your model using all firms in the training period
@@ -181,7 +181,7 @@ The below is a suggested set of steps to help you, especially if you're feeling 
     * Calculate the same error metrics for your focal firm's training and test data
         * Consider how these compare to the general model's error metrics
 
-6. Complile Model Comparison
+6. Compile Model Comparison
     * Combine and evaluate the in-sample and out-of-sample error metrics
         * **RMSE (Root Mean Squared Error):** Penalizes large errors more heavily. Good for math and statistics reasons, economically interpretable as standard deviation of errors.
         * **MAE (Mean Absolute Error):** Average model error (in absolute terms, i.e. predicting 1 more or 1 less treated the same). Highly interpretable, but mathematically less tractable.
@@ -235,7 +235,9 @@ The below is a suggested set of steps to help you, especially if you're feeling 
 
 **Predicting with Accounting vs Stock Return Variables**: You can choose to predict using only accounting variables, or include stock return variables (or just stock return variables, if you're feeling adventurous). What you choose is less important than your explanation of *why*, specifically what information in your X variable you think will help predict your Y variable. I strongly encourage you to think about the information that stock return variables are capturing, and whether it is likely to be useful for predicting your chosen outcome variable (spoiler: it often is).
 
-**Look-ahead bias**: I have provided a few variables you might choose as your outcome (Y) variable from the *next* fiscal year. They are those labeled `_next` (e.g., `ni_next`). I've provided these future values so that you can more easily avoid look-ahead bias, as long as you keep your predictor (X) variables from the *current* or *previous* fiscal year (though do note that `bhret_year_post_ea` is the returns *up until* next year's earnings announcement, so does not include information released *at* the next year's earnings announcement, and therefore would be fine to use as an X variable without the lookahead bias).
+**Look-ahead bias**: I have provided a few variables you might choose as your outcome (Y) variable from the *next* fiscal year. They are those labeled `_next` (e.g., `ni_next`). I've provided these future values so that you can more easily avoid look-ahead bias, as long as you keep your predictor (X) variables from the *current* or *previous* fiscal year.
+
+Be careful with the stock return variables here. `bhret_year_pre_ea` (the year of returns *leading up to* this year's earnings announcement) and `bhret_m1_p1` (the return *around* this year's announcement) are known when this year's earnings come out, so they are fine X variables. `bhret_year_post_ea` is **not**: it is the return from this year's announcement *up until next year's*, so it accumulates over almost the entire year in which `ni_next` is being earned, including the market's reaction to that year's quarterly reports. Someone forecasting at year T could not know it yet, so using it as an X variable is look-ahead bias (and it will flatter your model's fit).
 
 **Mechanical relationships**: Related to look-ahead bias, in this dataset, be careful about choosing outcome (Y) variables that are mechanically related to your predictor (X) variables. For example, predicting `roa_next` using `at` as a predictor is problematic, since `roa_next = ni_next / at`, so you would be regressing `at` on `1/at`, a mechanical relationship. This is just another example of why data analysis can be tricky, and why you should always think carefully about your model specification.
 
@@ -274,19 +276,22 @@ For Excel, you can use the built-in regression tool in the Data Analysis Toolpak
 #### 3.3.2. Python
 
 ```python
-from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error
+import pandas as pd
+import seaborn as sns
 import statsmodels.formula.api as smf
 
+df = pd.read_csv('financial_data_trunc_project3.csv')
+
 var = 'ni'
-cutoff = 2020
+cutoff = 2020   # training = fiscal years up to and including the cutoff
 ticker = 'WMT'
+formula = f'{var}_next ~ {var} + accruals + bhret_m1_p1 + bhret_year_pre_ea'
 
-# Assumes you have data loaded as df
-firm_data = df3.query('ticker==@ticker').sort_values('fyear').assign(fyear_next=lambda df: df.fyear + 1)
+firm_data = df.query('ticker==@ticker').sort_values('fyear').assign(fyear_next=lambda df: df.fyear + 1)
 
-# Note, this is the "formula" interface to statsmodels, which is very convenient for quickly specifying models. 
+# Note, this is the "formula" interface to statsmodels, which is very convenient for quickly specifying models.
 # You just write the model as a string, e.g. 'y ~ x1 + x2 + x3', and it handles the rest.
-model = smf.ols(f'{var}_next ~ {var} + accruals + bhret_m1_p1 + bhret_year_post_ea', data=df3.query('fyear < @cutoff')).fit()
+model = smf.ols(formula, data=df.query('fyear <= @cutoff')).fit()
 print("Full Sample Model:")
 print(model.summary())
 
@@ -294,26 +299,33 @@ print(model.summary())
 # To calculate errors, you can just take ni_next - ni_hat
 firm_data[f'{var}_hat'] = model.predict(firm_data)
 
-firm_model = smf.ols(f'{var}_next ~ {var} + accruals + bhret_m1_p1 + bhret_year_post_ea', data=firm_data.query('fyear <= @cutoff')).fit()
+firm_model = smf.ols(formula, data=firm_data.query('fyear <= @cutoff')).fit()
 print("Firm-Specific Model:")
 print(firm_model.summary())
 firm_data[f'{var}_hat_firm'] = firm_model.predict(firm_data)
 
-# Make the plot
+# Make the plot. The x-axis is the year the outcome is realized (fyear + 1), so the last
+# training outcome is cutoff + 1 and the first test outcome is cutoff + 2.
 ax = sns.lineplot(x='fyear_next', y=f'{var}_next', data=firm_data, color='blue', label=f'Actual {var.upper()}', marker='o', markersize=2)
 sns.lineplot(x='fyear_next', y=f'{var}_hat', data=firm_data, ax=ax, color='red', label=f'Overall Predicted {var.upper()}')
 sns.lineplot(x='fyear_next', y=f'{var}_hat_firm', data=firm_data, ax=ax, color='green', label=f'Firm Predicted {var.upper()}')
-ax.vlines(cutoff + .5, 0, 20000, color='grey', linestyle='--')
+ax.axvline(cutoff + 1.5, color='grey', linestyle='--')
 ```
 
 ---
 ## 4. Data
 
-The data for this project is provided as a CSV file, and it pulled from the same Compustat and CRSP databases as in Project 1 & 2, but I've done the merge, calculated ratios, and added next year variables (e.g., `roa_next`, `oancf_next`) and last year variables (e.g., `at_prev`, `ni_prev`).
+The data for this project is provided as a CSV file, and it is pulled from the same Compustat and CRSP databases as in Project 1 & 2, but I've done the merge, calculated ratios, and added next year variables (e.g., `roa_next`, `oancf_next`) and last year variables (e.g., `at_prev`, `ni_prev`).
 
 I have provided quite a few variables, as you will see below. You do not need to use all of them, or even most of them. The goal is to choose a few variables that you think will help predict your chosen outcome variable, and then justify your choices. If you are overwhelmed by the number of variables, I suggest you start by ignoring the dataset, and just choosing accounting measures that you think will be useful predictors based on your accounting and economic intuition. Then, once you have a list of variables you want to use, you can check the dataset to see if they are available, and if not, choose alternatives.
 
-**Note:** I have provided a "truncated" dataset that has removed extreme outliers. This means that across every continuous variable, I have set the top and bottom 1% of values to missing. If you wish to get the raw data for some reason, please reach out and I will provide it to you.
+**Note:** The data comes in three versions, identified by the file name suffix. They have the same rows and columns, and differ only in how extreme outliers are handled:
+
+* `financial_data_raw_project3.csv` (`_raw`): the data as pulled, with no outlier treatment.
+* `financial_data_win_project3.csv` (`_win`): winsorized at 1/99. For every continuous variable, values below that fiscal year's 1st percentile are set *to* the 1st percentile, and values above that year's 99th percentile are set to the 99th percentile. Extreme observations are kept, just pulled in.
+* `financial_data_trunc_project3.csv` (`_trunc`): truncated at 1/99. For every continuous variable, values below that fiscal year's 1st percentile or above its 99th percentile are set to *missing*. Extreme observations are dropped (for that variable).
+
+The percentiles are calculated separately within each fiscal year, so each year is compared only with its own year, using information available once that year is over. For the same reason, the future (`_next`) variables are **not** winsorized or truncated in any version. In practice you do not know where next year's 1st and 99th percentiles will fall until next year is over, so you cannot clean an outcome you are trying to forecast. You *can* winsorize or truncate historical data (your X variables, and the training sample generally), because those percentiles are already known. If you do clean your outcome variable yourself, only do it within the training period, using the training-period percentiles.
 
 ### 4.1. Data Dictionary
 

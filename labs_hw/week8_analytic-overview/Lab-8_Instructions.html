@@ -21,6 +21,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;
@@ -603,45 +623,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li>Consider how analytical insights can inform business decisions through the lens of understanding economic and market mechanisms</li>
 </ul>
 <h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
-<p>As always, you can use Excel or Python for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.</p>
-<p><em>However</em>, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available <a href="https://utah.instructure.com/courses/1243774/pages/regression-eda" target="_blank">on canvas</a>, and you can download it there to run it locally on your computer.</p>
-<p>I used an initial one-line prompt (collapsed, below) in ChatGPT to generate a first draft, then used Claude Code to add more features, then asked Claude to re-generate a prompt that would cover all the features I had added (also collapsed, below). You can copy/paste that prompt into your own LLM to generate your own version of the app, and modify it to add more features if you like. I use this as a further demonstration of how, with a good prompt, LLMs can help you quickly generate useful code to generate very valuable tools.</p>
-<details>
-<summary>Initial prompt</summary>
-<p>Make me a simple one-page website that takes a csv file upload, then populates a two dropdowns: x and y from the column headers of the CSV. Those dropdowns should show all the variables from the CSV, and they will be used to set the Y and X axis of the plot, which will be beneath the side-by-side dropdowns. The graph should be plotted in D3, aesthetically pleasing, and show a scatterplot of the two variables, and overlay the regression line of Y on X. The regression statistics should also be plotted, including slope, intercept, and R2.</p>
-</details>
-<details>
-<summary>Claude generated prompt for full features (you can copy/paste this into an LLM to get your own version, add features, etc.)</summary>
-<p>Create a single-file HTML page with embedded JavaScript using D3.js that:</p>
-<ol>
-<li>Allows users to upload a CSV file</li>
-<li>Automatically populates three dropdowns:<ul>
-<li>X axis: numeric columns only</li>
-<li>Y axis: numeric columns only</li>
-<li>Hue: all columns, with "(none)" option and clear button</li>
-</ul>
-</li>
-<li>Auto-selects the first two numeric columns for X and Y</li>
-<li>Displays a scatter plot with:<ul>
-<li>Points colored by hue variable (if selected)</li>
-<li>OLS regression line overlaid</li>
-<li>Optional 90% confidence interval band (toggleable checkbox)</li>
-<li>Hover tooltips showing Y, X, and Hue values with variable names</li>
-</ul>
-</li>
-<li>Shows regression statistics: slope, intercept, R<sup>2</sup>, RMSE, and N</li>
-<li>Displays the regression equation as text on the plot</li>
-<li>Handles hue coloring:<ul>
-<li>Categorical (≤20 unique values): discrete color palette with legend</li>
-<li>Numeric (&gt;20 unique values): continuous Viridis colorscale with colorbar</li>
-<li>Non-numeric with ≥100 values: default to single color</li>
-<li>Numeric with any number of values: always use continuous colorscale</li>
-</ul>
-</li>
-<li>Filters out non-numeric, empty, and whitespace-only values from X/Y calculations</li>
-<li>Updates plot automatically when any dropdown or checkbox changes</li>
-</ol>
-</details>
+<p>As always, you can use Excel or Python for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.
+Or, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically (<a href="https://gaulinmp.github.io/AccountingDataAnalytics/labs_hw/week8_analytic-overview/csv_scatter_regression.html" target="_blank">available on github</a>).</p>
 <h2 class="ada-h2" id="2-data">2. Data</h2>
 <p>The dataset for this lab contains annual financial statement data from Compustat merged with stock return data from CRSP for the 10 largest companies in each GICS sector from 2015 to present.</p>
 <h3 class="ada-h3" id="21-data-source">2.1. Data Source</h3>
@@ -1080,6 +1063,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">gvkey</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">permno</span><span class="p">,</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">fyear</span>
 </code></pre></div>
 </details>
-<p>This query takes approximately 7 seconds to run in <code class="fixed-width">python</code> with <code class="fixed-width">duckdb</code> on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data from the SQL lab). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.</p>
+<p>This query takes approximately 2 seconds to run in <code class="fixed-width">python</code> with <code class="fixed-width">duckdb</code> on my desktop, combining 19,000 financial records with 3.1 million stock returns (approximately 3x more than the data from the SQL lab). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.</p>
 </body>
 </html>

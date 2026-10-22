@@ -36,38 +36,8 @@ By the end of this lab, you will be able to:
 ### 1.2. Tools
 
 As always, you can use Excel or Python for this lab. At this point, you should be comfortable making scatter plots, and this lab will introduce you to adding trend lines and displaying R<sup>2</sup> values.
+Or, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically ([available on github](https://gaulinmp.github.io/AccountingDataAnalytics/labs_hw/week8_analytic-overview/csv_scatter_regression.html)).
 
-*However*, to demonstrate how useful LLMs can be to help with exploratory data analysis, I made a simple one-page HTML/JavaScript app that generates the required scatter plots with trend lines and R<sup>2</sup> values automatically. You can use this app to quickly generate the visualizations you need for the lab, regardless of your preferred tool. That tool is available [on canvas](https://utah.instructure.com/courses/1243774/pages/regression-eda), and you can download it there to run it locally on your computer.
-
-I used an initial one-line prompt (collapsed, below) in ChatGPT to generate a first draft, then used Claude Code to add more features, then asked Claude to re-generate a prompt that would cover all the features I had added (also collapsed, below). You can copy/paste that prompt into your own LLM to generate your own version of the app, and modify it to add more features if you like. I use this as a further demonstration of how, with a good prompt, LLMs can help you quickly generate useful code to generate very valuable tools.
-
-??? "Initial prompt"
-    Make me a simple one-page website that takes a csv file upload, then populates a two dropdowns: x and y from the column headers of the CSV. Those dropdowns should show all the variables from the CSV, and they will be used to set the Y and X axis of the plot, which will be beneath the side-by-side dropdowns. The graph should be plotted in D3, aesthetically pleasing, and show a scatterplot of the two variables, and overlay the regression line of Y on X. The regression statistics should also be plotted, including slope, intercept, and R2.
-
-
-??? "Claude generated prompt for full features (you can copy/paste this into an LLM to get your own version, add features, etc.)"
-    Create a single-file HTML page with embedded JavaScript using D3.js that:
-
-    1. Allows users to upload a CSV file
-    2. Automatically populates three dropdowns:
-        - X axis: numeric columns only
-        - Y axis: numeric columns only
-        - Hue: all columns, with "(none)" option and clear button
-    3. Auto-selects the first two numeric columns for X and Y
-    4. Displays a scatter plot with:
-        - Points colored by hue variable (if selected)
-        - OLS regression line overlaid
-        - Optional 90% confidence interval band (toggleable checkbox)
-        - Hover tooltips showing Y, X, and Hue values with variable names
-    5. Shows regression statistics: slope, intercept, R<sup>2</sup>, RMSE, and N
-    6. Displays the regression equation as text on the plot
-    7. Handles hue coloring:
-        - Categorical (≤20 unique values): discrete color palette with legend
-        - Numeric (>20 unique values): continuous Viridis colorscale with colorbar
-        - Non-numeric with ≥100 values: default to single color
-        - Numeric with any number of values: always use continuous colorscale
-    8. Filters out non-numeric, empty, and whitespace-only values from X/Y calculations
-    9. Updates plot automatically when any dropdown or checkbox changes
 
 ## 2. Data
 
@@ -471,4 +441,4 @@ Below (expandable) is the SQL code used to generate the dataset, for those inter
     ORDER BY c.gvkey, c.permno, c.fyear
     ```
 
-This query takes approximately 7 seconds to run in `python` with `duckdb` on my desktop, combining 16,000 financial records with 4 million stock returns (approximately 4x more than the data from the SQL lab). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.
+This query takes approximately 2 seconds to run in `python` with `duckdb` on my desktop, combining 19,000 financial records with 3.1 million stock returns (approximately 3x more than the data from the SQL lab). The merge combines all 3 merges covered in Lab 6, with the addition of the next-year buy and hold returns. I only highlight this to underscore the difference in efficiency of well-written SQL compared to what ChatGPT may have generated.

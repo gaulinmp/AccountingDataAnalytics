@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistic Regression Visualizer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #60a5fa, #a78bfa);
+            border-radius: 2px;
+        }
+
+        /* Accordion styles */
+        .accordion-header {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header .card-title {
+            margin-bottom: 0;
+        }
+
+        .accordion-toggle {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            color: #94a3b8;
+        }
+
+        .accordion-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .accordion-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            max-height: 500px;
+        }
+
+        .accordion-content.collapsed {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .accordion-content-inner {
+            padding-top: 16px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        select, input[type="number"] {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: #e4e4e7;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+
+        select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(96, 165, 250, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e4e4e7;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary.has-file {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.5);
+            color: #4ade80;
+        }
+
+        .visualization-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .visualization-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        #logitChart {
+            cursor: crosshair;
+        }
+
+        .click-hint {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .confusion-matrix {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .matrix-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .matrix-label-left {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-weight: 600;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .matrix-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .matrix-label-top {
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        /* New extended matrix grid: 4 columns (label + 2 confusion + precision), 4 rows (label + 2 confusion + recall) */
+        .matrix-grid-extended {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr auto;
+            grid-template-rows: auto 1fr 1fr auto;
+            gap: 4px;
+        }
+
+        .matrix-header {
+            padding: 12px 20px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .matrix-cell {
+            padding: 24px 32px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .matrix-cell.tp {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.1));
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .matrix-cell.tn {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(59, 130, 246, 0.1));
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .matrix-cell.fp {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.3), rgba(249, 115, 22, 0.1));
+            color: #fb923c;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .matrix-cell.fn {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(239, 68, 68, 0.1));
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .cell-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        /* Animation for flowing particles between cells */
+        .flow-particle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.9;
+            animation: flowMove 0.4s ease-out forwards;
+        }
+
+        .flow-particle.positive {
+            background: radial-gradient(circle, #4ade80 0%, #22c55e 100%);
+            box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+        }
+
+        .flow-particle.negative {
+            background: radial-gradient(circle, #60a5fa 0%, #3b82f6 100%);
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
+        }
+
+        @keyframes flowMove {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(var(--dx), calc(var(--dy) / 2)) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .matrix-grid-extended {
+            position: relative;
+        }
+
+        /* Metric cells in the extended matrix */
+        .metric-cell {
+            padding: 16px 20px;
+            border-radius: 8px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-cell.precision {
+            border-left: 3px solid rgba(167, 139, 250, 0.6);
+        }
+
+        .metric-cell.recall {
+            border-top: 3px solid rgba(167, 139, 250, 0.6);
+        }
+
+        .metric-cell.accuracy {
+            background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(96, 165, 250, 0.2));
+            border: 1px solid rgba(167, 139, 250, 0.4);
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #a78bfa;
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .threshold-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .threshold-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .threshold-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #a78bfa;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .run-btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #64748b;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Logistic Regression Visualizer</h1>
+        <p class="subtitle">Upload a dataset, fit a logistic model, and explore classification thresholds</p>
+
+        <!-- Variable Selection with Accordion -->
+        <div class="card" id="controlsCard">
+            <div class="accordion-header" id="accordionHeader">
+                <div class="card-title">Model Configuration</div>
+                <span class="accordion-toggle" id="accordionToggle">&#9660;</span>
+            </div>
+            <div class="accordion-content" id="accordionContent">
+                <div class="accordion-content-inner">
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label for="outcomeVar">Outcome Variable (Y)</label>
+                            <select id="outcomeVar" disabled>
+                                <option value="">Upload data first...</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="predictorVars">Predictor Variables (X)</label>
+                            <select id="predictorVars" multiple disabled>
+                                <option value="">Upload data first...</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="xAxisVar">X-Axis Display Variable</label>
+                            <select id="xAxisVar" disabled>
+                                <option value="">Select predictors first...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="run-btn-container">
+                        <input type="file" id="fileInput" accept=".csv">
+                        <button class="btn btn-secondary" id="uploadBtn">
+                            📂 Upload CSV
+                        </button>
+                        <button class="btn btn-primary" id="runBtn" disabled>
+                            🚀 Fit Logistic Regression
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visualization Section -->
+        <div class="card" id="vizCard">
+            <div class="card-title">Results</div>
+
+            <div class="visualization-grid">
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-title">Logistic Regression Curve</div>
+                    <div class="chart-container">
+                        <canvas id="logitChart"></canvas>
+                        <div class="empty-state" id="chartEmpty">
+                            <div class="empty-state-icon">📈</div>
+                            <div>Fit a model to see the logistic curve</div>
+                        </div>
+                    </div>
+                    <div class="click-hint" id="clickHint" style="display: none;">Click on the chart to set the classification threshold</div>
+                    <div class="threshold-display" id="thresholdDisplay" style="display: none;">
+                        <span class="threshold-label">Classification Threshold:</span>
+                        <span class="threshold-value" id="thresholdValue">0.50</span>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 0;">
+                    <div class="card-title">Confusion Matrix</div>
+                    <div class="confusion-matrix" id="confusionMatrix">
+                        <div class="matrix-wrapper">
+                            <div class="matrix-label-left">Predicted</div>
+                            <div class="matrix-content">
+                                <div class="matrix-label-top">Actual</div>
+                                <!-- Extended grid: Predicted (rows) x Actual (cols), with precision right, recall bottom -->
+                                <!-- Positive on right/bottom -->
+                                <div class="matrix-grid-extended">
+                                    <!-- Row 0: Headers (Actual) -->
+                                    <div class="matrix-header"></div>
+                                    <div class="matrix-header" id="actualNegHeader">Negative</div>
+                                    <div class="matrix-header" id="actualPosHeader">Positive</div>
+                                    <div class="matrix-header"></div>
+
+                                    <!-- Row 1: Predicted Negative -->
+                                    <div class="matrix-header" id="predNegHeader">Negative</div>
+                                    <div class="matrix-cell tn" id="cellTN">
+                                        <div id="tnValue">-</div>
+                                        <div class="cell-label">True Neg</div>
+                                    </div>
+                                    <div class="matrix-cell fn" id="cellFN">
+                                        <div id="fnValue">-</div>
+                                        <div class="cell-label">False Neg</div>
+                                    </div>
+                                    <div class="metric-cell precision">
+                                        <div class="metric-value" id="precisionNeg">-</div>
+                                        <div class="metric-label">Precision (-)</div>
+                                    </div>
+
+                                    <!-- Row 2: Predicted Positive -->
+                                    <div class="matrix-header" id="predPosHeader">Positive</div>
+                                    <div class="matrix-cell fp" id="cellFP">
+                                        <div id="fpValue">-</div>
+                                        <div class="cell-label">False Pos</div>
+                                    </div>
+                                    <div class="matrix-cell tp" id="cellTP">
+                                        <div id="tpValue">-</div>
+                                        <div class="cell-label">True Pos</div>
+                                    </div>
+                                    <div class="metric-cell precision">
+                                        <div class="metric-value" id="precisionPos">-</div>
+                                        <div class="metric-label">Precision (+)</div>
+                                    </div>
+
+                                    <!-- Row 3: Recall metrics -->
+                                    <div class="matrix-header"></div>
+                                    <div class="metric-cell recall">
+                                        <div class="metric-value" id="recallNeg">-</div>
+                                        <div class="metric-label">Recall (-)</div>
+                                    </div>
+                                    <div class="metric-cell recall">
+                                        <div class="metric-value" id="recallPos">-</div>
+                                        <div class="metric-label">Recall (+)</div>
+                                    </div>
+                                    <div class="metric-cell accuracy">
+                                        <div class="metric-value" id="accuracy">-</div>
+                                        <div class="metric-label">Accuracy</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let data = [];
+        let columns = [];
+        let model = null;
+        let predictions = [];
+        let actualValues = [];
+        let chart = null;
+        let currentThreshold = 0.5;
+
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const outcomeVar = document.getElementById('outcomeVar');
+        const predictorVars = document.getElementById('predictorVars');
+        const xAxisVar = document.getElementById('xAxisVar');
+        const runBtn = document.getElementById('runBtn');
+        const thresholdValue = document.getElementById('thresholdValue');
+        const thresholdDisplay = document.getElementById('thresholdDisplay');
+        const clickHint = document.getElementById('clickHint');
+        const chartEmpty = document.getElementById('chartEmpty');
+        const accordionHeader = document.getElementById('accordionHeader');
+        const accordionToggle = document.getElementById('accordionToggle');
+        const accordionContent = document.getElementById('accordionContent');
+
+        // Accordion functionality
+        accordionHeader.addEventListener('click', () => {
+            accordionContent.classList.toggle('collapsed');
+            accordionToggle.classList.toggle('collapsed');
+        });
+
+        // File upload handling
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: (results) => {
+                    data = results.data;
+                    columns = results.meta.fields;
+
+                    uploadBtn.classList.add('has-file');
+                    uploadBtn.innerHTML = `✅ ${file.name}`;
+
+                    populateSelects();
+                }
+            });
+        }
+
+        function populateSelects() {
+            outcomeVar.innerHTML = '<option value="">Select outcome variable...</option>';
+            predictorVars.innerHTML = '';
+
+            columns.forEach(col => {
+                outcomeVar.innerHTML += `<option value="${col}">${col}</option>`;
+                predictorVars.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+
+            outcomeVar.disabled = false;
+            predictorVars.disabled = false;
+
+            // Auto-select first column as Y, second column as X predictor
+            if (columns.length >= 1) {
+                outcomeVar.value = columns[0];
+            }
+            if (columns.length >= 2) {
+                // Select the second column in the multi-select
+                predictorVars.options[1].selected = true;
+                updateXAxisSelect();
+            }
+            updateRunButton();
+        }
+
+        outcomeVar.addEventListener('change', updateRunButton);
+        predictorVars.addEventListener('change', () => {
+            updateRunButton();
+            updateXAxisSelect();
+        });
+
+        function updateXAxisSelect() {
+            const selected = Array.from(predictorVars.selectedOptions).map(o => o.value);
+            xAxisVar.innerHTML = '';
+
+            if (selected.length > 0) {
+                selected.forEach(col => {
+                    xAxisVar.innerHTML += `<option value="${col}">${col}</option>`;
+                });
+                xAxisVar.disabled = false;
+            } else {
+                xAxisVar.innerHTML = '<option value="">Select predictors first...</option>';
+                xAxisVar.disabled = true;
+            }
+        }
+
+        function updateRunButton() {
+            const hasOutcome = outcomeVar.value !== '';
+            const hasPredictors = Array.from(predictorVars.selectedOptions).length > 0;
+            runBtn.disabled = !(hasOutcome && hasPredictors);
+        }
+
+        // Logistic Regression Implementation
+        function sigmoid(z) {
+            return 1 / (1 + Math.exp(-z));
+        }
+
+        function fitLogisticRegression(X, y, learningRate = 0.1, iterations = 1000) {
+            const n = X.length;
+            const m = X[0].length;
+            let weights = new Array(m).fill(0);
+            let bias = 0;
+
+            for (let iter = 0; iter < iterations; iter++) {
+                let dw = new Array(m).fill(0);
+                let db = 0;
+
+                for (let i = 0; i < n; i++) {
+                    let z = bias;
+                    for (let j = 0; j < m; j++) {
+                        z += weights[j] * X[i][j];
+                    }
+                    const pred = sigmoid(z);
+                    const error = pred - y[i];
+
+                    for (let j = 0; j < m; j++) {
+                        dw[j] += error * X[i][j];
+                    }
+                    db += error;
+                }
+
+                for (let j = 0; j < m; j++) {
+                    weights[j] -= learningRate * dw[j] / n;
+                }
+                bias -= learningRate * db / n;
+            }
+
+            return { weights, bias };
+        }
+
+        function predict(X, model) {
+            return X.map(row => {
+                let z = model.bias;
+                for (let j = 0; j < row.length; j++) {
+                    z += model.weights[j] * row[j];
+                }
+                return sigmoid(z);
+            });
+        }
+
+        // Run regression
+        runBtn.addEventListener('click', () => {
+            const outcome = outcomeVar.value;
+            const predictors = Array.from(predictorVars.selectedOptions).map(o => o.value);
+
+            // Prepare data
+            const cleanData = data.filter(row => {
+                if (row[outcome] === null || row[outcome] === undefined || row[outcome] === '') return false;
+                for (const p of predictors) {
+                    if (row[p] === null || row[p] === undefined || row[p] === '' || isNaN(row[p])) return false;
+                }
+                return true;
+            });
+
+            const X = cleanData.map(row => predictors.map(p => row[p]));
+            const y = cleanData.map(row => row[outcome] ? 1 : 0);
+            actualValues = y;
+
+            // Standardize features
+            const means = predictors.map((_, j) => X.reduce((sum, row) => sum + row[j], 0) / X.length);
+            const stds = predictors.map((_, j) => {
+                const mean = means[j];
+                return Math.sqrt(X.reduce((sum, row) => sum + Math.pow(row[j] - mean, 2), 0) / X.length) || 1;
+            });
+
+            const XStd = X.map(row => row.map((val, j) => (val - means[j]) / stds[j]));
+
+            // Fit model
+            model = fitLogisticRegression(XStd, y);
+            model.means = means;
+            model.stds = stds;
+            model.predictors = predictors;
+            model.XStd = XStd;
+            model.X = X;
+
+            predictions = predict(XStd, model);
+
+            // Update visualization
+            currentThreshold = 0.5;
+            thresholdValue.textContent = currentThreshold.toFixed(2);
+            updateChart();
+            updateConfusionMatrix(currentThreshold);
+            chartEmpty.classList.add('hidden');
+            thresholdDisplay.style.display = 'flex';
+            clickHint.style.display = 'block';
+        });
+
+        // Store chart data for threshold updates
+        let chartScatterData = [];
+        let chartActualData = [];
+        let chartActualValues = []; // Store actual Y values (0 or 1) for coloring
+        let chartCurvePoints = [];
+
+        function updateChart(thresholdOnly = false) {
+            const xVar = xAxisVar.value;
+            const xIdx = model.predictors.indexOf(xVar);
+            const threshold = currentThreshold;
+
+            // Only recalculate data if not just updating threshold
+            if (!thresholdOnly || chartScatterData.length === 0) {
+                // Get x values and predictions
+                const xValues = model.X.map(row => row[xIdx]);
+                const sortedIndices = xValues.map((_, i) => i).sort((a, b) => xValues[a] - xValues[b]);
+
+                // Create scatter points for predictions
+                chartScatterData = sortedIndices.map(i => ({
+                    x: xValues[i],
+                    y: predictions[i]
+                }));
+
+                // Create scatter points for actual values (0 or 1)
+                chartActualData = sortedIndices.map(i => ({
+                    x: xValues[i],
+                    y: actualValues[i] === 1 ? 1.05 : -0.05
+                }));
+
+                // Store actual values in same order for coloring
+                chartActualValues = sortedIndices.map(i => actualValues[i]);
+
+                // Create smooth curve data for the logistic fit
+                const xMin = Math.min(...xValues);
+                const xMax = Math.max(...xValues);
+                chartCurvePoints = [];
+
+                for (let x = xMin; x <= xMax; x += (xMax - xMin) / 100) {
+                    const point = model.predictors.map((p, j) => {
+                        if (j === xIdx) return x;
+                        return model.means[j];
+                    });
+                    const pointStd = point.map((val, j) => (val - model.means[j]) / model.stds[j]);
+                    let z = model.bias;
+                    for (let j = 0; j < pointStd.length; j++) {
+                        z += model.weights[j] * pointStd[j];
+                    }
+                    chartCurvePoints.push({ x, y: sigmoid(z) });
+                }
+            }
+
+            // Find x value where curve crosses threshold
+            let thresholdX = null;
+            for (let i = 1; i < chartCurvePoints.length; i++) {
+                if ((chartCurvePoints[i-1].y <= threshold && chartCurvePoints[i].y >= threshold) ||
+                    (chartCurvePoints[i-1].y >= threshold && chartCurvePoints[i].y <= threshold)) {
+                    thresholdX = chartCurvePoints[i].x;
+                    break;
+                }
+            }
+
+            const annotations = {
+                thresholdLine: {
+                    type: 'line',
+                    yMin: threshold,
+                    yMax: threshold,
+                    borderColor: 'rgba(167, 139, 250, 0.8)',
+                    borderWidth: 2,
+                    borderDash: [6, 6],
+                    label: {
+                        display: true,
+                        content: `Threshold: ${threshold.toFixed(2)}`,
+                        position: 'start',
+                        backgroundColor: 'rgba(167, 139, 250, 0.8)',
+                        color: 'white',
+                        font: { size: 12 }
+                    }
+                }
+            };
+
+            if (thresholdX !== null) {
+                annotations.verticalLine = {
+                    type: 'line',
+                    xMin: thresholdX,
+                    xMax: thresholdX,
+                    borderColor: 'rgba(167, 139, 250, 0.5)',
+                    borderWidth: 2,
+                    borderDash: [4, 4]
+                };
+            }
+
+            const newColors = chartScatterData.map(p =>
+                p.y >= threshold ? 'rgba(34, 197, 94, 0.7)' : 'rgba(239, 68, 68, 0.7)'
+            );
+
+            // Color actual data X marks: dark green if correctly classified, dark red if not
+            // Correct: (actual=1 & predicted>=threshold) OR (actual=0 & predicted<threshold)
+            const actualColors = chartScatterData.map((p, i) => {
+                const actual = chartActualValues[i];
+                const predictedPositive = p.y >= threshold;
+                const correct = (actual === 1 && predictedPositive) || (actual === 0 && !predictedPositive);
+                return correct ? 'rgba(21, 128, 61, 0.9)' : 'rgba(153, 27, 27, 0.9)';
+            });
+
+            // If chart exists and we're just updating threshold, update in place
+            if (chart && thresholdOnly) {
+                chart.data.datasets[0].borderColor = actualColors; // index 0 is actual data
+                chart.data.datasets[1].backgroundColor = newColors; // index 1 is predicted probability
+                chart.options.plugins.annotation.annotations = annotations;
+                chart.update('none'); // 'none' disables animation
+                return;
+            }
+
+            // Otherwise create new chart
+            if (chart) {
+                chart.destroy();
+            }
+
+            const ctx = document.getElementById('logitChart').getContext('2d');
+
+            chart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Actual (Y)',
+                            data: chartActualData,
+                            backgroundColor: 'transparent',
+                            borderColor: actualColors,
+                            pointStyle: 'crossRot',
+                            pointRadius: 8,
+                            pointHoverRadius: 8,
+                            borderWidth: 3
+                        },
+                        {
+                            label: 'Predicted Probability',
+                            data: chartScatterData,
+                            backgroundColor: newColors,
+                            pointRadius: 6,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Logistic Curve',
+                            data: chartCurvePoints,
+                            type: 'line',
+                            borderColor: 'rgba(96, 165, 250, 1)',
+                            borderWidth: 3,
+                            fill: false,
+                            pointRadius: 0,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: handleChartClick,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: xVar,
+                                color: '#94a3b8',
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            min: -0.08,
+                            max: 1.08,
+                            title: {
+                                display: true,
+                                text: 'P(Y=1)',
+                                color: '#94a3b8',
+                                font: { size: 14, weight: 'bold' }
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: { enabled: false },
+                        legend: {
+                            labels: { color: '#e4e4e7' }
+                        },
+                        annotation: { annotations }
+                    }
+                }
+            });
+        }
+
+        function handleChartClick(event, elements, chart) {
+            // Get the y-coordinate of the click relative to the chart area
+            const yScale = chart.scales.y;
+            const canvasPosition = Chart.helpers.getRelativePosition(event, chart);
+            const clickedY = yScale.getValueForPixel(canvasPosition.y);
+
+            // Clamp the threshold between 0 and 1
+            const newThreshold = Math.max(0, Math.min(1, clickedY));
+            currentThreshold = Math.round(newThreshold * 100) / 100; // Round to 2 decimal places
+
+            thresholdValue.textContent = currentThreshold.toFixed(2);
+            updateConfusionMatrix(currentThreshold);
+            updateChart(true); // threshold only - no animation
+        }
+
+        // Track previous confusion matrix values for animation
+        let prevTP = 0, prevTN = 0, prevFP = 0, prevFN = 0;
+
+        function createFlowParticles(fromCell, toCell, count, cssClass) {
+            if (count <= 0) return;
+
+            const fromRect = fromCell.getBoundingClientRect();
+            const toRect = toCell.getBoundingClientRect();
+            const container = document.querySelector('.matrix-grid-extended');
+            const containerRect = container.getBoundingClientRect();
+
+            // Calculate movement delta
+            const dx = toRect.left - fromRect.left;
+            const dy = toRect.top - fromRect.top;
+
+            // Create particles (max 10 for performance)
+            const numParticles = Math.min(count, 10);
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = `flow-particle ${cssClass}`;
+
+                // Randomize starting position within the cell
+                const startX = fromRect.left - containerRect.left + fromRect.width / 2 + (Math.random() - 0.5) * 30;
+                const startY = fromRect.top - containerRect.top + fromRect.height / 2 + (Math.random() - 0.5) * 20;
+
+                particle.style.left = startX + 'px';
+                particle.style.top = startY + 'px';
+                particle.style.setProperty('--dx', dx + 'px');
+                particle.style.setProperty('--dy', dy + 'px');
+                particle.style.animationDelay = (i * 30) + 'ms';
+
+                container.appendChild(particle);
+
+                // Remove particle after animation
+                setTimeout(() => particle.remove(), 500 + i * 30);
+            }
+        }
+
+        function updateConfusionMatrix(threshold) {
+            let tp = 0, tn = 0, fp = 0, fn = 0;
+
+            for (let i = 0; i < predictions.length; i++) {
+                const predicted = predictions[i] >= threshold ? 1 : 0;
+                const actual = actualValues[i];
+
+                if (predicted === 1 && actual === 1) tp++;
+                else if (predicted === 0 && actual === 0) tn++;
+                else if (predicted === 1 && actual === 0) fp++;
+                else fn++;
+            }
+
+            // Animate particles flowing between cells
+            const cellTP = document.getElementById('cellTP');
+            const cellFN = document.getElementById('cellFN');
+            const cellFP = document.getElementById('cellFP');
+            const cellTN = document.getElementById('cellTN');
+
+            // Actual Positives column: TP <-> FN
+            if (tp > prevTP) {
+                // FN -> TP (threshold lowered, more predicted positive)
+                createFlowParticles(cellFN, cellTP, tp - prevTP, 'positive');
+            } else if (tp < prevTP) {
+                // TP -> FN (threshold raised, fewer predicted positive)
+                createFlowParticles(cellTP, cellFN, prevTP - tp, 'positive');
+            }
+
+            // Actual Negatives column: FP <-> TN
+            if (fp > prevFP) {
+                // TN -> FP (threshold lowered, more predicted positive)
+                createFlowParticles(cellTN, cellFP, fp - prevFP, 'negative');
+            } else if (fp < prevFP) {
+                // FP -> TN (threshold raised, fewer predicted positive)
+                createFlowParticles(cellFP, cellTN, prevFP - fp, 'negative');
+            }
+
+            // Store current values for next comparison
+            prevTP = tp; prevTN = tn; prevFP = fp; prevFN = fn;
+
+            document.getElementById('tpValue').textContent = tp;
+            document.getElementById('tnValue').textContent = tn;
+            document.getElementById('fpValue').textContent = fp;
+            document.getElementById('fnValue').textContent = fn;
+
+            // Update header labels with counts
+            // Actual counts (column totals - don't change with threshold)
+            const actualPos = tp + fn;
+            const actualNeg = fp + tn;
+            document.getElementById('actualPosHeader').textContent = `Positive (${actualPos})`;
+            document.getElementById('actualNegHeader').textContent = `Negative (${actualNeg})`;
+
+            // Predicted counts (row totals - change with threshold)
+            const predPos = tp + fp;
+            const predNeg = fn + tn;
+            document.getElementById('predPosHeader').textContent = `Positive (${predPos})`;
+            document.getElementById('predNegHeader').textContent = `Negative (${predNeg})`;
+
+            const total = tp + tn + fp + fn;
+            const accuracy = total > 0 ? (tp + tn) / total : 0;
+
+            // Precision for positive class: TP / (TP + FP) - of those predicted positive, how many were actually positive
+            const precisionPos = (tp + fp) > 0 ? tp / (tp + fp) : 0;
+
+            // Precision for negative class: TN / (TN + FN) - of those predicted negative, how many were actually negative
+            const precisionNeg = (tn + fn) > 0 ? tn / (tn + fn) : 0;
+
+            // Recall for positive class: TP / (TP + FN) - of those actually positive, how many did we predict positive
+            const recallPos = (tp + fn) > 0 ? tp / (tp + fn) : 0;
+
+            // Recall for negative class: TN / (TN + FP) - of those actually negative, how many did we predict negative
+            const recallNeg = (tn + fp) > 0 ? tn / (tn + fp) : 0;
+
+            document.getElementById('accuracy').textContent = (accuracy * 100).toFixed(1) + '%';
+            document.getElementById('precisionPos').textContent = (precisionPos * 100).toFixed(1) + '%';
+            document.getElementById('precisionNeg').textContent = (precisionNeg * 100).toFixed(1) + '%';
+            document.getElementById('recallPos').textContent = (recallPos * 100).toFixed(1) + '%';
+            document.getElementById('recallNeg').textContent = (recallNeg * 100).toFixed(1) + '%';
+        }
+
+        xAxisVar.addEventListener('change', () => {
+            if (model && predictions.length > 0) {
+                updateChart();
+            }
+        });
+    </script>
+</body>
+</html>

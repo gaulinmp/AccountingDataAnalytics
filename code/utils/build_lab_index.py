@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 parser = argparse.ArgumentParser(description="Build the lab-index Pages site.")
 parser.add_argument("out_dir", nargs="?", type=Path, default=ROOT / "_site", help="output folder (default: _site)")
-parser.add_argument("--week", type=int, help="include week folders only up to this week number", default=8)
+parser.add_argument("--week", type=int, help="include week folders only up to this week number", default=10)
 args = parser.parse_args()
 OUT = args.out_dir
 

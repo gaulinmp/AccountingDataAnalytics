@@ -342,201 +342,96 @@ Note on the confusion matrix calculations: you could also achieve these counts w
 
 ### 4.2. Python Implementation
 
-The following is example code for implementing the lab exercises in Python. You could think of each section as a cell in your notebook, but note that the code below doesn't just copy/paste complete the Lab. It does, however, cover all the code you need to complete the exercises.
+Below is a skeleton for the Python version of the lab. It shows you the *tools* (which library functions do the heavy lifting, and how to call them) and outlines the *steps* as comments. Filling in the comments is your job. Think of each block as a cell in your notebook.
 
 **Setup and Data Loading**
 
 ```python
-# Load Imports
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
-from sklearn.metrics import (confusion_matrix, classification_report,
-                             accuracy_score, precision_score, recall_score, f1_score,
-                             roc_curve, roc_auc_score, auc)
+from sklearn.metrics import (confusion_matrix, accuracy_score, precision_score,
+                             recall_score, f1_score, roc_curve, auc)
 import matplotlib.pyplot as plt
-import seaborn as sns
 
-# Load data
 df = pd.read_csv('ar_default_data.csv')
 
-# View first few rows
-df.head()
-
-# Check class balance
-print(f"Default rate: {df['bad_ar'].mean():.2%}")
-print(df['bad_ar'].value_counts())
+# Look at the data, and check the class balance (what share of bad_ar is 1?)
 ```
 
-**Running Logistic Regression (Exercise 1)**
+**Logistic Regressions (Exercises 1 and 2)**
 
-*Note*: if you want, you could use ols instead of logit here to mimic Excel's approach, but logit is preferred for classification tasks. Just change the `smf.logit` to `smf.ols` and proceed similarly.
+`smf.logit` uses the same formula syntax as `smf.ols` from Lab 9 (so if you want to mimic the Excel approach, just swap in `ols`). For example:
 
 ```python
-# Exercise 1: Base model with payment/credit features
-model_e1_base = smf.logit(
-    'bad_ar ~ credit_limit + pay_this_month + no_activity_this_month + last_payment_portion + num_recent_payments',
-    data=df).fit()
-# Exercise 2: Base model + demographics
-model_e2_demo = smf.logit(
-    'bad_ar ~ credit_limit + pay_this_month + no_activity_this_month + last_payment_portion + num_recent_payments '
-    '+ C(gender) + C(education) + C(marital_status) + C(age_decile)',
-    data=df).fit()
+# Exercise 1: finish the formula with all the payment/credit features from 3.1.1
+model_base = smf.logit('bad_ar ~ credit_limit + pay_this_month + ...', data=df).fit()
+print(model_base.summary())
 
-# Display regression output for screenshot
-print(model_e1_base.summary())
+# Exercise 2: same model, plus demographics -- wrap categorical variables in C() (e.g. + C(gender))
+model_demo = smf.logit('bad_ar ~ credit_limit + ... + C(gender) + ...', data=df).fit()
+print(model_demo.summary())
 
-# Get predicted probabilities
-df['pred_prob_base'] = model_e1_base.predict(df)
-df['pred_prob_demo'] = model_e2_demo.predict(df)
+# For each model: save predicted probabilities, then make a 0/1 prediction column
+#   using a THRESHOLD variable (set it once at the top so you can change it later)
 
-# Create binary predictions using 0.5 threshold
-df['pred_class_base'] = (df['pred_prob_base'] > 0.5).astype(int)
-df['pred_class_demo'] = (df['pred_prob_demo'] > 0.5).astype(int)
+THRESHOLD = 0.5
+df['prob_base'] = model_base.predict(df)   # predicted probability of default
+df['pred_base'] = (df['prob_base'] >= THRESHOLD).astype(int)
+
+# Repeat for the demographic model
 ```
 
 **Confusion Matrix and Classification Metrics**
 
-```python
-# Set threshold variable for changing later
-THRESHOLD = 0.5
-
-# Create confusion matrix
-cm = confusion_matrix(df['bad_ar'], df['pred_prob_base'] >= THRESHOLD)
-print("\nConfusion Matrix:")
-print(cm)
-
-# Pretty confusion matrix with labels
-cm_df = pd.DataFrame(cm,
-                     index=['Actual: Paid', 'Actual: Default'],
-                     columns=['Predicted: Paid', 'Predicted: Default'])
-print(cm_df)
-
-# Calculate metrics
-accuracy = accuracy_score(df['bad_ar'], df['pred_prob_base'] >= THRESHOLD)
-precision = precision_score(df['bad_ar'], df['pred_prob_base'] >= THRESHOLD)
-recall = recall_score(df['bad_ar'], df['pred_prob_base'] >= THRESHOLD)
-f1 = f1_score(df['bad_ar'], df['pred_prob_base'] >= THRESHOLD)
-
-print(f"\nClassification Metrics (threshold=0.5):")
-print(f"Accuracy:  {accuracy:.4f}")
-print(f"Precision: {precision:.4f}")
-print(f"Recall:    {recall:.4f}")
-print(f"F1 Score:  {f1:.4f}")
-
-# Alternative: Use classification_report for comprehensive output
-print("\n" + classification_report(df['bad_ar'], df['pred_prob_base'] >= THRESHOLD,
-                                   target_names=['Paid', 'Default']))
-```
-
-
-**ROC Curves**
+Every `sklearn.metrics` function takes the same two arguments: the actual values, then the predicted values.
 
 ```python
-# Calculate ROC curve for both models
-fpr_base, tpr_base, thresholds_base = roc_curve(df['bad_ar'], df['pred_prob_base'])
-fpr_demo, tpr_demo, thresholds_demo = roc_curve(df['bad_ar'], df['pred_prob_demo'])
-
-auc_base = auc(fpr_base, tpr_base)
-auc_demo = auc(fpr_demo, tpr_demo)
-
-# Plot ROC curves
-plt.figure(figsize=(8, 6))
-plt.plot(fpr_base, tpr_base, label=f'Base Model (AUC = {auc_base:.3f})')
-plt.plot(fpr_demo, tpr_demo, label=f'With Demographics (AUC = {auc_demo:.3f})')
-plt.plot([0, 1], [0, 1], 'k--', label='Random Classifier')
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate (Recall)')
-plt.title('ROC Curves')
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.show()
+confusion_matrix(df['bad_ar'], df['pred_base'])   # returns [[TN, FP], [FN, TP]]
 ```
-
-**Plot Threshold Analysis**
 
 ```python
-# Threshold analysis for base model
-thresholds_to_test = list(np.arange(0.0, 0.91, 0.01))
-threshold_results = []
-
-for threshold in thresholds_to_test:
-    pred_class = (df['pred_prob_base'] > threshold).astype(int)
-
-    threshold_results.append({
-        'Threshold': threshold,
-        'Precision': precision_score(df['bad_ar'], pred_class),
-        'Recall': recall_score(df['bad_ar'], pred_class),
-        'F1 Score': f1_score(df['bad_ar'], pred_class),
-        '% Flagged': pred_class.mean() * 100
-    })
-
-threshold_df = pd.DataFrame(threshold_results)
-threshold_df.set_index('Threshold')[['Precision', 'Recall', 'F1 Score']].plot()
+# Compute accuracy, precision, recall, and F1 for each model with the matching
+#   *_score functions we imported
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+# Fill in the comparison table from Exercise 2
 ```
 
-**Cost-Benefit Analysis**
+**ROC Curves and AUC**
+
+`roc_curve` does the threshold sweep for you. Note that it wants the predicted *probabilities*, not the 0/1 predictions:
 
 ```python
-# Define costs/benefits
-COST_FP = df.query('bad_ar==0').outstanding_balance.mean()
-COST_FN = df.query('bad_ar==1').outstanding_balance.mean()
-BENEFIT_TP = df.query('bad_ar==1').outstanding_balance.mean()
-COST_TN = 0
-
-# Test multiple thresholds
-thresholds_cost = np.arange(0.1, 0.91, 0.01)
-cost_results = []
-
-for threshold in thresholds_cost:
-    pred_class = (df['pred_prob_base'] > threshold).astype(int)
-
-    # Get confusion matrix components
-    tn, fp, fn, tp = confusion_matrix(df['bad_ar'], pred_class).ravel()
-
-    # Calculate costs and benefits
-    total_fp_cost = fp * COST_FP
-    total_fn_cost = fn * COST_FN
-    total_tp_benefit = tp * BENEFIT_TP
-    net_result = total_tp_benefit - total_fp_cost - total_fn_cost
-
-    cost_results.append({
-        'Threshold': threshold,
-        'TP': tp, 'FP': fp, 'FN': fn, 'TN': tn,
-        'TP Benefit': total_tp_benefit,
-        'FP Cost': total_fp_cost,
-        'FN Cost': total_fn_cost,
-        'Net Result': net_result
-    })
-
-cost_df = pd.DataFrame(cost_results)
-
-# Find optimal threshold
-optimal_idx = cost_df['Net Result'].idxmax()
-optimal_threshold = cost_df.loc[optimal_idx, 'Threshold']
-optimal_net = cost_df.loc[optimal_idx, 'Net Result']
-
-print(f"\nOptimal threshold: {optimal_threshold:.2f}")
-print(f"Net result at optimal threshold: ${optimal_net:,.0f}")
-
-# Compare to default 0.5 threshold
-threshold_50_net = cost_df.loc[cost_df['Threshold'].round(1) == 0.5, 'Net Result'].values[0]
-improvement = optimal_net - threshold_50_net
-print(f"Net result at 0.5 threshold: ${threshold_50_net:,.0f}")
-print(f"Improvement: ${improvement:,.0f}")
-
-# Plot net result vs threshold
-plt.figure(figsize=(10, 6))
-plt.plot(cost_df['Threshold'], cost_df['Net Result'], marker='o')
-plt.axvline(optimal_threshold, color='r', linestyle='--', label=f'Optimal: {optimal_threshold:.2f}')
-plt.axvline(0.5, color='g', linestyle='--', label='Default: 0.50')
-plt.xlabel('Classification Threshold')
-plt.ylabel('Net Result ($)')
-plt.title('Cost-Benefit Analysis: Net Result by Threshold')
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.show()
+fpr, tpr, thresholds = roc_curve(df['bad_ar'], df['prob_base'])
+auc(fpr, tpr)
 ```
+
+```python
+# Get fpr/tpr and AUC for both models
+# Plot both ROC curves on one chart (x = FPR, y = TPR), with a dashed 45-degree
+#   line for a random classifier, and the AUCs in the legend
+```
+
+**Threshold Table (Exercises 3 and 4)**
+
+The pattern here is: loop over thresholds, compute a row of results for each, and collect the rows into a DataFrame.
+
+```python
+# rows = []
+# for each threshold from 0 to 1 in steps of 0.01:
+#     make 0/1 predictions at this threshold
+#     get TN, FP, FN, TP  (hint: confusion_matrix(...).ravel() unpacks all four)
+#     compute precision and recall
+#     compute net result using the costs/benefits from Exercise 4
+#     append a dictionary of these values to rows
+# threshold_df = pd.DataFrame(rows)
+#
+# Plot precision and recall vs threshold on one chart
+# Plot net result vs threshold; find the row with the largest net result
+#   (hint: .idxmax())
+```
+
+*Note*: precision is undefined when nothing is flagged (TP + FP = 0), which happens at high thresholds. sklearn will warn and return 0; that's fine, just be aware of it when you read your chart. {: .note}
 
 
 ### 4.3. Common Issues and Troubleshooting

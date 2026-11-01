@@ -21,6 +21,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;
@@ -1021,181 +1041,72 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </li>
 </ul>
 <h3 class="ada-h3" id="42-python-implementation">4.2. Python Implementation</h3>
-<p>The following is example code for implementing the lab exercises in Python. You could think of each section as a cell in your notebook, but note that the code below doesn't just copy/paste complete the Lab. It does, however, cover all the code you need to complete the exercises.</p>
+<p>Below is a skeleton for the Python version of the lab. It shows you the <em>tools</em> (which library functions do the heavy lifting, and how to call them) and outlines the <em>steps</em> as comments. Filling in the comments is your job. Think of each block as a cell in your notebook.</p>
 <p><strong>Setup and Data Loading</strong></p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Load Imports</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span>
-                             <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span>
-                             <span class="n">roc_curve</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">auc</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span>
+                             <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span><span class="p">)</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
-<span class="c1"># Load data</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;ar_default_data.csv&#39;</span><span class="p">)</span>
 
-<span class="c1"># View first few rows</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-<span class="c1"># Check class balance</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Default rate: </span><span class="si">{</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="c1"># Look at the data, and check the class balance (what share of bad_ar is 1?)</span>
 </code></pre></div>
-<p><strong>Running Logistic Regression (Exercise 1)</strong></p>
-<p><em>Note</em>: if you want, you could use ols instead of logit here to mimic Excel's approach, but logit is preferred for classification tasks. Just change the <code class="fixed-width">smf.logit</code> to <code class="fixed-width">smf.ols</code> and proceed similarly.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Exercise 1: Base model with payment/credit features</span>
-<span class="n">model_e1_base</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span>
-    <span class="s1">&#39;bad_ar ~ credit_limit + pay_this_month + no_activity_this_month + last_payment_portion + num_recent_payments&#39;</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
-<span class="c1"># Exercise 2: Base model + demographics</span>
-<span class="n">model_e2_demo</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span>
-    <span class="s1">&#39;bad_ar ~ credit_limit + pay_this_month + no_activity_this_month + last_payment_portion + num_recent_payments &#39;</span>
-    <span class="s1">&#39;+ C(gender) + C(education) + C(marital_status) + C(age_decile)&#39;</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<p><strong>Logistic Regressions (Exercises 1 and 2)</strong></p>
+<p><code class="fixed-width">smf.logit</code> uses the same formula syntax as <code class="fixed-width">smf.ols</code> from Lab 9 (so if you want to mimic the Excel approach, just swap in <code class="fixed-width">ols</code>). For example:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Exercise 1: finish the formula with all the payment/credit features from 3.1.1</span>
+<span class="n">model_base</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span><span class="s1">&#39;bad_ar ~ credit_limit + pay_this_month + ...&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_base</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 
-<span class="c1"># Display regression output for screenshot</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model_e1_base</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+<span class="c1"># Exercise 2: same model, plus demographics -- wrap categorical variables in C() (e.g. + C(gender))</span>
+<span class="n">model_demo</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">logit</span><span class="p">(</span><span class="s1">&#39;bad_ar ~ credit_limit + ... + C(gender) + ...&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_demo</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 
-<span class="c1"># Get predicted probabilities</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_e1_base</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_demo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_e2_demo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="c1"># For each model: save predicted probabilities, then make a 0/1 prediction column</span>
+<span class="c1">#   using a THRESHOLD variable (set it once at the top so you can change it later)</span>
 
-<span class="c1"># Create binary predictions using 0.5 threshold</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_class_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_class_demo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_demo&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;prob_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_base</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>   <span class="c1"># predicted probability of default</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_base&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Repeat for the demographic model</span>
 </code></pre></div>
 <p><strong>Confusion Matrix and Classification Metrics</strong></p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Set threshold variable for changing later</span>
-<span class="n">THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span>
-
-<span class="c1"># Create confusion matrix</span>
-<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Confusion Matrix:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">)</span>
-
-<span class="c1"># Pretty confusion matrix with labels</span>
-<span class="n">cm_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span>
-                     <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Actual: Paid&#39;</span><span class="p">,</span> <span class="s1">&#39;Actual: Default&#39;</span><span class="p">],</span>
-                     <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Predicted: Paid&#39;</span><span class="p">,</span> <span class="s1">&#39;Predicted: Default&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">cm_df</span><span class="p">)</span>
-
-<span class="c1"># Calculate metrics</span>
-<span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
-<span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
-<span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
-<span class="n">f1</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Classification Metrics (threshold=0.5):&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accuracy:  </span><span class="si">{</span><span class="n">accuracy</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Precision: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recall:    </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F1 Score:  </span><span class="si">{</span><span class="n">f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Alternative: Use classification_report for comprehensive output</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">THRESHOLD</span><span class="p">,</span>
-                                   <span class="n">target_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Paid&#39;</span><span class="p">,</span> <span class="s1">&#39;Default&#39;</span><span class="p">]))</span>
+<p>Every <code class="fixed-width">sklearn.metrics</code> function takes the same two arguments: the actual values, then the predicted values.</p>
+<div class="highlight"><pre><span></span><code><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_base&#39;</span><span class="p">])</span>   <span class="c1"># returns [[TN, FP], [FN, TP]]</span>
 </code></pre></div>
-<p><strong>ROC Curves</strong></p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Calculate ROC curve for both models</span>
-<span class="n">fpr_base</span><span class="p">,</span> <span class="n">tpr_base</span><span class="p">,</span> <span class="n">thresholds_base</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">])</span>
-<span class="n">fpr_demo</span><span class="p">,</span> <span class="n">tpr_demo</span><span class="p">,</span> <span class="n">thresholds_demo</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_demo&#39;</span><span class="p">])</span>
-
-<span class="n">auc_base</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr_base</span><span class="p">,</span> <span class="n">tpr_base</span><span class="p">)</span>
-<span class="n">auc_demo</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr_demo</span><span class="p">,</span> <span class="n">tpr_demo</span><span class="p">)</span>
-
-<span class="c1"># Plot ROC curves</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_base</span><span class="p">,</span> <span class="n">tpr_base</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Base Model (AUC = </span><span class="si">{</span><span class="n">auc_base</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr_demo</span><span class="p">,</span> <span class="n">tpr_demo</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;With Demographics (AUC = </span><span class="si">{</span><span class="n">auc_demo</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Random Classifier&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate (Recall)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC Curves&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Compute accuracy, precision, recall, and F1 for each model with the matching</span>
+<span class="c1">#   *_score functions we imported</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="c1"># Fill in the comparison table from Exercise 2</span>
 </code></pre></div>
-<p><strong>Plot Threshold Analysis</strong></p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Threshold analysis for base model</span>
-<span class="n">thresholds_to_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">))</span>
-<span class="n">threshold_results</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">thresholds_to_test</span><span class="p">:</span>
-    <span class="n">pred_class</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-
-    <span class="n">threshold_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;Threshold&#39;</span><span class="p">:</span> <span class="n">threshold</span><span class="p">,</span>
-        <span class="s1">&#39;Precision&#39;</span><span class="p">:</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">),</span>
-        <span class="s1">&#39;Recall&#39;</span><span class="p">:</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">),</span>
-        <span class="s1">&#39;F1 Score&#39;</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">),</span>
-        <span class="s1">&#39;</span><span class="si">% F</span><span class="s1">lagged&#39;</span><span class="p">:</span> <span class="n">pred_class</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
-    <span class="p">})</span>
-
-<span class="n">threshold_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">threshold_results</span><span class="p">)</span>
-<span class="n">threshold_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Threshold&#39;</span><span class="p">)[[</span><span class="s1">&#39;Precision&#39;</span><span class="p">,</span> <span class="s1">&#39;Recall&#39;</span><span class="p">,</span> <span class="s1">&#39;F1 Score&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<p><strong>ROC Curves and AUC</strong></p>
+<p><code class="fixed-width">roc_curve</code> does the threshold sweep for you. Note that it wants the predicted <em>probabilities</em>, not the 0/1 predictions:</p>
+<div class="highlight"><pre><span></span><code><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;prob_base&#39;</span><span class="p">])</span>
+<span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
 </code></pre></div>
-<p><strong>Cost-Benefit Analysis</strong></p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Define costs/benefits</span>
-<span class="n">COST_FP</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;bad_ar==0&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">outstanding_balance</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">COST_FN</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;bad_ar==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">outstanding_balance</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">BENEFIT_TP</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;bad_ar==1&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">outstanding_balance</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="n">COST_TN</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="c1"># Test multiple thresholds</span>
-<span class="n">thresholds_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
-<span class="n">cost_results</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="n">thresholds_cost</span><span class="p">:</span>
-    <span class="n">pred_class</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;pred_prob_base&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-
-    <span class="c1"># Get confusion matrix components</span>
-    <span class="n">tn</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bad_ar&#39;</span><span class="p">],</span> <span class="n">pred_class</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-
-    <span class="c1"># Calculate costs and benefits</span>
-    <span class="n">total_fp_cost</span> <span class="o">=</span> <span class="n">fp</span> <span class="o">*</span> <span class="n">COST_FP</span>
-    <span class="n">total_fn_cost</span> <span class="o">=</span> <span class="n">fn</span> <span class="o">*</span> <span class="n">COST_FN</span>
-    <span class="n">total_tp_benefit</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">*</span> <span class="n">BENEFIT_TP</span>
-    <span class="n">net_result</span> <span class="o">=</span> <span class="n">total_tp_benefit</span> <span class="o">-</span> <span class="n">total_fp_cost</span> <span class="o">-</span> <span class="n">total_fn_cost</span>
-
-    <span class="n">cost_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">&#39;Threshold&#39;</span><span class="p">:</span> <span class="n">threshold</span><span class="p">,</span>
-        <span class="s1">&#39;TP&#39;</span><span class="p">:</span> <span class="n">tp</span><span class="p">,</span> <span class="s1">&#39;FP&#39;</span><span class="p">:</span> <span class="n">fp</span><span class="p">,</span> <span class="s1">&#39;FN&#39;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;TN&#39;</span><span class="p">:</span> <span class="n">tn</span><span class="p">,</span>
-        <span class="s1">&#39;TP Benefit&#39;</span><span class="p">:</span> <span class="n">total_tp_benefit</span><span class="p">,</span>
-        <span class="s1">&#39;FP Cost&#39;</span><span class="p">:</span> <span class="n">total_fp_cost</span><span class="p">,</span>
-        <span class="s1">&#39;FN Cost&#39;</span><span class="p">:</span> <span class="n">total_fn_cost</span><span class="p">,</span>
-        <span class="s1">&#39;Net Result&#39;</span><span class="p">:</span> <span class="n">net_result</span>
-    <span class="p">})</span>
-
-<span class="n">cost_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cost_results</span><span class="p">)</span>
-
-<span class="c1"># Find optimal threshold</span>
-<span class="n">optimal_idx</span> <span class="o">=</span> <span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Net Result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span>
-<span class="n">optimal_threshold</span> <span class="o">=</span> <span class="n">cost_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">optimal_idx</span><span class="p">,</span> <span class="s1">&#39;Threshold&#39;</span><span class="p">]</span>
-<span class="n">optimal_net</span> <span class="o">=</span> <span class="n">cost_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">optimal_idx</span><span class="p">,</span> <span class="s1">&#39;Net Result&#39;</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Optimal threshold: </span><span class="si">{</span><span class="n">optimal_threshold</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Net result at optimal threshold: $</span><span class="si">{</span><span class="n">optimal_net</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Compare to default 0.5 threshold</span>
-<span class="n">threshold_50_net</span> <span class="o">=</span> <span class="n">cost_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Threshold&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;Net Result&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">improvement</span> <span class="o">=</span> <span class="n">optimal_net</span> <span class="o">-</span> <span class="n">threshold_50_net</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Net result at 0.5 threshold: $</span><span class="si">{</span><span class="n">threshold_50_net</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Improvement: $</span><span class="si">{</span><span class="n">improvement</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="c1"># Plot net result vs threshold</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Threshold&#39;</span><span class="p">],</span> <span class="n">cost_df</span><span class="p">[</span><span class="s1">&#39;Net Result&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">optimal_threshold</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Optimal: </span><span class="si">{</span><span class="n">optimal_threshold</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Default: 0.50&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Classification Threshold&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Net Result ($)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Cost-Benefit Analysis: Net Result by Threshold&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Get fpr/tpr and AUC for both models</span>
+<span class="c1"># Plot both ROC curves on one chart (x = FPR, y = TPR), with a dashed 45-degree</span>
+<span class="c1">#   line for a random classifier, and the AUCs in the legend</span>
 </code></pre></div>
+<p><strong>Threshold Table (Exercises 3 and 4)</strong></p>
+<p>The pattern here is: loop over thresholds, compute a row of results for each, and collect the rows into a DataFrame.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># rows = []</span>
+<span class="c1"># for each threshold from 0 to 1 in steps of 0.01:</span>
+<span class="c1">#     make 0/1 predictions at this threshold</span>
+<span class="c1">#     get TN, FP, FN, TP  (hint: confusion_matrix(...).ravel() unpacks all four)</span>
+<span class="c1">#     compute precision and recall</span>
+<span class="c1">#     compute net result using the costs/benefits from Exercise 4</span>
+<span class="c1">#     append a dictionary of these values to rows</span>
+<span class="c1"># threshold_df = pd.DataFrame(rows)</span>
+<span class="c1">#</span>
+<span class="c1"># Plot precision and recall vs threshold on one chart</span>
+<span class="c1"># Plot net result vs threshold; find the row with the largest net result</span>
+<span class="c1">#   (hint: .idxmax())</span>
+</code></pre></div>
+<p class="note"><em>Note</em>: precision is undefined when nothing is flagged (TP + FP = 0), which happens at high thresholds. sklearn will warn and return 0; that's fine, just be aware of it when you read your chart.</p>
 <h3 class="ada-h3" id="43-common-issues-and-troubleshooting">4.3. Common Issues and Troubleshooting</h3>
 <ul>
 <li>

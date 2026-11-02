@@ -653,7 +653,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </li>
 <li><strong>Demographic Features:</strong><ul>
 <li><code class="fixed-width">gender</code>: Customer gender (male, female)</li>
-<li><code class="fixed-width">education</code>: Education level (1-high school, 2-university, 3-graduate school, 4-trade school, 5-phd)</li>
+<li><code class="fixed-width">education</code>: Education level (1-high school, 2-university, 3-trade school, 4-graduate school, 5-phd)</li>
 <li><code class="fixed-width">marital_status</code>: Marital status (married, single, divorced)</li>
 <li><code class="fixed-width">age_decile</code>: Customer age group (20-70, representing age deciles, e.g., 20 = 20-29, 30 = 30-39, etc.)</li>
 </ul>
@@ -687,7 +687,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><strong>Demographic features</strong>: These add customer characteristics to assess incremental predictive value<ul>
 <li><code class="fixed-width">gender</code>: Male vs female</li>
 <li><code class="fixed-width">education</code>: Educational attainment (5 categories)</li>
-<li><code class="fixed-width">marital_status</code>: Married, single, or other</li>
+<li><code class="fixed-width">marital_status</code>: Married, single, or divorced</li>
 <li><code class="fixed-width">age_decile</code>: Age group (younger vs older customers)</li>
 </ul>
 </li>
@@ -892,42 +892,42 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <tbody>
 <tr>
 <td>0.5</td>
-<td>22292</td>
-<td>4425</td>
-<td>966</td>
-<td>2198</td>
+<td>22317</td>
+<td>4455</td>
+<td>941</td>
+<td>2168</td>
 <td>29881</td>
-<td>0.331</td>
-<td>0.694</td>
-<td>0.331</td>
-<td>0.0415</td>
-<td>0.000285</td>
+<td>0.327</td>
+<td>0.697</td>
+<td>0.327</td>
+<td>0.0405</td>
+<td>0.000042</td>
 </tr>
 <tr>
 <td>0.51</td>
-<td>22312</td>
-<td>4436</td>
-<td>946</td>
-<td>2187</td>
+<td>22320</td>
+<td>4459</td>
+<td>938</td>
+<td>2164</td>
 <td>29881</td>
-<td>0.330</td>
+<td>0.327</td>
 <td>0.698</td>
-<td>0.330</td>
-<td>0.0406</td>
-<td>0.000226</td>
+<td>0.327</td>
+<td>0.0403</td>
+<td>0.000112</td>
 </tr>
 <tr>
 <td>0.52</td>
 <td>22328</td>
-<td>4459</td>
+<td>4463</td>
 <td>930</td>
-<td>2164</td>
+<td>2160</td>
 <td>29881</td>
 <td>0.326</td>
 <td>0.699</td>
 <td>0.326</td>
-<td>0.0399</td>
-<td>0.000182</td>
+<td>0.0400</td>
+<td>0.000028</td>
 </tr>
 </tbody>
 </table>
@@ -941,7 +941,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <h3 class="ada-h3" id="34-exercise-4-cost-benefit-analysis">3.4. Exercise 4: Cost-Benefit Analysis</h3>
 <p><strong>Objective</strong>: Incorporate business costs into threshold selection by calculating the expected financial impact of different classification errors.</p>
 <p>Classification metrics like precision and recall are useful, but they treat all errors equally. In reality, not flagging an account that defaults (false negatives) and incorrectly flagging good customers (false positives) have different business costs. Cost-benefit analysis helps you choose the optimal threshold that minimizes expected losses or maximizes expected profits.</p>
-<p>We're going to take an extreme example, and say that the company does not extend any AR credit to those customers who are flagged as likely to default (i.e. above a threshold). This means that we forgoe the expected cost of a default when correct, but forgo the expected value of a customer when wrong. In general, we might choose to calculate those expected costs/benefits from our historical data, which I've provided below (I recommend putting these values in cells in Excel, or variables in Python, so you can reference them in your formulas and easily see how changing them affects your results):</p>
+<p>We're going to take an extreme example, and say that the company does not extend any AR credit to those customers who are flagged as likely to default (i.e. above a threshold). This means that we forgo the expected cost of a default when correct, but forgo the expected value of a customer when wrong. In general, we might choose to calculate those expected costs/benefits from our historical data, which I've provided below (I recommend putting these values in cells in Excel, or variables in Python, so you can reference them in your formulas and easily see how changing them affects your results):</p>
 <ul>
 <li><strong>True Paying Customer (TN)</strong>: Correctly identify paying customer → cost: $0</li>
 <li><strong>True Defaulting Customer (TP)</strong>: Correctly identify defaulting customer, avoiding their default → benefit: $0.4 thousand USD (all numbers in thousands of dollars, so this is just 0.4)</li>

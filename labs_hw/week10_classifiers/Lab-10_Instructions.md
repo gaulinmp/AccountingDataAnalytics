@@ -54,7 +54,7 @@ The dataset `ar_default_data.csv` contains the following variables:
     * `num_recent_payments`: Number of payments made in last 6 months months (0-6, where 6 indicates consistent payment history)
 * **Demographic Features:**
     * `gender`: Customer gender (male, female)
-    * `education`: Education level (1-high school, 2-university, 3-graduate school, 4-trade school, 5-phd)
+    * `education`: Education level (1-high school, 2-university, 3-trade school, 4-graduate school, 5-phd)
     * `marital_status`: Marital status (married, single, divorced)
     * `age_decile`: Customer age group (20-70, representing age deciles, e.g., 20 = 20-29, 30 = 30-39, etc.)
 
@@ -85,7 +85,7 @@ The dataset `ar_default_data.csv` contains the following variables:
 * **Demographic features**: These add customer characteristics to assess incremental predictive value
     * `gender`: Male vs female
     * `education`: Educational attainment (5 categories)
-    * `marital_status`: Married, single, or other
+    * `marital_status`: Married, single, or divorced
     * `age_decile`: Age group (younger vs older customers)
 
 **Expected performance**: The base model using payment features should achieve decent predictive performance. Adding demographics may provide modest improvements, but raises questions about whether collecting this additional data is worthwhile given the incremental value and potential fairness concerns.
@@ -239,9 +239,9 @@ So far we've used the default 0.5 threshold to convert predicted probabilities i
 
 | Threshold | TruePay | FalsePay | FalseDefault | TrueDefault | check sum | Recall | Precision  | tpr   | fpr    | auc_part |
 |-----------|---------|----------|--------------|-------------|-----------|--------|------------|-------|--------|----------|
-| 0.5       | 22292   | 4425     | 966          |        2198 |     29881 | 0.331  | 0.694      | 0.331 | 0.0415 | 0.000285 |
-| 0.51      | 22312   | 4436     | 946          |        2187 |     29881 | 0.330  | 0.698      | 0.330 | 0.0406 | 0.000226 |
-| 0.52      | 22328   | 4459     | 930          |        2164 |     29881 | 0.326  | 0.699      | 0.326 | 0.0399 | 0.000182 |
+| 0.5       | 22317   | 4455     | 941          |        2168 |     29881 | 0.327  | 0.697      | 0.327 | 0.0405 | 0.000042 |
+| 0.51      | 22320   | 4459     | 938          |        2164 |     29881 | 0.327  | 0.698      | 0.327 | 0.0403 | 0.000112 |
+| 0.52      | 22328   | 4463     | 930          |        2160 |     29881 | 0.326  | 0.699      | 0.326 | 0.0400 | 0.000028 |
 
 
 #### 3.3.2. Questions to Answer
@@ -258,7 +258,7 @@ So far we've used the default 0.5 threshold to convert predicted probabilities i
 
 Classification metrics like precision and recall are useful, but they treat all errors equally. In reality, not flagging an account that defaults (false negatives) and incorrectly flagging good customers (false positives) have different business costs. Cost-benefit analysis helps you choose the optimal threshold that minimizes expected losses or maximizes expected profits.
 
-We're going to take an extreme example, and say that the company does not extend any AR credit to those customers who are flagged as likely to default (i.e. above a threshold). This means that we forgoe the expected cost of a default when correct, but forgo the expected value of a customer when wrong. In general, we might choose to calculate those expected costs/benefits from our historical data, which I've provided below (I recommend putting these values in cells in Excel, or variables in Python, so you can reference them in your formulas and easily see how changing them affects your results):
+We're going to take an extreme example, and say that the company does not extend any AR credit to those customers who are flagged as likely to default (i.e. above a threshold). This means that we forgo the expected cost of a default when correct, but forgo the expected value of a customer when wrong. In general, we might choose to calculate those expected costs/benefits from our historical data, which I've provided below (I recommend putting these values in cells in Excel, or variables in Python, so you can reference them in your formulas and easily see how changing them affects your results):
 
 * **True Paying Customer (TN)**: Correctly identify paying customer → cost: $0
 * **True Defaulting Customer (TP)**: Correctly identify defaulting customer, avoiding their default → benefit: $0.4 thousand USD (all numbers in thousands of dollars, so this is just 0.4)

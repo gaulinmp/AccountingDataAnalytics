@@ -21,6 +21,26 @@ details.inline-image {
      margin-left: 1em;
      padding-left: 1em;
  }
+ /* Collapsible admonition blocks (the "???" syntax) */
+ details:not(.inline-image) {
+     margin: 1rem 0;
+ }
+ details:not(.inline-image) > summary {
+     cursor: pointer;
+     font-weight: 600;
+     color: #0066cc;
+     padding: 0.25rem 0;
+ }
+ details:not(.inline-image)[open] {
+     border-left: 4px solid #0066cc;
+     margin-left: 0.25rem;
+     padding-left: 1rem;
+ }
+ details:not(.inline-image)[open] > summary {
+     margin-left: -1rem;
+     padding-left: 1rem;
+ }
+
  .detail-image {
      max-height: 500px;
      max-width: 1000px;
@@ -541,33 +561,38 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </style>
 </head>
 <body>
-    <h1 class="ada-h1" id="lab-12-ai-assisted-web-scraping">Lab 12: AI-Assisted Web Scraping</h1>
-<p>Lab 12 introduces you to using AI tools (<a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a> or <a href="https://antigravity.google/" target="_blank">Antigravity</a>) to assist with development environment setup, coding, and web scraping tasks. You will install and configure <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>, use Copilot Chat to install <a href="https://www.python.org/" target="_blank">Python</a> and web scraping tools, and then build a scraper using <a href="https://playwright.dev/" target="_blank">Playwright</a> to collect data from a provided URL (using an event site as my example) and export it. This foundational scraper will then be enhanced in the homework using Large Language Models (LLMs) to automatically adapt to any site layout. This lab emphasizes learning to work effectively with AI coding assistants, understanding when to trust AI suggestions, and developing the skills to verify and debug AI-generated code.</p>
-<p class="note"><em>Note</em>: This lab is meant to demonstrate the power of AI-assisted development. For those of you who haven't been using Python for these labs and homework, I want to clarify that using Copilot to install, write, run, and test python code is far easier than doing it more manually, e.g. in Colab. This lab isn't intended to force you to learn to program, but instead demonstrate how AI tools can make development easier for beginners and experts alike. Focus on learning to use Copilot effectively rather than struggling with low-level Python details.</p>
+    <h1 class="ada-h1" id="lab-12-ai-assisted-development-vibe-coding-a-peer-comparison-dashboard">Lab 12: AI-Assisted Development (Vibe Coding a Peer Comparison Dashboard)</h1>
+<p>Lab 12 introduces you to using AI coding agents to build a real tool on your own computer. You will install one (the instructions use <a href="https://antigravity.google/download" target="_blank">Antigravity</a> but you can use whatever you know or prefer), then work with its agent in two phases: first you and the agent write a plan for the tool (a <em>spec</em>), and then have the agent build it. The tool takes a stock ticker, finds the company's peers, pulls everyone's financial statement data straight from the <a href="https://www.sec.gov/search-filings/edgar-application-programming-interfaces" target="_blank">SEC</a>, computes ratios, and writes an Excel dashboard comparing them. In other words, it automates the comparison you did by hand in Project 1. The homework then adds a Large Language Model (LLM) that writes analyst commentary on the numbers your tool computed. This lab emphasizes learning to work effectively with AI coding assistants: planning before building, understanding when to trust AI output, and verifying what it made.</p>
+<p class="note"><em>Note</em>: This lab is meant to demonstrate the power of AI-assisted development. For those of you who haven't been using Python for these labs and homework, I want to clarify that you won't have to write any Python yourself, the agent will. You'll provide the design, the LLM will implement that design in code. So this lab isn't intended to force you to program, but instead demonstrate how AI tools can make development easier for beginners and experts alike. Your job is the part the AI can't do: knowing which ratios matter, what a sensible peer is, and whether the numbers that come out are right.</p>
 <div class="toc">
 <ul>
-<li><a href="#lab-12-ai-assisted-web-scraping">Lab 12: AI-Assisted Web Scraping</a><ul>
+<li><a href="#lab-12-ai-assisted-development-vibe-coding-a-peer-comparison-dashboard">Lab 12: AI-Assisted Development (Vibe Coding a Peer Comparison Dashboard)</a><ul>
 <li><a href="#1-assignment">1. Assignment</a><ul>
 <li><a href="#11-learning-objectives">1.1. Learning objectives</a></li>
-<li><a href="#12-tools">1.2. Tools</a></li>
+<li><a href="#12-rubric-and-grading">1.2. Rubric and grading</a></li>
+<li><a href="#13-tools">1.3. Tools</a><ul>
+<li><a href="#alternatives">Alternatives</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#2-background-ai-assisted-development-vibe-coding">2. Background: AI-assisted development (vibe coding)</a><ul>
-<li><a href="#21-about-web-scraping-with-an-event-scraper-example">2.1. About web scraping (with an event scraper example)</a></li>
-<li><a href="#22-what-is-web-scraping">2.2. What is web scraping?</a></li>
+<li><a href="#21-about-spec-driven-development">2.1. About spec-driven development</a></li>
+<li><a href="#22-where-the-data-comes-from-the-secs-data-service">2.2. Where the data comes from: the SEC's data service</a></li>
 </ul>
 </li>
 <li><a href="#3-step-by-step-instructions">3. Step-by-step instructions</a><ul>
-<li><a href="#31-install-vs-code-and-github-copilot">3.1. Install VS Code and GitHub Copilot</a></li>
-<li><a href="#32-build-a-web-scraper-with-copilot-agent">3.2. Build a web scraper with Copilot Agent</a></li>
+<li><a href="#31-install-antigravity">3.1. Install Antigravity</a></li>
+<li><a href="#32-write-the-spec-with-the-agent">3.2. Write the spec with the agent</a></li>
+<li><a href="#33-build-the-dashboard-from-the-spec">3.3. Build the dashboard from the spec</a></li>
 </ul>
 </li>
 <li><a href="#4-technical-guidance">4. Technical guidance</a><ul>
-<li><a href="#41-effective-copilot-agent-prompting">4.1. Effective Copilot Agent prompting</a></li>
-<li><a href="#42-troubleshooting-with-agent-mode">4.2. Troubleshooting with Agent mode</a></li>
-<li><a href="#43-understanding-what-agent-creates">4.3. Understanding what Agent creates</a></li>
+<li><a href="#41-effective-agent-prompting">4.1. Effective agent prompting</a></li>
+<li><a href="#42-troubleshooting-with-the-agent">4.2. Troubleshooting with the agent</a></li>
+<li><a href="#43-understanding-what-the-agent-creates">4.3. Understanding what the agent creates</a></li>
 <li><a href="#44-going-further-optional-improvements-if-youre-feeling-adventurous">4.4. Going further (optional improvements, if you're feeling adventurous)</a></li>
-<li><a href="#45-ethical-considerations-checklist">4.5. Ethical considerations checklist</a></li>
+<li><a href="#45-responsible-use-checklist">4.5. Responsible use checklist</a></li>
 </ul>
 </li>
 </ul>
@@ -575,435 +600,478 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </ul>
 </div>
 <h2 class="ada-h2" id="1-assignment">1. Assignment</h2>
-<p>To complete this lab, complete the Canvas quiz by uploading your final working python script, and your excel output. The general steps will be:</p>
+<p>To complete this lab, complete the Canvas quiz by uploading three things: your spec (<code class="fixed-width">SPEC.md</code>), your Excel dashboard, and a screenshot of the dashboard's Overview sheet open in Excel. The general steps will be:</p>
 <ol>
-<li><em>VS Code Setup</em>: Install Visual Studio Code and GitHub Copilot extension</li>
-<li><em>Python Environment</em>: Use Copilot Chat to guide installation of Python and virtual environment setup using Minoconda</li>
-<li><em>Playwright Installation</em>: Install Playwright web scraping framework with Copilot's assistance</li>
-<li><em>Scraper Implementation</em>: Build a command-line scraper that extracts data from a provided URL (using an event site as an example)</li>
-<li><em>Data Export</em>: Export scraped data to Excel formats for analysis</li>
+<li><em>Antigravity Setup</em>: Install Antigravity and sign in with Google</li>
+<li><em>Starter Folder</em>: Download the starter folder, open it in Antigravity, and have the agent check your setup</li>
+<li><em>Write the Spec</em>: Have the agent interview you about what the tool should do, and write the answers down as <code class="fixed-width">SPEC.md</code></li>
+<li><em>Build from the Spec</em>: Have the agent implement <code class="fixed-width">SPEC.md</code> and run its own checks</li>
+<li><em>Verify</em>: Open the workbook in Excel, check the numbers and charts, and take your screenshot</li>
 </ol>
-<p>This lab demonstrates how AI tools can accelerate development workflows while teaching you to critically evaluate AI-generated solutions. You'll how to use LLMs to conduct tasks (here, vibe coding, but you can use copilot to write papers, create excel files, or anything else your heart desires), to ask for clarification when you don't understand what it's asking for permission about, and how to troubleshoot when things don't work as expected. This lab is not meant to be a slog through programming and environment setup details, if you're stuck on anything before you get to the AI Agent step (or after as well, of course), don't hesitate and flag me down for help. I don't want you discouraged by computer shenanigans, but rather amazed by AI doing everything for you.</p>
+<p>Your dashboard needs to meet these minimums (your spec can, and I hope will, go beyond them):</p>
+<ul>
+<li>One company of your choice plus at least 3 peers</li>
+<li>At least 5 fiscal years of data</li>
+<li>At least 4 ratios, from at least 2 different families (e.g., profitability, liquidity, leverage, efficiency)</li>
+<li>An Excel workbook with an <em>Overview</em> sheet (the headline comparison), a <em>Data</em> sheet (every number pulled), at least 2 charts, and a <em>Sources</em> sheet (where each number came from). I will only grade the <em>Overview</em> and <em>Data</em> sheets (plus your screenshot and <code class="fixed-width">SPEC.md</code>), so how you organize the rest, whether you keep the charts on <em>Overview</em> or add extra sheets for each ratio family, is completely up to you</li>
+<li>At least 3 acceptance checks in your spec, including one number you looked up yourself in the company's 10-K</li>
+</ul>
+<p>This lab demonstrates how AI tools can accelerate development workflows while teaching you to critically evaluate AI-generated solutions. You'll learn how to use LLMs to conduct tasks (here, vibe coding, but you can use the agent to write papers, create Excel files, or anything else your heart desires), to ask for clarification when you don't understand what it's asking for permission about, and how to troubleshoot when things don't work as expected. This lab is not meant to be a slog through programming and environment setup details, if you're stuck on anything before you get to the AI Agent step (or after as well, of course), don't hesitate and flag me down for help. I don't want you discouraged by computer shenanigans, but rather amazed by AI doing everything for you.</p>
 <h3 class="ada-h3" id="11-learning-objectives">1.1. Learning objectives</h3>
 <p>By the end of this lab, you will be able to:</p>
 <ul>
-<li>Install and configure Visual Studio Code as a development environment</li>
-<li>Use GitHub Copilot Chat effectively to solve development problems</li>
-<li>Vibe-code an application</li>
-<li>Scrape data from websites starting from a URL</li>
-<li>Export data to usable formats (e.g., Excel)</li>
-<li>Debug issues with AI assistance</li>
+<li>Install and configure an AI-enabled code editor (Antigravity)</li>
+<li>Use an AI coding agent effectively to solve development problems</li>
+<li>Write a spec with an AI agent <em>before</em> any code is written, and judge whether the spec is good enough to build from</li>
+<li>Vibe-code an application from that spec</li>
+<li>Pull financial statement data from the SEC's public data service</li>
+<li>Export data and charts to usable formats (e.g., Excel)</li>
+<li>Verify and debug AI-built output using what you know about accounting</li>
 </ul>
-<h3 class="ada-h3" id="12-tools">1.2. Tools</h3>
+<h3 class="ada-h3" id="12-rubric-and-grading">1.2. Rubric and grading</h3>
+<p>Your submission (<code class="fixed-width">SPEC.md</code>, the Excel workbook, and the <em>Overview</em> screenshot) will be graded on:</p>
+<ol>
+<li><em>Excellent</em>: Complete, specific <code class="fixed-width">SPEC.md</code> (with at least 3 acceptance checks including a verified 10-K number), and a clean, well-formatted Excel dashboard whose <em>Overview</em> and <em>Data</em> sheets and charts accurately reflect the spec.</li>
+<li><em>Good</em>: Working dashboard and spec with minor issues (e.g., a missing label, formatting clutter on <em>Overview</em>, or vague spec sections).</li>
+<li><em>Needs improvement</em>: Incomplete spec, broken or unreadable charts/tables on <em>Overview</em> or <em>Data</em>, or unverified numbers that do not match SEC filings.</li>
+</ol>
+<h3 class="ada-h3" id="13-tools">1.3. Tools</h3>
 <p>This lab focuses on learning to use professional development tools with AI assistance:</p>
 <ul>
-<li><strong><a href="https://code.visualstudio.com/" target="_blank">VS Code</a></strong>: A powerful, free code editor from Microsoft</li>
-<li><strong><a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a></strong>: AI pair programmer that provides code suggestions and answers questions</li>
-<li><strong><a href="https://www.python.org/" target="_blank">Python</a></strong>: Programming language for scripting and data manipulation</li>
-<li><strong><a href="https://playwright.dev/" target="_blank">Playwright</a></strong>: Modern web automation and scraping framework</li>
-<li><strong><a href="https://pandas.pydata.org/" target="_blank">pandas</a></strong>: Data manipulation library for Python</li>
+<li><strong><a href="https://antigravity.google/" target="_blank">Antigravity</a></strong>: Google's free, agent-first code editor (a VS Code fork) with the AI agent built in. Sign in with a Google account and you're ready to rock</li>
+<li><strong><a href="https://docs.astral.sh/uv/" target="_blank">uv</a></strong>: A small tool that installs and runs <a href="https://www.python.org/" target="_blank">Python</a> for you, so you never have to install Python yourself (if you're moving beyond Python, e.g. to Javascript for web dev, look into <a href="https://pixi.prefix.dev/latest/" target="_blank">pixi</a> for similar but broader functionality)</li>
+<li><strong><a href="https://www.sec.gov/search-filings/edgar-application-programming-interfaces" target="_blank">SEC EDGAR data</a></strong>: The SEC's free service for the numbers companies report in their filings</li>
+<li><strong><a href="https://xlsxwriter.readthedocs.io/" target="_blank">XlsxWriter</a></strong>: A Python library that writes Excel workbooks, including real Excel charts</li>
 </ul>
+<h4 class="ada-h4" id="alternatives">Alternatives</h4>
+<p>The lab is written for Antigravity because it is the simplest setup, but any AI coding agent that reads <code class="fixed-width">AGENTS.md</code> works. Prompts in this lab are the same everywhere; only where you type them changes:</p>
+<ul>
+<li><strong><a href="https://code.visualstudio.com/" target="_blank">VS Code</a></strong>: Install it, sign in to GitHub, and use the built-in Copilot Chat in <em>Agent</em> mode (free for students via the <a href="https://education.github.com/pack" target="_blank">Student Developer Pack</a>). Or install the Claude Code or Gemini Code Assist extension from the Extensions tab (Cmd/Ctrl+Shift+X)</li>
+<li><strong><a href="https://claude.com/product/claude-code" target="_blank">Claude Code</a></strong>: Use the Code tab in the downloaded <a href="https://claude.com/download" target="_blank">Claude desktop app</a>, pointed at the starter folder (needs a paid Claude plan), or install the VS Code extension</li>
+<li><strong><a href="https://cursor.com/" target="_blank">Cursor</a></strong>: A VS Code fork like Antigravity. Install, sign in, open the folder, and use the Agent chat panel (Cmd/Ctrl+L). Free tier is limited</li>
+<li><strong><a href="https://geminicli.com/" target="_blank">Gemini CLI</a></strong> / <strong><a href="https://openai.com/codex/" target="_blank">Codex</a></strong>: Terminal tools. Open a terminal in the starter folder and run <code class="fixed-width">gemini</code> or <code class="fixed-width">codex</code>. For the comfortable-with-a-terminal crowd</li>
+</ul>
+<p class="note"><em>Note</em>: If you use something other than Antigravity, wherever the steps below say "the agent," read "your tool's agent chat." Section 3.1's install steps are Antigravity-specific; skip to step 3 (open the starter folder) once your tool is running.</p>
 <h2 class="ada-h2" id="2-background-ai-assisted-development-vibe-coding">2. Background: AI-assisted development (vibe coding)</h2>
 <p>Modern software development increasingly involves AI coding assistants like <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a>, <a href="https://www.anthropic.com/claude" target="_blank">Claude</a>, <a href="https://antigravity.google/" target="_blank">Antigravity</a>, and others. These tools can dramatically accelerate development by:</p>
 <ul>
-<li>Suggesting code completions as you type</li>
 <li>Answering technical questions about libraries, syntax, and best practices</li>
 <li>Generating code for common patterns</li>
 <li>Generating specific code given more refined requests</li>
+<li>Running the code, reading the errors, and fixing them</li>
 <li>Explaining code in plain language</li>
-<li>Debugging errors by analyzing error messages</li>
 </ul>
 <p>However, AI assistants have important limitations:</p>
 <ul>
-<li><em>They can be confidently wrong</em>: suggestions may look correct but contain bugs</li>
-<li><em>They don't understand your full context</em>: you need to provide clear, specific prompts</li>
-<li><em>They may suggest outdated approaches</em>: libraries and best practices evolve (e.g. yours will probably use the old <code class="fixed-width">google-generativeai</code> library instead of the newer <code class="fixed-width">google-genai</code>)</li>
-<li><em>They can't replace understanding</em>: you still need to verify and understand the code if you want to use it in a robust, professional environment</li>
+<li><em>They can be confidently wrong</em>: output may look correct but contain bugs, such as a ratio with the wrong denominator timing</li>
+<li><em>They don't understand your full context</em>: you need to tell them clearly and specifically what you want</li>
+<li><em>They may suggest outdated approaches</em>: libraries and best practices evolve (e.g. yours might suggest the more popular <code class="fixed-width">openpyxl</code> instead of <code class="fixed-width">xlsxwriter</code> which handles charts better)</li>
+<li><em>They can't replace understanding</em>: you still need to verify the output if you want to use it in a robust, professional environment</li>
 </ul>
 <p>This lab gives you practice with AI assisted development, including:</p>
 <ol>
-<li>Writing clear prompts that specify what you need</li>
-<li>Evaluating whether AI suggestions make sense</li>
-<li>Testing and verifying AI-generated code</li>
-<li>Debugging with natural language when code doesn't work</li>
+<li>Planning with the AI before it builds anything</li>
+<li>Writing clear requests that specify what you need</li>
+<li>Evaluating whether AI output makes sense</li>
+<li>Testing and verifying AI-generated work</li>
+<li>Debugging with natural language when things don't work</li>
 </ol>
-<h3 class="ada-h3" id="21-about-web-scraping-with-an-event-scraper-example">2.1. About web scraping (with an event scraper example)</h3>
-<p>For this lab, you'll build a tool that scrapes data from a given URL. You can prompt your AI agent to scrape any website you wish (e.g., great time to get data for Project 4), all the Lab &amp; Homework submissions will require is your python code, and output Excel file. To provide an example, below I've given instructions for scraping a Salt Lake City events page. The general steps will be:</p>
+<h3 class="ada-h3" id="21-about-spec-driven-development">2.1. About spec-driven development</h3>
+<p>The most common way vibe coding goes wrong is not bad code, it's that the AI built the wrong thing. You type a two-sentence request, the agent fills in the hundred decisions you didn't make with its own guesses, and thirty minutes later you have something that runs but isn't what you wanted. Worse, you can't tell which of its guesses were wrong.</p>
+<p>The fix is the same one you'd use with a new staff accountant: agree on the plan in writing before the work starts. In software that written plan is called a <strong>spec</strong> (short for specification). A spec says what the tool does, what goes in, what comes out, and how you'll know it works. For this lab the workflow is:</p>
 <ul>
-<li>Start with a URL for the site (or sites) you wish to scrape</li>
-<li>Extract data from the site (e.g., event names, dates, locations, and URLs for an event site)</li>
-<li>Optionally add relevent data (e.g., adding categories to the events based on their text)</li>
-<li>Export the extracted records to Excel for further use (in my code, I asked it to also export to an ical file so I could import the events into a calendar)</li>
+<li><em>Interview</em>: the agent asks you questions, one at a time, and you make the decisions (which ratios, how to pick peers, what goes on each sheet in the output Excel file, etc.)</li>
+<li><em>Spec</em>: the agent writes your answers into a file we'll call <code class="fixed-width">SPEC.md</code>, you read it and ask for edits until you feel good about it. Importantly, the spec should include tests to verify that the agent's code properly fulfills the requirements</li>
+<li><em>Build</em>: the agent implements the spec, and nothing but the spec</li>
+<li><em>Verify</em>: the agent runs the tests written in the spec, and then you check what it can't</li>
 </ul>
-<p>This is a practical, real-world application because:</p>
+<p>A good spec is specific enough that a different AI (or a human, if we're feeling anachronistic) could build the same tool from it without asking you anything. "Compare profitability" is not a spec. "Gross margin = (Revenue - Cost of Revenue) / Revenue, for the last 5 fiscal years, shown as a line chart with one line per company" is.</p>
+<p>This is a practical, real-world approach to AI development because:</p>
 <ul>
-<li><em>Useful output</em>: You could actually use the resulting spreadsheet to track data or events</li>
-<li><em>Flexible design</em>: By starting with a different event URL, you could target different locations, event types, etc. The homework will further increase this flexibility by using LLMs to parse the site data regardless of its exact HTML structure</li>
-<li><em>Professional patterns</em>: Command-line interface, argument parsing, error handling.</li>
-<li><em>Educational value</em>: Demonstrates software development with AI assistance and sets up a foundation for AI-assisted parsing in the homework</li>
+<li><em>You stay in charge</em>: the accounting decisions are yours, written down, and not left to the AI's guesses</li>
+<li><em>Debugging gets easier</em>: when something is wrong, you can ask "does this match the spec?" If it doesn't, the code is wrong. If it does, the spec is wrong. Either way you know where to look</li>
+<li><em>It's reusable</em>: the homework adds to this same spec instead of starting over</li>
+<li><em>It's how professionals use these tools</em>: the people getting the most out of coding agents spend most of their effort on the plan (see, e.g., <a href="https://github.com/github/spec-kit" target="_blank">spec-kit</a>)</li>
 </ul>
-<p>Example sites you might target to scrape include:</p>
+<p>The piece of the spec that is critical is the <strong>acceptance checks</strong>: specific, checkable statements of what "working" means. For example, "Apple's fiscal 2024 revenue shows as $391,035 million" or "a ticker that doesn't exist prints a clear message instead of crashing." The agent can run these itself, which means it can catch and fix its own mistakes before you ever see them.</p>
+<h3 class="ada-h3" id="22-where-the-data-comes-from-the-secs-data-service">2.2. Where the data comes from: the SEC's data service</h3>
+<p>We've used Compustat all semester, which is a paid, cleaned-up version of what companies file with the SEC. The SEC also hosts the raw version publicly (for free!). Since 2009, companies have had to tag every number in their financial statements with a standard label (a system called <a href="https://www.sec.gov/data-research/structured-data/inline-xbrl" target="_blank">XBRL</a>), so that "Revenue" in Apple's 10-K and "Revenue" in Dell's 10-K can be found by a computer, not just read by a human.</p>
+<p>The SEC makes those tagged numbers available through an <strong>API</strong> (Application Programming Interface), which is just a web address that returns data instead of a web page meant for reading. You can try it right now: <a href="https://www.sec.gov/files/company_tickers.json" target="_blank">this link</a> returns every ticker the SEC knows about. It's ugly, but it's ugly in a perfectly consistent way, which is exactly what computers excel at (this is semi-structured data!).</p>
+<p>A few things about the SEC's data that you (not just the agent) should know:</p>
 <ul>
-<li>SEC [EDGAR](m for firm filings</li>
-<li>Sports stats sites (note that this might be hard if the site tries to block bots / scrapers)</li>
-<li>Bitcoin price history from <a href="https://finance.yahoo.com/quote/BTC-USD/history/?p=BTC-USD" target="_blank">Yahoo Finance</a></li>
-<li>Desktop wallpapers (e.g., <a href="https://unsplash.com/t/wallpapers" target="_blank">Unsplash</a>)</li>
+<li><em>It's free and needs no account</em>, but the SEC requires every request to say who is asking, with a name and email. Your agent will ask you for these.</li>
+<li><em>There's a speed limit</em> of 10 requests per second. Your tool will save what it downloads, so it only has to ask once.</li>
+<li><em>The labels are messy.</em> Companies choose their own tags, so revenue might be <code class="fixed-width">Revenues</code> at one firm and <code class="fixed-width">RevenueFromContractWithCustomerExcludingAssessedTax</code> at another. This is the single most likely reason for a blank cell in your dashboard, and it's a great example of why you need to look at the output with an accountant's eye.</li>
+<li><em>Industry codes.</em> The SEC classifies companies by <a href="https://www.sec.gov/search-filings/standard-industrial-classification-sic-code-list" target="_blank">SIC code</a>, which is how your tool will find peers. The starter folder includes a file, <code class="fixed-width">sec_companies.csv</code>, that lists every ticker with its SIC code and latest revenue so your tool can pick same-industry companies of similar size.</li>
 </ul>
-<p class="note"><em>Note</em>: Always check a website's <code class="fixed-width">robots.txt</code> file and terms of service before scraping (<a href="https://en.wikipedia.org/wiki/Robots.txt" target="_blank">explanation</a>). Be respectful and don't make too many requests too quickly.</p>
-<h3 class="ada-h3" id="22-what-is-web-scraping">2.2. What is web scraping?</h3>
-<p><strong>Web scraping</strong> is the automated process of extracting data from websites. While humans browse websites and read information, web scrapers programmatically download web pages, parse the HTML structure, and extract specific data elements.</p>
-<p>Common use cases include:</p>
-<ul>
-<li>Price monitoring to track competitor pricing across e-commerce sites</li>
-<li>Market research to collect product reviews, ratings, and customer feedback</li>
-<li>Lead generation to gather business contact information</li>
-<li>Financial analysis to extract financial data from company websites</li>
-<li>Academic research to collect data for research studies</li>
-<li>News aggregation to monitor news sources for relevant stories</li>
-<li>Project 4 maybe?</li>
-</ul>
-<p><strong>Ethical and Legal Considerations:</strong></p>
-<ul>
-<li>Respect robots.txt which tells scrapers which parts of a site can be accessed</li>
-<li>Check terms of service, as some sites explicitly prohibit scraping</li>
-<li>Rate limiting avoids overwhelming servers with too many requests</li>
-<li>Personal data is sensitive, be careful with personally identifiable information (GDPR, etc.)</li>
-<li>Copyright may apply to scraped content, which makes it legally protected</li>
-<li>Authentication should be legitimate, don't scrape behind login walls without permission/paying</li>
-</ul>
-<p><strong>Why Playwright?</strong></p>
-<p>We're using <strong>Playwright</strong> instead of simpler tools like <code class="fixed-width">requests</code> + <code class="fixed-width">BeautifulSoup</code> because it handles JavaScript-rendered content, is reliable and fast (developed by Microsoft and used in production environments), can be run "headed" which means you can watch the browser window as it operates, and works with Chrome, Firefox, Safari, etc. </p>
-<p>If you don't want to use Playwright, you could try using <code class="fixed-width">requests</code> + <code class="fixed-width">BeautifulSoup</code>, but you'll likely run into issues with modern websites that heavily rely on JavaScript for content rendering.</p>
 <h2 class="ada-h2" id="3-step-by-step-instructions">3. Step-by-step instructions</h2>
-<p>This lab walks you through setting up a complete development environment using AI assistance, then building a web scraper.</p>
-<h3 class="ada-h3" id="31-install-vs-code-and-github-copilot">3.1. Install VS Code and GitHub Copilot</h3>
-<p>VS Code is a free &amp; wonderful code editor from Microsoft that has quickly become one of the most widely used code editors. GitHub Copilot is an AI pair programmer that provides code suggestions and answers questions directly in the editor, and can directly write, edit, and debug code for you, as well as run scripts (like python), meaning you could conceivably never touch the command line yourself, and just interact with copilot in plain English.</p>
+<p>This lab walks you through setting up a complete development environment using AI assistance, then planning and building the Excel dashboard.</p>
+<h3 class="ada-h3" id="31-install-antigravity">3.1. Install Antigravity</h3>
+<p><a href="https://antigravity.google/" target="_blank">Antigravity</a> is Google's free code editor with an AI agent built in. Because it's a fork of VS Code, it looks and behaves like VS Code, but there are no extensions to install and no GitHub account needed. The agent can answer questions, write, edit, and debug code, and run scripts (like Python), meaning you could conceivably never touch the command line yourself and just interact with the agent in plain English.</p>
 <ol>
 <li>
-<p><strong>Download and install VS Code</strong></p>
+<p><strong>Download and install Antigravity</strong></p>
 <ul>
-<li>Go to <a href="https://code.visualstudio.com/Download" target="_blank">code.visualstudio.com</a></li>
+<li>Go to <a href="https://antigravity.google/download" target="_blank">antigravity.google/download</a></li>
 <li>Download the installer for your operating system (Windows, Mac, or Linux)</li>
 <li>Run the installer and follow the prompts (default settings are fine)</li>
-<li>Launch VS Code when installation completes</li>
+<li>Launch Antigravity when installation completes</li>
 </ul>
 </li>
 <li>
-<p><strong>Sign in to GitHub</strong> (required for Copilot)</p>
+<p><strong>Sign in with Google</strong></p>
 <ul>
-<li>If you don't have a GitHub account, create one at <a href="https://github.com/signup" target="_blank">github.com</a></li>
-<li>In VS Code, click the account icon in the bottom-left corner</li>
-<li>Choose "Sign in with GitHub" and follow the authentication flow</li>
-<li>Verify you're signed in (your GitHub username should appear in the bottom-left)</li>
+<li>Follow the first-run setup. Defaults are fine, and when asked, sign in with your Google account (a personal account is simplest, and <a href="https://gemini.google/students/" target="_blank">students can get free AI pro access</a>)</li>
+<li>Antigravity may offer to import settings from VS Code, which is useful if you already have used VS Code and want to keep your preferences</li>
 </ul>
 </li>
 <li>
-<p><strong>Activate GitHub Copilot</strong></p>
+<p><strong>Download and open the starter folder</strong></p>
 <ul>
-<li>(Optional) As a student, you get free access to GitHub Copilot. Go to <a href="https://education.github.com/pack" target="_blank">education.github.com/pack</a> and sign up for the Student Developer Pack</li>
-<li>Install the "GitHub Copilot" and "GitHub Copilot Chat" in VSCode by clicking <a href="vscode://github.copilot-chat">this link</a> (if it works on your computer) or manually installing extensions:<ul>
-<li>Click the Extensions icon in the left sidebar (or press <code class="fixed-width">Ctrl+Shift+X</code>/<code class="fixed-width">Cmd+Shift+X</code>)</li>
-<li>Search for "GitHub Copilot"</li>
-<li>Click "Install" on both "GitHub Copilot" and "GitHub Copilot Chat"</li>
-</ul>
-</li>
-<li>After installation, you may need to restart VS Code</li>
+<li>Download <a href="https://github.com/gaulinmp/AccountingDataAnalytics/raw/main/labs_hw/week12_AI/comp-dashboard-starter.zip" target="_blank">comp-dashboard-starter.zip</a> (also posted on Canvas with this lab)</li>
+<li>Unzip it somewhere you can find it again, such as your class folder</li>
+<li>Open the unzipped <code class="fixed-width">comp-dashboard-starter</code> folder in Antigravity: either choose <em>File &gt; Open Folder</em> in the editor window, or click <strong>Projects</strong> in the left-hand sidebar of the main agent window and add the folder there. Both views share the same agent, so use whichever interface you prefer as long as <code class="fixed-width">comp-dashboard-starter</code> is the active project</li>
+<li>If it asks whether you trust the authors of the files in this folder, say yes (it's me, and I think I'm trustworthy)</li>
+<li>You should see a handful of files in the folder (<code class="fixed-width">AGENTS.md</code>, <code class="fixed-width">SPEC_TEMPLATE.md</code>, <code class="fixed-width">sec_companies.csv</code>, etc.). The important one is <code class="fixed-width">AGENTS.md</code>, which is a set of instructions I wrote for your agent. The agent reads it automatically, and it's why it will already know to plan first, where the SEC data lives, and which mistakes to avoid. Have a read through it, it's written in plain English. Also you should get your AI agents to create these <code class="fixed-width">AGENTS.md</code> files for any new projects you start, they are incredibly helpful for customizing the agent's functionality and making them actually useful for your specific work</li>
 </ul>
 </li>
 <li>
-<p><strong>Test Copilot Chat</strong></p>
+<p><strong>Open the agent and test it</strong></p>
 <ul>
-<li>Open Copilot Chat by clicking the chat icon in the left sidebar (or press <code class="fixed-width">Ctrl+Alt+I</code>/<code class="fixed-width">Cmd+Ctrl+I</code>)<ul>
+<li>Start a new conversation in the agent chat (either in the central chat canvas or the right-hand sidebar chat panel in the editor)<ul>
 <li>You may need to click some approval dialogs the first time you open it</li>
 </ul>
 </li>
-<li>Type a test question, such as "What are some tips and tricks for using Copilot effectively?"</li>
-<li>Verify you get a response</li>
+<li>Verify it works by asking it to perform a simple task: "list the files in the current directory"</li>
+<li>If it asks about permissions for running terminal commands, the default "ask me first" (or "proceed in sandbox") setting is what you want</li>
 </ul>
 </li>
 <li>
-<p><strong>Enable Agent Mode</strong></p>
+<p><strong>Have the agent check your setup</strong></p>
 <ul>
-<li>In Copilot Chat, click the Down arrow next to the "Send" button, and select "Agent"</li>
-<li>Verify that Agent mode is enabled by asking it to perform a simple task: "list the files in the current directory"</li>
-</ul>
-</li>
-<li>
-<p><strong>Check Python installation</strong></p>
-<ul>
-<li>Python may already be installed on your system</li>
-<li>Ask Copilot: "check for an existing python installation"</li>
-<li>If Python is not installed, or you want to set up a clean, platform-agnostic environment, you should use Miniconda:<ul>
-<li><em>Option A (Recommended - Agent Mode):</em> Ask Copilot Agent: "Help me install python by first installing Miniconda (https://www.anaconda.com/docs/getting-started/miniconda/install/overview)."</li>
-<li><em>Option B (Manual):</em> Follow instructions online to install <a href="https://www.anaconda.com/docs/getting-started/miniconda/install/overview" target="_blank">Miniconda</a>.</li>
-</ul>
-</li>
-<li>Verify that python is installed, by asking Copilot: "what's my python version?" or running <code class="fixed-width">python --version</code> in a terminal (open a terminal in VS Code <code class="fixed-width">Ctrl+`</code>, which is control key and the backtick key, on both Windows and Mac (a rare instance of <code class="fixed-width">ctrl</code> not <code class="fixed-width">cmd</code> on Mac))</li>
+<li>You do not need to install Python. A tool called <code class="fixed-width">uv</code> does that for us, and the agent can install <code class="fixed-width">uv</code></li>
+<li>Ask the agent: "Check whether uv is installed, and install it if it isn't. Then run <code class="fixed-width">uv run python --version</code> to confirm Python works."</li>
+<li>It will ask permission to run a command or two (including running outside the sandbox so it can reach the internet). Say yes</li>
+<li>If it installs <code class="fixed-width">uv</code> and then says it can't find it, that's normal: <strong>quit Antigravity completely, reopen it, open the folder again, and repeat the request</strong>. A freshly installed tool doesn't show up until the program restarts</li>
+<li>You're done with setup when the agent shows you a Python version number (something like <code class="fixed-width">Python 3.13.1</code>)</li>
 </ul>
 </li>
 </ol>
-<p class="note"><em>Note</em>: You could also use other AI coding assistants like <a href="https://antigravity.google/" target="_blank">Antigravity</a> which is Google's version of VSCode, or if you're fancy, <a href="https://geminicli.com/" target="_blank">Gemini CLI</a> or <a href="https://claude.com/product/claude-code" target="_blank">Claude Code</a>.</p>
-<h3 class="ada-h3" id="32-build-a-web-scraper-with-copilot-agent">3.2. Build a web scraper with Copilot Agent</h3>
-<p>This is where you'll use Copilot Agent to build a complete scraping script. You'll provide the high-level requirements and let Copilot create, run, and debug the code for you. You might be thinking "but I haven't done anything yet, how can code run?" Great question! The point of vibe coding with Copilot Agent is that we will ask it to, as part of the scraping script we write, add some code to automatically install the required software we need to do the scraping. What a world!</p>
-<p>This whole lab basically boils down to the prompt that you will give to Copilot Agent. Everything else is just scaffolding to get you to this point. Below is an example prompt, but feel free to modify it as you see fit. The key is to be as clear and specific as possible about what you want the scraper to do.</p>
+<p class="note"><em>Note</em>: By default, Antigravity runs commands inside a <strong>sandbox</strong> which is a secure, fenced-off environment that can only touch your project folder and has no internet access. This keeps you safe because a mistake (or a confused AI) can't accidentally delete your personal files or send private data online. Whenever the agent genuinely needs the internet (like installing <code class="fixed-width">uv</code>, downloading Python packages, or pulling SEC filings) it will ask your permission to run that specific command outside the sandbox.</p>
+<h3 class="ada-h3" id="32-write-the-spec-with-the-agent">3.2. Write the spec with the agent</h3>
+<p>This is the most important part of the lab, and you won't write (or generate) a single line of code in it. You and the agent are going to agree on exactly what gets built.</p>
 <ol>
-<li>Ask Copilot to make a new folder and open it as a workspace in VS Code<ul>
-<li>"create a new folder called scraper_lab and open it as a workspace in VS Code"</li>
+<li>
+<p><strong>Pick your company</strong></p>
+<ul>
+<li>Any US public company works. One you analyzed in Project 1 is a good choice, since you already know what its numbers should look like</li>
+<li>Have its most recent 10-K handy (search the company on <a href="https://www.sec.gov/edgar/search/" target="_blank">EDGAR</a>). You'll need one or two numbers from it for your acceptance checks</li>
 </ul>
 </li>
 <li>
-<p><strong>Create the web scraper</strong>:</p>
+<p><strong>Start the interview</strong></p>
 <ul>
-<li>Ask Copilot Agent (change the part in square brackets [] to match your interests): </li>
+<li>Ask the agent (change the part in square brackets [] to your company):</li>
 </ul>
-<div class="highlight"><pre><span></span><code>Build a Python one-file script that scrapes [event data from the event site: https://www.visitsaltlake.com/events/] and exports it. The script should have a good software architecture, and should be easy to maintain and update (e.g. passing the content of the website into an LLM api call, down the line, to have it extract the data flexibly).
+<div class="highlight"><pre><span></span><code>Read AGENTS.md and SPEC_TEMPLATE.md. I want to build the peer comparison
+dashboard for [AAPL].
 
-First, install all dependencies including playwright, pandas, and openpyxl, then install Playwright&#39;s chromium browser.
+Interview me one question at a time to fill in the spec, and suggest a
+sensible default with each question. Do not write any code yet.
 
-Then, write the single-file python script that has a CLI interface using `click`, to:
-
-* take the hard-coded `url` (e.g., `[https://www.visitsaltlake.com/events/]`). There should be an optional --url flag to specify a different url.
-* open the page using Playwright
-* extract relevant information ([such as event name, date, location, event type/category, event URL])
-* export the results to an Excel spreadsheet
-* there should be an optional `--output` flag to specify an output filename prefix
-
-The scraper should use good, easy to maintain python software architecture. The scraper should handle errors gracefully with try/except blocks, network timeouts, and failed element extraction, use `headless=False` so users can see the browser, add waits for JavaScript to load. There should also be a --debug flag to enable more verbose logging, with the intent being that feeding the debug logging output to an LLM would allow it to fix the scraper. The scrape script should also have human in the loop functionality (disabled by default) to allow for users to click potential &quot;are you human&quot; popups, or to change the URL if desired (take control back from the human with, e.g., `input()` calls).
-
-Please make sure the code is clear and well commented, so new programmers can understand how it works.
+When we have covered every section, save the result as SPEC.md.
+</code></pre></div>
+<p class="tip"><em>Tip</em>: Most AI coding tools also have built-in shortcuts you can type right in the chat box. Typing <code class="fixed-width">@</code> lets you attach specific files directly to your message (e.g., <code class="fixed-width">@AGENTS.md</code> and <code class="fixed-width">@SPEC_TEMPLATE.md</code>). Typing <code class="fixed-width">/</code> brings up <strong>slash commands</strong> which are pre-built skills for common tasks. For example, Antigravity has <code class="fixed-width">/grill-me</code> (which tells the agent to interview you to resolve design decisions) and <code class="fixed-width">/plan</code> (which puts the agent into a step-by-step planning mode before writing code; <code class="fixed-width">/plan</code> also works in Claude Code!). Other editors like Cursor and VS Code Copilot have their own <code class="fixed-width">/</code> commands and <code class="fixed-width">@</code> mentions, so taking two minutes to explore what pops up when you type <code class="fixed-width">/</code> or <code class="fixed-width">@</code>will make you much faster in any tool.</p>
+</li>
+<li>
+<p><strong>Answer the questions like an accountant</strong></p>
+<ul>
+<li>The agent will ask about things like which ratios, how to choose peers, how many years, and what goes on each sheet. In Antigravity, it may ask using clickable multiple-choice cards (with a <code class="fixed-width">(Recommended)</code> option first and an "Other" box where you can type your own answer) or in plain text. Either way, it will suggest defaults, and choosing the recommended default is fine for many of them</li>
+<li>But this is where your expertise comes in, so don't just say yes to everything. Some decisions worth actually thinking about:<ul>
+<li><em>Peers</em>: The same 4-digit SIC code is a narrow industry, the first 2 digits is a broad one. Closest in revenue? How many? Is there a company you know belongs in the list regardless of what the rule picks?</li>
+<li><em>Ratios</em>: Which ones actually matter for this industry? Inventory turnover means a lot for Walmart and nothing for a software company</li>
+<li><em>Overview and extra sheets</em>: If a manager only looked at the <em>Overview</em> sheet for 30 seconds, what should they see? And do you want your charts right on <em>Overview</em>, or on separate sheets for each ratio family (e.g., <em>Profitability</em>, <em>Leverage</em>)? Remember, I am only grading the <em>Overview</em> and <em>Data</em> sheets, so any extra sheets are completely up to you</li>
+</ul>
+</li>
+<li>If you don't understand a question, say so: "I don't know what that means, explain it and recommend an option"</li>
+</ul>
+</li>
+<li>
+<p><strong>Read <code class="fixed-width">SPEC.md</code> and push back</strong></p>
+<ul>
+<li>When the agent saves <code class="fixed-width">SPEC.md</code>, open it (click it in the file list) and actually read it. This is what you're submitting, and it's what gets built</li>
+<li>Check that it meets the minimums in <a href="#1-assignment">Section 1</a></li>
+<li>Then ask the agent to poke holes in its own work. Some prompts I find useful:<ul>
+<li>"What in this spec is ambiguous? What would a different developer have to guess at?"</li>
+<li>"For each ratio, show me the exact formula and which reported items it uses"</li>
+<li>"What happens if a peer doesn't report one of these items?"</li>
+</ul>
+</li>
+<li>Add your own acceptance check: look up a number in your company's 10-K (total revenue is the easy one) and tell the agent: "add an acceptance check that [company]'s fiscal [year] revenue equals [number from the 10-K]"</li>
+<li>Keep going until you'd be comfortable handing the spec to someone else to build</li>
+</ul>
+</li>
+</ol>
+<p class="tip"><em>Tip</em>: The interview should feel like a conversation, not a form. If the agent dumps ten questions on you at once, tell it: "one question at a time, please." If it starts writing code, tell it: "stop, we're still writing the spec."</p>
+<h3 class="ada-h3" id="33-build-the-dashboard-from-the-spec">3.3. Build the dashboard from the spec</h3>
+<p>Now the fun part. You might be thinking "but I haven't installed anything except Antigravity, how can code run?" Great question! The point of vibe coding with the agent is that it will install what it needs (using <code class="fixed-width">uv</code>), write the code, run it, read its own errors, and fix them. What a world!</p>
+<ol>
+<li>
+<p><strong>Give the go-ahead</strong></p>
+<ul>
+<li>Ask the agent:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>Implement SPEC.md. When you are finished, run every acceptance check in
+the spec and show me the results.
 </code></pre></div>
 </li>
 <li>
-<p><strong>Babysit Copilot Agent as it writes the code</strong></p>
+<p><strong>Babysit the agent as it writes the code</strong></p>
 <ul>
-<li>As Copilot chugs away, it may ask you questions, or for permission to create files and run commands. Be responsive and guide it as needed, but if it wants to run some commands that you do not recognize, copy the command into a web-based LLM chat (e.g. ChatGPT, Claude, Gemini) and ask it to explain what the command does before allowing Copilot to run it.</li>
-<li>If any part seems confusing or overly complex, ask: "can you simplify the [specific section] of the code?"</li>
+<li>As the agent chugs away, it may ask you questions, or for permission to create files and run commands (including running outside the sandbox when it installs packages or calls the SEC API). Be responsive and guide it as needed, but if it wants to run some commands that you do not recognize, ask it "what does that command do?" before allowing it. If you want a second opinion, copy the command into a web-based LLM chat (e.g. ChatGPT, Claude, Gemini) and ask there</li>
+<li>Early on it will ask for your name and email. That's for the SEC's "who is asking" requirement from <a href="#22-where-the-data-comes-from-the-secs-data-service">Section 2.2</a>, and it gets saved in a file called <code class="fixed-width">.env</code> on your computer</li>
+<li>This step takes a while (10 to 20 minutes is normal). The agent will write several files, run them, hit errors, and fix them. That's it working as intended, not a sign something is wrong</li>
 </ul>
 </li>
 <li>
-<p><strong>Test the script</strong></p>
+<p><strong>Look at the acceptance checks</strong></p>
 <ul>
-<li>Now, find a URL for an event site (e.g., from Visit Salt Lake, a local university, or a venue) to test with.</li>
-<li>Ask Copilot Agent: "run the script targeting [INSERT URL HERE]"</li>
-<li>If you get an error about missing dependencies or browsers, ask Copilot to install them (e.g., "run the playwright install command").</li>
-<li>Watch the browser visit the configured site</li>
-<li>Wait for scraping to complete</li>
-<li>Ask Copilot Agent: "show me the first 10 rows of the excel output"</li>
-<li>At this point, you may see data, but you may not (since different sites have different HTML structures requiring different selectors). If not, continue on to the next step for debugging. If you do, then verify that the data looks correct and celebrate your success!</li>
+<li>When the agent says it's done, it should show you each acceptance check and whether it passed</li>
+<li>If any failed, tell it: "acceptance check [N] failed, fix it and run all the checks again"</li>
+<li>If it didn't show you the checks at all, ask: "run the acceptance checks in SPEC.md and show me the output of each one"</li>
+</ul>
+</li>
+<li>
+<p><strong>Open the workbook and check it yourself</strong></p>
+<ul>
+<li>Find the Excel file in the folder (ask the agent "where is the output file?" if you can't see it) and open it in Excel</li>
+<li>The agent can read the numbers in the workbook, but it <em>cannot see the charts</em>. You are the only one who can tell whether they look right. Look for:<ul>
+<li>Charts that are empty, or overlapping each other</li>
+<li>A company missing from a chart, or blank cells where you expected numbers</li>
+<li>Numbers that can't be right (a gross margin of 400%, a current ratio of exactly zero)</li>
+<li>Fiscal years that are off by one</li>
+</ul>
+</li>
+<li>Spot check one more number against the 10-K, one that <em>isn't</em> already an acceptance check</li>
+<li>Check the <em>Sources</em> sheet. Does each number say where it came from?</li>
 </ul>
 </li>
 <li>
 <p><strong>Debug and refine</strong></p>
 <ul>
-<li>If scraping fails or finds no events, you could try telling Copilot:<ul>
-<li>"the scraper isn't finding any events, please debug and fix" (this likely won't work, because it's too vague, but it's worth demonstrating that fact)</li>
-<li>"inspect the CSS selectors for the event website [INSERT URL HERE] and update the code if needed" (this is less vague, but still unlikely to work because Copilot can't actually see the website structure unless you give it that information)</li>
-<li>"use playwright to save the HTML of one of the event pages to a file, so we can inspect it, and then use that HTML page to refine the CSS selectors" (this is a great way to get the HTML structure so you can then provide it to Copilot for further debugging)</li>
+<li><strong>Close the workbook in Excel first!</strong> On Windows especially, Excel locks any file you have open, so Python will fail with a "Permission denied" error if the agent tries to overwrite the workbook while you're still looking at it</li>
+<li>Tell the agent what you saw, as specifically as you can:<ul>
+<li>"the gross margin chart on the Overview sheet (or your Profitability sheet) is empty" is good</li>
+<li>"the charts are broken" is too vague, but it's worth trying once to see what happens</li>
 </ul>
 </li>
-<li>If dates aren't parsing correctly:<ul>
-<li>"the date parsing isn't working correctly, improve the function to handle more formats"</li>
-<li>"use the python library <code class="fixed-width">dateutil</code> to help parse dates more robustly"</li>
+<li>For blank cells: "[TICKER] has no revenue in the Data sheet. Check which revenue tags that company actually reports and update the tag list"</li>
+<li>If you want to change <em>what the tool does</em> (a new ratio, a different peer rule, a different chart), change the plan first: "update SPEC.md to add [the change], then implement it." The spec should always describe what you actually built</li>
+<li>Keep iterating until the workbook is something you'd be willing to show a manager</li>
 </ul>
 </li>
-<li>Let Copilot Agent make the fixes and re-run tests</li>
-<li>Keep iterating until your scraper gives you data</li>
+<li>
+<p><strong>Submit</strong></p>
+<ul>
+<li>Take a screenshot of the <em>Overview</em> sheet open in Excel</li>
+<li>Upload <code class="fixed-width">SPEC.md</code>, the Excel workbook, and the screenshot to the Canvas quiz</li>
 </ul>
 </li>
 </ol>
 <h2 class="ada-h2" id="4-technical-guidance">4. Technical guidance</h2>
-<p>This section provides additional context and troubleshooting tips for working with Copilot Agent.</p>
-<h3 class="ada-h3" id="41-effective-copilot-agent-prompting">4.1. Effective Copilot Agent prompting</h3>
-<p>Getting good results from Copilot Agent requires clear, action-oriented prompts. Here are tips:</p>
+<p>This section provides additional context and troubleshooting tips for working with the agent.</p>
+<h3 class="ada-h3" id="41-effective-agent-prompting">4.1. Effective agent prompting</h3>
+<p>Getting good results from the agent requires clear, action-oriented prompts. Here are tips:</p>
 <ul>
 <li>
-<p>Good Agent prompts are:</p>
+<p>Good agent prompts are:</p>
 <ul>
-<li><em>Direct</em>: Tell Agent what to do, not ask how to do it</li>
-<li><em>Action-oriented</em>: "create a file..." "run the script..." "install packages..."</li>
-<li><em>Specific about outcomes</em>: "improve the scrape function to allow for a human verification step" not "make it better"</li>
-<li><em>Include program output for debugging</em>: Specify logging, error handling, and verbose output so Copilot can see what's happening</li>
+<li><em>Direct</em>: Tell the agent what to do, not ask how to do it</li>
+<li><em>Action-oriented</em>: "create a file..."; "run the script..."; "update the spec..."</li>
+<li><em>Specific about outcomes</em>: "put the peer median next to each ratio on the Overview sheet" not "make it better"</li>
+<li><em>Anchored to the spec</em>: "that doesn't match section 5 of SPEC.md" is the fastest way to get a fix</li>
 </ul>
 </li>
 <li>
 <p>Follow up on prompts</p>
 <ul>
-<li>Try out the code Agent creates, then ask for fixes if it doesn't work (see below)</li>
-<li>Review what Agent did and ask for explanations: "explain the code you just created"</li>
+<li>Try out what the agent creates, then ask for fixes if it doesn't work (see below)</li>
+<li>Review what the agent did and ask for explanations: "explain what you just built, in terms an accountant would understand"</li>
 <li>Ask for new features, or for features to work better/more simply</li>
 <li>Iterate until satisfied</li>
 </ul>
 </li>
 </ul>
-<h3 class="ada-h3" id="42-troubleshooting-with-agent-mode">4.2. Troubleshooting with Agent mode</h3>
-<p>When things go wrong, Copilot Agent can help fix issues directly:</p>
+<h3 class="ada-h3" id="42-troubleshooting-with-the-agent">4.2. Troubleshooting with the agent</h3>
+<p>When things go wrong, the agent can help fix issues directly:</p>
 <ul>
+<li>
+<p><code class="fixed-width">uv</code> is "not recognized" or "command not found"</p>
+<ul>
+<li>Quit Antigravity completely and reopen it, then try again. This fixes it almost every time</li>
+<li>If it still isn't found, tell the agent: "uv was installed but isn't being found, figure out where it was installed and fix it"</li>
+</ul>
+</li>
+<li>
+<p>"PermissionError" or "Permission denied" when saving the Excel file</p>
+<ul>
+<li>You still have the <code class="fixed-width">.xlsx</code> file open in Excel! Close the file in Excel and tell the agent to try again</li>
+</ul>
+</li>
+<li>
+<p>The SEC refuses the request (a "403" error)</p>
+<ul>
+<li>This means the SEC didn't get a name and email with the request</li>
+<li>Tell the agent: "the SEC is returning 403, check that the User-Agent from .env is being sent with every request"</li>
+</ul>
+</li>
+<li>
+<p>Blank cells or a missing company</p>
+<ul>
+<li>Usually the company uses a different label for that item (see <a href="#22-where-the-data-comes-from-the-secs-data-service">Section 2.2</a>)</li>
+<li>Tell the agent: "[TICKER] is missing [item]. Look at what that company actually reports and add the right tag"</li>
+<li>Sometimes the company genuinely doesn't report the item (banks don't report cost of goods sold). A blank cell is the right answer then, and a zero is not</li>
+</ul>
+</li>
+<li>
+<p>Numbers don't match the 10-K</p>
+<ul>
+<li>Tell the agent exactly what you see: "the dashboard shows [X] for fiscal 2024 revenue, the 10-K says [Y]"</li>
+<li>Common causes: a quarterly number picked up as an annual one, or the fiscal year labeled one year off</li>
+</ul>
+</li>
 <li>
 <p>Script not working or has errors</p>
 <ul>
-<li>Simply tell Agent: "the script has an error, please fix it"</li>
-<li>Agent can see the error output and will modify the code</li>
-<li>If Agent's fix doesn't work: "that didn't fix it, try a different approach"</li>
+<li>Simply tell the agent: "the script has an error, please fix it"</li>
+<li>The agent can see the error output and will modify the code</li>
+<li>If the agent's fix doesn't work: "that didn't fix it, try a different approach"</li>
 </ul>
 </li>
 <li>
-<p>Dependencies not installing</p>
+<p>The agent goes in circles</p>
 <ul>
-<li>Tell Agent: "install the missing dependencies"</li>
-<li>Agent should automatically run pip install commands</li>
-<li>If there's a conflict: "resolve the dependency conflict"</li>
-<li>Also consider asking Agent to "use conda to create and manage a virtual environment for this project"<ul>
-<li>The nice thing about vibe coding is you don't necessarily have to care about the details of virtual environments, Agent can handle that for you. It's not bad to ask what it's doing though, if you're curious and want to learn.</li>
-</ul>
-</li>
+<li>If it has tried the same fix three times, stop it and start a new chat. Tell the new chat: "Read AGENTS.md and SPEC.md, then look at the existing code. [Describe the problem.]" A fresh start with a written spec is often faster than arguing, and it's one more reason the spec is worth having</li>
 </ul>
 </li>
 <li>
-<p>Date parsing not working</p>
-<ul>
-<li>Tell Agent: "dates aren't parsing correctly, improve the date parser to handle more formats"</li>
-<li>Agent will modify the appropriate function</li>
-<li>Ask Agent to: "test the date parser with some example dates"</li>
-</ul>
-</li>
-<li>
-<p>Google blocks the bot</p>
-<ul>
-<li>If your script triggers a bot check on a website, tell Agent: "add human in the loop functionality so I can complete verification"</li>
-<li>Complete the verification manually in the browser, then press Enter in the terminal that VS Code opened</li>
-</ul>
-</li>
-<li>
-<p>General debugging approach with Agent</p>
+<p>General debugging approach with the agent</p>
 <ol>
-<li>Describe the problem: "the scraper isn't working"</li>
-<li>Agent will try to fix it</li>
+<li>Describe the problem, specifically: "the chart for Leverage is missing"</li>
+<li>The agent will try to fix it</li>
 <li>If the fix doesn't work: "that didn't solve it, try another approach"</li>
 <li>Ask for explanations: "explain what you changed and why"</li>
-<li>Ask for logging so Agent gets more information to help it: "add logging to a file so you can see error messages"</li>
+<li>Ask it to re-run the acceptance checks, to make sure the fix didn't break something else</li>
 <li>Iterate until it works</li>
 <li>Ask me for help if you're stuck!</li>
 </ol>
 </li>
 </ul>
-<p class="tip"><em>Tip</em>: Agent mode can access files, run commands, and see output automatically. You shouldn't need to copy/paste error messages, just describe what's wrong and Agent will investigate. If it can't see the error output, ask it to add logging to file so that it can.</p>
-<h3 class="ada-h3" id="43-understanding-what-agent-creates">4.3. Understanding what Agent creates</h3>
-<p>When Copilot Agent generates the script (in my example, an event scraper), the key concepts remain the same as traditional coding:</p>
+<p class="tip"><em>Tip</em>: The agent can access files, run commands, and see output automatically. You shouldn't need to copy/paste error messages, just describe what's wrong and the agent will investigate. The one thing it can't see is what the workbook looks like in Excel, so that part you do have to describe.</p>
+<h3 class="ada-h3" id="43-understanding-what-the-agent-creates">4.3. Understanding what the agent creates</h3>
+<p>When the agent builds your dashboard tool, the key concepts are the same as in traditional coding:</p>
 <ul>
 <li>
 <p>Command-line interface (CLI)</p>
 <ul>
-<li>Copilot (or you, as you get more advanced) needs to run the Python script somehow. A command-line interface is a common way to do this. It's kind of like when you run an app on your computer, but instead of clicking an icon, you type commands in a terminal window.</li>
-<li>Taking arguments (like <code class="fixed-width">--url</code> or <code class="fixed-width">--output</code>) makes the script flexible, acting like different settings for the same app.</li>
+<li>The agent (or you, as you get more advanced) needs to run the Python script somehow. A command-line interface is a common way to do this. It's kind of like when you run an app on your computer, but instead of clicking an icon, you type commands in a terminal window.</li>
+<li>Taking arguments (like the ticker, or <code class="fixed-width">--years 10</code>) makes the script flexible, acting like different settings for the same app. The same tool works for Apple or for Ford.</li>
 </ul>
 </li>
 <li>
-<p>Starting URL</p>
+<p><code class="fixed-width">uv</code> and packages</p>
 <ul>
-<li>Instead of hardcoding which website to scrape, taking the URL as an argument allows the same scraping code to be pointed at different locations</li>
-<li>As you'll see in the homework, this flexibility really shines when coupled with an LLM that can understand the structure of <em>any</em> URL you provide</li>
+<li>Python on its own can't write Excel files or talk to websites. Those abilities come from <em>packages</em>, which are add-ons other people wrote</li>
+<li><code class="fixed-width">uv</code> downloads Python and the packages into this one folder, so nothing else on your computer is affected. If it all goes wrong, you can delete the folder and start over</li>
 </ul>
 </li>
 <li>
-<p>Playwright basics</p>
+<p>APIs and JSON</p>
 <ul>
-<li>Playwright is a tool that controls a web browser automatically</li>
-<li>Instead of you clicking and scrolling, the script does it for you</li>
-<li>Key actions:<ul>
-<li>Opening a browser window that you can see (<code class="fixed-width">headless=False</code> means "show me the browser")</li>
-<li>Going to websites (like typing a URL in the address bar)</li>
-<li>Waiting for pages to load (websites often load content slowly or use animations)</li>
-</ul>
-</li>
+<li>Your tool asks the SEC for data by requesting a specific web address, one per company</li>
+<li>The answer comes back as <strong>JSON</strong>, a text format for structured data (think of it as nested bullet points that a program can read)</li>
+<li>The tool saves each answer in a <code class="fixed-width">cache</code> folder, so the second run is fast and doesn't bother the SEC again</li>
 </ul>
 </li>
 <li>
-<p>Webpages getting data from them (HTML and selectors)</p>
+<p>XBRL tags</p>
 <ul>
-<li>Webpages are written in HTML, which is a relatively simple language that tells the browser what text/images/data to display</li>
-<li>HTML organizes information into elements (pieces of text/images/data) like:<ul>
-<li>A heading for an event name</li>
-<li>A paragraph with the date and time</li>
-<li>A link to buy tickets</li>
+<li>Every number in the SEC's data has a tag (like <code class="fixed-width">NetIncomeLoss</code> or <code class="fixed-width">AssetsCurrent</code>), a period, and a value</li>
+<li>Your tool's job is mostly bookkeeping: find the right tag, keep only the annual values, line up the years across companies, and compute the ratios</li>
 </ul>
 </li>
-<li>Each element can have labels (called "classes" or "ids") to identify what it is</li>
-<li>Selectors are patterns that point to specific elements on a page, like giving directions:<ul>
-<li>"Find the element labeled 'event-title'" (to get event names)</li>
-<li>"Find all elements labeled 'date'" (to get all event dates)</li>
-<li>"Find the link inside the event box" (to get ticket URLs)</li>
-</ul>
-</li>
-<li>When websites change their design, the selectors might need to be updated because the labels changed</li>
-<li>By using CSS selectors, your script is hardcoded for a specific webpage layout. If you run it on a completely different website, you might collect nothing (since standard selectors won't match). The homework project will look at using LLMs to bypass this limitation.</li>
+<li>
+<p>Separate pieces</p>
+<ul>
+<li>Your agent was told (in <code class="fixed-width">AGENTS.md</code>) to keep fetching data, computing ratios, and writing Excel in separate files. That's so the homework can reuse the first two without touching them</li>
 </ul>
 </li>
 <li>
 <p>Data export</p>
 <ul>
-<li>Once the script collects data, it needs to save it in useful formats</li>
+<li>Once the script computes the numbers, it needs to save them in useful formats</li>
 <li>Excel format (<code class="fixed-width">.xlsx</code>) because we're Accountants, and it's just the best for viewing data in rows and columns, sorting, filtering</li>
+<li>The charts are real Excel charts pointing at cells in the workbook. You can click on one and restyle it like any chart you made yourself</li>
 </ul>
 </li>
 </ul>
 <h3 class="ada-h3" id="44-going-further-optional-improvements-if-youre-feeling-adventurous">4.4. Going further (optional improvements, if you're feeling adventurous)</h3>
-<p>If you want to explore more, try asking Copilot Agent to add more features, here are some example prompts:</p>
+<p>If you want to explore more, try asking the agent to add more features. Remember to have it update <code class="fixed-width">SPEC.md</code> first! Here are some example prompts:</p>
 <ol>
 <li>
-<p><strong>Add command-line options</strong>: </p>
+<p><strong>Add command-line options</strong>:</p>
 <ul>
-<li><code class="fixed-width">add a --limit option to only scrape up to N items</code></li>
-<li><code class="fixed-width">add --start-date and --end-date filters to the script</code></li>
+<li><code class="fixed-width">add a --peers option so I can list my own peers instead of the automatic ones</code></li>
+<li><code class="fixed-width">add a --years option to control how many fiscal years are included</code></li>
 </ul>
 </li>
 <li>
-<p><strong>Improve event categorization</strong>: </p>
+<p><strong>Deeper analysis</strong>:</p>
 <ul>
-<li><code class="fixed-width">use fuzzy string matching for better categorization</code></li>
-<li><code class="fixed-width">generate a hierarchy of categories, e.g. Music -&gt; Concerts, Festivals</code></li>
+<li><code class="fixed-width">add a DuPont decomposition of ROE (on Overview or a dedicated Profitability sheet)</code></li>
+<li><code class="fixed-width">add common-size income statements for each company</code></li>
+<li><code class="fixed-width">rank each company on each ratio, and color the best and worst on the Overview sheet</code></li>
 </ul>
 </li>
 <li>
-<p><strong>Handle pagination</strong>: </p>
+<p><strong>Better presentation</strong>:</p>
 <ul>
-<li><code class="fixed-width">modify the scraper to scroll down to load more events on infinite scroll pages</code></li>
-<li><code class="fixed-width">modify the scraper to click Next Page buttons and scrape multiple pages</code></li>
-<li><code class="fixed-width">add a --max-pages argument to control pagination</code></li>
-</ul>
-</li>
-<li>
-<p><strong>Better date intelligence</strong>: </p>
-<ul>
-<li><code class="fixed-width">handle date ranges like 'Nov 15-17'</code></li>
-<li><code class="fixed-width">handle recurring events like 'Every Saturday'</code></li>
+<li><code class="fixed-width">add conditional formatting to the Overview sheet so ratios worse than the peer median are highlighted</code></li>
+<li><code class="fixed-width">add small trend lines (sparklines) next to each ratio on the Overview sheet</code></li>
 </ul>
 </li>
 <li>
 <p><strong>Add project documentation</strong>:</p>
 <ul>
-<li><code class="fixed-width">generate a requirements.txt file for this project</code></li>
-<li><code class="fixed-width">create a README.md with installation and usage instructions</code></li>
+<li><code class="fixed-width">create a README.md that explains how to run this tool, written for an accountant</code></li>
 </ul>
 </li>
 <li>
-<p><strong>Add LLM integration</strong> (spoiler alert: this is the homework!):</p>
+<p><strong>Add LLM commentary</strong> (spoiler alert: this is the homework!):</p>
 <ul>
-<li><code class="fixed-width">add Gemini LLM integration (https://github.com/googleapis/python-genai) to intelligently extract events, and fall back to using selectors if it fails or no API key is provided</code></li>
+<li><code class="fixed-width">update SPEC.md section 10, then add Gemini LLM commentary (https://github.com/googleapis/python-genai) on the Overview sheet that interprets the computed ratios</code></li>
+<li>The key idea: <em>code does the arithmetic, the LLM does the judgment</em>. Your tool computes every number, and hands those numbers to the LLM to interpret. You never ask an LLM to do the math</li>
 <li>Also consider <code class="fixed-width">add instructions to automate as much of the generation of the API key as possible, to make it user friendly to non-technical users</code></li>
-<li>This uses Google's free Gemini API to parse pages and extract event information more robustly than brittle CSS selectors.</li>
+</ul>
+</li>
+<li>
+<p><strong>Turn it into a website</strong> (spoiler alert: this is the homework's extra credit!):</p>
+<ul>
+<li><code class="fixed-width">add a local web version: a small Python web server that reuses the existing code, and a page where I can type any ticker and see the comparison</code></li>
+<li>This runs only on your own computer (the address will start with <code class="fixed-width">localhost</code>), which is all we want. Note that in Antigravity, the agent must start this local server in the background and <em>outside</em> the sandbox so your web browser can reach it</li>
 </ul>
 </li>
 </ol>
-<h3 class="ada-h3" id="45-ethical-considerations-checklist">4.5. Ethical considerations checklist</h3>
-<p class="note"><em>Note</em>: This lab is intended to show you the very basics of vibe coding and web scraping, and as such shouldn't implicate ethical data collection practices broadly. However, these considerations are relevant if you are considering anything beyond this initial investigation into how basic scraping works.</p>
-<p>Before scraping any website, ask yourself:</p>
-<p><input type="checkbox" /> Have I checked the website's <code class="fixed-width">robots.txt</code> file? (always at the root of the domain, e.g., <a href="https://www.yelp.com/robots.txt" target="_blank">yelp.com/robots.txt</a>) <br />
-<input type="checkbox" /> Have I read the terms of service? <br />
-<input type="checkbox" /> Am I making requests at a reasonable rate? (3+ seconds between requests, not <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack" target="_blank">DoS-ing</a>) <br />
-<input type="checkbox" /> Am I respecting user privacy? (not collecting personal data without consent) <br />
-<input type="checkbox" /> Could this data be obtained through an official <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>? (always prefer APIs when available) <br />
-<input type="checkbox" /> Am I properly attributing the data source? <br />
-<input type="checkbox" /> Would I be comfortable if someone scraped my website this way? <br />
-<input type="checkbox" /> Am I only scraping public data? (not bypassing authentication) <br /></p>
+<h3 class="ada-h3" id="45-responsible-use-checklist">4.5. Responsible use checklist</h3>
+<p class="note"><em>Note</em>: This lab is intended to show you the very basics of vibe coding and pulling public data, and as such shouldn't raise many ethical concerns. However, these considerations are relevant if you take this further, on other data sources or at work.</p>
+<p>Before building a tool like this, ask yourself:</p>
+<p><input type="checkbox" /> Could this data be obtained through an official <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>? (always prefer APIs to scraping web pages) <br />
+<input type="checkbox" /> Have I read the data provider's rules? (the SEC's are <a href="https://www.sec.gov/search-filings/edgar-search-assistance/accessing-edgar-data" target="_blank">here</a>) <br />
+<input type="checkbox" /> Am I identifying myself honestly and making requests at a reasonable rate? <br />
+<input type="checkbox" /> Am I only using public data? (not bypassing a login or paywall) <br />
+<input type="checkbox" /> Are my passwords and API keys kept out of the code and out of anything I share? <br />
+<input type="checkbox" /> Am I keeping confidential or client data out of AI tools that aren't approved for it? <br />
+<input type="checkbox" /> Have I verified the output against a source I trust before relying on it? <br />
+<input type="checkbox" /> Could I explain to a manager or an auditor where every number came from? <br /></p>
 </body>
 </html>

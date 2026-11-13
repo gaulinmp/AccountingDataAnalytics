@@ -1,9 +1,10 @@
-"""Build the placeholder GitHub Pages site: tracked labs_hw/ HTML plus an index.
+"""Build the placeholder GitHub Pages site: tracked labs_hw/ HTML and zips plus an index.
 
 Stand-in for the Astro site (parked in .github/workflows/deploy-astro.yml).
-Copies every git-tracked labs_hw/**/*.html into OUT_DIR at the same relative
-path and writes OUT_DIR/index.html linking to them, grouped by folder. Using
-git ls-files means ignored files (solution HTML, scratch output) never ship.
+Copies every git-tracked labs_hw/**/*.html and *.zip (starter-file downloads)
+into OUT_DIR at the same relative path and writes OUT_DIR/index.html linking to
+them, grouped by folder. Using git ls-files means ignored files (solution HTML,
+scratch output) never ship.
 
     uv run python code/utils/build_lab_index.py [OUT_DIR] [--week N]
 
@@ -22,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 parser = argparse.ArgumentParser(description="Build the lab-index Pages site.")
 parser.add_argument("out_dir", nargs="?", type=Path, default=ROOT / "_site", help="output folder (default: _site)")
-parser.add_argument("--week", type=int, help="include week folders only up to this week number", default=10)
+parser.add_argument("--week", type=int, help="include week folders only up to this week number", default=12)
 args = parser.parse_args()
 OUT = args.out_dir
 
@@ -49,8 +50,11 @@ def is_handout(name):
 
 def file_label(name):
     """Handouts get a fixed label (their <title> is just "Instructions");
-    tools use their <title>, falling back to the file name."""
+    zips are labeled as downloads; tools use their <title>, falling back to
+    the file name."""
     stem = Path(name).stem
+    if name.endswith(".zip"):
+        return f"Download: {stem.replace('_', ' ').replace('-', ' ')} (zip)"
     m = re.match(r"(Lab|Homework)-(\d+)_Instructions", stem)
     if m:
         return f"{m[1]} {m[2]} instructions"
@@ -61,7 +65,7 @@ def file_label(name):
 
 
 files = subprocess.run(
-    ["git", "ls-files", "labs_hw/*.html"], cwd=ROOT, capture_output=True, text=True, check=True
+    ["git", "ls-files", "labs_hw/*.html", "labs_hw/*.zip"], cwd=ROOT, capture_output=True, text=True, check=True
 ).stdout.split()
 
 groups = {}

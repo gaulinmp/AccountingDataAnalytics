@@ -24,6 +24,8 @@ slides/
 *.csv
 *.tsv
 *.7z
+# ...except the SEC company lookup that ships in the Lab 12 starter folder.
+!labs_hw/week12_AI/comp-dashboard-starter/sec_companies.csv
 
 # Python
 __pycache__/
